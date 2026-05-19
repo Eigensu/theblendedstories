@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Blended Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Montserrat:wght@400;500&family=Great+Vibes&family=Martel+Sans:wght@400&display=swap" rel="stylesheet" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white: #FFFFFF;
+    --black: #000000;
+    --dark-navy: #050D18;
+    --gold: #AB853C;
+    --white-10: rgba(255,255,255,0.1);
+    --white-20: rgba(255,255,255,0.2);
+    --white-04: rgba(255,255,255,0.04);
+    --white-50: rgba(255,255,255,0.5);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    width: 1440px;
+    margin: 0 auto;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1440px;
+    height: 128px;
+    z-index: 100;
+    background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, transparent 100%);
+  }
+
+  .nav-inner {
+    position: relative;
+    width: 1440px;
+    height: 128px;
+  }
+
+  .nav-divider {
+    position: absolute;
+    width: 1352px;
+    height: 0;
+    left: 44px;
+    top: 128px;
+    border-top: 1px solid var(--white-20);
+  }
+
+  /* Menu icon */
+  .nav-menu {
+    position: absolute;
+    left: 44px;
+    top: 38px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .nav-menu-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+  .nav-menu-line {
+    width: 26px;
+    height: 1.5px;
+    background: var(--white);
+  }
+  .nav-menu-line.flipped {
+    transform: scaleY(-1);
+  }
+  .nav-menu-label {
+    font-family: 'Martel Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-top: 2px;
+  }
+
+  /* Logo */
+  .nav-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 40px;
+    font-family: 'Bodoni Moda', serif;
+    font-size: 40px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  /* Nav links */
+  .nav-links {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 42px;
+  }
+
+  .nav-link {
+    position: absolute;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    line-height: 160%;
+  }
+  .nav-link:hover { opacity: 0.7; }
+
+  .nl-lifestyle { left: 221px; top: 42px; width: 74px; }
+  .nl-fashion   { left: 371px; top: 53px; }
+  .nl-beauty    { left: 513px; top: 42px; width: 80px; }
+  .nl-culture   { left: 853px; top: 53px; }
+  .nl-events    { left: 999px; top: 53px; }
+  .nl-community { left: 1133px; top: 53px; }
+
+  /* Search */
+  .nav-search {
+    position: absolute;
+    right: 41px;
+    top: 38px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .nav-search-icon {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--white-50);
+    border-radius: 50%;
+    position: relative;
+  }
+  .nav-search-icon::after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 1px;
+    background: var(--white-50);
+    bottom: -4px;
+    right: -4px;
+    transform: rotate(45deg);
+  }
+  .nav-search-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    position: relative;
+    width: 1440px;
+    height: 720px;
+    overflow: hidden;
+    background: linear-gradient(0deg, rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+                url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1440&q=80') center/cover no-repeat;
+  }
+
+  /* Glow ellipse hero */
+  .ellipse-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.08;
+    pointer-events: none;
+  }
+  .hero-glow {
+    width: 400px; height: 400px;
+    left: 520px; top: 160px;
+    background: conic-gradient(from 180deg at 50% 50%, #FFFFFF 0deg, #050D18 360deg);
+  }
+
+  .hero-content {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding-top: 40px;
+  }
+
+  /* Sunburst rays */
+  .sunburst {
+    position: relative;
+    width: 80px; height: 80px;
+    margin-bottom: 16px;
+  }
+  .sunburst svg { width: 80px; height: 80px; }
+
+  .hero-title {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 72px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 120%;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .hero-subtitle {
+    font-family: 'Bodoni Moda', serif;
+    font-style: italic;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 120%;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 40px;
+    border: 1px solid var(--white);
+    border-radius: 30px;
+    filter: drop-shadow(0px 16px 16px rgba(255,255,255,0.04));
+    font-family: 'Bodoni Moda', serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.3s, color 0.3s;
+  }
+  .btn-pill:hover { background: rgba(255,255,255,0.08); }
+
+  /* ─── WHAT IS TBS ─── */
+  #what-is {
+    position: relative;
+    width: 1440px;
+    background: var(--black);
+    padding-top: 200px;
+    padding-bottom: 200px;
+    overflow: hidden;
+  }
+
+  /* Fan rays decoration */
+  .fan-group {
+    position: absolute;
+    width: 1200px;
+    height: 600px;
+    left: 120px;
+    top: 0px;
+    opacity: 0.08;
+    transform: rotate(-180deg);
+    pointer-events: none;
+  }
+
+  .fan-ray {
+    position: absolute;
+    width: 0;
+    border-left: 2px solid var(--white);
+    transform-origin: bottom center;
+  }
+
+  /* Glow ellipses */
+  .glow-left {
+    left: -70px; top: 250px;
+    background: conic-gradient(from 180deg at 50% 50%, #FFFFFF 0deg, #050D18 360deg);
+  }
+  .glow-right {
+    left: calc(50% - 200px + 560px); top: 308px;
+    background: conic-gradient(from 180deg at 50% 50%, #FFFFFF 0deg, #050D18 360deg);
+  }
+
+  .what-is-content {
+    position: relative;
+    padding-left: 44px;
+    display: flex;
+    align-items: flex-start;
+    gap: 80px;
+    z-index: 1;
+  }
+
+  .what-is-text {
+    flex: 0 0 auto;
+    max-width: 700px;
+  }
+
+  .what-is-script {
+    font-family: 'Great Vibes', cursive;
+    font-size: 64px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 120%;
+    margin-bottom: 0;
+    display: block;
+  }
+
+  .what-is-heading {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 120%;
+    margin-bottom: 40px;
+  }
+
+  .what-is-body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 160%;
+    color: var(--white);
+    max-width: 614px;
+  }
+
+  /* Portrait image with border */
+  .portrait-wrap {
+    position: absolute;
+    right: 120px;
+    top: 60px;
+  }
+
+  .portrait-border {
+    position: absolute;
+    width: 336px; height: 456px;
+    border: 0.5px solid var(--white);
+    border-radius: 168px 168px 0 0;
+    top: -8px; left: -8px;
+  }
+
+  .portrait-img {
+    width: 320px; height: 440px;
+    border-radius: 160px 160px 0 0;
+    object-fit: cover;
+    background: url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=640&q=80') center/cover no-repeat;
+    display: block;
+  }
+
+  /* ─── SECTION DIVIDER ─── */
+  .divider {
+    width: 1352px;
+    height: 1px;
+    background: var(--white-20);
+    margin: 0 auto;
+  }
+
+  /* ─── ABOUT US ─── */
+  #about-us {
+    position: relative;
+    width: 1440px;
+    padding: 160px 44px 160px;
+    overflow: hidden;
+  }
+
+  .about-bg-text {
+    position: absolute;
+    font-family: 'Bodoni Moda', serif;
+    font-size: 120px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--white-04);
+    line-height: 120%;
+    left: 50%;
+    transform: translateX(calc(-50% - 108.5px));
+    top: 140px;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .about-heading {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 120%;
+    margin-bottom: 80px;
+  }
+
+  .about-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 388px);
+    gap: 0;
+    position: relative;
+  }
+
+  .about-card {
+    padding-right: 60px;
+    position: relative;
+  }
+
+  .about-card-logo {
+    width: 40px; height: 40px;
+    margin-bottom: 28px;
+    mix-blend-mode: color-dodge;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .about-card-logo-line {
+    width: 40px; height: 2px;
+    background: var(--white);
+  }
+
+  .about-card-tag {
+    font-family: 'Bodoni Moda', serif;
+    font-style: italic;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .about-card-body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    line-height: 160%;
+    color: var(--white);
+    width: 348px;
+  }
+
+  .about-card-divider {
+    width: 320px;
+    height: 1px;
+    background: var(--white-20);
+    margin-top: 40px;
+  }
+
+  /* ─── LATEST NEWS ─── */
+  #latest-news {
+    position: relative;
+    width: 1440px;
+    padding: 0 44px 120px;
+    overflow: hidden;
+  }
+
+  .section-heading {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 120%;
+    text-align: center;
+    padding: 80px 0 60px;
+  }
+
+  .news-top-divider {
+    width: 1352px;
+    height: 1px;
+    background: var(--white-20);
+    margin: 0 auto 60px;
+  }
+
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 44px;
+  }
+
+  .news-card { position: relative; }
+
+  .news-card-img {
+    width: 424px; height: 240px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 24px;
+    background: center/cover no-repeat;
+  }
+
+  .nc1 { background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&q=80'); }
+  .nc2 { background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=500&q=80'); }
+  .nc3 { background-image: url('https://images.unsplash.com/photo-1485518994671-bb6fec3e8890?w=500&q=80'); }
+
+  .news-card-cat {
+    font-family: 'Bodoni Moda', serif;
+    font-style: italic;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .news-card-body {
+    font-size: 14px; line-height: 160%;
+    color: var(--white);
+    width: 380px;
+    margin-bottom: 28px;
+  }
+
+  .news-read-more {
+    display: inline-flex; align-items: center; gap: 16px;
+    font-family: 'Martel Sans', sans-serif;
+    font-size: 20px;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .news-read-more::after {
+    content: '';
+    display: block;
+    width: 48px; height: 2px;
+    background: rgba(255,255,255,0.4);
+  }
+
+  .news-bottom-divider {
+    width: 1352px; height: 1px;
+    background: var(--white-20);
+    margin: 60px auto 0;
+  }
+
+  .news-see-all-wrap {
+    display: flex; justify-content: center; padding: 40px 0 0;
+  }
+  .btn-pill-sm {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 16px;
+    padding: 16px 40px;
+    border: 1px solid var(--white);
+    border-radius: 25px;
+    filter: drop-shadow(0px 16px 16px rgba(255,255,255,0.04));
+    font-family: 'Bodoni Moda', serif;
+    font-size: 16px; font-weight: 500;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.3s;
+  }
+  .btn-pill-sm:hover { background: rgba(255,255,255,0.08); }
+  .btn-pill-sm::after {
+    content: '';
+    width: 16px; height: 1px;
+    background: rgba(255,255,255,0.4);
+  }
+
+  /* ─── EXPLORE / TRENDING ─── */
+  #explore {
+    position: relative;
+    width: 1440px;
+    height: 985px;
+    overflow: hidden;
+    background: linear-gradient(0deg, rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+                url('https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=1440&q=80') center/cover no-repeat;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .explore-label-wrap {
+    position: absolute;
+    left: 120px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .explore-label {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    white-space: nowrap;
+    transform: rotate(-90deg);
+  }
+
+  .trending-label {
+    font-family: 'Bodoni Moda', serif;
+    font-style: italic;
+    font-size: 40px;
+    font-weight: 400;
+    color: var(--white);
+    white-space: nowrap;
+    transform: rotate(-90deg);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    position: absolute;
+    left: 165px;
+    top: 50%;
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  .explore-cards {
+    position: absolute;
+    right: 44px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 36px;
+  }
+
+  .explore-card {
+    width: 340px; height: 440px;
+    border-radius: 8px;
+    background: center/cover no-repeat;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .ec1 {
+    background-image: url('https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80');
+    top: -25px; position: relative;
+  }
+  .ec2 {
+    background-image: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80');
+  }
+  .ec3 {
+    background-image: url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80');
+    top: -25px; position: relative;
+  }
+  .explore-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8) 100%);
+  }
+  .explore-card-info {
+    position: absolute;
+    bottom: 24px; left: 24px;
+  }
+  .explore-card-label {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+  }
+  .explore-card-divider {
+    width: 320px; height: 1px;
+    background: var(--white-20);
+    margin-bottom: 8px;
+  }
+
+  /* ─── PRESS / IN THE NEWS ─── */
+  #press {
+    position: relative;
+    width: 1440px;
+    padding: 100px 44px 100px;
+  }
+
+  .press-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 44px;
+    border-top: 1px solid var(--white-20);
+    padding-top: 60px;
+  }
+
+  .press-item-cat {
+    font-family: 'Bodoni Moda', serif;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+  .press-item-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 160%;
+    margin-bottom: 0;
+  }
+
+  .press-item-divider {
+    width: 340px; height: 1px;
+    background: var(--white-20);
+    margin: 40px 0;
+  }
+
+  /* ─── TBS NIGHTS ─── */
+  #tbs-nights {
+    position: relative;
+    width: 1440px;
+    height: 720px;
+    overflow: hidden;
+    background:
+      linear-gradient(90deg, rgba(5,13,24,0) 50%, rgba(5,13,24,0.4) 100%),
+      linear-gradient(0deg, rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+      url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1440&q=80') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+  }
+
+  .nights-content {
+    position: absolute;
+    right: 120px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: right;
+  }
+
+  .nights-heading {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 120%;
+    margin-bottom: 24px;
+  }
+
+  .nights-meta {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--white);
+    line-height: 160%;
+    margin-bottom: 8px;
+  }
+
+  .nights-location {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--white);
+    line-height: 160%;
+    margin-bottom: 32px;
+  }
+
+  .nights-event-title {
+    font-family: 'Martel Sans', sans-serif;
+    font-size: 40px;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 160%;
+    margin-bottom: 32px;
+  }
+
+  .nights-body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    line-height: 160%;
+    color: var(--white);
+    max-width: 540px;
+    margin-left: auto;
+    margin-bottom: 40px;
+  }
+
+  .btn-pill-join {
+    padding: 24px 40px;
+    border-radius: 40px;
+  }
+
+  /* ─── TBS TALKS ─── */
+  #tbs-talks {
+    position: relative;
+    width: 1440px;
+    min-height: 1115px;
+    overflow: hidden;
+    background:
+      linear-gradient(0deg, rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+      linear-gradient(180deg, #000000 0%, rgba(0,0,0,0) 100%),
+      url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1440&q=80') center/cover no-repeat;
+    padding: 120px 44px 120px;
+  }
+
+  .talks-heading {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 120%;
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  .talks-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 308px);
+    gap: 0 44px;
+    justify-content: center;
+  }
+
+  .talk-card {}
+
+  .talk-card-img {
+    width: 308px; height: 308px;
+    border-radius: 154px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 24px;
+    background: center/cover no-repeat;
+  }
+  .tc1 { background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80'); }
+  .tc2 { background-image: url('https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80'); }
+  .tc3 { background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80'); }
+  .tc4 { background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80'); }
+
+  .talk-card-divider {
+    width: 308px; height: 1px;
+    background: var(--white-20);
+    margin-bottom: 20px;
+  }
+
+  .talk-card-event {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .talk-card-body {
+    font-size: 14px; line-height: 160%;
+    color: var(--white);
+    width: 308px;
+  }
+
+  .talks-view-all {
+    display: flex; justify-content: center; margin-top: 60px;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    position: relative;
+    width: 1440px;
+    min-height: 921px;
+    background: var(--black);
+    padding: 0;
+  }
+
+  .footer-inner {
+    position: relative;
+    padding: 200px 44px 0;
+  }
+
+  .footer-logo-bg {
+    position: absolute;
+    left: 50%;
+    top: 200px;
+    transform: translateX(-50%);
+    width: 740px;
+    font-family: 'Bodoni Moda', serif;
+    font-size: 120px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: var(--white);
+    opacity: 0.06;
+    mix-blend-mode: hard-light;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .footer-top-divider {
+    width: 1352px; height: 1px;
+    background: var(--white-20);
+    margin: 0 auto 80px;
+  }
+
+  .footer-cols {
+    display: grid;
+    grid-template-columns: 420px 1fr 1fr 1fr;
+    gap: 0 44px;
+    padding: 0 44px;
+  }
+
+  .footer-col-head {
+    font-family: 'Bodoni Moda', serif;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 160%;
+    margin-bottom: 24px;
+  }
+
+  .footer-link {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    line-height: 160%;
+    color: var(--white);
+    text-decoration: none;
+    margin-bottom: 6px;
+  }
+  .footer-link:hover { opacity: 0.7; }
+
+  .footer-social {
+    display: flex; gap: 16px; margin-top: 0;
+  }
+
+  .social-circle {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .sc-white { background: var(--white); color: var(--black); }
+  .sc-gold  { background: var(--gold);  color: var(--black); }
+
+  .footer-bottom-divider {
+    width: 1352px; height: 1px;
+    background: var(--white-20);
+    margin: 80px auto 32px;
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 44px 60px;
+  }
+
+  .footer-copy {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    line-height: 160%;
+    color: var(--white);
+  }
+
+  .footer-legal {
+    display: flex; gap: 80px;
+  }
+
+  .footer-legal a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .footer-legal a:hover { opacity: 0.7; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-content > * {
+    animation: fadeUp 0.8s ease forwards;
+    opacity: 0;
+  }
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.3s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.5s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.7s; }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-inner">
+    <!-- Menu -->
+    <div class="nav-menu">
+      <div class="nav-menu-lines">
+        <div class="nav-menu-line"></div>
+        <div class="nav-menu-line flipped"></div>
+      </div>
+      <div class="nav-menu-label">Menu</div>
+    </div>
+
+    <!-- Nav links left -->
+    <a href="#" class="nav-link nl-lifestyle">Lifestyle<br>&amp; Travel</a>
+    <a href="#" class="nav-link nl-fashion">Fashion</a>
+    <a href="#" class="nav-link nl-beauty">Beauty &amp;<br>Wellness</a>
+
+    <!-- Logo -->
+    <a href="#" class="nav-logo">TBS</a>
+
+    <!-- Nav links right -->
+    <a href="#" class="nav-link nl-culture">Culture</a>
+    <a href="#" class="nav-link nl-events">Events</a>
+    <a href="#" class="nav-link nl-community">Community</a>
+
+    <!-- Search -->
+    <div class="nav-search">
+      <div class="nav-search-icon"></div>
+      <div class="nav-search-label">Search</div>
+    </div>
+
+    <div class="nav-divider"></div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="ellipse-glow hero-glow"></div>
+
+  <div class="hero-content">
+    <!-- Sunburst SVG -->
+    <div class="sunburst">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g opacity="0.9">
+          <line x1="40" y1="40" x2="40" y2="4"  stroke="white" stroke-width="1"/>
+          <line x1="40" y1="40" x2="40" y2="76" stroke="white" stroke-width="1"/>
+          <line x1="40" y1="40" x2="4"  y2="40" stroke="white" stroke-width="1"/>
+          <line x1="40" y1="40" x2="76" y2="40" stroke="white" stroke-width="1"/>
+          <line x1="40" y1="40" x2="63.6" y2="16.4" stroke="white" stroke-width="1"/>
+          <line x1="40" y1="40" x2="16.4" y2="63.6" stroke="white" stroke-width="1"/>
+          <line x1="40" y1="40" x2="16.4" y2="16.4" stroke="white" stroke-width="1"/>
+          <line x1="40" y1="40" x2="63.6" y2="63.6" stroke="white" stroke-width="1"/>
+          <line x1="40" y1="40" x2="52.4" y2="8.5"  stroke="white" stroke-width="0.7"/>
+          <line x1="40" y1="40" x2="27.6" y2="71.5" stroke="white" stroke-width="0.7"/>
+          <line x1="40" y1="40" x2="71.5" y2="52.4" stroke="white" stroke-width="0.7"/>
+          <line x1="40" y1="40" x2="8.5"  y2="27.6" stroke="white" stroke-width="0.7"/>
+          <line x1="40" y1="40" x2="27.6" y2="8.5"  stroke="white" stroke-width="0.7"/>
+          <line x1="40" y1="40" x2="52.4" y2="71.5" stroke="white" stroke-width="0.7"/>
+          <line x1="40" y1="40" x2="71.5" y2="27.6" stroke="white" stroke-width="0.7"/>
+          <line x1="40" y1="40" x2="8.5"  y2="52.4" stroke="white" stroke-width="0.7"/>
+        </g>
+      </svg>
+    </div>
+
+    <h1 class="hero-title">The Blended Stories</h1>
+    <p class="hero-subtitle">Explore the stories that define your city.</p>
+    <a href="#" class="btn-pill">Subscribe Now</a>
+  </div>
+</section>
+
+<!-- ─── WHAT IS TBS ─── -->
+<section id="what-is">
+  <!-- Fan rays -->
+  <div class="fan-group" aria-hidden="true">
+    <svg width="1200" height="600" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg" opacity="1">
+      <!-- rays from center ~(600,600) spreading up -->
+      <line x1="600" y1="600" x2="600" y2="300" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="677.65" y2="310.22" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="750" y2="340.19" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="812.13" y2="387.87" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="859.81" y2="450" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="889.78" y2="522.35" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="909" y2="600" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="522.35" y2="310.22" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="450" y2="340.19" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="387.87" y2="387.87" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="340.19" y2="450" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="310.22" y2="522.35" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="600" x2="291" y2="600" stroke="white" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <div class="ellipse-glow glow-left" style="width:400px;height:400px;"></div>
+  <div class="ellipse-glow glow-right" style="width:400px;height:400px;"></div>
+
+  <div class="what-is-content">
+    <div class="what-is-text">
+      <span class="what-is-script">What is</span>
+      <h2 class="what-is-heading">The Blended Stories ?</h2>
+      <p class="what-is-body">Change is on the horizon and everyone needs to adapt to this fast-paced world. With over 15 years in consultancy, I have helped businesses of all kinds thrive amid change, through strategic innovation and bold vision. Work with me and get future-ready!</p>
+    </div>
+
+    <div class="portrait-wrap">
+      <div class="portrait-border"></div>
+      <div class="portrait-img"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT US ─── -->
+<section id="about-us">
+  <div class="about-bg-text">About Us</div>
+  <h2 class="about-heading">About Us</h2>
+
+  <div class="about-cards">
+    <!-- Card 1: Who We Are -->
+    <div class="about-card">
+      <div class="about-card-logo">
+        <div class="about-card-logo-line"></div>
+        <div class="about-card-logo-line"></div>
+      </div>
+      <div class="about-card-tag">Who We Are</div>
+      <p class="about-card-body">Testimonials are short quotes from people who love your brand. It's a great way to convince customers to try your services.</p>
+      <div class="about-card-divider"></div>
+    </div>
+
+    <!-- Card 2: Our Approach -->
+    <div class="about-card">
+      <div class="about-card-logo">
+        <div class="about-card-logo-line"></div>
+        <div class="about-card-logo-line"></div>
+      </div>
+      <div class="about-card-tag">Our Approach</div>
+      <p class="about-card-body">Testimonials are short quotes from people who love your brand. It's a great way to convince customers to try your services.</p>
+      <div class="about-card-divider"></div>
+    </div>
+
+    <!-- Card 3: Why do YOU need US? -->
+    <div class="about-card">
+      <div class="about-card-logo">
+        <div class="about-card-logo-line"></div>
+        <div class="about-card-logo-line"></div>
+      </div>
+      <div class="about-card-tag">Why do YOU need US?</div>
+      <p class="about-card-body">Testimonials are short quotes from people who love your brand. It's a great way to convince customers to try your services.</p>
+      <div class="about-card-divider"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LATEST NEWS ─── -->
+<section id="latest-news">
+  <div class="divider"></div>
+  <h2 class="section-heading">Latest News</h2>
+  <div class="news-top-divider"></div>
+
+  <div class="news-grid">
+    <!-- Card 1 -->
+    <div class="news-card">
+      <div class="news-card-img nc1"></div>
+      <div class="news-card-cat">Lifestyle</div>
+      <p class="news-card-body">Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.</p>
+      <a href="#" class="news-read-more">Read More</a>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="news-card">
+      <div class="news-card-img nc2"></div>
+      <div class="news-card-cat">Fashion</div>
+      <p class="news-card-body">Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.</p>
+      <a href="#" class="news-read-more">Read More</a>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="news-card">
+      <div class="news-card-img nc3"></div>
+      <div class="news-card-cat">TBS Talks</div>
+      <p class="news-card-body">Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.</p>
+      <a href="#" class="news-read-more">Read More</a>
+    </div>
+  </div>
+
+  <div class="news-bottom-divider"></div>
+  <div class="news-see-all-wrap">
+    <a href="#" class="btn-pill-sm">See all News</a>
+  </div>
+</section>
+
+<!-- ─── EXPLORE / TRENDING ─── -->
+<section id="explore">
+  <!-- Vertical rotated labels -->
+  <div style="position:absolute;left:100px;top:50%;transform:translateY(-50%);">
+    <div style="
+      font-family:'Bodoni Moda',serif;
+      font-size:64px;font-weight:400;
+      letter-spacing:0.05em;text-transform:uppercase;
+      color:white;white-space:nowrap;
+      transform:rotate(-90deg) translateX(-50%);
+      transform-origin:center center;
+      display:block;
+    ">Explore</div>
+  </div>
+
+  <div style="position:absolute;left:200px;top:50%;transform:translateY(-50%);">
+    <div style="
+      font-family:'Bodoni Moda',serif;font-style:italic;
+      font-size:40px;font-weight:400;
+      color:white;white-space:nowrap;
+      writing-mode:vertical-rl;text-orientation:mixed;
+      transform:rotate(180deg);
+      line-height:160%;
+    ">Latest Trending Topics</div>
+  </div>
+
+  <!-- Photo cards -->
+  <div class="explore-cards">
+    <div class="explore-card ec1">
+      <div class="explore-card-overlay"></div>
+      <div class="explore-card-info">
+        <div class="explore-card-label">Lifestyle</div>
+        <div class="explore-card-divider"></div>
+      </div>
+    </div>
+    <div class="explore-card ec2">
+      <div class="explore-card-overlay"></div>
+      <div class="explore-card-info">
+        <div class="explore-card-label">Fashion</div>
+        <div class="explore-card-divider"></div>
+      </div>
+    </div>
+    <div class="explore-card ec3">
+      <div class="explore-card-overlay"></div>
+      <div class="explore-card-info">
+        <div class="explore-card-label">Culture</div>
+        <div class="explore-card-divider"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRESS / IN THE NEWS ─── -->
+<section id="press">
+  <div class="press-grid">
+    <div class="press-item">
+      <div class="press-item-cat">Press — Jan 03, 2030</div>
+      <div class="press-item-title">Schematiq partners with Studio Agatho to launch new app</div>
+      <div class="press-item-divider"></div>
+    </div>
+    <div class="press-item">
+      <div class="press-item-cat">Press — Jan 03, 2030</div>
+      <div class="press-item-title">Stugio Agatho wins Agency of the Year</div>
+      <div class="press-item-divider"></div>
+    </div>
+    <div class="press-item">
+      <div class="press-item-cat">Press — Jan 03, 2030</div>
+      <div class="press-item-title">Schematiq partners with Studio Agatho to launch new app</div>
+      <div class="press-item-divider"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TBS NIGHTS ─── -->
+<section id="tbs-nights">
+  <div class="nights-content">
+    <div class="nights-heading">TBS Nights</div>
+    <div class="nights-meta">Jan 03, 2030</div>
+    <div class="nights-location">Andheri (W), Mumbai, 400001</div>
+    <div class="nights-event-title">Lorem ipsum dolor sit</div>
+    <p class="nights-body">Agatho boasts a global client base and various industry awards. It has set the standard for design studios as its clients collaborate with the highest caliber of creatives, engineers, and ambassadors.</p>
+    <a href="#" class="btn-pill btn-pill-join">Join Now</a>
+  </div>
+</section>
+
+<!-- ─── TBS TALKS ─── -->
+<section id="tbs-talks">
+  <h2 class="talks-heading">TBS Talks</h2>
+
+  <div class="talks-grid">
+    <div class="talk-card">
+      <div class="talk-card-img tc1"></div>
+      <div class="talk-card-divider"></div>
+      <div class="talk-card-event">Event Name</div>
+      <p class="talk-card-body">Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.</p>
+    </div>
+    <div class="talk-card">
+      <div class="talk-card-img tc2"></div>
+      <div class="talk-card-divider"></div>
+      <div class="talk-card-event">Event Name</div>
+      <p class="talk-card-body">Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.</p>
+    </div>
+    <div class="talk-card">
+      <div class="talk-card-img tc3"></div>
+      <div class="talk-card-divider"></div>
+      <div class="talk-card-event">Event Name</div>
+      <p class="talk-card-body">Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.</p>
+    </div>
+    <div class="talk-card">
+      <div class="talk-card-img tc4"></div>
+      <div class="talk-card-divider"></div>
+      <div class="talk-card-event">Event Name</div>
+      <p class="talk-card-body">Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.</p>
+    </div>
+  </div>
+
+  <div class="talks-view-all">
+    <a href="#" class="btn-pill-sm">View All</a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo-bg">TBS</div>
+    <div class="footer-top-divider"></div>
+
+    <div class="footer-cols">
+      <!-- Col 1: Quick Links -->
+      <div>
+        <div class="footer-col-head">Quick Links</div>
+        <a href="#" class="footer-link">Lifestyle &amp; Travel</a>
+        <a href="#" class="footer-link">Fashion</a>
+        <a href="#" class="footer-link">Beauty &amp; Wellness</a>
+        <a href="#" class="footer-link">Culture</a>
+        <a href="#" class="footer-link">Events</a>
+        <a href="#" class="footer-link">Community</a>
+      </div>
+
+      <!-- Col 2: Locations -->
+      <div>
+        <div class="footer-col-head">Locations</div>
+        <a href="#" class="footer-link">Mumbai</a>
+        <a href="#" class="footer-link">Dubai</a>
+        <a href="#" class="footer-link">Indore</a>
+        <a href="#" class="footer-link">Lucknow</a>
+        <a href="#" class="footer-link">Hyderabad</a>
+        <a href="#" class="footer-link">Ahmedabad</a>
+      </div>
+
+      <!-- Col 3: empty spacer -->
+      <div></div>
+
+      <!-- Col 4: Follow Us -->
+      <div>
+        <div class="footer-col-head">Follow Us</div>
+        <div class="footer-social">
+          <div class="social-circle sc-white" title="Facebook">
+            <svg width="12" height="22" viewBox="0 0 12 22" fill="none"><path d="M7.5 7.5V5.5C7.5 4.67 8.17 4 9 4H10.5V1H8.5C6.29 1 4.5 2.79 4.5 5V7.5H2V10.5H4.5V21H7.5V10.5H10L10.5 7.5H7.5Z" fill="black"/></svg>
+          </div>
+          <div class="social-circle sc-white" title="Twitter/X">
+            <svg width="18" height="16" viewBox="0 0 18 16" fill="none"><path d="M17.5 1.5C16.8 2 16 2.3 15.2 2.5C14.8 2 14.2 1.6 13.6 1.4C12.4 1 11.1 1.3 10.2 2.1C9.3 2.9 8.9 4.1 9.1 5.3C6.6 5.2 4.3 4 2.7 2.1C1.9 3.4 2.3 5.1 3.5 5.9C3 5.9 2.5 5.7 2.1 5.5C2.1 6.8 3 7.9 4.3 8.2C3.8 8.3 3.3 8.3 2.8 8.2C3.2 9.4 4.3 10.2 5.6 10.2C4.5 11.1 3.1 11.6 1.7 11.5H1C2.4 12.4 4 13 5.7 13C11.3 13 14.4 8.3 14.4 4.2V3.9C15.1 3.3 15.7 2.5 16.2 1.7L17.5 1.5Z" fill="black"/></svg>
+          </div>
+          <div class="social-circle sc-gold" title="Instagram">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="4" stroke="black" stroke-width="1.5"/><circle cx="9" cy="9" r="3" stroke="black" stroke-width="1.5"/><circle cx="13" cy="5" r="1" fill="black"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom-divider"></div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">©2024. All Rights Reserved.</div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
