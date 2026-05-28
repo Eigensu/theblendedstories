@@ -39,7 +39,7 @@ export default function PressSection() {
             <ScrollReveal key={idx} delay={idx * 0.1}>
               <div style={{ paddingTop: item.offset ? 'clamp(0px, 3vw, 50px)' : '0' }}>
                 <div style={{
-                  fontFamily: "'Bodoni Moda', serif",
+                  fontFamily: 'var(--font-bodoni), serif',
                   fontSize: 'clamp(16px, 1.5vw, 20px)',
                   fontStyle: 'italic',
                   color: 'white',
@@ -49,7 +49,7 @@ export default function PressSection() {
                 </div>
 
                 <h3 style={{
-                  fontFamily: "'Montserrat', sans-serif",
+                  fontFamily: 'var(--font-montserrat), sans-serif',
                   fontSize: 'clamp(16px, 2vw, 24px)',
                   fontWeight: 400,
                   textTransform: 'uppercase',

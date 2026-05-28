@@ -41,7 +41,7 @@ export default function TBSTalks() {
       <div style={{ maxWidth: '1352px', margin: '0 auto' }}>
         <ScrollReveal>
           <h2 style={{
-            fontFamily: "'Bodoni Moda', serif",
+            fontFamily: 'var(--font-bodoni), serif',
             fontSize: 'var(--fs-section)',
             fontWeight: 400,
             letterSpacing: '0.05em',
@@ -64,7 +64,7 @@ export default function TBSTalks() {
                 </div>
                 <div style={{ width: '100%', height: '1px', background: 'var(--white-20)', margin: '24px 0 20px' }} />
                 <h3 style={{
-                  fontFamily: "'Bodoni Moda', serif",
+                  fontFamily: 'var(--font-bodoni), serif',
                   fontSize: 'clamp(18px, 2.2vw, 32px)',
                   fontWeight: 400,
                   textTransform: 'uppercase',
@@ -76,7 +76,7 @@ export default function TBSTalks() {
                   {speaker.event}
                 </h3>
                 <p style={{
-                  fontFamily: "'Montserrat', sans-serif",
+                  fontFamily: 'var(--font-montserrat), sans-serif',
                   fontSize: 'var(--fs-body)',
                   lineHeight: '160%',
                   color: 'white',

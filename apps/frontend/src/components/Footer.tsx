@@ -22,7 +22,7 @@ export default function Footer() {
         top: '40px',
         left: '50%',
         transform: 'translateX(-50%)',
-        fontFamily: "'Bodoni Moda', serif",
+        fontFamily: 'var(--font-bodoni), serif',
         fontSize: 'clamp(60px, 10vw, 120px)',
         fontWeight: 400,
         color: 'white',
@@ -56,7 +56,7 @@ export default function Footer() {
           <ScrollReveal>
             <div>
               <h4 style={{
-                fontFamily: "'Bodoni Moda', serif",
+                fontFamily: 'var(--font-bodoni), serif',
                 fontSize: 'clamp(16px, 1.5vw, 20px)',
                 fontStyle: 'italic',
                 color: 'white',
@@ -70,7 +70,7 @@ export default function Footer() {
                     key={link}
                     href="#"
                     style={{
-                      fontFamily: "'Montserrat', sans-serif",
+                      fontFamily: 'var(--font-montserrat), sans-serif',
                       fontSize: 'clamp(13px, 1.1vw, 16px)',
                       color: 'white',
                       textDecoration: 'none',
@@ -90,7 +90,7 @@ export default function Footer() {
           <ScrollReveal delay={0.1}>
             <div>
               <h4 style={{
-                fontFamily: "'Bodoni Moda', serif",
+                fontFamily: 'var(--font-bodoni), serif',
                 fontSize: 'clamp(16px, 1.5vw, 20px)',
                 fontStyle: 'italic',
                 color: 'white',
@@ -104,7 +104,7 @@ export default function Footer() {
                     key={loc}
                     href="#"
                     style={{
-                      fontFamily: "'Montserrat', sans-serif",
+                      fontFamily: 'var(--font-montserrat), sans-serif',
                       fontSize: 'clamp(13px, 1.1vw, 16px)',
                       color: 'white',
                       textDecoration: 'none',
@@ -127,7 +127,7 @@ export default function Footer() {
           <ScrollReveal delay={0.2}>
             <div>
               <h4 style={{
-                fontFamily: "'Bodoni Moda', serif",
+                fontFamily: 'var(--font-bodoni), serif',
                 fontSize: 'clamp(16px, 1.5vw, 20px)',
                 fontStyle: 'italic',
                 color: 'white',
@@ -207,7 +207,7 @@ export default function Footer() {
           padding: '24px 0',
         }}>
           <span style={{
-            fontFamily: "'Montserrat', sans-serif",
+            fontFamily: 'var(--font-montserrat), sans-serif',
             fontSize: '12px',
             color: 'white',
           }}>
@@ -219,7 +219,7 @@ export default function Footer() {
                 key={item}
                 href="#"
                 style={{
-                  fontFamily: "'Montserrat', sans-serif",
+                  fontFamily: 'var(--font-montserrat), sans-serif',
                   fontSize: '12px',
                   color: 'white',
                   textDecoration: 'none',

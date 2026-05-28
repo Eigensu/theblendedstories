@@ -16,7 +16,7 @@ const navLinks = {
 };
 
 const linkStyle: React.CSSProperties = {
-  fontFamily: "'Montserrat', sans-serif",
+  fontFamily: 'var(--font-montserrat), sans-serif',
   fontSize: 'clamp(11px, 0.9vw, 14px)',
   letterSpacing: '0.05em',
   textTransform: 'uppercase',
@@ -100,7 +100,7 @@ export default function Navbar() {
                 }} />
               </div>
               <span style={{
-                fontFamily: "'Martel Sans', sans-serif",
+                fontFamily: 'var(--font-martel-sans), sans-serif',
                 fontSize: '9px',
                 letterSpacing: '0.4em',
                 textTransform: 'uppercase',
@@ -133,7 +133,7 @@ export default function Navbar() {
               position: 'absolute',
               left: '50%',
               transform: 'translateX(-50%)',
-              fontFamily: "'Bodoni Moda', serif",
+              fontFamily: 'var(--font-bodoni), serif',
               fontSize: 'clamp(28px, 3vw, 40px)',
               fontWeight: 400,
               letterSpacing: '0.15em',
@@ -176,7 +176,7 @@ export default function Navbar() {
                 <line x1="15" y1="15" x2="21" y2="21" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
               <span className="hidden lg:inline" style={{
-                fontFamily: "'Martel Sans', sans-serif",
+                fontFamily: 'var(--font-martel-sans), sans-serif',
                 fontSize: '9px',
                 letterSpacing: '0.4em',
                 textTransform: 'uppercase',
@@ -220,7 +220,7 @@ export default function Navbar() {
             href={link.href}
             onClick={() => setMenuOpen(false)}
             style={{
-              fontFamily: "'Bodoni Moda', serif",
+              fontFamily: 'var(--font-bodoni), serif',
               fontSize: 'clamp(22px, 4vw, 40px)',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',

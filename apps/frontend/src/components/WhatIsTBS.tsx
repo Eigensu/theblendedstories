@@ -55,7 +55,7 @@ export default function WhatIsTBS() {
         <div style={{ maxWidth: '614px' }}>
           <ScrollReveal>
             <div style={{
-              fontFamily: "'Great Vibes', cursive",
+              fontFamily: 'var(--font-great-vibes), cursive',
               fontSize: '64px',
               fontWeight: 400,
               color: 'white',
@@ -66,7 +66,7 @@ export default function WhatIsTBS() {
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
             <h2 style={{
-              fontFamily: "'Bodoni Moda', serif",
+              fontFamily: 'var(--font-bodoni), serif',
               fontSize: '64px',
               fontWeight: 400,
               letterSpacing: '0.05em',
@@ -79,7 +79,7 @@ export default function WhatIsTBS() {
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
             <p style={{
-              fontFamily: "'Montserrat', sans-serif",
+              fontFamily: 'var(--font-montserrat), sans-serif',
               fontSize: '14px',
               lineHeight: '160%',
               color: 'white',

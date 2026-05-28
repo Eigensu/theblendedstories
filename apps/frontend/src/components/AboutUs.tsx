@@ -32,7 +32,7 @@ export default function AboutUs() {
         top: '50%',
         left: '50%',
         transform: 'translate(-60%, -50%)',
-        fontFamily: "'Bodoni Moda', serif",
+        fontFamily: 'var(--font-bodoni), serif',
         fontSize: '120px',
         fontWeight: 400,
         textTransform: 'uppercase',
@@ -52,7 +52,7 @@ export default function AboutUs() {
         {/* Section title */}
         <ScrollReveal>
           <h2 style={{
-            fontFamily: "'Bodoni Moda', serif",
+            fontFamily: 'var(--font-bodoni), serif',
             fontSize: '64px',
             fontWeight: 400,
             letterSpacing: '0.05em',
@@ -90,7 +90,7 @@ export default function AboutUs() {
 
                 {/* Sub-heading */}
                 <h3 style={{
-                  fontFamily: "'Bodoni Moda', serif",
+                  fontFamily: 'var(--font-bodoni), serif',
                   fontSize: '24px',
                   fontStyle: 'italic',
                   fontWeight: 500,
@@ -104,7 +104,7 @@ export default function AboutUs() {
 
                 {/* Body */}
                 <p style={{
-                  fontFamily: "'Montserrat', sans-serif",
+                  fontFamily: 'var(--font-montserrat), sans-serif',
                   fontSize: '14px',
                   lineHeight: '160%',
                   color: 'white',

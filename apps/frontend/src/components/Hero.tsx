@@ -29,7 +29,7 @@ export default function Hero() {
         {/* Title */}
         <h1
           style={{
-            fontFamily: "'Bodoni Moda', serif",
+            fontFamily: 'var(--font-bodoni), serif',
             fontSize: '72px',
             fontWeight: 400,
             letterSpacing: '0.05em',
@@ -46,7 +46,7 @@ export default function Hero() {
         {/* Subtitle */}
         <p
           style={{
-            fontFamily: "'Bodoni Moda', serif",
+            fontFamily: 'var(--font-bodoni), serif',
             fontSize: '32px',
             fontStyle: 'italic',
             fontWeight: 400,

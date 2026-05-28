@@ -34,7 +34,7 @@ export default function LatestNews() {
         {/* Title */}
         <ScrollReveal>
           <h2 style={{
-            fontFamily: "'Bodoni Moda', serif",
+            fontFamily: 'var(--font-bodoni), serif',
             fontSize: '64px',
             fontWeight: 400,
             letterSpacing: '0.05em',
@@ -113,7 +113,7 @@ function NewsCard({ item, delay }: { item: typeof newsItems[0]; delay: number })
 
         {/* Category */}
         <h3 style={{
-          fontFamily: "'Bodoni Moda', serif",
+          fontFamily: 'var(--font-bodoni), serif',
           fontSize: '32px',
           fontStyle: 'italic',
           fontWeight: 500,
@@ -127,7 +127,7 @@ function NewsCard({ item, delay }: { item: typeof newsItems[0]; delay: number })
 
         {/* Body */}
         <p style={{
-          fontFamily: "'Montserrat', sans-serif",
+          fontFamily: 'var(--font-montserrat), sans-serif',
           fontSize: '14px',
           lineHeight: '160%',
           color: 'white',
@@ -140,7 +140,7 @@ function NewsCard({ item, delay }: { item: typeof newsItems[0]; delay: number })
         {/* Read More */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: 'auto', paddingTop: '28px' }}>
           <a href={item.href} style={{
-            fontFamily: "'Martel Sans', sans-serif",
+            fontFamily: 'var(--font-martel-sans), sans-serif',
             fontSize: '20px',
             textTransform: 'uppercase',
             color: 'white',

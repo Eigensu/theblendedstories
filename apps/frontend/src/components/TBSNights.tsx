@@ -31,7 +31,7 @@ export default function TBSNights() {
             }}
           >
             <h2 style={{
-              fontFamily: "'Bodoni Moda', serif",
+              fontFamily: 'var(--font-bodoni), serif',
               fontSize: 'var(--fs-section)',
               fontWeight: 400,
               letterSpacing: '0.05em',
@@ -43,7 +43,7 @@ export default function TBSNights() {
             </h2>
 
             <p style={{
-              fontFamily: "'Montserrat', sans-serif",
+              fontFamily: 'var(--font-montserrat), sans-serif',
               fontSize: 'clamp(14px, 1.2vw, 16px)',
               fontWeight: 500,
               color: 'white',
@@ -53,7 +53,7 @@ export default function TBSNights() {
             </p>
 
             <p style={{
-              fontFamily: "'Montserrat', sans-serif",
+              fontFamily: 'var(--font-montserrat), sans-serif',
               fontSize: 'clamp(14px, 1.2vw, 16px)',
               fontWeight: 500,
               color: 'white',
@@ -63,7 +63,7 @@ export default function TBSNights() {
             </p>
 
             <p style={{
-              fontFamily: "'Martel Sans', sans-serif",
+              fontFamily: 'var(--font-martel-sans), sans-serif',
               fontSize: 'clamp(24px, 3vw, 40px)',
               textTransform: 'uppercase',
               color: 'white',
@@ -74,7 +74,7 @@ export default function TBSNights() {
             </p>
 
             <p style={{
-              fontFamily: "'Montserrat', sans-serif",
+              fontFamily: 'var(--font-montserrat), sans-serif',
               fontSize: 'var(--fs-body)',
               lineHeight: '160%',
               color: 'white',

@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Montserrat:wght@400;500&family=Great+Vibes&family=Martel+Sans:wght@400&display=swap');
 
 @import "tailwindcss";
 
@@ -29,7 +28,7 @@ html {
 body {
   background: var(--black);
   color: var(--white);
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
   overflow-x: hidden;
 }
 
@@ -137,7 +136,7 @@ body {
   border: 1px solid var(--white);
   background: transparent;
   color: var(--white);
-  font-family: 'Bodoni Moda', serif;
+  font-family: var(--font-bodoni), serif;
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.05em;
