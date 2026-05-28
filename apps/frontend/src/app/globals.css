@@ -293,8 +293,8 @@ body {
   }
   .explore-rotate-group > * {
     transform: none !important;
-    writingMode: horizontal-tb !important;
-    fontSize: clamp(24px, 4vw, 40px) !important;
+    writing-mode: horizontal-tb !important;
+    font-size: clamp(24px, 4vw, 40px) !important;
   }
 
   .whatis-inner {
