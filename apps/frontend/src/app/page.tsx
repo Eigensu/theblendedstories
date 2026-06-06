@@ -4,7 +4,6 @@ import WhatIsTBS from '@/components/WhatIsTBS';
 import AboutUs from '@/components/AboutUs';
 import LatestNews from '@/components/LatestNews';
 import Explore from '@/components/Explore';
-import PressSection from '@/components/PressSection';
 import TBSNights from '@/components/TBSNights';
 import TBSTalks from '@/components/TBSTalks';
 import Footer from '@/components/Footer';
@@ -21,7 +20,6 @@ export default function Home() {
       <AboutUs />
       <LatestNews />
       <Explore />
-      <PressSection />
       <TBSNights />
       <TBSTalks />
       <Footer />

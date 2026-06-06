@@ -3,98 +3,142 @@ import ScrollReveal from './ScrollReveal';
 const cards = [
   {
     subHead: 'Who We Are',
-    body: 'The Blended Stories is an editorial platform that celebrates lifestyle, fashion, beauty, culture, events, and community. We craft narratives that connect people with the stories shaping their cities and the world.',
+    body: "Testimonials are short quotes from people who love your brand. It's a great way to convince customers to try your services.",
   },
   {
     subHead: 'Our Approach',
-    body: 'We blend perspectives from across the creative spectrum — blending journalism, photography, and storytelling to bring you content that is as visually stunning as it is intellectually rich and culturally resonant.',
+    body: "Testimonials are short quotes from people who love your brand. It's a great way to convince customers to try your services.",
   },
   {
-    subHead: 'Why do YOU need US?',
-    body: 'In a world of fleeting content, TBS offers depth. We are the guide you need to navigate what\'s trending, what matters, and what defines the cultural pulse of your city and beyond.',
+    subHead: 'Why Do You Need Us ?',
+    body: "Testimonials are short quotes from people who love your brand. It's a great way to convince customers to try your services.",
   },
 ];
 
+function MiniSunburst() {
+  return (
+    <img
+      src="/sunburst-icon.png"
+      alt=""
+      style={{ width: '44px', height: 'auto', mixBlendMode: 'screen', display: 'block' }}
+    />
+  );
+}
+
 export default function AboutUs() {
+  const archW = 'clamp(180px, 19vw, 270px)';
+  const archH = 'clamp(440px, 52vw, 640px)';
+  const archR = 'clamp(90px, 9.5vw, 135px)';
+
   return (
     <section
       id="about-us"
       style={{
         position: 'relative',
-        background: 'var(--black)',
-        padding: '160px 44px',
         overflow: 'hidden',
+        background: 'var(--black)',
+        padding: 'clamp(80px, 10vw, 140px) clamp(20px, 3vw, 44px)',
       }}
     >
-      {/* Ghost watermark */}
+
+      {/* ── Background image — separate div so filter:grayscale doesn't bleed onto children ── */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: "url('/section3_bg.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        filter: 'grayscale(1)',
+        zIndex: 0,
+      }} />
+      {/* Dark overlay on top of the grayscale bg */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 0 }} />
+
+      {/* ── Arch image — left edge, partially bleeding off-screen ── */}
       <div style={{
         position: 'absolute',
+        left: 0,
         top: '50%',
-        left: '50%',
-        transform: 'translate(-60%, -50%)',
-        fontFamily: "'Bodoni Moda', serif",
-        fontSize: '120px',
-        fontWeight: 400,
-        textTransform: 'uppercase',
-        color: 'var(--white-04)',
-        whiteSpace: 'nowrap',
-        pointerEvents: 'none',
-        zIndex: 0,
-        userSelect: 'none',
+        transform: 'translateY(-50%)',
+        zIndex: 1,
       }}>
-        About Us
+        {/* Offset border frame */}
+        <div style={{
+          position: 'absolute',
+          top: '-12px',
+          left: '-12px',
+          width: `calc(${archW} + 24px)`,
+          height: `calc(${archH} + 12px)`,
+          borderRadius: `calc(${archR} + 12px) calc(${archR} + 12px) 0 0`,
+          border: '1px solid rgba(255,255,255,0.25)',
+          pointerEvents: 'none',
+        }} />
+        <img
+          src="/section2_door.png"
+          alt=""
+          style={{
+            width: archW,
+            height: archH,
+            objectFit: 'cover',
+            objectPosition: 'center top',
+            borderRadius: `${archR} ${archR} 0 0`,
+            display: 'block',
+            position: 'relative',
+            zIndex: 1,
+          }}
+        />
       </div>
 
-      <div style={{ maxWidth: '1352px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        {/* Divider top */}
-        <div className="h-divider" style={{ marginBottom: '80px' }} />
+      {/* ── Main content — offset right to clear the arch image ── */}
+      <div style={{
+        maxWidth: '1352px',
+        margin: '0 auto',
+        position: 'relative',
+        zIndex: 2,
+        /* push content past the arch: arch is ~15vw wide, add gap */
+        paddingLeft: 'clamp(160px, 18vw, 260px)',
+      }}>
 
         {/* Section title */}
         <ScrollReveal>
           <h2 style={{
             fontFamily: "'Bodoni Moda', serif",
-            fontSize: '64px',
+            fontVariationSettings: "'opsz' 18",
+            fontSize: 'clamp(50px, 7.3vw, 92px)',
             fontWeight: 400,
+            fontStyle: 'normal',
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
             color: 'white',
-            marginBottom: '80px',
+            marginBottom: '60px',
           }}>
-            About Us
+            ABOUT{' '}
+            <span style={{ fontStyle: 'italic' }}>US</span>
           </h2>
         </ScrollReveal>
 
-        {/* Three-column grid */}
+        {/* Three-column card grid */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '0',
         }}>
           {cards.map((card, idx) => (
-            <ScrollReveal key={card.subHead} delay={idx * 0.1}>
+            <ScrollReveal key={card.subHead} delay={idx * 0.12}>
               <div style={{
-                paddingRight: '60px',
-                paddingTop: `${idx * 38}px`,
+                paddingRight: 'clamp(24px, 4vw, 60px)',
+                paddingTop: `${idx * 48}px`,
               }}>
-                {/* TBS logo mark */}
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
-                  marginBottom: '24px',
-                  mixBlendMode: 'color-dodge',
-                }}>
-                  <div style={{ width: '40px', height: '2px', background: 'white' }} />
-                  <div style={{ width: '40px', height: '2px', background: 'white' }} />
+                <div style={{ marginBottom: '20px' }}>
+                  <MiniSunburst />
                 </div>
 
-                {/* Sub-heading */}
                 <h3 style={{
                   fontFamily: "'Bodoni Moda', serif",
-                  fontSize: '24px',
+                  fontVariationSettings: "'opsz' 18",
+                  fontSize: 'clamp(15px, 1.8vw, 21px)',
                   fontStyle: 'italic',
-                  fontWeight: 500,
-                  letterSpacing: '0.05em',
+                  fontWeight: 400,
+                  letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   color: 'white',
                   marginBottom: '16px',
@@ -102,20 +146,19 @@ export default function AboutUs() {
                   {card.subHead}
                 </h3>
 
-                {/* Body */}
                 <p style={{
                   fontFamily: "'Montserrat', sans-serif",
-                  fontSize: '14px',
+                  fontSize: '15px',
+                  fontWeight: 400,
                   lineHeight: '160%',
-                  color: 'white',
-                  maxWidth: '348px',
+                  letterSpacing: '0',
+                  color: 'rgba(255,255,255,0.85)',
                 }}>
                   {card.body}
                 </p>
 
-                {/* Bottom divider */}
                 <div style={{
-                  width: '320px',
+                  width: '100%',
                   height: '1px',
                   background: 'var(--white-20)',
                   marginTop: '40px',

@@ -1,5 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Montserrat:wght@400;500&family=Great+Vibes&family=Martel+Sans:wght@400&display=swap');
-
+/* Fonts are loaded via <link> in layout.tsx — do NOT add @import url() here.
+   Tailwind v4 processes @import rules at build time; an external @import url()
+   placed before it may be dropped or reordered past non-import rules,
+   causing browsers to silently ignore the whole font request. */
 @import "tailwindcss";
 
 *, *::before, *::after {
@@ -31,6 +33,10 @@ body {
   color: var(--white);
   font-family: 'Montserrat', sans-serif;
   overflow-x: hidden;
+  /* Match Figma's antialiasing: thinner strokes, especially on script + serif fonts */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* ─── Custom Scrollbar ─── */

@@ -14,6 +14,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* DNS pre-connect — avoids late TLS handshake on first font request */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        {/*
+          Bodoni Moda: full opsz axis (6–96) + italic variants so
+          font-variation-settings: 'opsz' 18 resolves to the correct optical-size cut.
+          Great Vibes: single weight script.
+          Montserrat: 400 + 500 for body/nav.
+        */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Great+Vibes&family=Montserrat:wght@400;500&family=Martel+Sans:wght@400&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

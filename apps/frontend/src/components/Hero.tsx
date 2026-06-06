@@ -4,54 +4,66 @@ export default function Hero() {
       style={{
         position: 'relative',
         width: '100%',
-        height: '720px',
+        minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
         background: `
-          linear-gradient(0deg, rgba(0,0,0,0.80), rgba(0,0,0,0.80)),
-          url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1440&q=80') center/cover no-repeat
+          linear-gradient(0deg, rgba(0,0,0,0.78), rgba(0,0,0,0.78)),
+          url('/hero-bg.jpg') center/cover no-repeat
         `,
       }}
     >
-      {/* Glow blob */}
-      <div className="glow-blob" style={{ top: '-60px', left: '55%' }} />
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 0,
+        zIndex: 2,
+        padding: '0 20px',
+        textAlign: 'center',
+      }}>
 
-      {/* Content */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0, zIndex: 2 }}>
-
-        {/* Sunburst SVG */}
-        <div style={{ marginBottom: '32px', animation: 'fadeUp 0.8s ease-out 0.1s both' }}>
-          <SunburstIcon />
+        {/* Sunburst icon */}
+        <div style={{ marginBottom: '28px', animation: 'fadeUp 0.8s ease-out 0.1s both' }}>
+          <img
+            src="/sunburst-icon.png"
+            alt=""
+            style={{ width: '130px', height: 'auto', mixBlendMode: 'screen', display: 'block' }}
+          />
         </div>
 
-        {/* Title */}
+        {/* Headline — exact Figma spec */}
         <h1
           style={{
             fontFamily: "'Bodoni Moda', serif",
+            fontVariationSettings: "'opsz' 18",
             fontSize: '72px',
             fontWeight: 400,
+            fontStyle: 'normal',
+            lineHeight: '120%',
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
             color: 'white',
-            lineHeight: '120%',
-            textAlign: 'center',
+            margin: 0,
             animation: 'fadeUp 0.8s ease-out 0.3s both',
           }}
         >
-          THE BLENDED STORIES
+          The Blended Stories
         </h1>
 
-        {/* Subtitle */}
+        {/* Subtitle — exact Figma spec */}
         <p
           style={{
             fontFamily: "'Bodoni Moda', serif",
+            fontVariationSettings: "'opsz' 18",
             fontSize: '32px',
-            fontStyle: 'italic',
             fontWeight: 400,
+            fontStyle: 'italic',
+            lineHeight: '120%',
+            letterSpacing: '0',
             color: 'white',
-            textAlign: 'center',
             marginTop: '16px',
             animation: 'fadeUp 0.8s ease-out 0.5s both',
           }}
@@ -59,44 +71,23 @@ export default function Hero() {
           Explore the stories that define your city.
         </p>
 
-        {/* CTA Button */}
+        {/* SUBSCRIBE NOW button */}
         <div style={{ marginTop: '48px', animation: 'fadeUp 0.8s ease-out 0.7s both' }}>
-          <a href="#newsletter" className="btn-pill btn-pill-large">
+          <a
+            href="#newsletter"
+            className="btn-pill btn-pill-large"
+            style={{
+              fontFamily: "'Bodoni Moda', serif",
+              fontVariationSettings: "'opsz' 18",
+              fontSize: '18px',
+              fontWeight: 400,
+              letterSpacing: '0.1em',
+            }}
+          >
             SUBSCRIBE NOW
           </a>
         </div>
       </div>
     </section>
-  );
-}
-
-function SunburstIcon() {
-  const lines = Array.from({ length: 16 }, (_, i) => {
-    const angle = (i * 360) / 16;
-    const isLong = i % 2 === 0;
-    const r1 = 10;
-    const r2 = isLong ? 38 : 28;
-    const rad = (angle * Math.PI) / 180;
-    return {
-      x1: 40 + Math.cos(rad) * r1,
-      y1: 40 + Math.sin(rad) * r1,
-      x2: 40 + Math.cos(rad) * r2,
-      y2: 40 + Math.sin(rad) * r2,
-    };
-  });
-
-  return (
-    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-      {lines.map((l, i) => (
-        <line
-          key={i}
-          x1={l.x1} y1={l.y1}
-          x2={l.x2} y2={l.y2}
-          stroke="white"
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
-      ))}
-    </svg>
   );
 }

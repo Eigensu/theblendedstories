@@ -4,6 +4,60 @@ import ScrollReveal from './ScrollReveal';
 const quickLinks = ['Lifestyle & Travel', 'Fashion', 'Beauty & Wellness', 'Culture', 'Events', 'Community'];
 const locations = ['Mumbai', 'Dubai', 'Indore', 'Lucknow', 'Hyderabad', 'Ahmedabad'];
 
+const socialIcons = [
+  {
+    label: 'Facebook',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="black">
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Instagram',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="1.2" fill="black" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    label: 'X / Twitter',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="black">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'YouTube',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="black">
+        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+        <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white" />
+      </svg>
+    ),
+  },
+];
+
+function FooterSunburst() {
+  return (
+    <img
+      src="/sunburst-icon.png"
+      alt=""
+      style={{
+        width: '130px',
+        height: 'auto',
+        display: 'block',
+        mixBlendMode: 'screen',
+      }}
+    />
+  );
+}
+
 export default function Footer() {
   return (
     <footer
@@ -11,72 +65,86 @@ export default function Footer() {
       style={{
         position: 'relative',
         width: '100%',
-        background: 'var(--black)',
         overflow: 'hidden',
-        padding: 'var(--py-section) var(--px-page) 0',
+        marginTop: '-2px',   /* close the subpixel rendering gap */
+        /* Same fixed hero-bg as TBSTalks — viewport-pinned so the two sections
+           see the same continuous image with no visible seam between them. */
+        backgroundImage: `
+          linear-gradient(to bottom,
+            rgba(0,0,0,0.28) 0%,
+            rgba(0,0,0,0.65) 28%,
+            rgba(0,0,0,1)    52%,
+            rgba(0,0,0,1)    100%
+          ),
+          url('/hero-bg.jpg')
+        `,
+        backgroundSize: 'auto, cover',
+        backgroundPosition: '0 0, center',
+        backgroundAttachment: 'scroll, fixed',
+        backgroundRepeat: 'no-repeat',
       }}
     >
-      {/* Ghost TBS watermark */}
+      {/* ── Brand section ── */}
       <div style={{
-        position: 'absolute',
-        top: '40px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        fontFamily: "'Bodoni Moda', serif",
-        fontSize: 'clamp(60px, 10vw, 120px)',
-        fontWeight: 400,
-        color: 'white',
-        opacity: 0.06,
-        mixBlendMode: 'hard-light',
-        letterSpacing: '0.3em',
-        whiteSpace: 'nowrap',
-        pointerEvents: 'none',
-        userSelect: 'none',
-        zIndex: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: 'clamp(60px, 8vw, 100px) clamp(20px, 4vw, 44px) clamp(40px, 5vw, 60px)',
       }}>
-        TBS
+        <ScrollReveal>
+          <FooterSunburst />
+        </ScrollReveal>
+        <ScrollReveal delay={0.1}>
+          <img
+            src="/tbs-logo.png"
+            alt="The Blended Stories"
+            style={{
+              height: 'clamp(80px, 12vw, 160px)',
+              width: 'auto',
+              display: 'block',
+              marginTop: '12px',
+              mixBlendMode: 'screen',
+            }}
+          />
+        </ScrollReveal>
       </div>
 
-      {/* Glow blob */}
-      <div className="glow-blob" style={{ top: '-100px', left: '50%', transform: 'translateX(-50%)' }} />
+      <div style={{ width: '100%', padding: '0 clamp(20px, 4vw, 88px)', position: 'relative', zIndex: 1 }}>
 
-      <div style={{ maxWidth: '1352px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-
-        {/* Spacer for ghost logo */}
-        <div style={{ height: 'clamp(120px, 16vw, 240px)' }} />
-
-        {/* First divider */}
+        {/* Top divider */}
         <div className="h-divider" />
 
-        {/* Four-column layout — responsive via Tailwind classes */}
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[var(--gap-grid)] py-[60px]"
-        >
+        {/* Three equal columns — pure inline CSS grid, no Tailwind dependency */}
+        <div className="footer-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 'clamp(32px, 4vw, 60px)',
+          padding: 'clamp(40px, 5vw, 60px) 0',
+        }}>
+
           {/* Column 1 — Quick Links */}
-          <ScrollReveal>
+          <ScrollReveal style={{ width: '100%' }}>
             <div>
               <h4 style={{
                 fontFamily: "'Bodoni Moda', serif",
-                fontSize: 'clamp(16px, 1.5vw, 20px)',
+                fontSize: 'clamp(16px, 1.5vw, 22px)',
                 fontStyle: 'italic',
+                fontWeight: 400,
                 color: 'white',
-                marginBottom: '20px',
+                marginBottom: '24px',
               }}>
                 Quick Links
               </h4>
-              <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {quickLinks.map((link) => (
-                  <a
-                    key={link}
-                    href="#"
-                    style={{
-                      fontFamily: "'Montserrat', sans-serif",
-                      fontSize: 'clamp(13px, 1.1vw, 16px)',
-                      color: 'white',
-                      textDecoration: 'none',
-                      transition: 'opacity 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.65')}
+                  <a key={link} href="#" style={{
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontSize: 'clamp(13px, 1.1vw, 15px)',
+                    color: 'white',
+                    textDecoration: 'none',
+                    transition: 'opacity 0.2s ease',
+                  }}
+                    onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
                     onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
                   >
                     {link}
@@ -87,30 +155,28 @@ export default function Footer() {
           </ScrollReveal>
 
           {/* Column 2 — Locations */}
-          <ScrollReveal delay={0.1}>
+          <ScrollReveal delay={0.1} style={{ width: '100%' }}>
             <div>
               <h4 style={{
                 fontFamily: "'Bodoni Moda', serif",
-                fontSize: 'clamp(16px, 1.5vw, 20px)',
+                fontSize: 'clamp(16px, 1.5vw, 22px)',
                 fontStyle: 'italic',
+                fontWeight: 400,
                 color: 'white',
-                marginBottom: '20px',
+                marginBottom: '24px',
               }}>
                 Locations
               </h4>
-              <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {locations.map((loc) => (
-                  <a
-                    key={loc}
-                    href="#"
-                    style={{
-                      fontFamily: "'Montserrat', sans-serif",
-                      fontSize: 'clamp(13px, 1.1vw, 16px)',
-                      color: 'white',
-                      textDecoration: 'none',
-                      transition: 'opacity 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.65')}
+                  <a key={loc} href="#" style={{
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontSize: 'clamp(13px, 1.1vw, 15px)',
+                    color: 'white',
+                    textDecoration: 'none',
+                    transition: 'opacity 0.2s ease',
+                  }}
+                    onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
                     onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
                   >
                     {loc}
@@ -120,81 +186,43 @@ export default function Footer() {
             </div>
           </ScrollReveal>
 
-          {/* Column 3 — Spacer (hidden on mobile) */}
-          <div className="footer-grid-spacer" />
-
-          {/* Column 4 — Follow Us */}
-          <ScrollReveal delay={0.2}>
+          {/* Column 3 — Follow Us */}
+          <ScrollReveal delay={0.2} style={{ width: '100%' }}>
             <div>
               <h4 style={{
                 fontFamily: "'Bodoni Moda', serif",
-                fontSize: 'clamp(16px, 1.5vw, 20px)',
+                fontSize: 'clamp(16px, 1.5vw, 22px)',
                 fontStyle: 'italic',
+                fontWeight: 400,
                 color: 'white',
-                marginBottom: '20px',
+                marginBottom: '24px',
               }}>
                 Follow Us
               </h4>
-              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                {/* Facebook */}
-                <a
-                  href="#"
-                  aria-label="Facebook"
-                  style={{
-                    width: '48px', height: '48px', borderRadius: '50%',
-                    background: 'white', display: 'flex', alignItems: 'center',
-                    justifyContent: 'center', transition: 'transform 0.2s ease', flexShrink: 0,
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="black">
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                  </svg>
-                </a>
-
-                {/* Twitter/X */}
-                <a
-                  href="#"
-                  aria-label="Twitter / X"
-                  style={{
-                    width: '48px', height: '48px', borderRadius: '50%',
-                    background: 'white', display: 'flex', alignItems: 'center',
-                    justifyContent: 'center', transition: 'transform 0.2s ease', flexShrink: 0,
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="black">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                  </svg>
-                </a>
-
-                {/* Instagram — gold */}
-                <a
-                  href="#"
-                  aria-label="Instagram"
-                  style={{
-                    width: '48px', height: '48px', borderRadius: '50%',
-                    background: 'var(--gold)', display: 'flex', alignItems: 'center',
-                    justifyContent: 'center', transition: 'transform 0.2s ease', flexShrink: 0,
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                    <circle cx="12" cy="12" r="4" />
-                    <circle cx="17.5" cy="6.5" r="1" fill="black" stroke="none" />
-                  </svg>
-                </a>
+              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+                {socialIcons.map(({ label, icon }) => (
+                  <a
+                    key={label}
+                    href="#"
+                    aria-label={label}
+                    style={{
+                      width: '52px', height: '52px', borderRadius: '50%',
+                      background: 'white', display: 'flex', alignItems: 'center',
+                      justifyContent: 'center', flexShrink: 0,
+                      transition: 'transform 0.2s ease, opacity 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  >
+                    {icon}
+                  </a>
+                ))}
               </div>
             </div>
           </ScrollReveal>
         </div>
 
-        {/* Second divider */}
+        {/* Bottom divider */}
         <div className="h-divider" />
 
         {/* Bottom bar */}
@@ -209,24 +237,21 @@ export default function Footer() {
           <span style={{
             fontFamily: "'Montserrat', sans-serif",
             fontSize: '12px',
-            color: 'white',
+            color: 'rgba(255,255,255,0.7)',
           }}>
             ©2024. All Rights Reserved.
           </span>
-          <div style={{ display: 'flex', gap: 'clamp(24px, 5vw, 80px)' }}>
+          <div style={{ display: 'flex', gap: 'clamp(40px, 6vw, 120px)' }}>
             {['Privacy Policy', 'Terms of Use'].map((item) => (
-              <a
-                key={item}
-                href="#"
-                style={{
-                  fontFamily: "'Montserrat', sans-serif",
-                  fontSize: '12px',
-                  color: 'white',
-                  textDecoration: 'none',
-                  transition: 'opacity 0.2s ease',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.65')}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+              <a key={item} href="#" style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '12px',
+                color: 'rgba(255,255,255,0.7)',
+                textDecoration: 'none',
+                transition: 'opacity 0.2s ease',
+              }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.7')}
               >
                 {item}
               </a>

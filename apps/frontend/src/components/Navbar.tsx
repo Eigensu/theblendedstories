@@ -17,15 +17,18 @@ const navLinks = {
 
 const linkStyle: React.CSSProperties = {
   fontFamily: "'Montserrat', sans-serif",
-  fontSize: 'clamp(11px, 0.9vw, 14px)',
-  letterSpacing: '0.05em',
+  fontSize: 'clamp(10px, 1.1vw, 14px)',
+  fontWeight: 400,
+  fontStyle: 'normal',
+  letterSpacing: '0',
   textTransform: 'uppercase',
   color: 'white',
   textDecoration: 'none',
-  lineHeight: '1.3',
+  lineHeight: '160%',
   textAlign: 'center',
   transition: 'opacity 0.2s ease',
   whiteSpace: 'nowrap',
+  flexShrink: 0,
 };
 
 export default function Navbar() {
@@ -49,29 +52,31 @@ export default function Navbar() {
         className="animate-fade-in-down"
         style={{
           position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
+          top: 0, left: 0, right: 0,
           height: '88px',
           zIndex: 100,
           background: scrolled
             ? 'rgba(0,0,0,0.95)'
-            : 'linear-gradient(180deg, rgba(0,0,0,0.85) 0%, transparent 100%)',
+            : 'linear-gradient(180deg, rgba(0,0,0,0.80) 0%, transparent 100%)',
           transition: 'background 0.4s ease',
         }}
       >
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
           height: '100%',
-          padding: '0 clamp(20px, 6vw, 60px)',
+          padding: '0 clamp(16px, 4vw, 48px)',
           position: 'relative',
         }}>
 
-          {/* ── LEFT: hamburger + left nav links ── */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '32px', flex: 1 }}>
-            {/* Hamburger */}
+          {/* ── LEFT: menu button + left links spread evenly ── */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flex: 1,
+          }}>
+            {/* Menu button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               style={{
@@ -87,37 +92,33 @@ export default function Navbar() {
               }}
               aria-label="Toggle Menu"
             >
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
-                <div style={{
-                  width: '26px', height: '1.5px', background: 'white',
-                  transition: 'transform 0.3s ease',
-                  transform: menuOpen ? 'rotate(45deg) translateY(6px)' : 'none',
-                }} />
-                <div style={{
-                  width: '26px', height: '1.5px', background: 'white',
-                  transition: 'transform 0.3s ease',
-                  transform: menuOpen ? 'rotate(-45deg) translateY(-6px)' : 'none',
-                }} />
+              <div style={{
+                width: '30px', height: '30px',
+                border: '1px solid rgba(255,255,255,0.4)',
+                borderRadius: '4px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'transform 0.3s ease',
+                transform: menuOpen ? 'rotate(45deg)' : 'none',
+              }}>
+                <img src="/sunburst-icon.png" alt="" style={{ width: '22px', height: 'auto', mixBlendMode: 'screen' }} />
               </div>
               <span style={{
-                fontFamily: "'Martel Sans', sans-serif",
-                fontSize: '9px',
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '8px',
                 letterSpacing: '0.4em',
                 textTransform: 'uppercase',
                 color: 'white',
-              }}>
-                MENU
-              </span>
+              }}>MENU</span>
             </button>
 
-            {/* Left nav links — hidden below 1024px via Tailwind */}
-            <div className="hidden lg:flex" style={{ gap: '28px', alignItems: 'center' }}>
+            {/* Left links — hidden on mobile only (< 640px) */}
+            <div
+              className="hidden sm:flex"
+              style={{ alignItems: 'center', justifyContent: 'space-evenly', flex: 1, paddingLeft: 'clamp(12px, 2vw, 32px)' }}
+            >
               {navLinks.left.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  style={linkStyle}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.65')}
+                <a key={link.href} href={link.href} style={linkStyle}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.55')}
                   onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
                 >
                   {link.label.map((line, i) => <span key={i} style={{ display: 'block' }}>{line}</span>)}
@@ -126,35 +127,40 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* ── CENTRE: Logo (truly centred via absolute) ── */}
+          {/* ── CENTRE: TBS logo — absolutely centred ── */}
           <a
             href="#"
             style={{
               position: 'absolute',
               left: '50%',
               transform: 'translateX(-50%)',
-              fontFamily: "'Bodoni Moda', serif",
-              fontSize: 'clamp(28px, 3vw, 40px)',
-              fontWeight: 400,
-              letterSpacing: '0.15em',
-              color: 'white',
               textDecoration: 'none',
-              whiteSpace: 'nowrap',
+              flexShrink: 0,
+              zIndex: 1,
             }}
           >
-            TBS
+            <img
+              src="/tbs-logo.png"
+              alt="The Blended Stories"
+              style={{ height: 'clamp(40px, 5.5vw, 56px)', width: 'auto', mixBlendMode: 'screen', display: 'block' }}
+            />
           </a>
 
-          {/* ── RIGHT: right nav links + search ── */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '32px', flex: 1 }}>
-            {/* Right nav links — hidden below 1024px via Tailwind */}
-            <div className="hidden lg:flex" style={{ gap: '28px', alignItems: 'center' }}>
+          {/* ── RIGHT: right links spread evenly + search ── */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flex: 1,
+          }}>
+            {/* Right links — hidden on mobile only (< 640px) */}
+            <div
+              className="hidden sm:flex"
+              style={{ alignItems: 'center', justifyContent: 'space-evenly', flex: 1, paddingRight: 'clamp(12px, 2vw, 32px)' }}
+            >
               {navLinks.right.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  style={linkStyle}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.65')}
+                <a key={link.href} href={link.href} style={linkStyle}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.55')}
                   onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
                 >
                   {link.label.map((line, i) => <span key={i} style={{ display: 'block' }}>{line}</span>)}
@@ -163,65 +169,45 @@ export default function Navbar() {
             </div>
 
             {/* Search icon */}
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '4px',
-              cursor: 'pointer',
-              flexShrink: 0,
-            }}>
-              <svg width="20" height="20" viewBox="0 0 22 22" fill="none" style={{ opacity: 0.8 }}>
-                <circle cx="9" cy="9" r="8" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', cursor: 'pointer', flexShrink: 0 }}>
+              <svg width="18" height="18" viewBox="0 0 22 22" fill="none">
+                <circle cx="9" cy="9" r="8" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
                 <line x1="15" y1="15" x2="21" y2="21" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
-              <span className="hidden lg:inline" style={{
-                fontFamily: "'Martel Sans', sans-serif",
-                fontSize: '9px',
+              <span className="hidden sm:inline" style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '8px',
                 letterSpacing: '0.4em',
                 textTransform: 'uppercase',
                 color: 'white',
-              }}>
-                SEARCH
-              </span>
+              }}>SEARCH</span>
             </div>
           </div>
         </div>
 
         {/* Bottom divider */}
         <div style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 'clamp(20px, 4vw, 44px)',
-          right: 'clamp(20px, 4vw, 44px)',
-          height: '1px',
-          background: 'var(--white-20)',
+          position: 'absolute', bottom: 0,
+          left: 'clamp(16px, 4vw, 48px)', right: 'clamp(16px, 4vw, 48px)',
+          height: '1px', background: 'var(--white-20)',
         }} />
       </nav>
 
       {/* ── Full-screen menu overlay ── */}
       <div style={{
-        position: 'fixed',
-        inset: 0,
+        position: 'fixed', inset: 0,
         background: 'rgba(0,0,0,0.97)',
         zIndex: 90,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '28px',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '32px',
         opacity: menuOpen ? 1 : 0,
         pointerEvents: menuOpen ? 'auto' : 'none',
         transition: 'opacity 0.4s ease',
       }}>
         {[...navLinks.left, ...navLinks.right].map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            onClick={() => setMenuOpen(false)}
+          <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}
             style={{
               fontFamily: "'Bodoni Moda', serif",
-              fontSize: 'clamp(22px, 4vw, 40px)',
+              fontSize: 'clamp(22px, 4vw, 44px)',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               color: 'white',

@@ -4,46 +4,45 @@ import ScrollReveal from './ScrollReveal';
 
 const newsItems = [
   {
-    img: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=848&q=80',
-    category: 'Fashion',
-    body: 'The runways of Paris and Milan are redefining elegance for a new generation — bold silhouettes, rich textures, and an unapologetic embrace of the avant-garde define this season\'s must-watch collections.',
-    href: '#',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=848&q=80',
+    img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=848&q=80',
     category: 'Lifestyle',
-    body: 'From rooftop gardens to curated interiors, a new wave of design-conscious living is sweeping through the city\'s most coveted neighbourhoods, merging sustainability with luxury.',
+    body: "Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.",
     href: '#',
   },
   {
-    img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=848&q=80',
-    category: 'Culture',
-    body: 'Underground art collectives and independent galleries are reshaping the city\'s cultural landscape, giving voice to emerging artists who refuse to be bound by convention.',
+    img: 'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?w=848&q=80',
+    category: 'Fashion',
+    body: "Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.",
+    href: '#',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=848&q=80',
+    category: 'TBS Talks',
+    body: "Since its founding in the 80s, Studio Agatho has been the go-to company for various design needs. Its offerings range from graphic design and branding strategy to website development and video.",
     href: '#',
   },
 ];
 
 export default function LatestNews() {
   return (
-    <section id="news" style={{ background: 'var(--black)', padding: '0 44px 80px' }}>
+    <section id="news" style={{ background: 'var(--black)', padding: '0 clamp(20px, 4vw, 44px) 80px' }}>
       <div style={{ maxWidth: '1352px', margin: '0 auto' }}>
-
-        {/* Top divider */}
-        <div className="h-divider" />
 
         {/* Title */}
         <ScrollReveal>
           <h2 style={{
             fontFamily: "'Bodoni Moda', serif",
-            fontSize: '64px',
+            fontSize: 'clamp(44px, 7vw, 90px)',
             fontWeight: 400,
-            letterSpacing: '0.05em',
+            letterSpacing: '0.06em',
             textTransform: 'uppercase',
             color: 'white',
             textAlign: 'center',
-            padding: '80px 0 60px',
+            padding: 'clamp(48px, 7vw, 80px) 0 clamp(32px, 5vw, 60px)',
+            fontStyle: 'normal',
           }}>
-            Latest News
+            LATEST{' '}
+            <span style={{ fontStyle: 'italic' }}>NEWS</span>
           </h2>
         </ScrollReveal>
 
@@ -51,16 +50,18 @@ export default function LatestNews() {
         <div className="h-divider" />
 
         {/* Three-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-[44px] relative" style={{ paddingTop: '50px' }}>
-          
-          {/* Mathematically centered vertical lines (tablet and desktop) */}
-          <div 
-            className="hidden md:block absolute w-[1px] bg-white/20" 
-            style={{ left: 'calc(33.333% - 7.33px)', top: '80px', bottom: '0' }} 
+        <div
+          className="grid grid-cols-1 md:grid-cols-3 relative"
+          style={{ paddingTop: '40px' }}
+        >
+          {/* Vertical column dividers */}
+          <div
+            className="hidden md:block absolute w-[1px] bg-white/20"
+            style={{ left: 'calc(33.333%)', top: 0, bottom: 0 }}
           />
-          <div 
-            className="hidden md:block absolute w-[1px] bg-white/20" 
-            style={{ left: 'calc(66.666% + 7.33px)', top: '80px', bottom: '0' }} 
+          <div
+            className="hidden md:block absolute w-[1px] bg-white/20"
+            style={{ left: 'calc(66.666%)', top: 0, bottom: 0 }}
           />
 
           {newsItems.map((item, idx) => (
@@ -69,14 +70,14 @@ export default function LatestNews() {
         </div>
 
         {/* Below grid divider */}
-        <div className="h-divider" style={{ marginTop: '60px' }} />
+        <div className="h-divider" style={{ marginTop: '0' }} />
 
         {/* See All button */}
         <ScrollReveal>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-            <a href="#" className="btn-pill btn-pill-small">
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px', marginBottom: '16px' }}>
+            <a href="#" className="btn-pill btn-pill-small" style={{ gap: '12px' }}>
               SEE ALL NEWS
-              <span className="btn-separator" />
+              <ArrowRight />
             </a>
           </div>
         </ScrollReveal>
@@ -93,10 +94,30 @@ function NewsCard({ item, delay }: { item: typeof newsItems[0]; delay: number })
       <article
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        style={{ cursor: 'pointer', height: '100%', display: 'flex', flexDirection: 'column' }}
+        style={{
+          cursor: 'pointer',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '0 clamp(16px, 3vw, 44px) clamp(32px, 4vw, 48px)',
+        }}
       >
+        {/* Category — ABOVE the image */}
+        <h3 style={{
+          fontFamily: "'Bodoni Moda', serif",
+          fontSize: 'clamp(28px, 3.5vw, 48px)',
+          fontStyle: 'italic',
+          fontWeight: 400,
+          letterSpacing: '0.03em',
+          textTransform: 'uppercase',
+          color: 'white',
+          marginBottom: '16px',
+        }}>
+          {item.category}
+        </h3>
+
         {/* Image */}
-        <div style={{ borderRadius: '8px', overflow: 'hidden', width: '100%', height: '240px' }}>
+        <div style={{ overflow: 'hidden', width: '100%', height: 'clamp(180px, 18vw, 230px)', flexShrink: 0 }}>
           <img
             src={item.img}
             alt={item.category}
@@ -105,34 +126,19 @@ function NewsCard({ item, delay }: { item: typeof newsItems[0]; delay: number })
               height: '100%',
               objectFit: 'cover',
               display: 'block',
-              transform: hovered ? 'scale(1.03)' : 'scale(1)',
-              transition: 'transform 0.3s ease',
+              transform: hovered ? 'scale(1.04)' : 'scale(1)',
+              transition: 'transform 0.4s ease',
             }}
           />
         </div>
 
-        {/* Category */}
-        <h3 style={{
-          fontFamily: "'Bodoni Moda', serif",
-          fontSize: '32px',
-          fontStyle: 'italic',
-          fontWeight: 500,
-          letterSpacing: '0.05em',
-          textTransform: 'uppercase',
-          color: 'white',
-          marginTop: '24px',
-        }}>
-          {item.category}
-        </h3>
-
         {/* Body */}
         <p style={{
           fontFamily: "'Montserrat', sans-serif",
-          fontSize: '14px',
-          lineHeight: '160%',
-          color: 'white',
-          maxWidth: '380px',
-          marginTop: '16px',
+          fontSize: 'clamp(12px, 1vw, 14px)',
+          lineHeight: '170%',
+          color: 'rgba(255,255,255,0.85)',
+          marginTop: '24px',
         }}>
           {item.body}
         </p>
@@ -140,23 +146,28 @@ function NewsCard({ item, delay }: { item: typeof newsItems[0]; delay: number })
         {/* Read More */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: 'auto', paddingTop: '28px' }}>
           <a href={item.href} style={{
-            fontFamily: "'Martel Sans', sans-serif",
-            fontSize: '20px',
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: 'clamp(11px, 1vw, 13px)',
+            fontWeight: 500,
             textTransform: 'uppercase',
+            letterSpacing: '0.12em',
             color: 'white',
             textDecoration: 'none',
-            letterSpacing: '0.02em',
           }}>
-            Read More
+            READ MORE
           </a>
-          <div style={{
-            height: '2px',
-            background: 'var(--white-40)',
-            width: hovered ? '64px' : '48px',
-            transition: 'width 0.2s ease',
-          }} />
+          <ArrowRight />
         </div>
       </article>
     </ScrollReveal>
+  );
+}
+
+function ArrowRight() {
+  return (
+    <svg width="40" height="12" viewBox="0 0 40 12" fill="none" style={{ flexShrink: 0 }}>
+      <line x1="0" y1="6" x2="34" y2="6" stroke="white" strokeWidth="1" strokeOpacity="0.7" />
+      <polyline points="28,1 38,6 28,11" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.7" strokeLinejoin="round" />
+    </svg>
   );
 }
