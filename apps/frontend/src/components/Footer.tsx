@@ -49,7 +49,7 @@ function FooterSunburst() {
       src="/sunburst-icon.png"
       alt=""
       style={{
-        width: '130px',
+        width: 'clamp(60px, 16vw, 130px)',
         height: 'auto',
         display: 'block',
         mixBlendMode: 'screen',
@@ -62,6 +62,7 @@ export default function Footer() {
   return (
     <footer
       id="newsletter"
+      className="fixed-bg-section"
       style={{
         position: 'relative',
         width: '100%',
@@ -155,7 +156,7 @@ export default function Footer() {
           </ScrollReveal>
 
           {/* Column 2 — Locations */}
-          <ScrollReveal delay={0.1} style={{ width: '100%' }}>
+          <ScrollReveal delay={0.1} className="footer-locations-col" style={{ width: '100%' }}>
             <div>
               <h4 style={{
                 fontFamily: "'Bodoni Moda', serif",
@@ -186,9 +187,9 @@ export default function Footer() {
             </div>
           </ScrollReveal>
 
-          {/* Column 3 — Follow Us */}
-          <ScrollReveal delay={0.2} style={{ width: '100%' }}>
-            <div>
+          {/* Column 3 — Follow Us (spans both columns on mobile so icons fit in 1 row) */}
+          <ScrollReveal delay={0.2} className="footer-follow-us" style={{ width: '100%' }}>
+            <div style={{ textAlign: 'center' }}>
               <h4 style={{
                 fontFamily: "'Bodoni Moda', serif",
                 fontSize: 'clamp(16px, 1.5vw, 22px)',
@@ -199,7 +200,7 @@ export default function Footer() {
               }}>
                 Follow Us
               </h4>
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+              <div className="footer-social-icons" style={{ display: 'flex', gap: '14px', flexWrap: 'nowrap', justifyContent: 'center' }}>
                 {socialIcons.map(({ label, icon }) => (
                   <a
                     key={label}
@@ -226,7 +227,7 @@ export default function Footer() {
         <div className="h-divider" />
 
         {/* Bottom bar */}
-        <div style={{
+        <div className="footer-bottom-bar" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',

@@ -30,7 +30,7 @@ export default function Hero() {
           <img
             src="/sunburst-icon.png"
             alt=""
-            style={{ width: '130px', height: 'auto', mixBlendMode: 'screen', display: 'block' }}
+            style={{ width: 'clamp(60px, 16vw, 130px)', height: 'auto', mixBlendMode: 'screen', display: 'block' }}
           />
         </div>
 
@@ -39,7 +39,7 @@ export default function Hero() {
           style={{
             fontFamily: "'Bodoni Moda', serif",
             fontVariationSettings: "'opsz' 18",
-            fontSize: '72px',
+            fontSize: 'clamp(30px, 8vw, 72px)',
             fontWeight: 400,
             fontStyle: 'normal',
             lineHeight: '120%',
@@ -58,7 +58,7 @@ export default function Hero() {
           style={{
             fontFamily: "'Bodoni Moda', serif",
             fontVariationSettings: "'opsz' 18",
-            fontSize: '32px',
+            fontSize: 'clamp(18px, 4.5vw, 32px)',
             fontWeight: 400,
             fontStyle: 'italic',
             lineHeight: '120%',

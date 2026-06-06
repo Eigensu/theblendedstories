@@ -19,18 +19,18 @@ export default function TBSNights() {
       }}
     >
       <div
+        className="nights-inner"
         style={{
           width: '100%',
           maxWidth: '1440px',
           margin: '0 auto',
           padding: 'clamp(60px, 8vw, 120px) clamp(20px, 4vw, 44px)',
           display: 'flex',
-          /* shifted left: use center instead of flex-end, then margin-right nudges the block */
           justifyContent: 'flex-end',
         }}
       >
         <ScrollReveal>
-          <div style={{ maxWidth: '520px', textAlign: 'left', marginRight: 'clamp(40px, 8vw, 120px)' }}>
+          <div className="nights-content" style={{ maxWidth: '520px', textAlign: 'left', marginRight: 'clamp(40px, 8vw, 120px)' }}>
 
             {/* Title */}
             <h2 style={{

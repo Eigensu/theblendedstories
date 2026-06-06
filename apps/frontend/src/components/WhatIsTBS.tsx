@@ -47,7 +47,7 @@ export default function WhatIsTBS() {
         </svg>
       </div>
 
-      <div style={{
+      <div className="whatis-inner" style={{
         maxWidth: '1352px',
         margin: '0 auto',
         display: 'flex',
@@ -96,7 +96,7 @@ export default function WhatIsTBS() {
 
           {/* Body — Montserrat 14px, indented */}
           <ScrollReveal delay={0.2}>
-            <p style={{
+            <p className="whatis-body-indent" style={{
               fontFamily: "'Montserrat', sans-serif",
               fontSize: '14px',
               fontWeight: 400,
@@ -105,7 +105,6 @@ export default function WhatIsTBS() {
               letterSpacing: '0',
               color: 'rgba(255,255,255,0.9)',
               marginTop: '48px',
-              /* Figma: body Left 256px − section padding 44px = 212px indent; text width 614px */
               paddingLeft: 'clamp(80px, 14.7vw, 212px)',
               maxWidth: '826px',
             }}>
@@ -118,15 +117,14 @@ export default function WhatIsTBS() {
 
         {/* ── Right arch image ── */}
         <ScrollReveal delay={0.25}>
-          <div style={{ position: 'relative', flexShrink: 0 }}>
+          <div className="whatis-portrait-wrap" style={{ position: 'relative', flexShrink: 0 }}>
             {/* Offset border frame — arch shape, slightly larger than image */}
-            <div style={{
+            <div className="whatis-portrait-frame" style={{
               position: 'absolute',
               top: '-14px',
               left: '-14px',
               width: 'calc(100% + 28px)',
               height: 'calc(100% + 14px)',
-              /* radius = half the total offset width so the top is a true semicircle */
               borderRadius: 'clamp(147px, 15.4vw, 214px) clamp(147px, 15.4vw, 214px) 0 0',
               border: '1px solid rgba(255,255,255,0.35)',
               pointerEvents: 'none',

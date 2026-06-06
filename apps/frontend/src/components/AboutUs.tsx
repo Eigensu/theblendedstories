@@ -53,8 +53,8 @@ export default function AboutUs() {
       {/* Dark overlay on top of the grayscale bg */}
       <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 0 }} />
 
-      {/* ── Arch image — left edge, partially bleeding off-screen ── */}
-      <div style={{
+      {/* ── Arch image — left edge, hidden on mobile ── */}
+      <div className="about-arch-wrap" style={{
         position: 'absolute',
         left: 0,
         top: '50%',
@@ -89,12 +89,11 @@ export default function AboutUs() {
       </div>
 
       {/* ── Main content — offset right to clear the arch image ── */}
-      <div style={{
+      <div className="about-content-pad" style={{
         maxWidth: '1352px',
         margin: '0 auto',
         position: 'relative',
         zIndex: 2,
-        /* push content past the arch: arch is ~15vw wide, add gap */
         paddingLeft: 'clamp(160px, 18vw, 260px)',
       }}>
 
@@ -116,15 +115,15 @@ export default function AboutUs() {
           </h2>
         </ScrollReveal>
 
-        {/* Three-column card grid */}
-        <div style={{
+        {/* Three-column card grid — stacks to 1 col on mobile */}
+        <div className="about-cards-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '0',
         }}>
           {cards.map((card, idx) => (
             <ScrollReveal key={card.subHead} delay={idx * 0.12}>
-              <div style={{
+              <div className="about-card-stagger" style={{
                 paddingRight: 'clamp(24px, 4vw, 60px)',
                 paddingTop: `${idx * 48}px`,
               }}>

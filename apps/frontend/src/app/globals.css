@@ -313,12 +313,21 @@ body {
   }
 
   .nights-inner {
-    justify-content: center;
+    justify-content: center !important;
   }
   .nights-content {
     text-align: center !important;
     max-width: 100% !important;
+    margin-right: 0 !important;
   }
+  .whatis-body-indent { padding-left: 0 !important; }
+  .whatis-portrait-wrap img {
+    width: min(280px, 72vw) !important;
+    height: auto !important;
+    aspect-ratio: 260 / 380;
+    border-radius: 50% 50% 0 0 !important;
+  }
+  .whatis-portrait-frame { border-radius: 50% 50% 0 0 !important; }
   .nights-content p,
   .nights-content div[style] {
     text-align: center !important;
@@ -334,8 +343,32 @@ body {
     gap: 16px;
   }
 
-  .about-ghost {
-    display: none;
+  .about-ghost { display: none; }
+  /* AboutUs arch + content reset */
+  .about-arch-wrap { display: none !important; }
+  .about-content-pad { padding-left: 0 !important; }
+  .about-cards-grid { grid-template-columns: 1fr !important; gap: clamp(32px, 5vw, 48px) !important; }
+  .about-card-stagger { padding-top: 0 !important; }
+  /* Disable fixed bg on mobile — iOS doesn't support background-attachment:fixed */
+  .fixed-bg-section { background-attachment: scroll, scroll !important; }
+
+  /* Fix seam between TBSTalks and Footer on mobile.
+     With scroll attachment, each section renders its own copy of hero-bg.jpg at
+     a different offset, causing a visible break. Solution: make TBSTalks fully
+     black so the boundary is black→black (invisible), then let the footer reveal
+     the image gradually as you scroll into it. */
+  #talks { background: var(--black) !important; }
+  #newsletter {
+    background-image:
+      linear-gradient(to bottom,
+        rgba(0,0,0,1)    0%,
+        rgba(0,0,0,1)    25%,
+        rgba(0,0,0,0.5)  58%,
+        rgba(0,0,0,1)    100%
+      ),
+      url('/hero-bg.jpg') !important;
+    background-size: auto, cover !important;
+    background-position: 0 0, center !important;
   }
 }
 
@@ -355,15 +388,25 @@ body {
     display: none !important;
   }
 
-  .press-grid {
-    grid-template-columns: 1fr !important;
+  .press-grid { grid-template-columns: 1fr !important; }
+  .footer-bottom-bar {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
   }
+  /* Follow Us spans both columns so all 4 icons fit in one row */
+  .footer-follow-us { grid-column: span 2; }
+  /* Locations: add right breathing room so text doesn't crowd the phone edge */
+  .footer-locations-col { padding-right: 16px !important; }
+  /* Follow Us: center heading + icons on mobile */
+  .footer-follow-us { text-align: center; }
+  .footer-social-icons { justify-content: center !important; }
 }
 
 /* ── Small mobile: 480px ── */
 @media (max-width: 480px) {
   .footer-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr 1fr !important;
   }
 }
 

@@ -28,12 +28,10 @@ export default function TBSTalks() {
   return (
     <section
       id="talks"
+      className="fixed-bg-section"
       style={{
         width: '100%',
         overflow: 'hidden',
-        /* Cards area = solid black; hero-bg gradually reveals toward the bottom.
-           background-attachment: fixed pins the image to the viewport so it
-           flows seamlessly into the footer (no seam at the section boundary). */
         backgroundImage: `
           linear-gradient(to bottom,
             rgba(0,0,0,1)   0%,
@@ -74,7 +72,7 @@ export default function TBSTalks() {
         </ScrollReveal>
 
         {/* Four-column speaker grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[clamp(24px,3vw,44px)] w-full">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-[clamp(16px,3vw,44px)] w-full">
           {speakers.map((speaker, idx) => (
             <ScrollReveal key={idx} delay={idx * 0.1}>
               <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -82,10 +80,12 @@ export default function TBSTalks() {
                 {/* Circular portrait */}
                 <div style={{
                   width: '100%',
+                  maxWidth: 'clamp(150px, 17vw, 210px)',
                   aspectRatio: '1 / 1',
                   borderRadius: '50%',
                   overflow: 'hidden',
                   flexShrink: 0,
+                  margin: '0 auto',
                 }}>
                   <img
                     src={speaker.img}
