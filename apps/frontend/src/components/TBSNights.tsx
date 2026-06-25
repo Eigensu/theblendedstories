@@ -1,136 +1,140 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import ScrollReveal from './ScrollReveal';
 
 export default function TBSNights() {
+  const router = useRouter();
+
   return (
     <section
       id="nights"
       style={{
         position: 'relative',
         width: '100%',
-        minHeight: 'clamp(560px, 65vh, 760px)',
+        minHeight: 'clamp(520px, 62vh, 740px)',
         overflow: 'hidden',
-        background: `
-          linear-gradient(to right, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 45%, rgba(0,0,0,0.45) 75%, rgba(0,0,0,0.20) 100%),
-          url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1440&q=80') center/cover no-repeat
-        `,
+        backgroundImage: `url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1440&q=80')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         display: 'flex',
         alignItems: 'center',
       }}
     >
+      {/* Dark overlay */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'rgba(0,0,0,0.58)',
+        zIndex: 0,
+      }} />
+
+      {/* TBS NIGHTS label — top right */}
+      <span style={{
+        position: 'absolute',
+        top: 'clamp(20px, 3vw, 36px)',
+        right: 'clamp(20px, 4vw, 60px)',
+        fontFamily: "'Poppins', sans-serif",
+        fontSize: 'clamp(10px, 0.9vw, 13px)',
+        letterSpacing: '0.22em',
+        textTransform: 'uppercase',
+        color: 'rgba(255,255,255,0.85)',
+        zIndex: 2,
+      }}>
+        TBS NIGHTS
+      </span>
+
       <div
         className="nights-inner"
         style={{
+          position: 'relative',
+          zIndex: 1,
           width: '100%',
           maxWidth: '1440px',
           margin: '0 auto',
-          padding: 'clamp(60px, 8vw, 120px) clamp(20px, 4vw, 44px)',
+          padding: 'clamp(60px, 8vw, 110px) clamp(20px, 4vw, 60px)',
           display: 'flex',
-          justifyContent: 'flex-end',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 'clamp(40px, 6vw, 100px)',
         }}
       >
+        {/* Left: Title */}
         <ScrollReveal>
-          <div className="nights-content" style={{ maxWidth: '520px', textAlign: 'left', marginRight: 'clamp(40px, 8vw, 120px)' }}>
+          <h2 style={{
+            fontFamily: "'Fraunces', serif",
+            fontSize: 'clamp(44px, 6vw, 82px)',
+            fontWeight: 400,
+            color: 'white',
+            lineHeight: '1.1',
+            margin: 0,
+            flexShrink: 0,
+          }}>
+            TBS <br /><em>Nights</em>
+          </h2>
+        </ScrollReveal>
 
-            {/* Title */}
-            <h2 style={{
-              fontFamily: "'Bodoni Moda', serif",
-              fontVariationSettings: "'opsz' 18",
-              fontSize: 'clamp(46px, 6.3vw, 84px)',
-              fontWeight: 400,
-              letterSpacing: '0.04em',
-              color: 'white',
-              lineHeight: '110%',
-              fontStyle: 'normal',
-            }}>
-              TBS{' '}
-              <span style={{ fontStyle: 'italic' }}>NIGHTS</span>
-            </h2>
+        {/* Right: Body text + button */}
+        <ScrollReveal delay={0.12}>
+          <div style={{ maxWidth: '540px' }}>
 
-            {/* Subtitle */}
             <p style={{
-              fontFamily: "'Montserrat', sans-serif",
-              fontSize: 'clamp(15px, 1.7vw, 21px)',
-              fontWeight: 600,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'white',
-              marginTop: '24px',
-            }}>
-              Lorem Ipsum Dolor Sit
-            </p>
-
-            {/* Date */}
-            <p style={{
-              fontFamily: "'Montserrat', sans-serif",
-              fontSize: 'clamp(14px, 1.2vw, 16px)',
-              fontWeight: 400,
-              color: 'rgba(255,255,255,0.9)',
-              marginTop: '16px',
-            }}>
-              Jan 03, 2030
-            </p>
-
-            {/* Location */}
-            <p style={{
-              fontFamily: "'Montserrat', sans-serif",
-              fontSize: 'clamp(14px, 1.2vw, 16px)',
-              fontWeight: 400,
-              color: 'rgba(255,255,255,0.9)',
-              marginTop: '6px',
-            }}>
-              Andheri (W), Mumbai, 400001
-            </p>
-
-            {/* Body */}
-            <p style={{
-              fontFamily: "'Montserrat', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               fontSize: 'clamp(13px, 1.1vw, 15px)',
-              lineHeight: '170%',
-              color: 'rgba(255,255,255,0.85)',
-              marginTop: '24px',
-              maxWidth: '440px',
+              fontStyle: 'italic',
+              color: 'white',
+              margin: '0 0 clamp(16px, 2vw, 24px) 0',
+              lineHeight: '1.6',
             }}>
-              Agatho boasts a global client base and various industry awards. It has set
-              the standard for design studios as its clients collaborate with the highest
-              caliber of creatives, engineers, and ambassadors.
+              The conversations that don&apos;t happen online.
             </p>
 
-            {/* JOIN NOW — styled like SUBSCRIBE NOW pill (no inner dot) */}
-            <div style={{ marginTop: '40px' }}>
-              <a
-                href="#"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid white',
-                  borderRadius: '30px',
-                  width: '223px',
-                  height: '60px',
-                  color: 'white',
-                  textDecoration: 'none',
-                  fontFamily: "'Bodoni Moda', serif",
-                  fontVariationSettings: "'opsz' 18",
-                  fontSize: '18px',
-                  fontWeight: 400,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  transition: 'background 0.25s ease, transform 0.25s ease',
-                  background: 'transparent',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
-                  e.currentTarget.style.transform = 'scale(1.02)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.transform = 'scale(1)';
-                }}
-              >
-                JOIN NOW
-              </a>
-            </div>
+            <p style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: 'clamp(12px, 0.95vw, 14px)',
+              color: 'rgba(255,255,255,0.85)',
+              lineHeight: '1.8',
+              margin: '0 0 clamp(14px, 1.8vw, 20px) 0',
+              textAlign: 'justify',
+            }}>
+              TBS Nights is an intimate dinner series by The Blended Stories that brings together founders, creatives, tastemakers and cultural voices for meaningful conversations beyond likes, algorithms and timelines.
+            </p>
+
+            <p style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: 'clamp(12px, 0.95vw, 14px)',
+              color: 'rgba(255,255,255,0.85)',
+              lineHeight: '1.8',
+              margin: '0 0 clamp(28px, 3.5vw, 44px) 0',
+              textAlign: 'justify',
+            }}>
+              Because the best connections happen when people put their phones down and pull up a chair.
+            </p>
+
+            <button
+              onClick={() => router.push('/tbs-nights')}
+              style={{
+                border: '1px solid rgba(255,255,255,0.8)',
+                background: 'transparent',
+                color: 'white',
+                padding: '14px 36px',
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: 'clamp(10px, 0.85vw, 12px)',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                transition: 'background 0.2s ease, border-color 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                e.currentTarget.style.borderColor = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.8)';
+              }}
+            >
+              JOIN THE WAITLIST
+            </button>
 
           </div>
         </ScrollReveal>

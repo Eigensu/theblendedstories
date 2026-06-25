@@ -253,6 +253,20 @@ body {
   flex-wrap: nowrap;
 }
 
+/* ─── WhyWeExist layout ─── */
+.whyweexist-inner {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .whyweexist-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px !important;
+  }
+}
+
 /* ─── WhatIsTBS layout ─── */
 .whatis-inner {
   display: flex;
@@ -304,7 +318,7 @@ body {
   }
 
   .whatis-inner {
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
     text-align: center;
   }
@@ -322,12 +336,9 @@ body {
   }
   .whatis-body-indent { padding-left: 0 !important; }
   .whatis-portrait-wrap img {
-    width: min(280px, 72vw) !important;
-    height: auto !important;
-    aspect-ratio: 260 / 380;
-    border-radius: 50% 50% 0 0 !important;
+    width: min(320px, 82vw) !important;
+    height: min(320px, 82vw) !important;
   }
-  .whatis-portrait-frame { border-radius: 50% 50% 0 0 !important; }
   .nights-content p,
   .nights-content div[style] {
     text-align: center !important;

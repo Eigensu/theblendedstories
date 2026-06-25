@@ -1,26 +1,23 @@
-import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import NewsletterPopup from '@/components/NewsletterPopup';
 import WhatIsTBS from '@/components/WhatIsTBS';
 import AboutUs from '@/components/AboutUs';
-import LatestNews from '@/components/LatestNews';
-import Explore from '@/components/Explore';
+import WhyWeExist from '@/components/WhyWeExist';
 import TBSNights from '@/components/TBSNights';
+import TheEdit from '@/components/TheEdit';
 import TBSTalks from '@/components/TBSTalks';
 import Footer from '@/components/Footer';
-import CustomCursor from '@/components/CustomCursor';
 
 export default function Home() {
   return (
     <>
-      <CustomCursor />
-      {/* No width constraint here — each section handles its own full-width layout */}
-      <Navbar />
+      <NewsletterPopup />
       <Hero />
       <WhatIsTBS />
       <AboutUs />
-      <LatestNews />
-      <Explore />
+      <WhyWeExist />
       <TBSNights />
+      <TheEdit />
       <TBSTalks />
       <Footer />
     </>
