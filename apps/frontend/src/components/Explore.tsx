@@ -153,6 +153,7 @@ function DesktopCard({ card, delay }: { card: typeof cards[0]; delay: number }) 
       }}
     >
       <div
+        className="img-card"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{ cursor: 'pointer' }}
@@ -212,7 +213,7 @@ function DesktopCard({ card, delay }: { card: typeof cards[0]; delay: number }) 
 function MobileCard({ card, delay }: { card: typeof cards[0]; delay: number }) {
   return (
     <ScrollReveal delay={delay} style={{ width: '100%', maxWidth: '340px', margin: '0 auto' }}>
-      <div>
+      <div className="img-card">
         <div style={{ width: '100%', height: '260px', overflow: 'hidden', borderRadius: '6px 6px 0 0' }}>
           <img src={card.img} alt={card.headline}
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />

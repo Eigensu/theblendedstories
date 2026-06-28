@@ -14,15 +14,15 @@ export default function AboutUs() {
       }}
     >
       {/* Image — full bleed, no horizontal padding */}
-      <ScrollReveal>
+      <ScrollReveal className="img-card">
         <img
-          src="/hero-bg.jpg"
+          src="/whatwecover.png"
           alt="What we cover"
           style={{
             width: '100%',
             height: 'clamp(240px, 42vw, 580px)',
             objectFit: 'cover',
-            objectPosition: 'center',
+            objectPosition: 'center 28%',
             display: 'block',
           }}
         />
@@ -32,13 +32,9 @@ export default function AboutUs() {
 
         {/* Black bar */}
         <ScrollReveal delay={0.1}>
-          <div style={{
+          <div className="aboutus-cover-bar" style={{
             background: 'var(--black)',
             padding: 'clamp(20px, 2.5vw, 36px) 0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 'clamp(24px, 4vw, 60px)',
             borderTop: 'none',
           }}>
 

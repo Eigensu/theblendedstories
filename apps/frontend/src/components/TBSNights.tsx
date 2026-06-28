@@ -13,19 +13,28 @@ export default function TBSNights() {
         width: '100%',
         minHeight: 'clamp(520px, 62vh, 740px)',
         overflow: 'hidden',
-        backgroundImage: `url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1440&q=80')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
         display: 'flex',
         alignItems: 'center',
       }}
     >
+      {/* Background — grayscale by default, full colour on section hover */}
+      <img
+        src="/tbsnights.png"
+        alt=""
+        className="nights-bg-img"
+        style={{
+          position: 'absolute', inset: 0,
+          width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: 'center',
+          zIndex: 0,
+        }}
+      />
       {/* Dark overlay */}
       <div style={{
         position: 'absolute',
         inset: 0,
         background: 'rgba(0,0,0,0.58)',
-        zIndex: 0,
+        zIndex: 1,
       }} />
 
       {/* TBS NIGHTS label — top right */}
@@ -38,7 +47,7 @@ export default function TBSNights() {
         letterSpacing: '0.22em',
         textTransform: 'uppercase',
         color: 'rgba(255,255,255,0.85)',
-        zIndex: 2,
+        zIndex: 3,
       }}>
         TBS NIGHTS
       </span>
@@ -47,7 +56,7 @@ export default function TBSNights() {
         className="nights-inner"
         style={{
           position: 'relative',
-          zIndex: 1,
+          zIndex: 2,
           width: '100%',
           maxWidth: '1440px',
           margin: '0 auto',

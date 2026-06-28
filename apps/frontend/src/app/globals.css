@@ -11,6 +11,8 @@
 }
 
 :root {
+  --img-gs: saturate(0);
+  --img-color: saturate(1.001);
   --black: #000000;
   --white: #FFFFFF;
   --dark-navy: #050D18;
@@ -277,6 +279,46 @@ body {
   margin: 0 auto;
 }
 
+/* ─── Grayscale / Color-Reveal Theme ─── */
+/*
+  All images are monochrome by default.
+  Color is revealed when the user hovers over the card or section.
+  Logos and decorative icons carry the .no-grayscale class to opt out.
+*/
+/* Use CSS custom properties so Turbopack cannot optimise the values away.
+   --img-gs  = saturate(0)     → fully desaturated (grayscale)
+   --img-color = saturate(1.001) → visually identical to 1 but not collapsed */
+img:not(.no-grayscale) {
+  filter: var(--img-gs) !important;
+  transition: filter 0.65s ease;
+}
+
+/* Section-level reveal — entire section lights up on cursor enter */
+#hero:hover     img:not(.no-grayscale),
+#about:hover    img:not(.no-grayscale),
+#about-us:hover img:not(.no-grayscale),
+#why:hover      img:not(.no-grayscale),
+#explore:hover  img:not(.no-grayscale),
+#news:hover     img:not(.no-grayscale),
+#nights:hover   img:not(.no-grayscale),
+#press:hover    img:not(.no-grayscale) {
+  filter: var(--img-color) !important;
+}
+
+/* The Edit + TBS Talks — individual card hover only.
+   Uses scoped selector (specificity 1,2,1) so it beats the base
+   section rule (1,1,1) and only the hovered card goes to colour. */
+#the-edit .img-card:hover img:not(.no-grayscale),
+#talks    .img-card:hover img:not(.no-grayscale) {
+  filter: var(--img-color) !important;
+}
+
+/* Mobile tap reveal — JS adds .touch-color on touchstart */
+section.touch-color img:not(.no-grayscale),
+.img-card.touch-color img:not(.no-grayscale) {
+  filter: var(--img-color) !important;
+}
+
 /* ─── TBS Nights layout ─── */
 .nights-inner {
   max-width: 1440px;
@@ -285,6 +327,37 @@ body {
   padding: 0 var(--px-page);
   display: flex;
   justify-content: flex-end;
+}
+
+/* ─── AboutUs cover bar ─── */
+.aboutus-cover-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(24px, 4vw, 60px);
+}
+
+/* ─── TBSTalks grid ─── */
+.talks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(10px, 1.5vw, 20px);
+}
+
+/* ─── TheEdit layout ─── */
+.the-edit-outer {
+  display: flex;
+  gap: clamp(32px, 4vw, 64px);
+  align-items: flex-start;
+}
+.the-edit-left {
+  flex-shrink: 0;
+  width: clamp(160px, 18vw, 240px);
+}
+.the-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
 }
 
 /* ─── BREAKPOINTS ─── */
@@ -343,6 +416,24 @@ body {
   .nights-content div[style] {
     text-align: center !important;
   }
+
+  /* TBSTalks: 4-col → 2-col */
+  .talks-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* TheEdit: stack left panel above cards */
+  .the-edit-outer { flex-direction: column; }
+  .the-edit-left { width: 100%; }
+  .the-edit-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(20px, 3vw, 32px);
+  }
+  .the-edit-vertical-label { display: none !important; }
+  /* Reset per-article inline borders/padding set in the JS map */
+  .the-edit-grid .reveal > div {
+    border-left: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 
 /* ── Tablet: 768px ── */
@@ -362,6 +453,18 @@ body {
   .about-card-stagger { padding-top: 0 !important; }
   /* Disable fixed bg on mobile — iOS doesn't support background-attachment:fixed */
   .fixed-bg-section { background-attachment: scroll, scroll !important; }
+
+  /* TBSNights: stack title above text on mobile */
+  .nights-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  /* AboutUs cover bar: stack heading above category grid */
+  .aboutus-cover-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   /* Fix seam between TBSTalks and Footer on mobile.
      With scroll attachment, each section renders its own copy of hero-bg.jpg at
@@ -400,6 +503,13 @@ body {
   }
 
   .press-grid { grid-template-columns: 1fr !important; }
+
+  /* TBSTalks: keep 2-col on mobile (2×2 grid) */
+  .talks-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* TheEdit articles: 2-col → 1-col */
+  .the-edit-grid { grid-template-columns: 1fr; }
+
   .footer-bottom-bar {
     flex-direction: column !important;
     align-items: center !important;
@@ -418,6 +528,79 @@ body {
 @media (max-width: 480px) {
   .footer-grid {
     grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ─── TBS Nights form — placeholder colour to match select text ─── */
+.tbs-nights-form input::placeholder,
+.tbs-nights-form textarea::placeholder {
+  color: rgba(255,255,255,0.38);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ─── TBS Nights form page ─── */
+.tbs-nights-form {
+  display: grid;
+  grid-template-columns: 210px 1fr 1fr 1fr;
+  height: 100vh;
+  background: #0c0c0c;
+  overflow: hidden;
+}
+.tbs-nights-image-col {
+  position: relative;
+  overflow: hidden;
+}
+.form-col {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 24px 20px;
+}
+.form-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.tbs-nights-success {
+  display: flex;
+  width: 100%;
+  max-width: 820px;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .tbs-nights-form {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+  .tbs-nights-image-col {
+    min-height: 340px;
+    height: auto;
+  }
+  .form-col {
+    height: auto !important;
+    overflow: visible !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: 1px solid rgba(255,255,255,0.12) !important;
+    padding: 32px 24px !important;
+  }
+  .form-two-col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .tbs-nights-success {
+    flex-direction: column;
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+  .tbs-nights-success-img {
+    display: none;
   }
 }
 

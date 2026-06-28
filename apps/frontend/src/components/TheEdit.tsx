@@ -44,21 +44,15 @@ export default function TheEdit() {
         overflow: 'hidden',
       }}
     >
-      <div style={{
+      <div className="the-edit-outer" style={{
         maxWidth: '1440px',
         margin: '0 auto',
         padding: '0 clamp(20px, 3vw, 44px)',
-        display: 'flex',
-        gap: 'clamp(32px, 4vw, 64px)',
-        alignItems: 'flex-start',
       }}>
 
         {/* ── Left panel ── */}
         <ScrollReveal>
-          <div style={{
-            flexShrink: 0,
-            width: 'clamp(160px, 18vw, 240px)',
-          }}>
+          <div className="the-edit-left">
             {/* THE EDIT heading */}
             <div style={{ marginBottom: 'clamp(16px, 2vw, 24px)' }}>
               <p style={{
@@ -105,7 +99,7 @@ export default function TheEdit() {
             </p>
 
             {/* LATEST FEATURES — vertical, left-aligned, below subtitle */}
-            <div style={{
+            <div className="the-edit-vertical-label" style={{
               marginTop: '48px',
               display: 'flex',
               flexDirection: 'column',
@@ -137,14 +131,11 @@ export default function TheEdit() {
 
         {/* ── Right: 5 article cards ── */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(5, 1fr)',
-            gap: '0',
-          }}>
+          <div className="the-edit-grid">
             {articles.map((article, i) => (
               <ScrollReveal key={article.num} delay={i * 0.06}>
                 <div
+                  className="img-card"
                   style={{
                     borderLeft: i === 0 ? 'none' : '1px solid rgba(255,255,255,0.08)',
                     paddingLeft: i === 0 ? '0' : 'clamp(14px, 1.5vw, 22px)',
@@ -168,7 +159,7 @@ export default function TheEdit() {
                         objectFit: 'cover',
                         objectPosition: 'center',
                         display: 'block',
-                        transition: 'transform 0.5s ease',
+                        transition: 'transform 0.5s ease, filter 0.65s ease',
                       }}
                       onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)')}
                       onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}

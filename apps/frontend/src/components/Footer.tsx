@@ -48,6 +48,7 @@ function FooterSunburst() {
     <img
       src="/sunburst-icon.png"
       alt=""
+      className="no-grayscale"
       style={{
         width: 'clamp(60px, 16vw, 130px)',
         height: 'auto',
@@ -99,6 +100,7 @@ export default function Footer() {
           <img
             src="/tbs-logo.png"
             alt="The Blended Stories"
+            className="no-grayscale"
             style={{
               height: 'clamp(80px, 12vw, 160px)',
               width: 'auto',

@@ -36,9 +36,9 @@ export default function WhatIsTBS() {
 
         {/* ── Left: Square image ── */}
         <ScrollReveal delay={0.05}>
-          <div className="whatis-portrait-wrap" style={{ flexShrink: 0 }}>
+          <div className="whatis-portrait-wrap img-card" style={{ flexShrink: 0 }}>
             <img
-              src="/section2_door.png"
+              src="/whatis.png"
               alt="The Blended Stories"
               style={{
                 width: 'clamp(280px, 36vw, 520px)',

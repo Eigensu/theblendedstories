@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import MobileTouchReveal from '@/components/MobileTouchReveal';
 
 export const metadata: Metadata = {
   title: 'The Blended Stories',
@@ -25,11 +26,14 @@ export default function RootLayout({
           Montserrat: 400 + 500 for body/nav.
         */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=Great+Vibes&family=Montserrat:wght@400;500&family=Martel+Sans:wght@400&family=Poppins:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=Great+Vibes&family=Libre+Bodoni:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;500&family=Martel+Sans:wght@400&family=Poppins:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <MobileTouchReveal />
+      </body>
     </html>
   );
 }

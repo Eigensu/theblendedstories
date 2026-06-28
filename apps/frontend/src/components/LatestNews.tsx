@@ -92,6 +92,7 @@ function NewsCard({ item, delay }: { item: typeof newsItems[0]; delay: number })
   return (
     <ScrollReveal delay={delay} style={{ height: '100%' }}>
       <article
+        className="img-card"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
@@ -127,7 +128,7 @@ function NewsCard({ item, delay }: { item: typeof newsItems[0]; delay: number })
               objectFit: 'cover',
               display: 'block',
               transform: hovered ? 'scale(1.04)' : 'scale(1)',
-              transition: 'transform 0.4s ease',
+              transition: 'transform 0.4s ease, filter 0.65s ease',
             }}
           />
         </div>

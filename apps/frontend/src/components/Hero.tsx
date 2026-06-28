@@ -49,7 +49,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
 
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-          <img src="/tbs-logo.png" alt="The Blended Stories" style={{ height: '34px', width: 'auto', mixBlendMode: 'screen' }} />
+          <img src="/tbs-logo.png" alt="The Blended Stories" className="no-grayscale" style={{ height: '34px', width: 'auto', mixBlendMode: 'screen' }} />
         </div>
 
         {/* Tab toggle */}
@@ -220,6 +220,7 @@ export default function Hero() {
   return (
     <>
       <section
+        id="hero"
         style={{
           position: 'relative',
           width: '100%',
@@ -228,17 +229,33 @@ export default function Hero() {
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
-          background: `
-            linear-gradient(0deg, rgba(0,0,0,0.78), rgba(0,0,0,0.78)),
-            url('/hero-bg.jpg') center/cover no-repeat
-          `,
+          background: '#000',
         }}
       >
+        {/* Background — grayscale by default, full colour on section hover */}
+        <img
+          src="/hero-bg.jpg"
+          alt=""
+          className="hero-bg-img"
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center',
+            zIndex: 0,
+          }}
+        />
+        {/* Dark overlay */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'rgba(0,0,0,0.78)',
+          zIndex: 1,
+        }} />
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: 0,
+          position: 'relative',
           zIndex: 2,
           padding: '0 20px',
           textAlign: 'center',
@@ -249,6 +266,7 @@ export default function Hero() {
             <img
               src="/sunburst-icon.png"
               alt=""
+              className="no-grayscale"
               style={{ width: 'clamp(60px, 16vw, 130px)', height: 'auto', mixBlendMode: 'screen', display: 'block' }}
             />
           </div>

@@ -3,25 +3,25 @@ import ScrollReveal from './ScrollReveal';
 
 const speakers = [
   {
-    img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&q=80',
+    img: '/anita.png',
     name: 'ANITA DONGRE',
     role: 'FASHION DESIGNER\n& ENTREPRENEUR',
     date: 'MAY 28, 2026',
   },
   {
-    img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=700&q=80',
+    img: '/karan.png',
     name: 'KARAN KAUSHIK',
     role: 'ARCHITECT\n& FOUNDER',
     date: 'MAY 29, 2026',
   },
   {
-    img: 'https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=700&q=80',
+    img: '/masaba.png',
     name: 'MASABA GUPTA',
     role: 'ENTREPRENEUR\n& CREATOR',
     date: 'MAY 30, 2026',
   },
   {
-    img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=700&q=80',
+    img: '/sarthak.png',
     name: 'SARTHAK AILAWADI',
     role: 'CHEF\n& RESTAURATEUR',
     date: 'MAY 31, 2026',
@@ -102,14 +102,10 @@ export default function TBSTalks() {
         </ScrollReveal>
 
         {/* ── Four speaker cards ── */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 'clamp(10px, 1.5vw, 20px)',
-        }}>
+        <div className="talks-grid">
           {speakers.map((speaker, idx) => (
             <ScrollReveal key={idx} delay={idx * 0.08}>
-              <div style={{
+              <div className="img-card" style={{
                 background: '#0a0a0a',
                 border: '1px solid rgba(255,255,255,0.06)',
                 overflow: 'hidden',
@@ -119,7 +115,7 @@ export default function TBSTalks() {
                 {/* Portrait photo */}
                 <div style={{
                   width: '100%',
-                  height: 'clamp(160px, 22vw, 320px)',
+                  height: 'clamp(200px, 22vw, 320px)',
                   overflow: 'hidden',
                 }}>
                   <img
@@ -129,10 +125,9 @@ export default function TBSTalks() {
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover',
-                      objectPosition: 'center top',
+                      objectPosition: 'center 15%',
                       display: 'block',
-                      filter: 'grayscale(100%)',
-                      transition: 'transform 0.5s ease',
+                      transition: 'transform 0.5s ease, filter 0.65s ease',
                     }}
                     onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
                     onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
@@ -144,7 +139,7 @@ export default function TBSTalks() {
 
                   {/* Name */}
                   <h3 style={{
-                    fontFamily: "'Fraunces', serif",
+                    fontFamily: "'Libre Bodoni', serif",
                     fontSize: 'clamp(12px, 1.1vw, 16px)',
                     fontWeight: 400,
                     letterSpacing: '0.08em',

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "PowerShell(taskkill /PID 25980 /F)",
+      "PowerShell(netstat -ano)",
+      "PowerShell($pid3000 = \\(netstat -ano | findstr \":3000 \" | Select-String \"LISTENING\" | ForEach-Object { \\($_ -split '\\\\s+'\\)[-1] } | Select-Object -First 1\\); if \\($pid3000\\) { taskkill /PID $pid3000 /F; Write-Host \"Killed PID $pid3000\" } else { Write-Host \"No process on 3000\" })",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)"
+    ]
+  }
+}

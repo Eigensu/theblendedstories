@@ -40,7 +40,7 @@ export default function NewsletterPopup() {
         animation: 'fadeUp 0.45s ease both',
       }}
     >
-      <div style={{
+      <div className="img-card" style={{
         background: '#0d0d0d',
         border: '1px solid rgba(255,255,255,0.1)',
         width: '100%',
@@ -52,7 +52,7 @@ export default function NewsletterPopup() {
         {/* Top image */}
         <div style={{ position: 'relative' }}>
           <img
-            src="/section2_door.png"
+            src="/popup.png"
             alt=""
             style={{
               width: '100%',
@@ -68,7 +68,7 @@ export default function NewsletterPopup() {
             position: 'absolute', inset: 0,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <img src="/tbs-logo.png" alt="The Blended Stories" style={{ height: '44px', width: 'auto', mixBlendMode: 'screen' }} />
+            <img src="/tbs-logo.png" alt="The Blended Stories" className="no-grayscale" style={{ height: '44px', width: 'auto', mixBlendMode: 'screen' }} />
           </div>
           {/* Close button */}
           <button

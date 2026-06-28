@@ -10,14 +10,9 @@ function SuccessModal({ onBack }: { onBack: () => void }) {
       background: 'rgba(0,0,0,0.85)',
       padding: '20px',
     }}>
-      <div style={{
-        display: 'flex',
-        width: '100%',
-        maxWidth: '820px',
-        maxHeight: '90vh',
+      <div className="tbs-nights-success" style={{
         boxShadow: '0 0 80px rgba(0,0,0,0.8)',
         border: '1px solid rgba(255,255,255,0.1)',
-        overflow: 'hidden',
       }}>
 
         {/* Left: content */}
@@ -136,7 +131,7 @@ function SuccessModal({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Right: image */}
-        <div style={{
+        <div className="tbs-nights-success-img" style={{
           flex: '0 0 45%',
           backgroundImage: `url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80')`,
           backgroundSize: 'cover',
@@ -158,21 +153,27 @@ const inp: React.CSSProperties = {
   borderBottom: '1px solid rgba(255,255,255,0.18)',
   color: 'white',
   fontFamily: "'Poppins', sans-serif",
-  fontSize: '11px',
-  padding: '5px 0',
+  fontSize: 'clamp(12px, 1.2vw, 14px)',
+  padding: '8px 0',
   outline: 'none',
   boxSizing: 'border-box',
 };
 
 const lbl: React.CSSProperties = {
   fontFamily: "'Poppins', sans-serif",
-  fontSize: '9px',
+  fontSize: 'clamp(11px, 0.9vw, 12px)',
   color: 'rgba(255,255,255,0.85)',
   display: 'block',
-  marginBottom: '3px',
+  marginBottom: '6px',
+  lineHeight: '1.4',
 };
 
-const sel: React.CSSProperties = { ...inp, appearance: 'none', cursor: 'pointer' };
+const sel = (hasValue: boolean): React.CSSProperties => ({
+  ...inp,
+  appearance: 'none',
+  cursor: 'pointer',
+  color: hasValue ? 'white' : 'rgba(255,255,255,0.38)',
+});
 
 const secHead: React.CSSProperties = {
   fontFamily: "'Poppins', sans-serif",
@@ -201,7 +202,7 @@ function F({ label, req, children }: { label: string; req?: boolean; children: R
 }
 
 function TwoCol({ children }: { children: React.ReactNode }) {
-  return <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>{children}</div>;
+  return <div className="form-two-col">{children}</div>;
 }
 
 const OPT = { background: '#111' };
@@ -222,20 +223,12 @@ export default function TBSNightsPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => setForm(f => ({ ...f, [key]: e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value }));
 
-  const colPad: React.CSSProperties = {
-    padding: '24px 20px',
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    boxSizing: 'border-box',
-    overflowY: 'auto',
-  };
-
   const fieldCol: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    gap: '20px',
     flex: 1,
+    paddingTop: '8px',
   };
 
   return (
@@ -243,13 +236,11 @@ export default function TBSNightsPage() {
     {submitted && <SuccessModal onBack={() => router.push('/')} />}
     <form
       onSubmit={e => { e.preventDefault(); setSubmitted(true); }}
-      style={{ height: '100vh', display: 'grid', gridTemplateColumns: '210px 1fr 1fr 1fr', background: '#0c0c0c', overflow: 'hidden' }}
+      className="tbs-nights-form"
     >
 
       {/* ── Col 1: IMAGE PANEL (left) ── */}
-      <div style={{
-        position: 'relative',
-        overflow: 'hidden',
+      <div className="tbs-nights-image-col" style={{
         backgroundImage: `url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&q=80')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -257,7 +248,7 @@ export default function TBSNightsPage() {
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.78)' }} />
         <div style={{
           position: 'relative', zIndex: 1,
-          padding: '24px 18px',
+          padding: '56px 18px 24px',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
@@ -311,7 +302,7 @@ export default function TBSNightsPage() {
       </div>
 
       {/* ── Col 2: ABOUT YOU ── */}
-      <div style={{ ...colPad, borderLeft: '1px solid rgba(255,255,255,0.07)', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
+      <div className="form-col" style={{ borderLeft: '1px solid rgba(255,255,255,0.07)', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
         <p style={secHead}>ABOUT YOU</p>
         <p style={secSub}>Purpose: Basic information &amp; guest verification</p>
         <div style={fieldCol}>
@@ -339,7 +330,7 @@ export default function TBSNightsPage() {
           </TwoCol>
           <TwoCol>
             <F label="Dietary preference or restrictions?">
-              <select style={sel} value={form.dietaryPref} onChange={set('dietaryPref')}>
+              <select style={sel(!!form.dietaryPref)} value={form.dietaryPref} onChange={set('dietaryPref')}>
                 <option value="" style={OPT}>Select</option>
                 <option value="none" style={OPT}>None</option>
                 <option value="vegetarian" style={OPT}>Vegetarian</option>
@@ -360,7 +351,7 @@ export default function TBSNightsPage() {
       </div>
 
       {/* ── Col 3: YOUR WORLD ── */}
-      <div style={{ ...colPad, borderLeft: '1px solid rgba(255,255,255,0.07)', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
+      <div className="form-col" style={{ borderLeft: '1px solid rgba(255,255,255,0.07)', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
         <p style={secHead}>YOUR WORLD</p>
         <p style={secSub}>Purpose: Understand interests, tastes &amp; cultural fit</p>
         <div style={fieldCol}>
@@ -377,10 +368,10 @@ export default function TBSNightsPage() {
           </F>
           <TwoCol>
             <F label="What do you currently obsess over?">
-              <textarea rows={3} style={{ ...inp, resize: 'none' }} placeholder="Your answer" value={form.currentObsession} onChange={set('currentObsession')} />
+              <textarea rows={2} style={{ ...inp, resize: 'none' }} placeholder="Your answer" value={form.currentObsession} onChange={set('currentObsession')} />
             </F>
             <F label="What are you currently focused on? (Open Text)">
-              <textarea rows={3} style={{ ...inp, resize: 'none' }} placeholder="Your answer" value={form.currentFocus} onChange={set('currentFocus')} />
+              <textarea rows={2} style={{ ...inp, resize: 'none' }} placeholder="Your answer" value={form.currentFocus} onChange={set('currentFocus')} />
             </F>
           </TwoCol>
           <TwoCol>
@@ -400,19 +391,19 @@ export default function TBSNightsPage() {
       </div>
 
       {/* ── Col 4: WHY TBS NIGHTS? + submit ── */}
-      <div style={{ ...colPad }}>
+      <div className="form-col">
         <p style={secHead}>WHY TBS NIGHTS?</p>
         <p style={secSub}>Purpose: Understand intent &amp; fit</p>
         <div style={{ ...fieldCol }}>
           <F label="Why would you like to attend TBS Nights?" req>
-            <textarea rows={3} style={{ ...inp, resize: 'none' }} placeholder="Your answer" value={form.whyAttend} onChange={set('whyAttend')} required />
+            <textarea rows={2} style={{ ...inp, resize: 'none' }} placeholder="Your answer" value={form.whyAttend} onChange={set('whyAttend')} required />
           </F>
           <F label="What do you hope to experience?" req>
-            <textarea rows={3} style={{ ...inp, resize: 'none' }} placeholder="Your answer" value={form.hopeToExperience} onChange={set('hopeToExperience')} required />
+            <textarea rows={2} style={{ ...inp, resize: 'none' }} placeholder="Your answer" value={form.hopeToExperience} onChange={set('hopeToExperience')} required />
           </F>
           <TwoCol>
             <F label="How did you hear about TBS Nights?">
-              <select style={sel} value={form.heardAbout} onChange={set('heardAbout')}>
+              <select style={sel(!!form.heardAbout)} value={form.heardAbout} onChange={set('heardAbout')}>
                 <option value="" style={OPT}>Your answer</option>
                 <option value="instagram" style={OPT}>Instagram</option>
                 <option value="friend" style={OPT}>Friend / Word of mouth</option>
@@ -422,7 +413,7 @@ export default function TBSNightsPage() {
               </select>
             </F>
             <F label="What drew you to The Blended Stories?">
-              <select style={sel} value={form.drewYou} onChange={set('drewYou')}>
+              <select style={sel(!!form.drewYou)} value={form.drewYou} onChange={set('drewYou')}>
                 <option value="" style={OPT}>Your answer</option>
                 <option value="content" style={OPT}>Content &amp; storytelling</option>
                 <option value="community" style={OPT}>Community</option>
