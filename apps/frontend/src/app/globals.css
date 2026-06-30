@@ -288,13 +288,24 @@ body {
 /* Use CSS custom properties so Turbopack cannot optimise the values away.
    --img-gs  = saturate(0)     → fully desaturated (grayscale)
    --img-color = saturate(1.001) → visually identical to 1 but not collapsed */
-img:not(.no-grayscale) {
+img:not(.no-grayscale),
+video:not(.no-grayscale) {
   filter: var(--img-gs) !important;
   transition: filter 0.65s ease;
 }
 
+/* Hero video responsive switching */
+.hero-video-mobile { display: none; }
+.hero-video-desktop { display: block; }
+
+@media (max-width: 767px) {
+  .hero-video-desktop { display: none; }
+  .hero-video-mobile  { display: block; }
+}
+
 /* Section-level reveal — entire section lights up on cursor enter */
 #hero:hover     img:not(.no-grayscale),
+#hero:hover     video:not(.no-grayscale),
 #about:hover    img:not(.no-grayscale),
 #about-us:hover img:not(.no-grayscale),
 #why:hover      img:not(.no-grayscale),
@@ -315,6 +326,7 @@ img:not(.no-grayscale) {
 
 /* Mobile tap reveal — JS adds .touch-color on touchstart */
 section.touch-color img:not(.no-grayscale),
+section.touch-color video:not(.no-grayscale),
 .img-card.touch-color img:not(.no-grayscale) {
   filter: var(--img-color) !important;
 }

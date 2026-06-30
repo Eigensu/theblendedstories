@@ -232,18 +232,39 @@ export default function Hero() {
           background: '#000',
         }}
       >
-        {/* Background — grayscale by default, full colour on section hover */}
-        <img
-          src="/hero-bg.jpg"
-          alt=""
-          className="hero-bg-img"
+        {/* Background video — desktop (≥768px) */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="hero-video-desktop"
           style={{
             position: 'absolute', inset: 0,
             width: '100%', height: '100%',
             objectFit: 'cover', objectPosition: 'center',
             zIndex: 0,
           }}
-        />
+        >
+          <source src="/Logo%20Animation%201920x1080%20Wider%20Screens.mp4" type="video/mp4" />
+        </video>
+
+        {/* Background video — mobile (<768px) */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="hero-video-mobile"
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center',
+            zIndex: 0,
+          }}
+        >
+          <source src="/Logo%20Animation%20Mobile%20Screen.mp4" type="video/mp4" />
+        </video>
         {/* Dark overlay */}
         <div style={{
           position: 'absolute', inset: 0,
