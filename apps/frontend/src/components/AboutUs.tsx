@@ -101,7 +101,7 @@ export default function AboutUs() {
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                objectPosition: s.objectPosition ?? 'center',
+                objectPosition: 'center',
                 display: 'block',
                 opacity: i === index ? 1 : 0,
                 transition: 'opacity 1s ease',
