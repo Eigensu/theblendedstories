@@ -356,14 +356,15 @@ export default function TBSNightsPage() {
         <button
           type="button"
           onClick={() => router.push('/')}
+          className="tbs-wizard-mobile-back"
           style={{
             background: 'transparent', border: 'none',
             color: 'rgba(255,255,255,0.5)',
             fontFamily: "'Poppins', sans-serif",
             fontSize: '10px', letterSpacing: '0.14em',
             textTransform: 'uppercase', cursor: 'pointer',
-            padding: 0, marginBottom: '20px', alignSelf: 'flex-start',
-            flexShrink: 0,
+            padding: 0, marginBottom: '14px',
+            textAlign: 'left', alignSelf: 'flex-start',
             transition: 'color 0.2s',
           }}
           onMouseEnter={e => e.currentTarget.style.color = 'white'}
@@ -379,31 +380,73 @@ export default function TBSNightsPage() {
           flexShrink: 0,
         }}>TBS NIGHTS</p>
 
-        <h1 style={{
-          fontFamily: "'Fraunces', serif", fontSize: 'clamp(26px, 2.6vw, 36px)',
-          fontWeight: 400, color: 'white', lineHeight: '1.15',
-          textTransform: 'uppercase', margin: '0 0 20px 0',
-          flexShrink: 0,
-        }}>
-          CURATED DINNERS.<br />MEANINGFUL<br />CONVERSATIONS.
-        </h1>
+        {/* Mobile-only: thin progress bar + compact "[step] — X of Y" line */}
+        <div className="tbs-wizard-mobile-progress">
+          <div className="tbs-wizard-progress-track">
+            <div
+              className="tbs-wizard-progress-fill"
+              style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+            />
+          </div>
+          <p style={{
+            fontFamily: "'Poppins', sans-serif", fontSize: '15px', fontWeight: 600,
+            color: 'white', margin: 0,
+          }}>
+            {STEPS[step].label}
+            <span style={{ fontWeight: 400, color: 'rgba(255,255,255,0.4)', marginLeft: '8px' }}>
+              — {step + 1} of {STEPS.length}
+            </span>
+          </p>
+        </div>
 
-        <p style={{
-          fontFamily: "'Poppins', sans-serif", fontSize: '13px',
-          color: 'rgba(255,255,255,0.55)', lineHeight: '1.7', margin: '0 0 14px 0',
-          flexShrink: 0,
-        }}>
-          TBS Nights is an invite-only dinner series that brings together inspiring people for intentional evenings of great food and even better conversation.
-        </p>
-        <p style={{
-          fontFamily: "'Poppins', sans-serif", fontSize: '13px',
-          color: 'rgba(255,255,255,0.35)', lineHeight: '1.7', margin: 0,
-          flexShrink: 0,
-        }}>
-          Apply below to be considered for our upcoming gathering.
-        </p>
+        {/* Desktop-only: intro heading/copy + back button + full step list */}
+        <div className="tbs-wizard-desktop-intro">
+          <button
+            type="button"
+            onClick={() => router.push('/')}
+            style={{
+              background: 'transparent', border: 'none',
+              color: 'rgba(255,255,255,0.5)',
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: '10px', letterSpacing: '0.14em',
+              textTransform: 'uppercase', cursor: 'pointer',
+              padding: 0, marginBottom: '20px', alignSelf: 'flex-start',
+              flexShrink: 0,
+              transition: 'color 0.2s',
+              order: -1,
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = 'white'}
+            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}
+          >
+            ← Back
+          </button>
 
-        <StepList current={step} />
+          <h1 style={{
+            fontFamily: "'Fraunces', serif", fontSize: 'clamp(26px, 2.6vw, 36px)',
+            fontWeight: 400, color: 'white', lineHeight: '1.15',
+            textTransform: 'uppercase', margin: '0 0 20px 0',
+            flexShrink: 0,
+          }}>
+            CURATED DINNERS.<br />MEANINGFUL<br />CONVERSATIONS.
+          </h1>
+
+          <p style={{
+            fontFamily: "'Poppins', sans-serif", fontSize: '13px',
+            color: 'rgba(255,255,255,0.55)', lineHeight: '1.7', margin: '0 0 14px 0',
+            flexShrink: 0,
+          }}>
+            TBS Nights is an invite-only dinner series that brings together inspiring people for intentional evenings of great food and even better conversation.
+          </p>
+          <p style={{
+            fontFamily: "'Poppins', sans-serif", fontSize: '13px',
+            color: 'rgba(255,255,255,0.35)', lineHeight: '1.7', margin: 0,
+            flexShrink: 0,
+          }}>
+            Apply below to be considered for our upcoming gathering.
+          </p>
+
+          <StepList current={step} />
+        </div>
       </div>
 
       {/* ── Main ── */}

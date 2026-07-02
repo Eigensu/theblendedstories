@@ -4,16 +4,15 @@ import { useEffect, useState } from 'react';
 import ScrollReveal from './ScrollReveal';
 
 const slides = [
-  { img: '/whatwecover.png', objectPosition: 'center 28%', caption: "Basically, everything shaping the city right now." },
-  { img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80', caption: "Basically, everything shaping the city right now." },
-  { img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80', caption: "The restaurants everyone suddenly can't get into." },
-  { img: 'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1600&q=80', caption: 'Fashion people are actually wearing right now.' },
-  { img: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=1600&q=80', caption: 'Last-minute plans that save the night.' },
-  { img: 'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=1600&q=80', caption: 'Hotels you immediately want to check into.' },
-  { img: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1600&q=80', caption: 'Beauty brands before they become impossible to buy.' },
-  { img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600&q=80', caption: 'The parties, launches, and people having a moment.' },
-  { img: 'https://images.unsplash.com/photo-1449247709967-d4461a6a6103?w=1600&q=80', caption: 'Interiors, aesthetics, and homes worth obsessing over.' },
-  { img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600&q=80', caption: 'Travel finds that make you consider booking a flight immediately.' },
+  { img: '/whatwecover/Basically, everything shaping the city right now..jpg', caption: 'Basically, everything shaping the city right now.' },
+  { img: '/whatwecover/Beauty brands before they become impossible to buy..jpg', caption: 'Beauty brands before they become impossible to buy.' },
+  { img: '/whatwecover/Fashion people are actually wearing right now..png', caption: 'Fashion people are actually wearing right now.' },
+  { img: '/whatwecover/Hotels you immediately want to check into..jpg', caption: 'Hotels you immediately want to check into.' },
+  { img: '/whatwecover/Interiors, aesthetics, and homes worth obsessing over..JPG', caption: 'Interiors, aesthetics, and homes worth obsessing over.' },
+  { img: '/whatwecover/Last-minute plans that save the night..jpg', caption: 'Last-minute plans that save the night.' },
+  { img: '/whatwecover/The parties, launches, and people having a moment..jpg', caption: 'The parties, launches, and people having a moment.' },
+  { img: "/whatwecover/The restaurants everyone suddenly can't get into..jpg", caption: "The restaurants everyone suddenly can't get into." },
+  { img: '/whatwecover/Travel finds that make you consider booking a flight immediately..jpg', caption: 'Travel finds that make you consider booking a flight immediately.' },
 ];
 
 const SLIDE_DURATION = 4000;
@@ -28,7 +27,7 @@ export default function AboutUs() {
     return () => clearInterval(timer);
   }, []);
 
-  const slide = slides[index];
+  const slide = slides[index % slides.length];
 
   return (
     <section

@@ -17,18 +17,6 @@ export default function WhatIsTBS() {
         overflow: 'hidden',
       }}
     >
-      {/* Split top dividers */}
-      <div style={{
-        position: 'absolute', top: 0,
-        left: 'clamp(20px, 3vw, 44px)', width: '22%',
-        height: '1px', background: 'var(--white-20)',
-      }} />
-      <div style={{
-        position: 'absolute', top: 0,
-        right: 'clamp(20px, 3vw, 44px)', width: '22%',
-        height: '1px', background: 'var(--white-20)',
-      }} />
-
       <div className="whatis-inner" style={{
         maxWidth: '1352px',
         margin: '0 auto',

@@ -47,7 +47,7 @@ export default function TBSTalks() {
             marginBottom: 'clamp(16px, 3vw, 32px)',
           }}>
             {/* Title */}
-            <div style={{
+            <div className="talks-logo-wrap" style={{
               height: 'calc(clamp(64px, 9vw, 110px) + 30px)',
               paddingTop: '15px',
               paddingBottom: '15px',
@@ -60,7 +60,7 @@ export default function TBSTalks() {
               <img
                 src="/tbstalks-logo.png"
                 alt="TBS Talks"
-                className="no-grayscale"
+                className="no-grayscale talks-logo-img"
                 style={{
                   height: '420px',
                   width: 'auto',
@@ -70,7 +70,7 @@ export default function TBSTalks() {
             </div>
 
             {/* Subtitle */}
-            <p style={{
+            <p className="talks-subtitle" style={{
               fontFamily: "'Poppins', sans-serif",
               fontSize: 'clamp(13px, 1.1vw, 16px)',
               color: 'rgba(255,255,255,0.7)',
@@ -80,34 +80,36 @@ export default function TBSTalks() {
               Conversation with people&nbsp; shaping what&apos;s next
             </p>
 
-            {/* VIEW ALL TALKS — top right */}
-            <a
-              href="#"
-              style={{
-                position: 'absolute',
-                right: 0,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: 'clamp(9px, 0.8vw, 11px)',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.7)',
-                textDecoration: 'none',
-                transition: 'color 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.color = 'white'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-            >
-              VIEW ALL TALKS
-              <svg width="32" height="10" viewBox="0 0 32 10" fill="none">
-                <line x1="0" y1="5" x2="26" y2="5" stroke="white" strokeWidth="1" strokeOpacity="0.7" />
-                <polyline points="21,1 30,5 21,9" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.7" strokeLinejoin="round" />
-              </svg>
-            </a>
+            {/* VIEW ALL TALKS — below tagline, right-aligned */}
+            <div className="talks-view-all-row" style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              marginTop: 'clamp(12px, 2vw, 20px)',
+            }}>
+              <a
+                href="#"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: 'clamp(9px, 0.8vw, 11px)',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.7)',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = 'white'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
+              >
+                VIEW ALL TALKS
+                <svg width="32" height="10" viewBox="0 0 32 10" fill="none">
+                  <line x1="0" y1="5" x2="26" y2="5" stroke="white" strokeWidth="1" strokeOpacity="0.7" />
+                  <polyline points="21,1 30,5 21,9" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.7" strokeLinejoin="round" />
+                </svg>
+              </a>
+            </div>
           </div>
         </ScrollReveal>
 

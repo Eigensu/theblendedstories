@@ -49,7 +49,31 @@
       "Bash(git checkout *)",
       "Bash(rm -f apps/frontend/src/components/WhyWeExist.tsx)",
       "Bash(grep -rn \"WhyWeExist\" apps/frontend/src)",
-      "Bash(tasklist)"
+      "Bash(tasklist)",
+      "Bash(sleep 6; cat /tmp/dev.log 2>/dev/null || cat \"C:\\\\Users\\\\AANSHU~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Aanshuvi-Shah-Desktop-Eigensu-TBS-tbs\\\\0d891e41-47d2-4c88-a7a6-11309f75bf82\\\\tasks\\\\b42zv6uim.output\")",
+      "Read(//tmp/**)",
+      "Bash(curl -s http://localhost:3000 -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/whatwecover/Basically,%20everything%20shaping%20the%20city%20right%20now..jpg\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/whatwecover/Fashion%20people%20are%20actually%20wearing%20right%20now..png\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/whatwecover/Interiors,%20aesthetics,%20and%20homes%20worth%20obsessing%20over..JPG\")",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000)",
+      "Bash(tasklist //FI \"PID eq 27532\")",
+      "Bash(curl -s \"http://localhost:3000\")",
+      "Bash(npx --yes playwright --version)",
+      "Bash(npx --yes playwright install chromium --with-deps)",
+      "Read(//c/Users/AANSHU~1/AppData/Local/Temp/claude/c--Users-Aanshuvi-Shah-Desktop-Eigensu-TBS-tbs/0d891e41-47d2-4c88-a7a6-11309f75bf82/scratchpad/**)",
+      "Bash(npx playwright *)",
+      "Bash(node check-mobile.js)",
+      "Bash(curl -s http://localhost:3000/tbs-nights)",
+      "Bash(netstat -ano)",
+      "Bash(tasklist //FI \"PID eq 24512\")",
+      "Bash(tasklist //FI \"PID eq 19768\")",
+      "Bash(taskkill //PID 19768 //F)",
+      "Bash(grep \"^\\\\.next$\")",
+      "Bash(timeout 30 bash -c 'until curl -sf http://localhost:3000 >/dev/null 2>&1; do sleep 1; done')",
+      "Bash(node check-all-steps.js)",
+      "Bash(node check-back-btn.js)"
     ]
   }
 }

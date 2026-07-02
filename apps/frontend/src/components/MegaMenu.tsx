@@ -2,34 +2,34 @@
 
 import { useEffect, useState } from 'react';
 
-const EDITS = [
+const S = [
   {
-    title: 'FASHION EDIT',
+    title: 'FASHION ',
     items: ['Fashion', 'Jewellery & Watches', 'Accessories', 'Bridal', 'Trend Reports'],
   },
   {
-    title: 'FOOD & DRINK EDIT',
+    title: 'FOOD & DRINK ',
     items: ['Restaurants', 'Cafés', 'Bars & Cocktails', 'Desserts', 'New Openings'],
   },
   {
-    title: 'TRAVEL EDIT',
+    title: 'TRAVEL ',
     items: ['Hotels & Stays', 'Destinations', 'City Guides', 'Weekend Escapes', 'Travel Trends'],
   },
   {
-    title: 'BEAUTY & WELLNESS EDIT',
+    title: 'BEAUTY &\nWELLNESS ',
     items: ['Beauty', 'Skincare', 'Hair & Makeup', 'Wellness', 'Treatments'],
   },
   {
-    title: 'DESIGN EDIT',
+    title: 'DESIGN ',
     items: ['Interiors', 'Architecture', 'Home Décor', 'Furniture', 'Styling'],
   },
   {
-    title: 'CULTURE EDIT',
+    title: 'CULTURE ',
     items: ['People', 'Arts', 'Entertainment', 'Events', 'TBS Talks'],
   },
   {
     title: 'THE BLENDED EDIT',
-    items: ['Curated Edit', 'Weekend Edit', 'Monthly Edit', 'Luxury Edit', 'Best Of'],
+    items: ['Curated ', 'Weekend ', 'Monthly ', 'Luxury ', 'Best Of'],
   },
 ];
 
@@ -108,14 +108,17 @@ export default function MegaMenu() {
             ✕
           </button>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: `repeat(${EDITS.length}, 1fr)`,
-            gap: 'clamp(12px, 1.5vw, 24px)',
-            marginTop: 'clamp(40px, 5vw, 56px)',
-          }}>
-            {EDITS.map((edit) => (
-              <div key={edit.title}>
+          <div
+            className="mega-menu-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${S.length}, 1fr)`,
+              gap: 'clamp(12px, 1.5vw, 24px)',
+              marginTop: 'clamp(40px, 5vw, 56px)',
+            }}
+          >
+            {S.map((section) => (
+              <div key={section.title}>
                 <h3 style={{
                   fontFamily: "'Poppins', sans-serif",
                   fontSize: '13px',
@@ -124,11 +127,12 @@ export default function MegaMenu() {
                   textTransform: 'uppercase',
                   color: 'white',
                   margin: '0 0 18px 0',
+                  whiteSpace: 'pre-line',
                 }}>
-                  {edit.title}
+                  {section.title}
                 </h3>
                 <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {edit.items.map((item) => (
+                  {section.items.map((item) => (
                     <li key={item}>
                       <a
                         href="#"

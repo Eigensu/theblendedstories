@@ -53,7 +53,7 @@ const articles = [
   },
   {
     num: '09',
-    img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=80',
+    img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&q=80',
     title: 'The Founders Building The Next Big Thing',
     desc: 'The entrepreneurs, ideas and ventures quietly reshaping how the city works, shops and connects.',
   },
@@ -65,13 +65,24 @@ const articles = [
   },
 ];
 
+const PAGE_SIZE = 4;
+const pages = Array.from({ length: Math.ceil(articles.length / PAGE_SIZE) }, (_, i) =>
+  articles.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
+);
+
 export default function TheEdit() {
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   const scrollByCard = (direction: 1 | -1) => {
     const el = scrollerRef.current;
     if (!el) return;
-    const card = el.querySelector<HTMLElement>('.reveal');
+    const page = el.querySelector<HTMLElement>('.the-edit-page');
+    if (page) {
+      // Mobile: scroll a full 2×2 page at a time.
+      el.scrollBy({ left: (page.offsetWidth + 20) * direction, behavior: 'smooth' });
+      return;
+    }
+    const card = el.querySelector<HTMLElement>('.the-edit-card');
     const step = card ? card.offsetWidth + 20 : el.clientWidth * 0.8;
     el.scrollBy({ left: step * direction, behavior: 'smooth' });
   };
@@ -125,15 +136,6 @@ export default function TheEdit() {
             <div>
               {/* THE EDIT heading */}
               <div style={{ marginBottom: 'clamp(16px, 2vw, 24px)' }}>
-                <p style={{
-                  fontFamily: "'Fraunces', serif",
-                  fontSize: 'clamp(11px, 1vw, 14px)',
-                  fontWeight: 400,
-                  color: 'white',
-                  margin: '0',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                }}>THE</p>
                 <h2 style={{
                   fontFamily: "'Fraunces', serif",
                   fontSize: 'clamp(36px, 5vw, 64px)',
@@ -259,78 +261,81 @@ export default function TheEdit() {
           </div>
 
           <div className="the-edit-grid" ref={scrollerRef}>
-            {articles.map((article, i) => (
-              <ScrollReveal key={article.num} delay={i * 0.06}>
-                <div
-                  className="img-card"
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                >
-                  {/* Image */}
-                  <div style={{
-                    width: '100%',
-                    height: 'clamp(180px, 22vw, 300px)',
-                    overflow: 'hidden',
-                    marginBottom: 'clamp(14px, 1.6vw, 20px)',
-                  }}>
-                    <img
-                      src={article.img}
-                      alt={article.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: 'center',
-                        display: 'block',
-                        transition: 'transform 0.5s ease, filter 0.65s ease',
-                      }}
-                      onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)')}
-                      onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
-                    />
-                  </div>
+            {pages.map((page, pageIdx) => (
+              <div className="the-edit-page" key={pageIdx}>
+                {page.map((article) => (
+                  <div
+                    key={article.num}
+                    className="img-card the-edit-card"
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {/* Image */}
+                    <div style={{
+                      width: '100%',
+                      height: 'clamp(180px, 22vw, 300px)',
+                      overflow: 'hidden',
+                      marginBottom: 'clamp(14px, 1.6vw, 20px)',
+                    }}>
+                      <img
+                        src={article.img}
+                        alt={article.title}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          objectPosition: 'center',
+                          display: 'block',
+                          transition: 'transform 0.5s ease, filter 0.65s ease',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)')}
+                        onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                      />
+                    </div>
 
-                  {/* Number */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    marginBottom: 'clamp(10px, 1.2vw, 16px)',
-                  }}>
-                    <span style={{
+                    {/* Number */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      marginBottom: 'clamp(10px, 1.2vw, 16px)',
+                    }}>
+                      <span style={{
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: 'clamp(10px, 0.85vw, 12px)',
+                        color: 'rgba(255,255,255,0.45)',
+                        letterSpacing: '0.08em',
+                      }}>{article.num}</span>
+                      <div style={{ width: '24px', height: '1px', background: 'rgba(255,255,255,0.3)' }} />
+                    </div>
+
+                    {/* Title */}
+                    <h3 style={{
+                      fontFamily: "'Fraunces', serif",
+                      fontSize: 'clamp(14px, 1.3vw, 20px)',
+                      fontWeight: 400,
+                      color: 'white',
+                      lineHeight: '1.35',
+                      margin: '0 0 clamp(10px, 1vw, 14px) 0',
+                      letterSpacing: '0.01em',
+                    }}>
+                      {article.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p style={{
                       fontFamily: "'Poppins', sans-serif",
-                      fontSize: 'clamp(10px, 0.85vw, 12px)',
-                      color: 'rgba(255,255,255,0.45)',
-                      letterSpacing: '0.08em',
-                    }}>{article.num}</span>
-                    <div style={{ width: '24px', height: '1px', background: 'rgba(255,255,255,0.3)' }} />
+                      fontSize: 'clamp(10px, 0.8vw, 12px)',
+                      color: 'rgba(255,255,255,0.5)',
+                      lineHeight: '1.75',
+                      margin: 0,
+                    }}>
+                      {article.desc}
+                    </p>
                   </div>
-
-                  {/* Title */}
-                  <h3 style={{
-                    fontFamily: "'Fraunces', serif",
-                    fontSize: 'clamp(14px, 1.3vw, 20px)',
-                    fontWeight: 400,
-                    color: 'white',
-                    lineHeight: '1.35',
-                    margin: '0 0 clamp(10px, 1vw, 14px) 0',
-                    letterSpacing: '0.01em',
-                  }}>
-                    {article.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: 'clamp(10px, 0.8vw, 12px)',
-                    color: 'rgba(255,255,255,0.5)',
-                    lineHeight: '1.75',
-                    margin: 0,
-                  }}>
-                    {article.desc}
-                  </p>
-                </div>
-              </ScrollReveal>
+                ))}
+              </div>
             ))}
           </div>
         </div>

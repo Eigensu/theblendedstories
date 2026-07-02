@@ -50,11 +50,24 @@ export default function TBSNights() {
         }}
       >
         {/* Left: spacer to clear the video */}
-        <div style={{ flexShrink: 0, width: 'clamp(120px, 20vw, 280px)' }} aria-hidden="true" />
+        <div className="nights-video-spacer" style={{ flexShrink: 0, width: 'clamp(120px, 20vw, 280px)' }} aria-hidden="true" />
 
         {/* Right: Body text + button */}
         <ScrollReveal delay={0.12}>
-          <div style={{ maxWidth: '540px' }}>
+          <div className="nights-content" style={{ maxWidth: '540px' }}>
+
+            <h2 style={{
+              fontFamily: "'Fraunces', serif",
+              fontSize: 'clamp(24px, 3vw, 40px)',
+              fontWeight: 400,
+              textTransform: 'uppercase',
+              color: 'white',
+              margin: '0 0 clamp(12px, 1.5vw, 18px) 0',
+              lineHeight: '1.05',
+              letterSpacing: '0.01em',
+            }}>
+              TBS Nights
+            </h2>
 
             <p style={{
               fontFamily: "'Poppins', sans-serif",

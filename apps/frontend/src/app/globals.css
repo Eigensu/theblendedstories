@@ -363,8 +363,11 @@ section.touch-color video:not(.no-grayscale),
 .the-edit-grid::-webkit-scrollbar {
   display: none;
 }
-.the-edit-grid > .reveal {
-  flex: 0 0 clamp(220px, 26vw, 300px);
+.the-edit-page {
+  display: contents;
+}
+.the-edit-grid .the-edit-card {
+  flex: 0 0 clamp(180px, 18vw, 230px);
   scroll-snap-align: start;
 }
 
@@ -428,10 +431,39 @@ section.touch-color video:not(.no-grayscale),
   /* TBSTalks: 4-col → 2-col */
   .talks-grid { grid-template-columns: repeat(2, 1fr); }
 
+  /* TBSTalks header: logo was overflowing its box and getting cropped; tagline/link sat flush against the screen edge */
+  .talks-logo-wrap {
+    height: auto !important;
+    overflow: hidden !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .talks-logo-img {
+    height: auto !important;
+    width: min(480px, 82%) !important;
+    object-fit: contain !important;
+    /* Crops empty space baked into the logo PNG above/below the artwork.
+       Increase these (in px or %) to crop more, decrease to crop less. */
+    margin-top: -90px !important;
+    margin-bottom: -40px !important;
+  }
+  .talks-subtitle {
+    font-size: clamp(15px, 2.4vw, 18px) !important;
+    padding: 0 16px !important;
+  }
+  .talks-view-all-row {
+    padding: 0 16px !important;
+  }
+  .talks-view-all-row a {
+    font-size: clamp(11px, 1.6vw, 13px) !important;
+  }
+
   /* TheEdit: stack left panel above cards */
   .the-edit-outer { flex-direction: column; }
   .the-edit-left { width: 100%; }
-  .the-edit-grid > .reveal {
+  .the-edit-grid .the-edit-card {
     flex-basis: clamp(200px, 60vw, 260px);
   }
   .the-edit-vertical-label { display: none !important; }
@@ -455,16 +487,41 @@ section.touch-color video:not(.no-grayscale),
   /* Disable fixed bg on mobile — iOS doesn't support background-attachment:fixed */
   .fixed-bg-section { background-attachment: scroll, scroll !important; }
 
-  /* TBSNights: stack title above text on mobile */
+  /* TBSNights: text first, video banner below it on mobile */
+  #nights {
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .nights-bg-img {
+    position: relative !important;
+    inset: auto !important;
+    order: 2;
+    width: 100% !important;
+    height: clamp(220px, 56vw, 340px) !important;
+    display: block;
+  }
   .nights-inner {
+    order: 1;
     flex-direction: column !important;
     align-items: flex-start !important;
+    padding-top: clamp(28px, 6vw, 44px) !important;
+  }
+  .nights-video-spacer {
+    display: none !important;
   }
 
   /* AboutUs cover bar: stack heading above category grid */
   .aboutus-cover-bar {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  /* MegaMenu: 3-col grid using the full screen width instead of 7 squeezed columns */
+  .mega-menu-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    row-gap: clamp(28px, 6vw, 40px) !important;
+    column-gap: clamp(16px, 4vw, 28px) !important;
   }
 
   /* Fix seam between TBSTalks and Footer on mobile.
@@ -508,8 +565,23 @@ section.touch-color video:not(.no-grayscale),
   /* TBSTalks: keep 2-col on mobile (2×2 grid) */
   .talks-grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* TheEdit articles: one card per view on mobile */
-  .the-edit-grid > .reveal { flex-basis: 84vw; }
+  /* TheEdit articles: 2×2 grid per page, swipe/arrow between pages */
+  .the-edit-grid {
+    width: 100%;
+  }
+  .the-edit-page {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 3vw, 18px);
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: start;
+  }
+  .the-edit-grid .the-edit-card {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+  }
 
   .footer-bottom-bar {
     flex-direction: column !important;
@@ -546,6 +618,23 @@ section.touch-color video:not(.no-grayscale),
   height: 100vh;
   background: #100f0d;
   overflow: hidden;
+}
+.tbs-wizard-mobile-progress {
+  display: none;
+}
+.tbs-wizard-mobile-back {
+  display: none;
+}
+.tbs-wizard-progress-track {
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.15);
+  margin-bottom: 16px;
+}
+.tbs-wizard-progress-fill {
+  height: 100%;
+  background: white;
+  transition: width 0.3s ease;
 }
 .tbs-wizard-sidebar {
   position: relative;
@@ -655,9 +744,18 @@ section.touch-color video:not(.no-grayscale),
   .tbs-wizard-sidebar {
     height: auto;
     overflow: visible;
-    padding: 40px 24px 24px;
+    padding: 24px 20px 20px;
     border-right: none;
     border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .tbs-wizard-mobile-progress {
+    display: block;
+  }
+  .tbs-wizard-mobile-back {
+    display: inline-block;
+  }
+  .tbs-wizard-desktop-intro {
+    display: none;
   }
   .tbs-wizard-main {
     height: auto;
@@ -674,13 +772,26 @@ section.touch-color video:not(.no-grayscale),
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  .rating-endlabel {
-    display: none;
+  .rating-row {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 0;
+  }
+  .rating-dots {
+    flex-basis: 100%;
+    order: -1;
   }
   .rating-dot {
-    width: 30px;
-    height: 30px;
-    font-size: 11px;
+    width: 42px;
+    height: 42px;
+    font-size: 13px;
+  }
+  .rating-endlabel {
+    width: auto;
+    flex: none;
+  }
+  .rating-endlabel.right {
+    margin-left: auto;
   }
   .tbs-nights-success {
     flex-direction: column;
