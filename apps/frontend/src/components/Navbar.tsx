@@ -100,7 +100,10 @@ export default function Navbar() {
                 transition: 'transform 0.3s ease',
                 transform: menuOpen ? 'rotate(45deg)' : 'none',
               }}>
-                <img src="/sunburst-icon.png" alt="" className="no-grayscale" style={{ width: '22px', height: 'auto', mixBlendMode: 'screen' }} />
+                <div style={{ width: '14px', height: '14px', position: 'relative' }}>
+                  <span style={{ position: 'absolute', top: '50%', left: 0, width: '100%', height: '1px', background: 'white', transform: 'translateY(-3px)' }} />
+                  <span style={{ position: 'absolute', top: '50%', left: 0, width: '100%', height: '1px', background: 'white', transform: 'translateY(3px)' }} />
+                </div>
               </div>
               <span style={{
                 fontFamily: "'Montserrat', sans-serif",
@@ -140,10 +143,10 @@ export default function Navbar() {
             }}
           >
             <img
-              src="/tbs-logo.png"
+              src="/TBS LOGO-02 white.png"
               alt="The Blended Stories"
               className="no-grayscale"
-              style={{ height: 'clamp(40px, 5.5vw, 56px)', width: 'auto', mixBlendMode: 'screen', display: 'block' }}
+              style={{ height: 'clamp(64px, 8.5vw, 84px)', width: 'auto', mixBlendMode: 'screen', display: 'block' }}
             />
           </a>
 

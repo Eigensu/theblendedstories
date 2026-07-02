@@ -1,0 +1,158 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
+const EDITS = [
+  {
+    title: 'FASHION EDIT',
+    items: ['Fashion', 'Jewellery & Watches', 'Accessories', 'Bridal', 'Trend Reports'],
+  },
+  {
+    title: 'FOOD & DRINK EDIT',
+    items: ['Restaurants', 'Cafés', 'Bars & Cocktails', 'Desserts', 'New Openings'],
+  },
+  {
+    title: 'TRAVEL EDIT',
+    items: ['Hotels & Stays', 'Destinations', 'City Guides', 'Weekend Escapes', 'Travel Trends'],
+  },
+  {
+    title: 'BEAUTY & WELLNESS EDIT',
+    items: ['Beauty', 'Skincare', 'Hair & Makeup', 'Wellness', 'Treatments'],
+  },
+  {
+    title: 'DESIGN EDIT',
+    items: ['Interiors', 'Architecture', 'Home Décor', 'Furniture', 'Styling'],
+  },
+  {
+    title: 'CULTURE EDIT',
+    items: ['People', 'Arts', 'Entertainment', 'Events', 'TBS Talks'],
+  },
+  {
+    title: 'THE BLENDED EDIT',
+    items: ['Curated Edit', 'Weekend Edit', 'Monthly Edit', 'Luxury Edit', 'Best Of'],
+  },
+];
+
+export default function MegaMenu() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+
+  return (
+    <>
+      {/* Hamburger button — fixed top-right corner */}
+      <button
+        onClick={() => setOpen(true)}
+        aria-label="Open menu"
+        style={{
+          position: 'fixed',
+          top: 'clamp(16px, 3vw, 28px)',
+          right: 'clamp(16px, 3vw, 28px)',
+          zIndex: 210,
+          width: '44px',
+          height: '44px',
+          display: open ? 'none' : 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '6px',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+        }}
+      >
+        <span style={{ width: '18px', height: '1px', background: 'white' }} />
+        <span style={{ width: '18px', height: '1px', background: 'white' }} />
+        <span style={{ width: '18px', height: '1px', background: 'white' }} />
+      </button>
+
+      {/* Expanded mega menu panel */}
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 220,
+          background: '#000',
+          color: 'white',
+          overflowY: 'auto',
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? 'auto' : 'none',
+          transition: 'opacity 0.3s ease',
+        }}
+      >
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: 'clamp(32px, 5vw, 64px) clamp(20px, 4vw, 48px) 40px',
+          position: 'relative',
+        }}>
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+            style={{
+              position: 'absolute',
+              top: 'clamp(20px, 4vw, 40px)',
+              right: 'clamp(20px, 4vw, 48px)',
+              width: '38px', height: '38px',
+              border: 'none',
+              background: 'transparent',
+              color: 'white',
+              fontSize: '16px',
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            ✕
+          </button>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${EDITS.length}, 1fr)`,
+            gap: 'clamp(12px, 1.5vw, 24px)',
+            marginTop: 'clamp(40px, 5vw, 56px)',
+          }}>
+            {EDITS.map((edit) => (
+              <div key={edit.title}>
+                <h3 style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: 'white',
+                  margin: '0 0 18px 0',
+                }}>
+                  {edit.title}
+                </h3>
+                <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {edit.items.map((item) => (
+                    <li key={item}>
+                      <a
+                        href="#"
+                        onClick={() => setOpen(false)}
+                        style={{
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: '13.5px',
+                          color: 'rgba(255,255,255,0.7)',
+                          textDecoration: 'none',
+                          transition: 'color 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = 'white')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

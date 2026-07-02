@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import MobileTouchReveal from '@/components/MobileTouchReveal';
+import MegaMenu from '@/components/MegaMenu';
 
 export const metadata: Metadata = {
   title: 'The Blended Stories',
@@ -32,6 +33,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <MegaMenu />
         <MobileTouchReveal />
       </body>
     </html>

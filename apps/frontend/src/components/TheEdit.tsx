@@ -73,7 +73,7 @@ export default function TheEdit() {
                 lineHeight: '0.9',
                 textTransform: 'uppercase',
                 letterSpacing: '-0.01em',
-              }}>EDIT</h2>
+              }}>Top Picks</h2>
             </div>
 
             {/* Short rule */}

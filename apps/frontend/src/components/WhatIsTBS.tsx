@@ -1,6 +1,12 @@
+'use client';
+
+import { useState } from 'react';
 import ScrollReveal from './ScrollReveal';
+import { RegisterModal } from './Hero';
 
 export default function WhatIsTBS() {
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <section
       id="about"
@@ -97,8 +103,44 @@ export default function WhatIsTBS() {
               </p>
             </div>
           </ScrollReveal>
+
+          {/* Get Blended CTA */}
+          <ScrollReveal delay={0.25}>
+            <button
+              onClick={() => setModalOpen(true)}
+              style={{
+                marginTop: 'clamp(28px, 3.5vw, 40px)',
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: 'clamp(10px, 1vw, 13px)',
+                fontWeight: 600,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'black',
+                background: 'white',
+                border: '1px solid white',
+                cursor: 'pointer',
+                padding: '0 clamp(24px, 3vw, 36px)',
+                height: '52px',
+                borderRadius: '40px',
+                transition: 'background 0.25s ease, color 0.25s ease',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.color = 'black';
+              }}
+            >
+              Get Blended
+            </button>
+          </ScrollReveal>
         </div>
       </div>
+
+      {modalOpen && <RegisterModal onClose={() => setModalOpen(false)} />}
     </section>
   );
 }

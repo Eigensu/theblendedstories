@@ -15,6 +15,7 @@ export default function TBSNights() {
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
+        background: '#000',
       }}
     >
       {/* Background — grayscale by default, full colour on section hover */}
@@ -23,16 +24,16 @@ export default function TBSNights() {
         alt=""
         className="nights-bg-img"
         style={{
-          position: 'absolute', inset: 0,
-          width: '100%', height: '100%',
+          position: 'absolute', top: 0, left: 0, bottom: 0,
+          width: '48%', height: '100%',
           objectFit: 'cover', objectPosition: 'center',
           zIndex: 0,
         }}
       />
       {/* Dark overlay */}
       <div style={{
-        position: 'absolute',
-        inset: 0,
+        position: 'absolute', top: 0, left: 0, bottom: 0,
+        width: '48%',
         background: 'rgba(0,0,0,0.58)',
         zIndex: 1,
       }} />

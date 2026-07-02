@@ -43,22 +43,6 @@ const socialIcons = [
   },
 ];
 
-function FooterSunburst() {
-  return (
-    <img
-      src="/sunburst-icon.png"
-      alt=""
-      className="no-grayscale"
-      style={{
-        width: 'clamp(60px, 16vw, 130px)',
-        height: 'auto',
-        display: 'block',
-        mixBlendMode: 'screen',
-      }}
-    />
-  );
-}
-
 export default function Footer() {
   return (
     <footer
@@ -94,18 +78,15 @@ export default function Footer() {
         padding: 'clamp(60px, 8vw, 100px) clamp(20px, 4vw, 44px) clamp(40px, 5vw, 60px)',
       }}>
         <ScrollReveal>
-          <FooterSunburst />
-        </ScrollReveal>
-        <ScrollReveal delay={0.1}>
           <img
-            src="/tbs-logo.png"
+            src="/TBS LOGO-02 white.png"
             alt="The Blended Stories"
             className="no-grayscale"
             style={{
-              height: 'clamp(80px, 12vw, 160px)',
+              height: 'clamp(260px, 38vw, 480px)',
               width: 'auto',
               display: 'block',
-              marginTop: '12px',
+              margin: '-70px auto',
               mixBlendMode: 'screen',
             }}
           />

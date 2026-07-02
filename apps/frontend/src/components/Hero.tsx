@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-function RegisterModal({ onClose }: { onClose: () => void }) {
+export function RegisterModal({ onClose }: { onClose: () => void }) {
   const [tab, setTab] = useState<'join' | 'signin'>('join');
   const [form, setForm] = useState({ name: '', email: '', password: '' });
 
@@ -49,7 +49,7 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
 
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-          <img src="/tbs-logo.png" alt="The Blended Stories" className="no-grayscale" style={{ height: '34px', width: 'auto', mixBlendMode: 'screen' }} />
+          <img src="/TBS LOGO-02 white.png" alt="The Blended Stories" className="no-grayscale" style={{ height: '56px', width: 'auto', mixBlendMode: 'screen', margin: '0 auto', display: 'block' }} />
         </div>
 
         {/* Tab toggle */}
@@ -215,8 +215,6 @@ function RegisterModal({ onClose }: { onClose: () => void }) {
 }
 
 export default function Hero() {
-  const [modalOpen, setModalOpen] = useState(false);
-
   return (
     <>
       <section
@@ -271,140 +269,7 @@ export default function Hero() {
           background: 'rgba(0,0,0,0.78)',
           zIndex: 1,
         }} />
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 0,
-          position: 'relative',
-          zIndex: 2,
-          padding: '0 20px',
-          textAlign: 'center',
-        }}>
-
-          {/* Sunburst icon */}
-          <div style={{ marginBottom: '28px', animation: 'fadeUp 0.8s ease-out 0.1s both' }}>
-            <img
-              src="/sunburst-icon.png"
-              alt=""
-              className="no-grayscale"
-              style={{ width: 'clamp(60px, 16vw, 130px)', height: 'auto', mixBlendMode: 'screen', display: 'block' }}
-            />
-          </div>
-
-          {/* Headline */}
-          <h1
-            style={{
-              fontFamily: "'Bodoni Moda', serif",
-              fontVariationSettings: "'opsz' 18",
-              fontSize: 'clamp(30px, 8vw, 72px)',
-              fontWeight: 400,
-              lineHeight: '120%',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-              color: 'white',
-              margin: 0,
-              animation: 'fadeUp 0.8s ease-out 0.3s both',
-            }}
-          >
-            The Blended Stories
-          </h1>
-
-          {/* Subtitle */}
-          <p
-            style={{
-              fontFamily: "'Bodoni Moda', serif",
-              fontVariationSettings: "'opsz' 18",
-              fontSize: 'clamp(18px, 4.5vw, 32px)',
-              fontWeight: 400,
-              fontStyle: 'italic',
-              lineHeight: '120%',
-              color: 'white',
-              marginTop: '16px',
-              animation: 'fadeUp 0.8s ease-out 0.5s both',
-            }}
-          >
-            Explore the stories that define your city.
-          </p>
-
-          {/* Two CTA buttons */}
-          <div style={{
-            marginTop: '48px',
-            display: 'flex',
-            gap: 'clamp(12px, 2vw, 20px)',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            animation: 'fadeUp 0.8s ease-out 0.7s both',
-          }}>
-            {/* GET BLENDED — primary, opens modal */}
-            <button
-              onClick={() => setModalOpen(true)}
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: 'clamp(10px, 1vw, 13px)',
-                fontWeight: 600,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'black',
-                background: 'white',
-                border: '1px solid white',
-                cursor: 'pointer',
-                padding: '0 clamp(24px, 3vw, 36px)',
-                height: '52px',
-                borderRadius: '40px',
-                transition: 'background 0.25s ease, color 0.25s ease',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = 'white';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'white';
-                e.currentTarget.style.color = 'black';
-              }}
-            >
-              Get Blended
-            </button>
-
-            {/* STEP INTO THE STORY — secondary, outline */}
-            <a
-              href="#about"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: 'clamp(10px, 1vw, 13px)',
-                fontWeight: 500,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'white',
-                background: 'transparent',
-                border: '1px solid rgba(255,255,255,0.5)',
-                cursor: 'pointer',
-                padding: '0 clamp(24px, 3vw, 36px)',
-                height: '52px',
-                borderRadius: '40px',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                transition: 'border-color 0.25s ease, background 0.25s ease',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'white';
-                e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)';
-                e.currentTarget.style.background = 'transparent';
-              }}
-            >
-              Step Into The Story
-            </a>
-          </div>
-        </div>
       </section>
-
-      {modalOpen && <RegisterModal onClose={() => setModalOpen(false)} />}
     </>
   );
 }

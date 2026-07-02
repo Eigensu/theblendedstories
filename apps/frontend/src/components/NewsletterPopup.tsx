@@ -68,7 +68,7 @@ export default function NewsletterPopup() {
             position: 'absolute', inset: 0,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <img src="/tbs-logo.png" alt="The Blended Stories" className="no-grayscale" style={{ height: '44px', width: 'auto', mixBlendMode: 'screen' }} />
+            <img src="/TBS LOGO-02 white.png" alt="The Blended Stories" className="no-grayscale" style={{ height: '240px', width: 'auto', mixBlendMode: 'screen' }} />
           </div>
           {/* Close button */}
           <button
