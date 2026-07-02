@@ -266,7 +266,7 @@ export default function Hero() {
         {/* Dark overlay */}
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'rgba(0,0,0,0.78)',
+          background: 'rgba(0,0,0,0.35)',
           zIndex: 1,
         }} />
       </section>

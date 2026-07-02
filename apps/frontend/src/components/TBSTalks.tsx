@@ -34,7 +34,7 @@ export default function TBSTalks() {
       id="talks"
       style={{
         background: '#000',
-        padding: 'clamp(28px, 4vw, 52px) clamp(20px, 3vw, 44px) clamp(28px, 4vw, 52px)',
+        padding: 'clamp(8px, 1vw, 16px) clamp(20px, 3vw, 44px) clamp(8px, 1vw, 16px)',
       }}
     >
       <div style={{ maxWidth: '1352px', margin: '0 auto' }}>
@@ -44,20 +44,30 @@ export default function TBSTalks() {
           <div style={{
             position: 'relative',
             textAlign: 'center',
-            marginBottom: 'clamp(32px, 5vw, 64px)',
+            marginBottom: 'clamp(16px, 3vw, 32px)',
           }}>
             {/* Title */}
-            <h2 style={{
-              fontFamily: "'Bodoni Moda', serif",
-              fontVariationSettings: "'opsz' 18",
-              fontSize: 'clamp(24px, 3.5vw, 44px)',
-              fontWeight: 400,
-              letterSpacing: '0.06em',
-              color: 'white',
-              margin: '0 0 14px 0',
+            <div style={{
+              height: 'calc(clamp(64px, 9vw, 110px) + 30px)',
+              paddingTop: '15px',
+              paddingBottom: '15px',
+              boxSizing: 'border-box',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
-              TBS TALKS
-            </h2>
+              <img
+                src="/tbstalks-logo.png"
+                alt="TBS Talks"
+                className="no-grayscale"
+                style={{
+                  height: '420px',
+                  width: 'auto',
+                  display: 'block',
+                }}
+              />
+            </div>
 
             {/* Subtitle */}
             <p style={{

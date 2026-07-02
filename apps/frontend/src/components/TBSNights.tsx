@@ -19,9 +19,13 @@ export default function TBSNights() {
       }}
     >
       {/* Background — grayscale by default, full colour on section hover */}
-      <img
-        src="/tbsnights.png"
-        alt=""
+      <video
+        src="/tbs-nights.mp4"
+        poster="/tbsnights-hero.png"
+        autoPlay
+        loop
+        muted
+        playsInline
         className="nights-bg-img"
         style={{
           position: 'absolute', top: 0, left: 0, bottom: 0,
@@ -30,29 +34,6 @@ export default function TBSNights() {
           zIndex: 0,
         }}
       />
-      {/* Dark overlay */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, bottom: 0,
-        width: '48%',
-        background: 'rgba(0,0,0,0.58)',
-        zIndex: 1,
-      }} />
-
-      {/* TBS NIGHTS label — top right */}
-      <span style={{
-        position: 'absolute',
-        top: 'clamp(20px, 3vw, 36px)',
-        right: 'clamp(20px, 4vw, 60px)',
-        fontFamily: "'Poppins', sans-serif",
-        fontSize: 'clamp(10px, 0.9vw, 13px)',
-        letterSpacing: '0.22em',
-        textTransform: 'uppercase',
-        color: 'rgba(255,255,255,0.85)',
-        zIndex: 3,
-      }}>
-        TBS NIGHTS
-      </span>
-
       <div
         className="nights-inner"
         style={{
@@ -68,20 +49,8 @@ export default function TBSNights() {
           gap: 'clamp(40px, 6vw, 100px)',
         }}
       >
-        {/* Left: Title */}
-        <ScrollReveal>
-          <h2 style={{
-            fontFamily: "'Fraunces', serif",
-            fontSize: 'clamp(44px, 6vw, 82px)',
-            fontWeight: 400,
-            color: 'white',
-            lineHeight: '1.1',
-            margin: 0,
-            flexShrink: 0,
-          }}>
-            TBS <br /><em>Nights</em>
-          </h2>
-        </ScrollReveal>
+        {/* Left: spacer to clear the video */}
+        <div style={{ flexShrink: 0, width: 'clamp(120px, 20vw, 280px)' }} aria-hidden="true" />
 
         {/* Right: Body text + button */}
         <ScrollReveal delay={0.12}>

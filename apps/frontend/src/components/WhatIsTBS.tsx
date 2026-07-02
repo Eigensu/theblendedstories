@@ -121,7 +121,7 @@ export default function WhatIsTBS() {
                 cursor: 'pointer',
                 padding: '0 clamp(24px, 3vw, 36px)',
                 height: '52px',
-                borderRadius: '40px',
+                borderRadius: '0',
                 transition: 'background 0.25s ease, color 0.25s ease',
                 whiteSpace: 'nowrap',
               }}

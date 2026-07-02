@@ -2,7 +2,6 @@ import Hero from '@/components/Hero';
 import NewsletterPopup from '@/components/NewsletterPopup';
 import WhatIsTBS from '@/components/WhatIsTBS';
 import AboutUs from '@/components/AboutUs';
-import WhyWeExist from '@/components/WhyWeExist';
 import TBSNights from '@/components/TBSNights';
 import TheEdit from '@/components/TheEdit';
 import TBSTalks from '@/components/TBSTalks';
@@ -15,7 +14,6 @@ export default function Home() {
       <Hero />
       <WhatIsTBS />
       <AboutUs />
-      <WhyWeExist />
       <TBSNights />
       <TheEdit />
       <TBSTalks />

@@ -123,13 +123,12 @@ export default function NewsletterPopup() {
                 fontSize: 'clamp(18px, 4vw, 22px)',
                 fontWeight: 400,
                 color: 'white',
-                textTransform: 'uppercase',
                 letterSpacing: '0.03em',
                 lineHeight: '1.2',
                 marginBottom: '20px',
               }}>
-                Join The Blended Stories.<br />
-                <em style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.65)' }}>&amp; Just Like That</em> You&apos;re In The Know.
+                JOIN THE BLENDED STORIES.<br />
+                <em style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.65)' }}>&amp; just like that </em> you&apos;re in the know.
               </h2>
 
               {/* Email form */}
@@ -186,7 +185,7 @@ export default function NewsletterPopup() {
                   color: 'rgba(255,255,255,0.35)',
                   lineHeight: '1.6',
                 }}>
-                  Your all-access pass to what&apos;s happening, who&apos;s going, and what not to miss.
+                  Your invite to what&apos;s happening, who&apos;s going, and what not to miss.
                 </p>
               </form>
             </>

@@ -1,4 +1,5 @@
 'use client';
+import { useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 
 const articles = [
@@ -32,9 +33,49 @@ const articles = [
     title: 'Where The City\'s Most Interesting People Are Spending Their Time',
     desc: 'From cafés and galleries to wellness studios and members\' clubs, these are the places currently on our radar.',
   },
+  {
+    num: '06',
+    img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80',
+    title: 'The Art Openings Worth Rearranging Your Week For',
+    desc: 'The galleries, shows and emerging artists pulling the city\'s creative crowd out of their studios.',
+  },
+  {
+    num: '07',
+    img: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500&q=80',
+    title: 'The Playlists Soundtracking Every Good Party Right Now',
+    desc: 'The DJs, producers and sets defining the city\'s nightlife before they hit the mainstream.',
+  },
+  {
+    num: '08',
+    img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=80',
+    title: 'The Wellness Rituals The City\'s Insiders Swear By',
+    desc: 'From sunrise recovery sessions to the studios fully booked weeks in advance, this is what wellness looks like now.',
+  },
+  {
+    num: '09',
+    img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=80',
+    title: 'The Founders Building The Next Big Thing',
+    desc: 'The entrepreneurs, ideas and ventures quietly reshaping how the city works, shops and connects.',
+  },
+  {
+    num: '10',
+    img: 'https://images.unsplash.com/photo-1520333789090-1afc82db536a?w=500&q=80',
+    title: 'The Getaways Everyone Is Quietly Booking',
+    desc: 'The destinations, stays and itineraries showing up in every well-travelled group chat this season.',
+  },
 ];
 
 export default function TheEdit() {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  const scrollByCard = (direction: 1 | -1) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>('.reveal');
+    const step = card ? card.offsetWidth + 20 : el.clientWidth * 0.8;
+    el.scrollBy({ left: step * direction, behavior: 'smooth' });
+  };
+
   return (
     <section
       id="the-edit"
@@ -52,59 +93,15 @@ export default function TheEdit() {
 
         {/* ── Left panel ── */}
         <ScrollReveal>
-          <div className="the-edit-left">
-            {/* THE EDIT heading */}
-            <div style={{ marginBottom: 'clamp(16px, 2vw, 24px)' }}>
-              <p style={{
-                fontFamily: "'Fraunces', serif",
-                fontSize: 'clamp(11px, 1vw, 14px)',
-                fontWeight: 400,
-                color: 'white',
-                margin: '0',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-              }}>THE</p>
-              <h2 style={{
-                fontFamily: "'Fraunces', serif",
-                fontSize: 'clamp(36px, 5vw, 64px)',
-                fontWeight: 400,
-                color: 'white',
-                margin: '0',
-                lineHeight: '0.9',
-                textTransform: 'uppercase',
-                letterSpacing: '-0.01em',
-              }}>Top Picks</h2>
-            </div>
+          <div className="the-edit-left" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 1.5vw, 20px)', marginTop: 'clamp(120px, 16vw, 220px)' }}>
 
-            {/* Short rule */}
-            <div style={{
-              width: '36px',
-              height: '1px',
-              background: 'rgba(255,255,255,0.4)',
-              marginBottom: 'clamp(16px, 2vw, 24px)',
-            }} />
-
-            {/* Subtitle */}
-            <p style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: 'clamp(9px, 0.75vw, 11px)',
-              fontWeight: 400,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.55)',
-              lineHeight: '1.8',
-              margin: 0,
-            }}>
-              THE STORIES, PEOPLE, PLACES AND TRENDS SHAPING CITY CULTURE RIGHT NOW.
-            </p>
-
-            {/* LATEST FEATURES — vertical, left-aligned, below subtitle */}
+            {/* LATEST FEATURES — vertical, parallel with the title block, vertically centered */}
             <div className="the-edit-vertical-label" style={{
-              marginTop: '48px',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'flex-start',
+              alignItems: 'center',
               gap: '8px',
+              flexShrink: 0,
             }}>
               <span style={{
                 fontFamily: "'Poppins', sans-serif",
@@ -122,24 +119,151 @@ export default function TheEdit() {
                 height: '4px',
                 borderRadius: '50%',
                 background: 'rgba(255,255,255,0.35)',
-                marginLeft: '2px',
               }} />
+            </div>
+
+            <div>
+              {/* THE EDIT heading */}
+              <div style={{ marginBottom: 'clamp(16px, 2vw, 24px)' }}>
+                <p style={{
+                  fontFamily: "'Fraunces', serif",
+                  fontSize: 'clamp(11px, 1vw, 14px)',
+                  fontWeight: 400,
+                  color: 'white',
+                  margin: '0',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                }}>THE</p>
+                <h2 style={{
+                  fontFamily: "'Fraunces', serif",
+                  fontSize: 'clamp(36px, 5vw, 64px)',
+                  fontWeight: 400,
+                  color: 'white',
+                  margin: '0',
+                  lineHeight: '0.9',
+                  textTransform: 'uppercase',
+                  letterSpacing: '-0.01em',
+                }}>Top Picks</h2>
+              </div>
+
+              {/* Short rule */}
+              <div style={{
+                width: '36px',
+                height: '1px',
+                background: 'rgba(255,255,255,0.4)',
+                marginBottom: 'clamp(16px, 2vw, 24px)',
+              }} />
+
+              {/* EXPLORE ALL STORIES */}
+              <a
+                href="#"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: 'clamp(10px, 0.85vw, 12px)',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.7)',
+                  textDecoration: 'none',
+                  borderBottom: '1px solid rgba(255,255,255,0.25)',
+                  paddingBottom: '6px',
+                  transition: 'color 0.2s, border-color 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.7)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)';
+                }}
+              >
+                EXPLORE ALL STORIES
+                <span style={{ fontSize: '16px', fontWeight: 300 }}>→</span>
+              </a>
             </div>
 
           </div>
         </ScrollReveal>
 
-        {/* ── Right: 5 article cards ── */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="the-edit-grid">
+        {/* ── Right: carousel of 10 article cards ── */}
+        <div style={{ flex: 1, minWidth: 0, position: 'relative' }}>
+
+          {/* Carousel arrows */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: '10px',
+            marginBottom: 'clamp(12px, 1.5vw, 18px)',
+          }}>
+            <button
+              type="button"
+              onClick={() => scrollByCard(-1)}
+              aria-label="Previous"
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '50%',
+                border: '1px solid rgba(255,255,255,0.3)',
+                background: 'transparent',
+                color: 'white',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '16px',
+                transition: 'background 0.2s ease, border-color 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                e.currentTarget.style.borderColor = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
+              }}
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollByCard(1)}
+              aria-label="Next"
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '50%',
+                border: '1px solid rgba(255,255,255,0.3)',
+                background: 'transparent',
+                color: 'white',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '16px',
+                transition: 'background 0.2s ease, border-color 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                e.currentTarget.style.borderColor = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
+              }}
+            >
+              →
+            </button>
+          </div>
+
+          <div className="the-edit-grid" ref={scrollerRef}>
             {articles.map((article, i) => (
               <ScrollReveal key={article.num} delay={i * 0.06}>
                 <div
                   className="img-card"
                   style={{
-                    borderLeft: i === 0 ? 'none' : '1px solid rgba(255,255,255,0.08)',
-                    paddingLeft: i === 0 ? '0' : 'clamp(14px, 1.5vw, 22px)',
-                    paddingRight: i === articles.length - 1 ? '0' : 'clamp(14px, 1.5vw, 22px)',
                     cursor: 'pointer',
                   }}
                 >
@@ -209,44 +333,6 @@ export default function TheEdit() {
               </ScrollReveal>
             ))}
           </div>
-
-          {/* EXPLORE ALL STORIES */}
-          <ScrollReveal delay={0.2}>
-            <div style={{
-              marginTop: 'clamp(36px, 4vw, 56px)',
-              display: 'flex',
-              justifyContent: 'center',
-            }}>
-              <a
-                href="#"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '14px',
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: 'clamp(10px, 0.85vw, 12px)',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.7)',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid rgba(255,255,255,0.25)',
-                  paddingBottom: '6px',
-                  transition: 'color 0.2s, border-color 0.2s',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.7)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)';
-                }}
-              >
-                EXPLORE ALL STORIES
-                <span style={{ fontSize: '16px', fontWeight: 300 }}>→</span>
-              </a>
-            </div>
-          </ScrollReveal>
         </div>
 
       </div>

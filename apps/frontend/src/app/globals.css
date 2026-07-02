@@ -255,20 +255,6 @@ body {
   flex-wrap: nowrap;
 }
 
-/* ─── WhyWeExist layout ─── */
-.whyweexist-inner {
-  display: flex;
-  align-items: center;
-}
-
-@media (max-width: 768px) {
-  .whyweexist-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 32px !important;
-  }
-}
-
 /* ─── WhatIsTBS layout ─── */
 .whatis-inner {
   display: flex;
@@ -308,7 +294,6 @@ video:not(.no-grayscale) {
 #hero:hover     video:not(.no-grayscale),
 #about:hover    img:not(.no-grayscale),
 #about-us:hover img:not(.no-grayscale),
-#why:hover      img:not(.no-grayscale),
 #explore:hover  img:not(.no-grayscale),
 #news:hover     img:not(.no-grayscale),
 #nights:hover   img:not(.no-grayscale),
@@ -367,9 +352,20 @@ section.touch-color video:not(.no-grayscale),
   width: clamp(160px, 18vw, 240px);
 }
 .the-edit-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: clamp(14px, 1.5vw, 22px);
+  scrollbar-width: none;
+}
+.the-edit-grid::-webkit-scrollbar {
+  display: none;
+}
+.the-edit-grid > .reveal {
+  flex: 0 0 clamp(220px, 26vw, 300px);
+  scroll-snap-align: start;
 }
 
 /* ─── BREAKPOINTS ─── */
@@ -435,17 +431,10 @@ section.touch-color video:not(.no-grayscale),
   /* TheEdit: stack left panel above cards */
   .the-edit-outer { flex-direction: column; }
   .the-edit-left { width: 100%; }
-  .the-edit-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(20px, 3vw, 32px);
+  .the-edit-grid > .reveal {
+    flex-basis: clamp(200px, 60vw, 260px);
   }
   .the-edit-vertical-label { display: none !important; }
-  /* Reset per-article inline borders/padding set in the JS map */
-  .the-edit-grid .reveal > div {
-    border-left: none !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
 }
 
 /* ── Tablet: 768px ── */
@@ -519,8 +508,8 @@ section.touch-color video:not(.no-grayscale),
   /* TBSTalks: keep 2-col on mobile (2×2 grid) */
   .talks-grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* TheEdit articles: 2-col → 1-col */
-  .the-edit-grid { grid-template-columns: 1fr; }
+  /* TheEdit articles: one card per view on mobile */
+  .the-edit-grid > .reveal { flex-basis: 84vw; }
 
   .footer-bottom-bar {
     flex-direction: column !important;

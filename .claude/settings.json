@@ -44,7 +44,12 @@
       "Bash(node fitcheck.mjs)",
       "Bash(node fitcheck2.mjs)",
       "Bash(magick -version)",
-      "Bash(convert -version)"
+      "Bash(convert -version)",
+      "Bash(npx next *)",
+      "Bash(git checkout *)",
+      "Bash(rm -f apps/frontend/src/components/WhyWeExist.tsx)",
+      "Bash(grep -rn \"WhyWeExist\" apps/frontend/src)",
+      "Bash(tasklist)"
     ]
   }
 }
