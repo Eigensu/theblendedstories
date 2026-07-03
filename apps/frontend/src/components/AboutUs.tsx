@@ -45,8 +45,8 @@ export default function AboutUs() {
             background: 'var(--black)',
             padding: 'clamp(12px, 1.5vw, 20px) 0',
             borderTop: 'none',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
 
             {/* WHAT DO WE COVER? — Fraunces */}
@@ -62,6 +62,7 @@ export default function AboutUs() {
               flexShrink: 0,
               whiteSpace: 'nowrap',
               letterSpacing: '0.01em',
+              textAlign: 'center',
             }}>
               WHAT DO WE COVER?
             </h2>
@@ -73,7 +74,7 @@ export default function AboutUs() {
         <p
           key={index}
           style={{
-            marginTop: 'clamp(48px, 7vw, 96px)',
+            marginTop: 'clamp(20px, 3vw, 10px)',
             fontFamily: "'Poppins', sans-serif",
             fontSize: 'clamp(12px, 1.1vw, 15px)',
             fontWeight: 400,

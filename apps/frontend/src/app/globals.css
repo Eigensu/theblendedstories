@@ -514,7 +514,7 @@ section.touch-color video:not(.no-grayscale),
   /* AboutUs cover bar: stack heading above category grid */
   .aboutus-cover-bar {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
   }
 
   /* MegaMenu: 3-col grid using the full screen width instead of 7 squeezed columns */
