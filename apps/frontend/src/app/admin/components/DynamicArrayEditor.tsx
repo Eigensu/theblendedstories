@@ -58,7 +58,6 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
 
       const payloadItems = items.map(item => ({
         ...item,
-        [visibilityField]: publish ? true : false,
         status: publish ? 'published' : 'draft'
       }));
 
