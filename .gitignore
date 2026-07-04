@@ -2,3 +2,37 @@ node_modules
 .next
 .turbo
 boilerplate
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# Node
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Build output
+dist/
+build/
+.next/
+coverage/

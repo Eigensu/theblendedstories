@@ -4,6 +4,7 @@
    causing browsers to silently ignore the whole font request. */
 @import "tailwindcss";
 
+@layer base {
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -802,4 +803,4 @@ section.touch-color video:not(.no-grayscale),
     display: none;
   }
 }
-
+}
