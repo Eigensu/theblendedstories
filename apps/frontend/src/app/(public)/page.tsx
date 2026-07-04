@@ -32,7 +32,6 @@ export default async function Home() {
     theEditData,
     tbsTalksData,
     footerData,
-    seoData,
     settingsData
   ] = await Promise.all([
     fetchCMSData('/hero/'),
@@ -42,7 +41,6 @@ export default async function Home() {
     fetchCMSData('/the-edit/'),
     fetchCMSData('/tbs-talks/'),
     fetchCMSData('/footer/'),
-    fetchCMSData('/seo/'),
     fetchCMSData('/settings/')
   ]);
 
