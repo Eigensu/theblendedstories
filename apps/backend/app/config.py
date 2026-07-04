@@ -5,9 +5,9 @@ class Settings(BaseSettings):
     MONGO_URL: str = Field("mongodb://localhost:27017", alias="MONGODB_URI")
     MONGO_DB_NAME: str = "blended_stories"
     
-    ADMIN_USERNAME: str = "admin"
-    ADMIN_PASSWORD: str = "admin123"
-    JWT_SECRET: str = Field("supersecretkey", alias="SECRET_KEY")
+    ADMIN_USERNAME: str = Field("admin", min_length=1)
+    ADMIN_PASSWORD: str = Field(..., min_length=12)
+    JWT_SECRET: str = Field(..., alias="SECRET_KEY", min_length=32)
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 60 * 24 * 7 # 7 days
     
