@@ -2,8 +2,19 @@
 import { useRouter } from 'next/navigation';
 import ScrollReveal from './ScrollReveal';
 
-export default function TBSNights() {
+export default function TBSNights({ data }: { data?: any }) {
   const router = useRouter();
+
+  const videoUrl = data?.video_url || "/tbs-nights.mp4";
+  const posterUrl = data?.poster_url || "/tbsnights-hero.png";
+  const title = data?.title || "TBS Nights";
+  const subtitle = data?.subtitle || "The conversations that don't happen online.";
+  const paragraphs = data?.paragraphs?.length >= 2 ? data.paragraphs : [
+    "TBS Nights is an intimate dinner series by The Blended Stories that brings together founders, creatives, tastemakers and cultural voices for meaningful conversations beyond likes, algorithms and timelines.",
+    "Because the best connections happen when people put their phones down and pull up a chair."
+  ];
+  const buttonText = data?.button_text || "JOIN THE WAITLIST";
+  const buttonLink = data?.button_link || "/tbs-nights";
 
   return (
     <section
@@ -20,8 +31,8 @@ export default function TBSNights() {
     >
       {/* Background — grayscale by default, full colour on section hover */}
       <video
-        src="/tbs-nights.mp4"
-        poster="/tbsnights-hero.png"
+        src={videoUrl}
+        poster={posterUrl}
         autoPlay
         loop
         muted
@@ -66,7 +77,7 @@ export default function TBSNights() {
               lineHeight: '1.05',
               letterSpacing: '0.01em',
             }}>
-              TBS Nights
+              {title}
             </h2>
 
             <p style={{
@@ -77,7 +88,7 @@ export default function TBSNights() {
               margin: '0 0 clamp(16px, 2vw, 24px) 0',
               lineHeight: '1.6',
             }}>
-              The conversations that don&apos;t happen online.
+              {subtitle}
             </p>
 
             <p style={{
@@ -88,7 +99,7 @@ export default function TBSNights() {
               margin: '0 0 clamp(14px, 1.8vw, 20px) 0',
               textAlign: 'justify',
             }}>
-              TBS Nights is an intimate dinner series by The Blended Stories that brings together founders, creatives, tastemakers and cultural voices for meaningful conversations beyond likes, algorithms and timelines.
+              {paragraphs[0]}
             </p>
 
             <p style={{
@@ -99,11 +110,11 @@ export default function TBSNights() {
               margin: '0 0 clamp(28px, 3.5vw, 44px) 0',
               textAlign: 'justify',
             }}>
-              Because the best connections happen when people put their phones down and pull up a chair.
+              {paragraphs[1]}
             </p>
 
             <button
-              onClick={() => router.push('/tbs-nights')}
+              onClick={() => router.push(buttonLink)}
               style={{
                 border: '1px solid rgba(255,255,255,0.8)',
                 background: 'transparent',
@@ -125,7 +136,7 @@ export default function TBSNights() {
                 e.currentTarget.style.borderColor = 'rgba(255,255,255,0.8)';
               }}
             >
-              JOIN THE WAITLIST
+              {buttonText}
             </button>
 
           </div>

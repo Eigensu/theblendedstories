@@ -70,8 +70,21 @@ const pages = Array.from({ length: Math.ceil(articles.length / PAGE_SIZE) }, (_,
   articles.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
 );
 
-export default function TheEdit() {
+export default function TheEdit({ data, settings }: { data?: any[], settings?: any }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+
+  const apiArticles = data && data.length > 0 
+    ? data.filter(d => d.published !== false).sort((a: any, b: any) => a.display_order - b.display_order).map(d => ({
+        img: d.cover_image_url,
+        title: d.title,
+        desc: d.description,
+        num: d.display_number,
+        url: d.story_url || '#'
+      }))
+    : articles;
+
+  const title = settings?.the_edit_title || 'TOP PICKS';
+  const description = settings?.the_edit_description || 'A curated selection of our most recent and essential stories. Everything you need to know, styled for the way you live.';
 
   const scrollByCard = (direction: 1 | -1) => {
     const el = scrollerRef.current;
@@ -145,7 +158,7 @@ export default function TheEdit() {
                   lineHeight: '0.9',
                   textTransform: 'uppercase',
                   letterSpacing: '-0.01em',
-                }}>Top Picks</h2>
+                }}>{title}</h2>
               </div>
 
               {/* Short rule */}
@@ -155,6 +168,18 @@ export default function TheEdit() {
                 background: 'rgba(255,255,255,0.4)',
                 marginBottom: 'clamp(16px, 2vw, 24px)',
               }} />
+
+              {/* Description */}
+              <p className="theedit-desc" style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: 'clamp(11px, 0.95vw, 13px)',
+                color: 'rgba(255,255,255,0.7)',
+                lineHeight: '1.7',
+                margin: '0 0 24px 0',
+                maxWidth: '420px',
+              }}>
+                {description}
+              </p>
 
               {/* EXPLORE ALL STORIES */}
               <a
@@ -261,7 +286,9 @@ export default function TheEdit() {
           </div>
 
           <div className="the-edit-grid" ref={scrollerRef}>
-            {pages.map((page, pageIdx) => (
+            {Array.from({ length: Math.ceil(apiArticles.length / PAGE_SIZE) }, (_, i) =>
+              apiArticles.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
+            ).map((page, pageIdx) => (
               <div className="the-edit-page" key={pageIdx}>
                 {page.map((article) => (
                   <div

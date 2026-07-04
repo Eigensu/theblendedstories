@@ -4,8 +4,17 @@ import { useState } from 'react';
 import ScrollReveal from './ScrollReveal';
 import { RegisterModal } from './Hero';
 
-export default function WhatIsTBS() {
+export default function WhatIsTBS({ data }: { data?: any }) {
   const [modalOpen, setModalOpen] = useState(false);
+
+  const title = data?.title || 'WHAT IS\nTHE BLENDED STORIES?';
+  const imageUrl = data?.image_url || '/whatis.png';
+  const paragraphs = data?.paragraphs?.length === 3 ? data.paragraphs : [
+    "The first social-forward lifestyle magazine where storytelling meets cultural vibe check.",
+    "Part Instagram.\nPart editorial.\nPart survival guide for navigating the city properly.",
+    "From fashion and nightlife to restaurants, travel, beauty, design, and the people shaping culture right now, all in language you're already fluent in."
+  ];
+  const buttonText = data?.button_text || 'Get Blended';
 
   return (
     <section
@@ -32,7 +41,7 @@ export default function WhatIsTBS() {
         <ScrollReveal delay={0.05}>
           <div className="whatis-portrait-wrap img-card" style={{ flexShrink: 0 }}>
             <img
-              src="/whatis.png"
+              src={imageUrl}
               alt="The Blended Stories"
               style={{
                 width: 'clamp(280px, 36vw, 520px)',
@@ -62,7 +71,12 @@ export default function WhatIsTBS() {
               color: 'white',
               margin: '0 0 clamp(24px, 3vw, 40px) 0',
             }}>
-              WHAT IS<br />THE BLENDED STORIES?
+              {title.split('\\n').map((line: string, i: number) => (
+                <span key={i}>
+                  {line}
+                  {i !== title.split('\\n').length - 1 && <br />}
+                </span>
+              ))}
             </h2>
           </ScrollReveal>
 
@@ -78,17 +92,13 @@ export default function WhatIsTBS() {
               flexDirection: 'column',
               gap: 'clamp(14px, 1.5vw, 20px)',
             }}>
+              <p style={{ margin: 0 }}>{paragraphs[0]}</p>
               <p style={{ margin: 0 }}>
-                The first <strong style={{ color: 'white', fontWeight: 600 }}>social-forward</strong> lifestyle magazine where storytelling meets cultural vibe check.
+                {paragraphs[1].split('\n').map((line: string, i: number, arr: string[]) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </p>
-              <p style={{ margin: 0 }}>
-                Part Instagram.<br />
-                Part editorial.<br />
-                Part survival guide for <strong style={{ color: 'white', fontWeight: 600 }}>navigating the city properly.</strong>
-              </p>
-              <p style={{ margin: 0 }}>
-                From fashion and nightlife to restaurants, travel, beauty, design, and the people shaping culture right now, all in <strong style={{ color: 'white', fontWeight: 600 }}>language you&apos;re already fluent in.</strong>
-              </p>
+              <p style={{ margin: 0 }}>{paragraphs[2]}</p>
             </div>
           </ScrollReveal>
 
@@ -122,7 +132,7 @@ export default function WhatIsTBS() {
                 e.currentTarget.style.color = 'black';
               }}
             >
-              Get Blended
+              {buttonText}
             </button>
           </ScrollReveal>
         </div>

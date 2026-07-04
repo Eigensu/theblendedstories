@@ -214,7 +214,10 @@ export function RegisterModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default function Hero() {
+export default function Hero({ data }: { data?: any }) {
+  const desktopVideoUrl = data?.video_desktop_url || "/Logo Animation 1920x1080 Wider Screens.mp4";
+  const mobileVideoUrl = data?.video_mobile_url || "/Logo Animation Mobile Screen.mp4";
+
   return (
     <>
       <section
@@ -244,7 +247,7 @@ export default function Hero() {
             zIndex: 0,
           }}
         >
-          <source src="/Logo%20Animation%201920x1080%20Wider%20Screens.mp4" type="video/mp4" />
+          <source src={desktopVideoUrl} type="video/mp4" />
         </video>
 
         {/* Background video — mobile (<768px) */}
@@ -261,7 +264,7 @@ export default function Hero() {
             zIndex: 0,
           }}
         >
-          <source src="/Logo%20Animation%20Mobile%20Screen.mp4" type="video/mp4" />
+          <source src={mobileVideoUrl} type="video/mp4" />
         </video>
         {/* Dark overlay */}
         <div style={{

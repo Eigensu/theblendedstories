@@ -17,17 +17,31 @@ const slides = [
 
 const SLIDE_DURATION = 4000;
 
-export default function AboutUs() {
+export default function AboutUs({ data, settings }: { data?: any[], settings?: any }) {
   const [index, setIndex] = useState(0);
 
+  // Fallback to static slides if no data
+  const apiSlides = data && data.length > 0 
+    ? data.filter(d => d.visibility !== false).sort((a: any, b: any) => a.display_order - b.display_order).map(d => ({
+        img: d.image_url,
+        caption: d.caption
+      }))
+    : slides;
+
+  // Title from settings
+  const title = settings?.what_we_cover_title || 'WHAT DO WE COVER?';
+
   useEffect(() => {
+    if (apiSlides.length <= 1) return;
     const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % slides.length);
+      setIndex((i) => (i + 1) % apiSlides.length);
     }, SLIDE_DURATION);
     return () => clearInterval(timer);
-  }, []);
+  }, [apiSlides.length]);
 
-  const slide = slides[index % slides.length];
+  const slide = apiSlides[index % apiSlides.length] || apiSlides[0];
+
+  if (!slide) return null;
 
   return (
     <section
@@ -64,7 +78,7 @@ export default function AboutUs() {
               letterSpacing: '0.01em',
               textAlign: 'center',
             }}>
-              WHAT DO WE COVER?
+              {title}
             </h2>
 
           </div>
@@ -91,9 +105,9 @@ export default function AboutUs() {
       {/* Image — full bleed, no horizontal padding */}
       <ScrollReveal className="img-card">
         <div style={{ position: 'relative', width: '100%', height: 'clamp(240px, 42vw, 580px)', overflow: 'hidden' }}>
-          {slides.map((s, i) => (
+          {apiSlides.map((s, i) => (
             <img
-              key={s.img}
+              key={s.img + i}
               src={s.img}
               alt="What we cover"
               style={{

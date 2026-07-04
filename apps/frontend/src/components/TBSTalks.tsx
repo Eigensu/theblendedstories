@@ -28,7 +28,17 @@ const speakers = [
   },
 ];
 
-export default function TBSTalks() {
+export default function TBSTalks({ data, settings }: { data?: any[], settings?: any }) {
+  const apiSpeakers = data && data.length > 0
+    ? data.filter(d => d.visibility !== false).sort((a: any, b: any) => a.display_order - b.display_order).map(d => ({
+        img: d.photo_url,
+        name: d.name,
+        role: d.designation,
+        date: d.date,
+      }))
+    : speakers;
+
+  const subtitle = settings?.tbs_talks_subtitle || "Conversation with people shaping what's next";
   return (
     <section
       id="talks"
@@ -77,7 +87,7 @@ export default function TBSTalks() {
               margin: 0,
               letterSpacing: '0.02em',
             }}>
-              Conversation with people&nbsp; shaping what&apos;s next
+              {subtitle}
             </p>
 
             {/* VIEW ALL TALKS — below tagline, right-aligned */}
@@ -115,7 +125,7 @@ export default function TBSTalks() {
 
         {/* ── Four speaker cards ── */}
         <div className="talks-grid">
-          {speakers.map((speaker, idx) => (
+          {apiSpeakers.map((speaker, idx) => (
             <ScrollReveal key={idx} delay={idx * 0.08}>
               <div className="img-card" style={{
                 background: '#0a0a0a',

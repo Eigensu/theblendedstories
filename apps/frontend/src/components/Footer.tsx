@@ -43,7 +43,13 @@ const socialIcons = [
   },
 ];
 
-export default function Footer() {
+export default function Footer({ data }: { data?: any }) {
+  const logoUrl = data?.logo_url || '/TBS LOGO-02 white.png';
+  const backgroundUrl = data?.background_url || '/hero-bg.jpg';
+  const copyright = data?.copyright || '©2024. All Rights Reserved.';
+  const footerQuickLinks = data?.quick_links?.length ? data.quick_links : quickLinks.map((label) => ({ label, url: '#' }));
+  const footerLocations = data?.locations?.length ? data.locations : locations.map((label) => ({ label, url: '#' }));
+
   return (
     <footer
       id="newsletter"
@@ -62,7 +68,7 @@ export default function Footer() {
             rgba(0,0,0,1)    52%,
             rgba(0,0,0,1)    100%
           ),
-          url('/hero-bg.jpg')
+          url('${backgroundUrl}')
         `,
         backgroundSize: 'auto, cover',
         backgroundPosition: '0 0, center',
@@ -79,7 +85,7 @@ export default function Footer() {
       }}>
         <ScrollReveal>
           <img
-            src="/TBS LOGO-02 white.png"
+            src={logoUrl}
             alt="The Blended Stories"
             className="no-grayscale"
             style={{
@@ -120,7 +126,7 @@ export default function Footer() {
                 Quick Links
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {quickLinks.map((link) => (
+                {footerQuickLinks.map((link: string) => (
                   <a key={link} href="#" style={{
                     fontFamily: "'Montserrat', sans-serif",
                     fontSize: 'clamp(13px, 1.1vw, 15px)',
@@ -152,7 +158,7 @@ export default function Footer() {
                 Locations
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {locations.map((loc) => (
+                {footerLocations.map((loc: string) => (
                   <a key={loc} href="#" style={{
                     fontFamily: "'Montserrat', sans-serif",
                     fontSize: 'clamp(13px, 1.1vw, 15px)',
@@ -223,7 +229,7 @@ export default function Footer() {
             fontSize: '12px',
             color: 'rgba(255,255,255,0.7)',
           }}>
-            ©2024. All Rights Reserved.
+            {copyright}
           </span>
           <div style={{ display: 'flex', gap: 'clamp(40px, 6vw, 120px)' }}>
             {['Privacy Policy', 'Terms of Use'].map((item) => (
