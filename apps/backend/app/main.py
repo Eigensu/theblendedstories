@@ -45,7 +45,9 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @app.get("/auth/me")
 async def get_me(token: str = Depends(oauth2_scheme)):
-    return success_response(data={"username": app_settings.ADMIN_USERNAME})
+    from app.auth import get_current_admin
+    username = await get_current_admin(token)
+    return success_response(data={"username": username})
 
 app.include_router(hero.router)
 app.include_router(what_is_tbs.router)
