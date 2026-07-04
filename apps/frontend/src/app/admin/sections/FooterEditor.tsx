@@ -62,21 +62,21 @@ export default function FooterEditor({ sectionId }: { sectionId: string }) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="h-64 bg-white rounded-2xl border border-slate-200 animate-pulse"></div>
-        <div className="h-64 bg-white rounded-2xl border border-slate-200 animate-pulse"></div>
+        <div className="h-64 bg-[#111111] rounded-2xl border border-[#222222] animate-pulse"></div>
+        <div className="h-64 bg-[#111111] rounded-2xl border border-[#222222] animate-pulse"></div>
       </div>
     );
   }
-  if (!data) return <div className="p-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">Failed to load data.</div>;
+  if (!data) return <div className="p-12 text-center text-zinc-400 bg-[#111111] rounded-2xl border border-[#222222]">Failed to load data.</div>;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full pb-12">
       
       {/* Media Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 h-fit">
-        <div className="mb-6 border-b border-slate-100 pb-4">
-          <h2 className="text-lg font-semibold text-slate-900">Footer Media</h2>
-          <p className="text-sm text-slate-500 mt-1">Manage the logo and background image.</p>
+      <div className="bg-[#111111] rounded-2xl shadow-sm border border-[#222222] p-8 h-fit">
+        <div className="mb-6 border-b border-[#222222] pb-4">
+          <h2 className="text-lg font-semibold text-white">Footer Media</h2>
+          <p className="text-sm text-zinc-400 mt-1">Manage the logo and background image.</p>
         </div>
         <div className="space-y-6">
           <MediaUploader 
@@ -97,10 +97,10 @@ export default function FooterEditor({ sectionId }: { sectionId: string }) {
       </div>
 
       {/* General Settings Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <div className="mb-6 border-b border-slate-100 pb-4">
-          <h2 className="text-lg font-semibold text-slate-900">General Information</h2>
-          <p className="text-sm text-slate-500 mt-1">Copyright and contact details.</p>
+      <div className="bg-[#111111] rounded-2xl shadow-sm border border-[#222222] p-8">
+        <div className="mb-6 border-b border-[#222222] pb-4">
+          <h2 className="text-lg font-semibold text-white">General Information</h2>
+          <p className="text-sm text-zinc-400 mt-1">Copyright and contact details.</p>
         </div>
         <div className="space-y-5">
           <TextField 
@@ -120,11 +120,11 @@ export default function FooterEditor({ sectionId }: { sectionId: string }) {
           />
         </div>
         
-        <div className="mt-8 mb-6 border-b border-slate-100 pb-4">
-          <h2 className="text-lg font-semibold text-slate-900">Advanced Navigation</h2>
-          <p className="text-sm text-slate-500 mt-1">Links are currently configured in the backend schema.</p>
+        <div className="mt-8 mb-6 border-b border-[#222222] pb-4">
+          <h2 className="text-lg font-semibold text-white">Advanced Navigation</h2>
+          <p className="text-sm text-zinc-400 mt-1">Links are currently configured in the backend schema.</p>
         </div>
-        <div className="text-sm text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100">
+        <div className="text-sm text-zinc-400 bg-[#0A0A0A] p-4 rounded-xl border border-[#222222]">
           Advanced array editor for links (Locations, Quick Links, Social Links) will be added in a future update.
         </div>
       </div>

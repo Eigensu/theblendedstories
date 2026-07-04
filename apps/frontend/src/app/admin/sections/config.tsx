@@ -5,8 +5,6 @@ import TheEditEditor from './TheEditEditor';
 import TBSNightsEditor from './TBSNightsEditor';
 import WhatIsTBSEditor from './WhatIsTBSEditor';
 import FooterEditor from './FooterEditor';
-import SEOEditor from './SEOEditor';
-import SettingsEditor from './SettingsEditor';
 import WhatWeCoverEditor from './WhatWeCoverEditor';
 import TBSTalksEditor from './TBSTalksEditor';
 
@@ -32,6 +30,4 @@ export const adminSections: AdminSection[] = [
   { id: 'the_edit', title: 'The Edit', collection: 'the-edit', icon: 'book', component: TheEditEditor, order: 5 },
   { id: 'tbs_talks', title: 'TBS Talks', collection: 'tbs-talks', icon: 'users', component: TBSTalksEditor, order: 6 },
   { id: 'footer', title: 'Footer', collection: 'footer', icon: 'layout', component: FooterEditor, order: 7 },
-  { id: 'seo', title: 'SEO', collection: 'seo', icon: 'search', component: SEOEditor, order: 8 },
-  { id: 'settings', title: 'Settings', collection: 'settings', icon: 'settings', component: SettingsEditor, order: 9 },
 ];

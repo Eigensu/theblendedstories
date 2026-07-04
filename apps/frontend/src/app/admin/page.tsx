@@ -54,33 +54,33 @@ export default function AdminDashboard() {
 
   const getBreadcrumb = () => {
     if (activeSectionId === 'media_library') return 'Dashboard / Media Library';
-    const isPage = adminSections.findIndex(s => s.id === activeSectionId) < adminSections.length - 3;
+    const isPage = adminSections.findIndex(s => s.id === activeSectionId) < adminSections.length - 1;
     if (isPage) return `Dashboard / Pages / Home / ${activeSection.title}`;
     return `Dashboard / ${activeSection.title}`;
   };
 
   return (
-    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900">
+    <div className="flex h-screen bg-black overflow-hidden text-white font-sans selection:bg-white/20 selection:text-white">
       {/* Sidebar */}
       <AnimatePresence initial={false}>
         <motion.aside 
           initial={{ width: isSidebarOpen ? 280 : 80 }}
           animate={{ width: isSidebarOpen ? 280 : 80 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="bg-[#0F172A] text-slate-300 flex-shrink-0 flex flex-col shadow-xl z-20 border-r border-slate-800"
+          className="bg-[#0A0A0A] text-zinc-400 flex-shrink-0 flex flex-col shadow-xl z-20 border-r border-zinc-800/50"
         >
-          <div className="h-16 flex items-center justify-between px-6 border-b border-slate-800/50">
+          <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-800/50">
             {isSidebarOpen && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <span className="font-bold text-white tracking-tight">TBS</span>
+                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                  <span className="font-bold text-black tracking-tight">TBS</span>
                 </div>
                 <h2 className="text-sm font-semibold tracking-wide text-white">WORKSPACE</h2>
               </motion.div>
             )}
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="text-slate-400 hover:text-white transition-colors"
+              className="text-zinc-500 hover:text-white transition-colors"
             >
               {isSidebarOpen ? <PanelLeftClose className="w-5 h-5" /> : <PanelLeftOpen className="w-5 h-5 mx-auto" />}
             </button>
@@ -88,21 +88,12 @@ export default function AdminDashboard() {
 
           <nav className="flex-1 overflow-y-auto py-6 custom-scrollbar">
             <ul className="space-y-1 px-3">
-              {/* Dashboard */}
-              <li>
-                <button
-                  className="w-full flex items-center px-3 py-2.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-lg transition-colors"
-                >
-                  <LayoutDashboard className="w-5 h-5 min-w-[20px]" />
-                  {isSidebarOpen && <span className="ml-3">Dashboard</span>}
-                </button>
-              </li>
 
               {/* Pages Group */}
               <li className="pt-4">
                 <button 
                   onClick={() => setPagesOpen(!pagesOpen)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider hover:text-slate-300 transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider hover:text-zinc-300 transition-colors"
                 >
                   {isSidebarOpen ? (
                     <>
@@ -124,7 +115,7 @@ export default function AdminDashboard() {
                       exit={{ opacity: 0, height: 0 }}
                       className="mt-2 space-y-1 overflow-hidden"
                     >
-                      {adminSections.slice(0, -3).map((section) => {
+                      {adminSections.slice(0, -1).map((section) => {
                         const isActive = activeSectionId === section.id;
                         return (
                           <li key={section.id}>
@@ -132,11 +123,11 @@ export default function AdminDashboard() {
                               onClick={() => setActiveSectionId(section.id)}
                               className={`w-full flex items-center pl-10 pr-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 isActive 
-                                  ? 'bg-blue-600/10 text-blue-400' 
-                                  : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
+                                  ? 'bg-zinc-900 text-white' 
+                                  : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'
                               }`}
                             >
-                              {isActive && <motion.div layoutId="active-indicator" className="absolute left-3 w-1 h-5 bg-blue-500 rounded-full" />}
+                              {isActive && <motion.div layoutId="active-indicator" className="absolute left-3 w-1 h-5 bg-white rounded-full" />}
                               <span className="mr-3 opacity-70">{iconMap[section.icon] || <FileText className="w-4 h-4" />}</span>
                               {section.title}
                             </button>
@@ -148,10 +139,10 @@ export default function AdminDashboard() {
                 </AnimatePresence>
               </li>
 
-              <li className="my-4 border-t border-slate-800/50"></li>
+              <li className="my-4 border-t border-zinc-800/50"></li>
 
               {/* Global Sections */}
-              {adminSections.slice(-3).map((section) => {
+              {adminSections.slice(-1).map((section) => {
                 const isActive = activeSectionId === section.id;
                 return (
                   <li key={section.id}>
@@ -159,11 +150,11 @@ export default function AdminDashboard() {
                       onClick={() => setActiveSectionId(section.id)}
                       className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                         isActive 
-                          ? 'bg-blue-600/10 text-blue-400' 
-                          : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
+                          ? 'bg-zinc-900 text-white' 
+                          : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'
                       }`}
                     >
-                      {isActive && isSidebarOpen && <motion.div layoutId="active-indicator" className="absolute left-3 w-1 h-5 bg-blue-500 rounded-full" />}
+                      {isActive && isSidebarOpen && <motion.div layoutId="active-indicator" className="absolute left-3 w-1 h-5 bg-white rounded-full" />}
                       <span className={`${!isSidebarOpen && 'mx-auto'}`}>
                         {iconMap[section.icon] || <Settings className="w-5 h-5" />}
                       </span>
@@ -173,29 +164,14 @@ export default function AdminDashboard() {
                 );
               })}
 
-              <li>
-                <button
-                  onClick={() => setActiveSectionId('media_library')}
-                  className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
-                    activeSectionId === 'media_library' 
-                      ? 'bg-blue-600/10 text-blue-400' 
-                      : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
-                  }`}
-                >
-                  {activeSectionId === 'media_library' && isSidebarOpen && <motion.div layoutId="active-indicator" className="absolute left-3 w-1 h-5 bg-blue-500 rounded-full" />}
-                  <span className={`${!isSidebarOpen && 'mx-auto'}`}>
-                    <ImageIcon className="w-5 h-5" />
-                  </span>
-                  {isSidebarOpen && <span className="ml-3">Media Library</span>}
-                </button>
-              </li>
+
             </ul>
           </nav>
 
           <div className="p-4 border-t border-slate-800/50">
             <button 
               onClick={handleLogout}
-              className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+              className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-lg transition-colors"
             >
               <LogOut className="w-5 h-5 min-w-[20px]" />
               {isSidebarOpen && <span className="ml-3">Log Out</span>}
@@ -207,15 +183,15 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden relative">
         {/* Sticky Navbar */}
-        <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 h-16 flex items-center px-8 justify-between flex-shrink-0 z-10 sticky top-0">
+        <header className="bg-[#0A0A0A]/90 backdrop-blur-md border-b border-zinc-800/50 h-16 flex items-center px-8 justify-between flex-shrink-0 z-10 sticky top-0">
           <div className="flex items-center gap-4">
-            <div className="flex items-center text-sm font-medium text-slate-500">
+            <div className="flex items-center text-sm font-medium text-zinc-400">
               {getBreadcrumb().split(' / ').map((part, i, arr) => (
                 <React.Fragment key={i}>
-                  <span className={i === arr.length - 1 ? 'text-slate-900 font-semibold' : ''}>
+                  <span className={i === arr.length - 1 ? 'text-white font-semibold' : ''}>
                     {part}
                   </span>
-                  {i < arr.length - 1 && <span className="mx-2 text-slate-300">/</span>}
+                  {i < arr.length - 1 && <span className="mx-2 text-zinc-600">/</span>}
                 </React.Fragment>
               ))}
             </div>
@@ -224,23 +200,23 @@ export default function AdminDashboard() {
 
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center relative">
-              <Search className="w-4 h-4 absolute left-3 text-slate-400" />
+              <Search className="w-4 h-4 absolute left-3 text-zinc-500" />
               <input 
                 type="text" 
                 placeholder="Search..." 
-                className="pl-9 pr-4 py-1.5 bg-slate-100 border-transparent rounded-lg text-sm focus:bg-white focus:border-slate-300 focus:ring-0 transition-all w-48"
+                className="pl-9 pr-4 py-1.5 bg-zinc-900 border border-transparent rounded-lg text-sm text-white focus:bg-zinc-900 focus:border-zinc-700 focus:ring-0 transition-all w-48 placeholder-zinc-500"
               />
             </div>
             <a 
               href="/" 
               target="_blank" 
-              className="flex items-center px-4 py-1.5 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+              className="flex items-center px-4 py-1.5 text-sm font-medium text-zinc-300 bg-zinc-900 hover:bg-zinc-800 rounded-lg transition-colors"
             >
               View Site
               <ExternalLink className="w-4 h-4 ml-2" />
             </a>
             
-            <div className="w-px h-6 bg-slate-200 mx-1"></div>
+            <div className="w-px h-6 bg-zinc-800 mx-1"></div>
 
             {/* Global Context-Powered Save Buttons */}
             {activeSectionId !== 'media_library' && (
@@ -251,7 +227,7 @@ export default function AdminDashboard() {
                       initial={{ opacity: 0, x: 10 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 10 }}
-                      className="text-sm text-amber-600 font-medium mr-2"
+                      className="text-sm text-zinc-400 font-medium mr-2"
                     >
                       Unsaved changes
                     </motion.span>
@@ -260,8 +236,8 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => onSave(false)}
                   disabled={isSaving || !hasUnsavedChanges}
-                  className={`relative flex items-center justify-center px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                    isSaving ? 'bg-slate-100 text-slate-400' : hasUnsavedChanges ? 'bg-white border border-slate-200 shadow-sm hover:bg-slate-50' : 'bg-slate-50 text-slate-400'
+                  className={`relative flex items-center justify-center px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    isSaving ? 'bg-zinc-900 text-zinc-600' : hasUnsavedChanges ? 'bg-black border border-zinc-700 text-white hover:bg-zinc-900' : 'bg-black border border-zinc-800 text-zinc-600'
                   }`}
                 >
                   {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
@@ -270,8 +246,8 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => onSave(true)}
                   disabled={isSaving || (status === 'published' && !hasUnsavedChanges)}
-                  className={`relative flex items-center justify-center px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 shadow-sm ${
-                    isSaving || (status === 'published' && !hasUnsavedChanges) ? 'bg-slate-100 text-slate-400' : 'bg-slate-900 text-white hover:bg-slate-800'
+                  className={`relative flex items-center justify-center px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    isSaving || (status === 'published' && !hasUnsavedChanges) ? 'bg-zinc-900 text-zinc-600' : 'bg-white text-black hover:bg-zinc-200'
                   }`}
                 >
                   Publish
@@ -291,10 +267,10 @@ export default function AdminDashboard() {
             className="max-w-5xl mx-auto pb-20"
           >
             {activeSectionId === 'media_library' ? (
-              <div className="flex flex-col items-center justify-center p-16 bg-white rounded-2xl border border-dashed border-slate-300 text-center">
-                <ImageIcon className="w-16 h-16 text-slate-200 mb-4" />
-                <h2 className="text-xl font-semibold text-slate-800 mb-2">Media Library</h2>
-                <p className="text-slate-500 max-w-md">Global media management is coming soon. For now, you can upload media directly within each section editor.</p>
+              <div className="flex flex-col items-center justify-center p-16 bg-[#111111] rounded-2xl border border-dashed border-zinc-800 text-center">
+                <ImageIcon className="w-16 h-16 text-zinc-700 mb-4" />
+                <h2 className="text-xl font-semibold text-white mb-2">Media Library</h2>
+                <p className="text-zinc-400 max-w-md">Global media management is coming soon. For now, you can upload media directly within each section editor.</p>
               </div>
             ) : (
               <ActiveComponent sectionId={activeSectionId} />

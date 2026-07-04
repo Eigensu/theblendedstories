@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import connect_to_mongo, close_mongo_connection
 from app.utils.exceptions import global_exception_handler
 from app.routers import (
-    hero, what_is_tbs, footer, seo, settings,
+    hero, what_is_tbs, footer,
     what_we_cover, tbs_nights, the_edit, tbs_talks, media
 )
 from app.auth import oauth2_scheme, verify_password, create_access_token, TokenData
@@ -54,8 +54,7 @@ app.include_router(tbs_nights.router)
 app.include_router(the_edit.router)
 app.include_router(tbs_talks.router)
 app.include_router(footer.router)
-app.include_router(seo.router)
-app.include_router(settings.router)
+
 app.include_router(media.router)
 
 @app.get("/")

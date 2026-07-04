@@ -75,22 +75,22 @@ export default function HeroEditor({ sectionId }: { sectionId: string }) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="h-64 bg-white rounded-2xl border border-slate-200 animate-pulse"></div>
-        <div className="h-64 bg-white rounded-2xl border border-slate-200 animate-pulse"></div>
+        <div className="h-64 bg-[#111111] rounded-2xl border border-[#222222] animate-pulse"></div>
+        <div className="h-64 bg-[#111111] rounded-2xl border border-[#222222] animate-pulse"></div>
       </div>
     );
   }
   
-  if (!data) return <div className="p-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">Failed to load data.</div>;
+  if (!data) return <div className="p-12 text-center text-zinc-400 bg-[#111111] rounded-2xl border border-[#222222]">Failed to load data.</div>;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full pb-12">
       
       {/* Background Media Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+      <div className="bg-[#111111] rounded-2xl shadow-sm border border-[#222222] p-8">
         <div className="mb-6">
-          <h2 className="text-lg font-semibold text-slate-900">Background Media</h2>
-          <p className="text-sm text-slate-500 mt-1">Manage the video loop shown in the Hero section on different devices.</p>
+          <h2 className="text-lg font-semibold text-white">Background Media</h2>
+          <p className="text-sm text-zinc-400 mt-1">Manage the video loop shown in the Hero section on different devices.</p>
         </div>
         <div className="space-y-6">
           <MediaUploader 
@@ -111,10 +111,10 @@ export default function HeroEditor({ sectionId }: { sectionId: string }) {
       </div>
 
       {/* Modal Content Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+      <div className="bg-[#111111] rounded-2xl shadow-sm border border-[#222222] p-8">
         <div className="mb-6">
-          <h2 className="text-lg font-semibold text-slate-900">Waitlist Modal</h2>
-          <p className="text-sm text-slate-500 mt-1">Content shown when users click "Get Blended".</p>
+          <h2 className="text-lg font-semibold text-white">Waitlist Modal</h2>
+          <p className="text-sm text-zinc-400 mt-1">Content shown when users click "Get Blended".</p>
         </div>
         <div className="space-y-5">
           <div className="grid grid-cols-2 gap-4">

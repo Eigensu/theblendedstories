@@ -75,21 +75,21 @@ export default function TBSNightsEditor({ sectionId }: { sectionId: string }) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="h-96 bg-white rounded-2xl border border-slate-200 animate-pulse"></div>
-        <div className="h-96 bg-white rounded-2xl border border-slate-200 animate-pulse"></div>
+        <div className="h-96 bg-[#111111] rounded-2xl border border-[#222222] animate-pulse"></div>
+        <div className="h-96 bg-[#111111] rounded-2xl border border-[#222222] animate-pulse"></div>
       </div>
     );
   }
-  if (!data) return <div className="p-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">Failed to load data.</div>;
+  if (!data) return <div className="p-12 text-center text-zinc-400 bg-[#111111] rounded-2xl border border-[#222222]">Failed to load data.</div>;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full pb-12">
       
       {/* Media Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 h-fit">
-        <div className="mb-6 border-b border-slate-100 pb-4">
-          <h2 className="text-lg font-semibold text-slate-900">Nights Media</h2>
-          <p className="text-sm text-slate-500 mt-1">Video and poster imagery for the dinner series.</p>
+      <div className="bg-[#111111] rounded-2xl shadow-sm border border-[#222222] p-8 h-fit">
+        <div className="mb-6 border-b border-[#222222] pb-4">
+          <h2 className="text-lg font-semibold text-white">Nights Media</h2>
+          <p className="text-sm text-zinc-400 mt-1">Video and poster imagery for the dinner series.</p>
         </div>
         <div className="space-y-6">
           <MediaUploader 
@@ -110,10 +110,10 @@ export default function TBSNightsEditor({ sectionId }: { sectionId: string }) {
       </div>
 
       {/* Content Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <div className="mb-6 border-b border-slate-100 pb-4">
-          <h2 className="text-lg font-semibold text-slate-900">Event Details</h2>
-          <p className="text-sm text-slate-500 mt-1">Copy and CTAs for TBS Nights.</p>
+      <div className="bg-[#111111] rounded-2xl shadow-sm border border-[#222222] p-8">
+        <div className="mb-6 border-b border-[#222222] pb-4">
+          <h2 className="text-lg font-semibold text-white">Event Details</h2>
+          <p className="text-sm text-zinc-400 mt-1">Copy and CTAs for TBS Nights.</p>
         </div>
         <div className="space-y-5">
           <TextField 
@@ -127,8 +127,8 @@ export default function TBSNightsEditor({ sectionId }: { sectionId: string }) {
             onChange={(val) => setData({ ...data, subtitle: val })} 
           />
           
-          <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 space-y-5 mt-4">
-            <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Description Paragraphs</h3>
+          <div className="bg-[#0A0A0A] p-5 rounded-xl border border-[#222222] space-y-5 mt-4">
+            <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Description Paragraphs</h3>
             <TextArea 
               label="Paragraph 1" 
               value={data.paragraphs[0] || ''} 

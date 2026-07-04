@@ -87,21 +87,21 @@ export default function WhatIsTBSEditor({ sectionId }: { sectionId: string }) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-8 h-96 bg-white rounded-2xl border border-slate-200 animate-pulse"></div>
-        <div className="lg:col-span-4 h-96 bg-white rounded-2xl border border-slate-200 animate-pulse"></div>
+        <div className="lg:col-span-8 h-96 bg-[#111111] rounded-2xl border border-[#222222] animate-pulse"></div>
+        <div className="lg:col-span-4 h-96 bg-[#111111] rounded-2xl border border-[#222222] animate-pulse"></div>
       </div>
     );
   }
-  if (!data) return <div className="p-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">Failed to load data.</div>;
+  if (!data) return <div className="p-12 text-center text-zinc-400 bg-[#111111] rounded-2xl border border-[#222222]">Failed to load data.</div>;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full pb-12">
       
       {/* Text Content Card */}
-      <div className="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <div className="mb-6 border-b border-slate-100 pb-4">
-          <h2 className="text-lg font-semibold text-slate-900">About Content</h2>
-          <p className="text-sm text-slate-500 mt-1">Manage the title, paragraphs, and CTA button.</p>
+      <div className="lg:col-span-8 bg-[#111111] rounded-2xl shadow-sm border border-[#222222] p-8">
+        <div className="mb-6 border-b border-[#222222] pb-4">
+          <h2 className="text-lg font-semibold text-white">About Content</h2>
+          <p className="text-sm text-zinc-400 mt-1">Manage the title, paragraphs, and CTA button.</p>
         </div>
 
         <div className="space-y-6">
@@ -111,8 +111,8 @@ export default function WhatIsTBSEditor({ sectionId }: { sectionId: string }) {
             onChange={(val) => setData({ ...data, title: val })} 
           />
           
-          <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 space-y-5">
-            <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Story Paragraphs</h3>
+          <div className="bg-[#0A0A0A] p-5 rounded-xl border border-[#222222] space-y-5">
+            <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Story Paragraphs</h3>
             {[0, 1, 2].map((idx) => (
               <TextArea 
                 key={idx}
@@ -140,10 +140,10 @@ export default function WhatIsTBSEditor({ sectionId }: { sectionId: string }) {
       </div>
 
       {/* Media Card */}
-      <div className="lg:col-span-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 h-fit sticky top-24">
-        <div className="mb-6 border-b border-slate-100 pb-4">
-          <h2 className="text-lg font-semibold text-slate-900">Featured Media</h2>
-          <p className="text-sm text-slate-500 mt-1">The portrait image shown on the right side.</p>
+      <div className="lg:col-span-4 bg-[#111111] rounded-2xl shadow-sm border border-[#222222] p-8 h-fit sticky top-24">
+        <div className="mb-6 border-b border-[#222222] pb-4">
+          <h2 className="text-lg font-semibold text-white">Featured Media</h2>
+          <p className="text-sm text-zinc-400 mt-1">The portrait image shown on the right side.</p>
         </div>
         <MediaUploader 
           label="Portrait Image" 

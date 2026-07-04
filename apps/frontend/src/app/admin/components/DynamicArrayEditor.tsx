@@ -146,7 +146,7 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
     return (
       <div className="space-y-4">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-24 bg-white border border-slate-200 rounded-2xl animate-pulse"></div>
+          <div key={i} className="h-24 bg-[#111111] border border-zinc-800 rounded-2xl animate-pulse"></div>
         ))}
       </div>
     );
@@ -155,10 +155,10 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-semibold text-slate-800">List Items</h2>
+        <h2 className="text-lg font-semibold text-white">List Items</h2>
         <button 
           onClick={handleCreate}
-          className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-sm"
+          className="flex items-center bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-zinc-200 active:scale-95 transition-all shadow-sm"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Item
@@ -166,15 +166,15 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
       </div>
 
       {items.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-16 bg-white rounded-2xl border border-dashed border-slate-300 shadow-sm">
-          <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-            <Plus className="w-8 h-8 text-blue-500" />
+        <div className="flex flex-col items-center justify-center p-16 bg-[#111111] rounded-2xl border border-dashed border-zinc-800 shadow-sm">
+          <div className="w-16 h-16 bg-zinc-900 rounded-full flex items-center justify-center mb-4">
+            <Plus className="w-8 h-8 text-white" />
           </div>
-          <h3 className="text-lg font-medium text-slate-900 mb-1">No items yet</h3>
-          <p className="text-sm text-slate-500 mb-6 text-center max-w-sm">Create your first item to populate this section.</p>
+          <h3 className="text-lg font-medium text-white mb-1">No items yet</h3>
+          <p className="text-sm text-zinc-500 mb-6 text-center max-w-sm">Create your first item to populate this section.</p>
           <button 
             onClick={handleCreate}
-            className="text-sm font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-6 py-2.5 rounded-lg transition-colors"
+            className="text-sm font-semibold text-black hover:bg-zinc-200 bg-white px-6 py-2.5 rounded-lg transition-colors"
           >
             Create Item
           </button>
@@ -198,9 +198,9 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         className={cn(
-                          "bg-white rounded-2xl border transition-all duration-200 overflow-hidden",
-                          snapshot.isDragging ? "shadow-xl border-blue-500 scale-[1.02] z-50" : "shadow-sm border-slate-200 hover:border-slate-300",
-                          !isVisible && "opacity-75 bg-slate-50"
+                          "bg-zinc-950 rounded-2xl border transition-all duration-200 overflow-hidden",
+                          snapshot.isDragging ? "shadow-xl border-white scale-[1.02] z-50" : "shadow-sm border-zinc-800 hover:border-zinc-700",
+                          !isVisible && "opacity-75 bg-black"
                         )}
                       >
                         <div 
@@ -209,14 +209,14 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
                         >
                           <div 
                             {...provided.dragHandleProps} 
-                            className="text-slate-300 hover:text-slate-600 mr-4 cursor-grab active:cursor-grabbing p-1.5 rounded-md hover:bg-slate-100 transition-colors"
+                            className="text-zinc-600 hover:text-white mr-4 cursor-grab active:cursor-grabbing p-1.5 rounded-md hover:bg-zinc-900 transition-colors"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <GripVertical className="w-5 h-5" />
                           </div>
                           
                           {/* Thumbnail */}
-                          <div className="w-16 h-16 rounded-xl overflow-hidden mr-5 bg-slate-100 border border-slate-200 flex-shrink-0 relative flex items-center justify-center">
+                          <div className="w-16 h-16 rounded-xl overflow-hidden mr-5 bg-zinc-900 border border-zinc-800 flex-shrink-0 relative flex items-center justify-center">
                             {(item.image_url || item.photo_url || item.cover_image_url) ? (
                               <img 
                                 src={item.image_url || item.photo_url || item.cover_image_url} 
@@ -224,22 +224,22 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              <ImageIcon className="w-6 h-6 text-slate-300" />
+                              <ImageIcon className="w-6 h-6 text-zinc-700" />
                             )}
                           </div>
 
                           <div className="flex-1 min-w-0 pr-4">
                             <div className="flex items-center gap-3 mb-1">
-                              <h4 className="text-base font-semibold text-slate-900 truncate">
+                              <h4 className="text-base font-semibold text-white truncate">
                                 {item[itemTitleField] || 'Untitled Item'}
                               </h4>
                               {!isVisible && (
-                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-600 uppercase tracking-wider">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-800 text-zinc-400 uppercase tracking-wider">
                                   Hidden
                                 </span>
                               )}
                             </div>
-                            <p className="text-sm text-slate-500 truncate">
+                            <p className="text-sm text-zinc-500 truncate">
                               {item.designation || item.caption || item.date || item.description || `Order: ${item.display_order}`}
                             </p>
                           </div>
@@ -251,37 +251,37 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
                                 e.stopPropagation();
                                 handleUpdate(item.id, { [endpoint === '/the-edit' ? 'published' : 'visibility']: !isVisible });
                               }}
-                              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
                               title={isVisible ? "Hide" : "Show"}
                             >
                               {isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                             </button>
                             <button 
                               onClick={(e) => handleDuplicate(item, e)}
-                              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
                               title="Duplicate"
                             >
                               <Copy className="w-4 h-4" />
                             </button>
                             <button 
                               onClick={(e) => handleDelete(item.id, e)}
-                              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2 text-zinc-500 hover:text-white hover:bg-red-950/30 hover:border-red-500/50 rounded-lg transition-colors"
                               title="Delete"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
                           
-                          <div className="w-px h-8 bg-slate-200 mx-2"></div>
+                          <div className="w-px h-8 bg-zinc-800 mx-2"></div>
                           
-                          <div className="p-2 text-slate-400 bg-slate-50 rounded-full group-hover:bg-slate-100 transition-colors">
+                          <div className="p-2 text-zinc-400 bg-zinc-900 rounded-full group-hover:bg-zinc-800 transition-colors">
                             {expandedId === item.id ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                           </div>
                         </div>
 
                         {/* Expanded Form */}
                         {expandedId === item.id && (
-                          <div className="p-6 bg-slate-50/50 border-t border-slate-100 space-y-4">
+                          <div className="p-6 bg-[#0A0A0A] border-t border-zinc-800 space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                               {fields.map(field => {
                                 if (field.type === 'text' || field.type === 'number') {
