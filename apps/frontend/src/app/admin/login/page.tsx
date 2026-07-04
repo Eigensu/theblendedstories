@@ -45,16 +45,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-white font-sans">
+    <div className="min-h-screen flex bg-black font-sans">
       
       {/* Left Branding Panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-950 relative overflow-hidden flex-col justify-between p-12">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+      <div className="hidden lg:flex lg:w-1/2 bg-[#0A0A0A] border-r border-[#222222] relative overflow-hidden flex-col justify-between p-12">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay grayscale"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
         
         <div className="relative z-10 flex items-center gap-3">
           <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-            <span className="text-slate-950 font-bold text-xl leading-none -mt-0.5">T</span>
+            <span className="text-black font-bold text-xl leading-none -mt-0.5">T</span>
           </div>
           <span className="text-white font-semibold text-xl tracking-tight">The Blended Stories</span>
         </div>
@@ -63,30 +63,30 @@ export default function LoginPage() {
           <h1 className="text-4xl font-bold text-white mb-6 leading-tight">
             Manage your content with precision.
           </h1>
-          <p className="text-slate-400 text-lg leading-relaxed">
+          <p className="text-zinc-400 text-lg leading-relaxed">
             A premium content management experience designed exclusively for The Blended Stories.
           </p>
         </div>
         
-        <div className="relative z-10 text-slate-500 text-sm">
+        <div className="relative z-10 text-zinc-500 text-sm">
           &copy; {new Date().getFullYear()} The Blended Stories. All rights reserved.
         </div>
       </div>
 
       {/* Right Login Form */}
-      <div className="flex-1 flex flex-col justify-center items-center p-8 sm:p-12 lg:p-24 relative">
+      <div className="flex-1 flex flex-col justify-center items-center p-8 sm:p-12 lg:p-24 relative bg-black">
         <div className="w-full max-w-[400px]">
           
           <div className="mb-10 lg:hidden flex flex-col items-center">
-             <div className="w-12 h-12 bg-slate-950 rounded-xl flex items-center justify-center mb-4">
-              <span className="text-white font-bold text-2xl leading-none -mt-0.5">T</span>
+             <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4">
+              <span className="text-black font-bold text-2xl leading-none -mt-0.5">T</span>
             </div>
-            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">TBS Admin</h2>
+            <h2 className="text-2xl font-bold text-white tracking-tight">TBS Admin</h2>
           </div>
 
           <div className="mb-10 text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Welcome back</h2>
-            <p className="text-slate-500">Sign in to your account to continue</p>
+            <h2 className="text-3xl font-bold text-white tracking-tight mb-2">Welcome back</h2>
+            <p className="text-zinc-400">Sign in to your account to continue</p>
           </div>
 
           <form className="space-y-5" onSubmit={handleLogin}>
@@ -99,13 +99,13 @@ export default function LoginPage() {
             
             <div className="space-y-4">
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-slate-700 mb-1.5">Username</label>
+                <label htmlFor="username" className="block text-sm font-medium text-zinc-300 mb-1.5">Username</label>
                 <input
                   id="username"
                   name="username"
                   type="text"
                   required
-                  className="block w-full px-4 py-3 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-950 focus:border-transparent transition-all sm:text-sm"
+                  className="block w-full px-4 py-3 bg-[#111111] border border-[#222222] text-white rounded-xl focus:outline-none focus:ring-1 focus:ring-white focus:border-transparent transition-all sm:text-sm placeholder-zinc-600"
                   placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -113,13 +113,13 @@ export default function LoginPage() {
               </div>
               
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+                <label htmlFor="password" className="block text-sm font-medium text-zinc-300 mb-1.5">Password</label>
                 <input
                   id="password"
                   name="password"
                   type="password"
                   required
-                  className="block w-full px-4 py-3 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-950 focus:border-transparent transition-all sm:text-sm"
+                  className="block w-full px-4 py-3 bg-[#111111] border border-[#222222] text-white rounded-xl focus:outline-none focus:ring-1 focus:ring-white focus:border-transparent transition-all sm:text-sm placeholder-zinc-600"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -131,11 +131,11 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white shadow-sm ${isLoading ? 'bg-slate-400 cursor-not-allowed' : 'bg-slate-950 hover:bg-slate-800 hover:shadow-md active:scale-[0.98]'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-950 transition-all duration-200`}
+                className={`relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-semibold rounded-xl shadow-sm ${isLoading ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' : 'bg-white text-black hover:bg-zinc-200 hover:shadow-md active:scale-[0.98]'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black focus:ring-offset-black transition-all duration-200`}
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin text-zinc-500" />
                     Authenticating...
                   </>
                 ) : 'Sign in'}
