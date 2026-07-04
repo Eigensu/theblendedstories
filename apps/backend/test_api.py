@@ -1,10 +1,24 @@
+import os
 import requests
 import sys
+from dotenv import load_dotenv
 
-BASE_URL = "http://localhost:8000"
+load_dotenv()
+
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+
+if not ADMIN_USERNAME:
+    print("Error: ADMIN_USERNAME environment variable is missing.")
+    sys.exit(1)
+
+if not ADMIN_PASSWORD:
+    print("Error: ADMIN_PASSWORD environment variable is missing.")
+    sys.exit(1)
 
 print("1. Testing Login...")
-res = requests.post(f"{BASE_URL}/auth/login", data={"username": "admin", "password": "1234"})
+res = requests.post(f"{BASE_URL}/auth/login", data={"username": ADMIN_USERNAME, "password": ADMIN_PASSWORD})
 if res.status_code != 200:
     print(f"Login failed! {res.status_code} {res.text}")
     sys.exit(1)
