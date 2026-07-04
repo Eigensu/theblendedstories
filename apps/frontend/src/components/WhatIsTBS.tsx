@@ -92,9 +92,13 @@ export default function WhatIsTBS({ data }: { data?: any }) {
               flexDirection: 'column',
               gap: 'clamp(14px, 1.5vw, 20px)',
             }}>
-              <p style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: paragraphs[0] }} />
-              <p style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: paragraphs[1].replace(/\\n/g, '<br />') }} />
-              <p style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: paragraphs[2] }} />
+              <p style={{ margin: 0 }}>{paragraphs[0]}</p>
+              <p style={{ margin: 0 }}>
+                {paragraphs[1].split('\n').map((line: string, i: number, arr: string[]) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
+              </p>
+              <p style={{ margin: 0 }}>{paragraphs[2]}</p>
             </div>
           </ScrollReveal>
 
