@@ -47,8 +47,8 @@ export default function Footer({ data }: { data?: any }) {
   const logoUrl = data?.logo_url || '/TBS LOGO-02 white.png';
   const backgroundUrl = data?.background_url || '/hero-bg.jpg';
   const copyright = data?.copyright || '©2024. All Rights Reserved.';
-  const footerQuickLinks = data?.quick_links?.length ? data.quick_links.map((l:any)=>l.label) : quickLinks;
-  const footerLocations = data?.locations?.length ? data.locations.map((l:any)=>l.label) : locations;
+  const footerQuickLinks = data?.quick_links?.length ? data.quick_links : quickLinks.map((label) => ({ label, url: '#' }));
+  const footerLocations = data?.locations?.length ? data.locations : locations.map((label) => ({ label, url: '#' }));
 
   return (
     <footer
