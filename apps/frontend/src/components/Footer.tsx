@@ -126,8 +126,8 @@ export default function Footer({ data }: { data?: any }) {
                 Quick Links
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {footerQuickLinks.map((link: string) => (
-                  <a key={link} href="#" style={{
+                {footerQuickLinks.map((link: any) => (
+                  <a key={link.label} href={link.url || '#'} style={{
                     fontFamily: "'Montserrat', sans-serif",
                     fontSize: 'clamp(13px, 1.1vw, 15px)',
                     color: 'white',
@@ -137,7 +137,7 @@ export default function Footer({ data }: { data?: any }) {
                     onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
                     onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
                   >
-                    {link}
+                    {link.label}
                   </a>
                 ))}
               </nav>
@@ -158,8 +158,8 @@ export default function Footer({ data }: { data?: any }) {
                 Locations
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {footerLocations.map((loc: string) => (
-                  <a key={loc} href="#" style={{
+                {footerLocations.map((loc: any) => (
+                  <a key={loc.label} href={loc.url || '#'} style={{
                     fontFamily: "'Montserrat', sans-serif",
                     fontSize: 'clamp(13px, 1.1vw, 15px)',
                     color: 'white',
@@ -169,7 +169,7 @@ export default function Footer({ data }: { data?: any }) {
                     onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
                     onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
                   >
-                    {loc}
+                    {loc.label}
                   </a>
                 ))}
               </nav>
