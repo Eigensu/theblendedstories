@@ -566,6 +566,13 @@ section.touch-color video:not(.no-grayscale),
   /* TBSTalks: keep 2-col on mobile (2×2 grid) */
   .talks-grid { grid-template-columns: repeat(2, 1fr); }
 
+  /* TheEdit: the left block's marginTop is a desktop-only trick to vertically
+     align the heading with the taller carousel; once stacked on mobile it just
+     leaves dead space above "TOP PICKS", so collapse it here. */
+  .the-edit-left {
+    margin-top: 0 !important;
+  }
+
   /* TheEdit articles: 2×2 grid per page, swipe/arrow between pages */
   .the-edit-grid {
     width: 100%;
@@ -596,6 +603,15 @@ section.touch-color video:not(.no-grayscale),
   /* Follow Us: center heading + icons on mobile */
   .footer-follow-us { text-align: center; }
   .footer-social-icons { justify-content: center !important; }
+  /* Quick Links / Locations: center heading + link list on mobile */
+  .footer-quicklinks-col,
+  .footer-locations-col {
+    text-align: center;
+  }
+  .footer-quicklinks-col nav,
+  .footer-locations-col nav {
+    align-items: center;
+  }
 }
 
 /* ── Small mobile: 480px ── */

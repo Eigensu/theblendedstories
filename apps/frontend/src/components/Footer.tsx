@@ -113,7 +113,7 @@ export default function Footer({ data }: { data?: any }) {
         }}>
 
           {/* Column 1 — Quick Links */}
-          <ScrollReveal style={{ width: '100%' }}>
+          <ScrollReveal className="footer-quicklinks-col" style={{ width: '100%' }}>
             <div>
               <h4 style={{
                 fontFamily: "'Bodoni Moda', serif",
@@ -126,8 +126,8 @@ export default function Footer({ data }: { data?: any }) {
                 Quick Links
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {footerQuickLinks.map((link: any) => (
-                  <a key={link.label} href={link.url || '#'} style={{
+                {footerQuickLinks.map(({ label, url }: { label: string; url: string }) => (
+                  <a key={label} href={url || '#'} style={{
                     fontFamily: "'Montserrat', sans-serif",
                     fontSize: 'clamp(13px, 1.1vw, 15px)',
                     color: 'white',
@@ -137,7 +137,7 @@ export default function Footer({ data }: { data?: any }) {
                     onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
                     onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
                   >
-                    {link.label}
+                    {label}
                   </a>
                 ))}
               </nav>
@@ -158,8 +158,8 @@ export default function Footer({ data }: { data?: any }) {
                 Locations
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {footerLocations.map((loc: any) => (
-                  <a key={loc.label} href={loc.url || '#'} style={{
+                {footerLocations.map(({ label, url }: { label: string; url: string }) => (
+                  <a key={label} href={url || '#'} style={{
                     fontFamily: "'Montserrat', sans-serif",
                     fontSize: 'clamp(13px, 1.1vw, 15px)',
                     color: 'white',
@@ -169,7 +169,7 @@ export default function Footer({ data }: { data?: any }) {
                     onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
                     onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
                   >
-                    {loc.label}
+                    {label}
                   </a>
                 ))}
               </nav>
