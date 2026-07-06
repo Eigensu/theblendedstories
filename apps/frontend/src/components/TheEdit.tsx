@@ -1,5 +1,5 @@
 'use client';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 
 const articles = [
@@ -90,7 +90,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
     const el = scrollerRef.current;
     if (!el) return;
     const page = el.querySelector<HTMLElement>('.the-edit-page');
-    if (page) {
+    if (page && page.offsetWidth > 0) {
       // Mobile: scroll a full 2×2 page at a time.
       el.scrollBy({ left: (page.offsetWidth + 20) * direction, behavior: 'smooth' });
       return;
@@ -99,6 +99,23 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
     const step = card ? card.offsetWidth + 20 : el.clientWidth * 0.8;
     el.scrollBy({ left: step * direction, behavior: 'smooth' });
   };
+
+  // Auto-advance the carousel — no manual arrows, so this is the only way
+  // to move through cards on both touch and pointer devices. Loops back to
+  // the start once it hits the end.
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const interval = setInterval(() => {
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
+      if (atEnd) {
+        el.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        scrollByCard(1);
+      }
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section
@@ -217,73 +234,6 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
 
         {/* ── Right: carousel of 10 article cards ── */}
         <div style={{ flex: 1, minWidth: 0, position: 'relative' }}>
-
-          {/* Carousel arrows */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: '10px',
-            marginBottom: 'clamp(12px, 1.5vw, 18px)',
-          }}>
-            <button
-              type="button"
-              onClick={() => scrollByCard(-1)}
-              aria-label="Previous"
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                border: '1px solid rgba(255,255,255,0.3)',
-                background: 'transparent',
-                color: 'white',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '16px',
-                transition: 'background 0.2s ease, border-color 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                e.currentTarget.style.borderColor = 'white';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
-              }}
-            >
-              ←
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollByCard(1)}
-              aria-label="Next"
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                border: '1px solid rgba(255,255,255,0.3)',
-                background: 'transparent',
-                color: 'white',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '16px',
-                transition: 'background 0.2s ease, border-color 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                e.currentTarget.style.borderColor = 'white';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
-              }}
-            >
-              →
-            </button>
-          </div>
 
           <div className="the-edit-grid" ref={scrollerRef}>
             {Array.from({ length: Math.ceil(apiArticles.length / PAGE_SIZE) }, (_, i) =>
