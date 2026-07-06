@@ -13,7 +13,8 @@ export const dynamic = 'force-dynamic';
 async function fetchCMSData(endpoint: string) {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${endpoint}`, {
-      cache: 'no-store'
+      cache: 'no-store',
+      signal: AbortSignal.timeout(5000)
     });
     if (!res.ok) return null;
     const json = await res.json();
