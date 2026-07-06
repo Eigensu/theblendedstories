@@ -7,6 +7,8 @@ import TheEdit from '@/components/TheEdit';
 import TBSTalks from '@/components/TBSTalks';
 import Footer from '@/components/Footer';
 
+export const dynamic = 'force-dynamic';
+
 // Helper to fetch data safely without crashing the frontend
 async function fetchCMSData(endpoint: string) {
   try {
