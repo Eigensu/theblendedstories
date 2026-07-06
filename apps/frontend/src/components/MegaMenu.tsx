@@ -49,8 +49,8 @@ export default function MegaMenu() {
         aria-label="Open menu"
         style={{
           position: 'fixed',
-          top: 'clamp(16px, 3vw, 28px)',
-          right: 'clamp(16px, 3vw, 28px)',
+          top: 'var(--px-page)',
+          right: 'var(--px-page)',
           zIndex: 210,
           width: '44px',
           height: '44px',
@@ -93,10 +93,11 @@ export default function MegaMenu() {
             onClick={() => setOpen(false)}
             aria-label="Close menu"
             style={{
-              position: 'absolute',
-              top: 'clamp(20px, 4vw, 40px)',
-              right: 'clamp(20px, 4vw, 48px)',
-              width: '38px', height: '38px',
+              position: 'fixed',
+              top: 'var(--px-page)',
+              right: 'var(--px-page)',
+              zIndex: 230,
+              width: '44px', height: '44px',
               border: 'none',
               background: 'transparent',
               color: 'white',
