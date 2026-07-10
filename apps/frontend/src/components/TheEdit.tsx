@@ -2,72 +2,12 @@
 import { useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 
-const articles = [
-  {
-    num: '01',
-    img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80',
-    title: 'The Restaurants Everyone Suddenly Wants A Table At',
-    desc: 'From intimate chef-led experiences to the city\'s most talked-about openings, these are the reservations becoming increasingly difficult to get.',
-  },
-  {
-    num: '02',
-    img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=80',
-    title: 'The Fashion Crowd Is Quietly Wearing This Again',
-    desc: 'The silhouettes, colours and styling cues showing up everywhere before the rest of the internet catches on.',
-  },
-  {
-    num: '03',
-    img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&q=80',
-    title: 'Inside The Homes Defining Modern Living',
-    desc: 'The designers, spaces and interior ideas influencing how the city is living, entertaining and decorating today.',
-  },
-  {
-    num: '04',
-    img: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=500&q=80',
-    title: 'The Beauty Brands Worth Knowing Before Everyone Else Does',
-    desc: 'The products, founders and innovations shaping the next wave of beauty and wellness.',
-  },
-  {
-    num: '05',
-    img: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=500&q=80',
-    title: 'Where The City\'s Most Interesting People Are Spending Their Time',
-    desc: 'From cafés and galleries to wellness studios and members\' clubs, these are the places currently on our radar.',
-  },
-  {
-    num: '06',
-    img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80',
-    title: 'The Art Openings Worth Rearranging Your Week For',
-    desc: 'The galleries, shows and emerging artists pulling the city\'s creative crowd out of their studios.',
-  },
-  {
-    num: '07',
-    img: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500&q=80',
-    title: 'The Playlists Soundtracking Every Good Party Right Now',
-    desc: 'The DJs, producers and sets defining the city\'s nightlife before they hit the mainstream.',
-  },
-  {
-    num: '08',
-    img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=80',
-    title: 'The Wellness Rituals The City\'s Insiders Swear By',
-    desc: 'From sunrise recovery sessions to the studios fully booked weeks in advance, this is what wellness looks like now.',
-  },
-  {
-    num: '09',
-    img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&q=80',
-    title: 'The Founders Building The Next Big Thing',
-    desc: 'The entrepreneurs, ideas and ventures quietly reshaping how the city works, shops and connects.',
-  },
-  {
-    num: '10',
-    img: 'https://images.unsplash.com/photo-1520333789090-1afc82db536a?w=500&q=80',
-    title: 'The Getaways Everyone Is Quietly Booking',
-    desc: 'The destinations, stays and itineraries showing up in every well-travelled group chat this season.',
-  },
-];
+import Link from 'next/link';
+import { mockArticles } from '@/lib/articles';
 
 const PAGE_SIZE = 4;
-const pages = Array.from({ length: Math.ceil(articles.length / PAGE_SIZE) }, (_, i) =>
-  articles.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
+const pages = Array.from({ length: Math.ceil(mockArticles.length / PAGE_SIZE) }, (_, i) =>
+  mockArticles.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
 );
 
 export default function TheEdit({ data, settings }: { data?: any[], settings?: any }) {
@@ -79,9 +19,15 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
         title: d.title,
         desc: d.description,
         num: d.display_number,
-        url: d.story_url || '#'
+        url: d.story_url || (mockArticles.find(m => m.num === d.display_number) ? `/stories/${mockArticles.find(m => m.num === d.display_number)!.slug}` : '#')
       }))
-    : articles;
+    : mockArticles.map(a => ({
+        img: a.heroImage,
+        title: a.title,
+        desc: a.description,
+        num: a.num,
+        url: `/stories/${a.slug}`
+      }));
 
   const title = settings?.the_edit_title || 'TOP PICKS';
   const description = settings?.the_edit_description || 'A curated selection of our most recent and essential stories. Everything you need to know, styled for the way you live.';
@@ -241,11 +187,13 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
             ).map((page, pageIdx) => (
               <div className="the-edit-page" key={pageIdx}>
                 {page.map((article) => (
-                  <div
+                  <Link
+                    href={article.url}
                     key={article.num}
-                    className="img-card the-edit-card"
+                    className="img-card the-edit-card block focus:outline-none"
                     style={{
                       cursor: 'pointer',
+                      textDecoration: 'none',
                     }}
                   >
                     {/* Image */}
@@ -310,7 +258,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
                     }}>
                       {article.desc}
                     </p>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ))}
