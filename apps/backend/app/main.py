@@ -27,31 +27,6 @@ app.add_exception_handler(Exception, global_exception_handler)
 @app.on_event("startup")
 async def startup_db_client():
     await connect_to_mongo()
-    
-    # --- PRODUCTION DIAGNOSTIC OUTPUT ---
-    print("==================================================")
-    print("PRODUCTION DIAGNOSTIC: MONGODB CONNECTION DETAILS")
-    # Hide password if present, or just print exactly what user asked
-    print("Mongo URI:", app_settings.MONGODB_URI)
-    print("Database:", app_settings.MONGO_DB_NAME)
-    print("--- COLLECTION COUNTS ---")
-    
-    from app.database import db
-    collections = [
-        "hero",
-        "what_is_tbs",
-        "tbs_nights",
-        "what_we_cover",
-        "the_edit",
-        "tbs_talks",
-    ]
-    for coll in collections:
-        try:
-            count = await db.db[coll].count_documents({})
-            print(f"{coll}: {count}")
-        except Exception as e:
-            print(f"{coll}: ERROR ({e})")
-    print("==================================================")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
