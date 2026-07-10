@@ -41,7 +41,10 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
   const fetchItems = async () => {
     try {
       const data = await apiClient.get<any[]>(endpoint);
-      const sorted = data.sort((a, b) => a.display_order - b.display_order);
+      console.log(`RAW API DATA FOR ${endpoint}:`, data);
+      console.log("Array?", Array.isArray(data));
+      console.log("Length:", data?.length);
+      const sorted = (Array.isArray(data) ? data : []).sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
       setItems(sorted);
       setOriginalItems(sorted);
     } catch (err) {
