@@ -2,7 +2,7 @@ import React from 'react';
 import DynamicArrayEditor from '../components/DynamicArrayEditor';
 
 export default function TheEditEditor() {
-  const endpoint = '/the-edit';
+  const endpoint = '/the-edit/';
   const itemTitleField = 'title';
   const fields = [
     { name: 'display_number', label: 'Display Number (e.g. "01")', type: 'text' as const },

@@ -67,9 +67,10 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
       const deletedIds = originalIds.filter(id => !currentIds.includes(id));
 
       // Handle deletions
+      const baseUrl = endpoint.endsWith('/') ? endpoint.slice(0, -1) : endpoint;
       for (const id of deletedIds) {
         if (!id.startsWith('new-')) {
-          await apiClient.delete(`${endpoint}/${id}`);
+          await apiClient.delete(`${baseUrl}/${id}`);
         }
       }
 
@@ -79,7 +80,7 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
           const { id, _id, ...rest } = item;
           await apiClient.post(endpoint, rest);
         } else {
-          await apiClient.put(`${endpoint}/${item.id}`, item);
+          await apiClient.put(`${baseUrl}/${item.id}`, item);
         }
       }
 
