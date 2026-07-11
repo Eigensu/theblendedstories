@@ -4,7 +4,7 @@ from app.database import connect_to_mongo, close_mongo_connection
 from app.utils.exceptions import global_exception_handler
 from app.routers import (
     hero, what_is_tbs, footer,
-    what_we_cover, tbs_nights, the_edit, tbs_talks, media
+    what_we_cover, tbs_nights, articles, tbs_talks, media, the_edit
 )
 from app.auth import oauth2_scheme, verify_password, create_access_token, TokenData
 from fastapi import Depends, HTTPException, status
@@ -88,9 +88,10 @@ app.include_router(hero.router)
 app.include_router(what_is_tbs.router)
 app.include_router(what_we_cover.router)
 app.include_router(tbs_nights.router)
-app.include_router(the_edit.router)
+app.include_router(articles.router)
 app.include_router(tbs_talks.router)
 app.include_router(footer.router)
+app.include_router(the_edit.router)
 
 app.include_router(media.router)
 

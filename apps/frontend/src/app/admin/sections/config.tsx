@@ -1,7 +1,8 @@
 import { ComponentType } from 'react';
 // These imports will be created later
 import HeroEditor from './HeroEditor';
-import TheEditEditor from './TheEditEditor';
+import ArticlesEditor from './ArticlesEditor';
+import TopPicksEditor from './TopPicksEditor';
 import TBSNightsEditor from './TBSNightsEditor';
 import WhatIsTBSEditor from './WhatIsTBSEditor';
 import FooterEditor from './FooterEditor';
@@ -20,14 +21,26 @@ export type AdminSection = {
   icon: string; // simple string for now, could be an SVG component
   component: ComponentType<any>;
   order: number;
+  group: 'home' | 'standalone' | 'global';
 };
 
 export const adminSections: AdminSection[] = [
-  { id: 'hero', title: 'Hero', collection: 'hero', icon: 'monitor', component: HeroEditor, order: 1 },
-  { id: 'what_is_tbs', title: 'What is TBS', collection: 'what-is-tbs', icon: 'info', component: WhatIsTBSEditor, order: 2 },
-  { id: 'what_we_cover', title: 'What We Cover', collection: 'what-we-cover', icon: 'image', component: WhatWeCoverEditor, order: 3 },
-  { id: 'tbs_nights', title: 'TBS Nights', collection: 'tbs-nights', icon: 'moon', component: TBSNightsEditor, order: 4 },
-  { id: 'the_edit', title: 'The Edit', collection: 'the-edit', icon: 'book', component: TheEditEditor, order: 5 },
-  { id: 'tbs_talks', title: 'TBS Talks', collection: 'tbs-talks', icon: 'users', component: TBSTalksEditor, order: 6 },
-  { id: 'footer', title: 'Footer', collection: 'footer', icon: 'layout', component: FooterEditor, order: 7 },
+  // Home group — homepage sections
+  { id: 'hero', title: 'Hero', collection: 'hero', icon: 'monitor', component: HeroEditor, order: 1, group: 'home' },
+  { id: 'what_is_tbs', title: 'What is TBS', collection: 'what-is-tbs', icon: 'info', component: WhatIsTBSEditor, order: 2, group: 'home' },
+  { id: 'what_we_cover', title: 'What We Cover', collection: 'what-we-cover', icon: 'image', component: WhatWeCoverEditor, order: 3, group: 'home' },
+  { id: 'tbs_nights', title: 'TBS Nights', collection: 'tbs-nights', icon: 'moon', component: TBSNightsEditor, order: 4, group: 'home' },
+  { id: 'top_picks', title: 'Top Picks', collection: 'articles', icon: 'star', component: TopPicksEditor, order: 5, group: 'home' },
+  { id: 'tbs_talks', title: 'TBS Talks', collection: 'tbs-talks', icon: 'users', component: TBSTalksEditor, order: 6, group: 'home' },
+
+  // Standalone sections
+  { id: 'articles', title: 'Articles', collection: 'articles', icon: 'book', component: ArticlesEditor, order: 7, group: 'standalone' },
+
+  // Global sections
+  { id: 'footer', title: 'Footer', collection: 'footer', icon: 'layout', component: FooterEditor, order: 8, group: 'global' },
 ];
+
+// Helper selectors
+export const homeSections = adminSections.filter(s => s.group === 'home');
+export const standaloneSections = adminSections.filter(s => s.group === 'standalone');
+export const globalSections = adminSections.filter(s => s.group === 'global');

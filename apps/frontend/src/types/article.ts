@@ -1,3 +1,15 @@
+export type ArticleContentBlockType = 'text' | 'quote' | 'image';
+
+export interface ArticleContentBlock {
+  id: string;
+  type: ArticleContentBlockType;
+  content?: string;
+  quote?: string;
+  author?: string;
+  image?: string;
+  caption?: string;
+}
+
 export interface Article {
   id: number;
   slug: string;
@@ -15,7 +27,8 @@ export interface Article {
   videoUrl: string;
   quote: string;
   editorNote: string;
-  content: string[];
+  content?: string[];
+  contentBlocks?: ArticleContentBlock[];
   relatedArticles: string[];
   num: string;
 }

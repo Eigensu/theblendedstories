@@ -3,31 +3,24 @@ import { useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 
 import Link from 'next/link';
-import { mockArticles } from '@/lib/articles';
-
 const PAGE_SIZE = 4;
-const pages = Array.from({ length: Math.ceil(mockArticles.length / PAGE_SIZE) }, (_, i) =>
-  mockArticles.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
-);
 
 export default function TheEdit({ data, settings }: { data?: any[], settings?: any }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
 
-  const apiArticles = data && data.length > 0 
-    ? data.filter(d => d.published !== false).sort((a: any, b: any) => a.display_order - b.display_order).map(d => ({
-        img: d.cover_image_url,
+  const apiArticles = data && data.length > 0
+    ? data.filter(d => d.status === 'published').sort((a: any, b: any) => a.display_order - b.display_order).map((d, index) => ({
+        img: d.cover_image || d.hero_image,
         title: d.title,
-        desc: d.description,
-        num: d.display_number,
-        url: d.story_url || (mockArticles.find(m => m.num === d.display_number) ? `/stories/${mockArticles.find(m => m.num === d.display_number)!.slug}` : '#')
+        desc: d.subtitle,
+        num: (index + 1).toString().padStart(2, '0'),
+        url: `/stories/${d.slug}`
       }))
-    : mockArticles.map(a => ({
-        img: a.heroImage,
-        title: a.title,
-        desc: a.description,
-        num: a.num,
-        url: `/stories/${a.slug}`
-      }));
+    : [];
+
+  const pages = Array.from({ length: Math.ceil(apiArticles.length / PAGE_SIZE) }, (_, i) =>
+    apiArticles.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
+  );
 
   const title = settings?.the_edit_title || 'TOP PICKS';
   const description = settings?.the_edit_description || 'A curated selection of our most recent and essential stories. Everything you need to know, styled for the way you live.';
@@ -65,7 +58,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
 
   return (
     <section
-      id="the-edit"
+      id="top-picks"
       style={{
         background: 'var(--black)',
         padding: 'clamp(60px, 8vw, 100px) 0 clamp(48px, 6vw, 80px)',
@@ -145,8 +138,8 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
               </p>
 
               {/* EXPLORE ALL STORIES */}
-              <a
-                href="#"
+              <Link
+                href="/stories"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -172,7 +165,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
               >
                 EXPLORE ALL STORIES
                 <span style={{ fontSize: '16px', fontWeight: 300 }}>→</span>
-              </a>
+              </Link>
             </div>
 
           </div>
@@ -181,12 +174,10 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
         {/* ── Right: carousel of 10 article cards ── */}
         <div style={{ flex: 1, minWidth: 0, position: 'relative' }}>
 
-          <div className="the-edit-grid" ref={scrollerRef}>
-            {Array.from({ length: Math.ceil(apiArticles.length / PAGE_SIZE) }, (_, i) =>
-              apiArticles.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
-            ).map((page, pageIdx) => (
-              <div className="the-edit-page" key={pageIdx}>
-                {page.map((article) => (
+          <div className="the-edit-grid" ref={scrollerRef} style={{ display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory' }}>
+            {pages.map((pageGroup, pageIndex) => (
+              <div key={pageIndex} className="the-edit-page grid grid-rows-2 grid-cols-2 gap-2.5 md:gap-5 w-[85vw] md:w-full shrink-0 md:grid-rows-1 md:grid-cols-4" style={{ scrollSnapAlign: 'start' }}>
+                {pageGroup.map((article: any) => (
                   <Link
                     href={article.url}
                     key={article.num}

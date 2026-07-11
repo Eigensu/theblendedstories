@@ -1,8 +1,9 @@
 import { Article } from '@/types/article';
+import ShareSection from './ShareSection';
 
 export default function ArticleHero({ article }: { article: Article }) {
   return (
-    <div style={{ position: 'relative', height: '100vh', minHeight: '600px', marginTop: '-90px', overflow: 'hidden', background: '#171716', backgroundImage: 'repeating-linear-gradient(135deg, #1d1d1b 0px, #1d1d1b 2px, #171716 2px, #171716 5px)' }}>
+    <div style={{ position: 'relative', height: '100vh', minHeight: '600px', overflow: 'hidden', background: '#171716', backgroundImage: 'repeating-linear-gradient(135deg, #1d1d1b 0px, #1d1d1b 2px, #171716 2px, #171716 5px)' }}>
       <img src={article.heroImage} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.35) brightness(0.6) contrast(1.1)' }} />
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.05) 0%, rgba(10,10,10,0.35) 55%, rgba(10,10,10,0.92) 88%, #0a0a0a 100%)' }}></div>
       <div className="w-full absolute left-0 right-0 flex flex-col items-center text-center" style={{ bottom: 'clamp(32px, 8vh, 76px)', padding: '0 clamp(20px, 4vw, 120px)' }}>
@@ -21,6 +22,9 @@ export default function ArticleHero({ article }: { article: Article }) {
           <span>{article.date}</span>
           <span className="hidden sm:inline" style={{ color: '#5a5952' }}>•</span>
           <span>{article.readingTime}</span>
+        </div>
+        <div style={{ marginTop: 'clamp(18px, 3vh, 26px)' }}>
+          <ShareSection title={article.title} />
         </div>
       </div>
     </div>

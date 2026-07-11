@@ -1,0 +1,314 @@
+
+
+module.exports = [
+  {
+    id: 1,
+    slug: 'the-restaurants-everyone-suddenly-wants-a-table-at',
+    category: 'Lifestyle',
+    subcategory: 'Dining',
+    title: 'The Restaurants Everyone Suddenly Wants A Table At',
+    description: "From intimate chef-led experiences to the city's most talked-about openings, these are the reservations becoming increasingly difficult to get.",
+    author: 'Editorial Team',
+    authorImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80',
+    date: 'OCT 24, 2026',
+    readingTime: '5 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80',
+      'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "It's no longer just about the food. The modern dining experience is theater, and these new establishments are putting on a spectacular show.",
+    editorNote: "This list is curated based on our anonymous dining visits over the past three months. No restaurant has paid for placement.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['the-fashion-crowd-is-quietly-wearing-this-again', 'inside-the-homes-defining-modern-living', 'the-beauty-brands-worth-knowing'],
+    num: '01'
+  },
+  {
+    id: 2,
+    slug: 'the-fashion-crowd-is-quietly-wearing-this-again',
+    category: 'Fashion',
+    subcategory: 'Trends',
+    title: 'The Fashion Crowd Is Quietly Wearing This Again',
+    description: "The silhouettes, colours and styling cues showing up everywhere before the rest of the internet catches on.",
+    author: 'Style Editor',
+    authorImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&q=80',
+    date: 'OCT 22, 2026',
+    readingTime: '4 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=80',
+      'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "True style whispers, it doesn't shout. What we're seeing now is a return to thoughtful, considered dressing over fleeting internet micro-trends.",
+    editorNote: "All items featured are selected by our editors. The Blended Stories may earn a commission on links.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['the-restaurants-everyone-suddenly-wants-a-table-at', 'inside-the-homes-defining-modern-living', 'the-beauty-brands-worth-knowing'],
+    num: '02'
+  },
+  {
+    id: 3,
+    slug: 'inside-the-homes-defining-modern-living',
+    category: 'Lifestyle',
+    subcategory: 'Interiors',
+    title: 'Inside The Homes Defining Modern Living',
+    description: "The designers, spaces and interior ideas influencing how the city is living, entertaining and decorating today.",
+    author: 'Design Desk',
+    authorImage: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&q=80',
+    date: 'OCT 20, 2026',
+    readingTime: '6 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "A home should be the story of who you are, and a collection of what you love.",
+    editorNote: "Properties featured are private residences. Respect the owners' privacy.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['the-restaurants-everyone-suddenly-wants-a-table-at', 'the-fashion-crowd-is-quietly-wearing-this-again', 'where-the-citys-most-interesting-people-are-spending-their-time'],
+    num: '03'
+  },
+  {
+    id: 4,
+    slug: 'the-beauty-brands-worth-knowing',
+    category: 'Beauty',
+    subcategory: 'Wellness',
+    title: 'The Beauty Brands Worth Knowing Before Everyone Else Does',
+    description: "The products, founders and innovations shaping the next wave of beauty and wellness.",
+    author: 'Beauty Editor',
+    authorImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80',
+    date: 'OCT 18, 2026',
+    readingTime: '4 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1596462502278-27bf85033e5a?w=500&q=80',
+      'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "We are moving away from the multi-step routines toward highly effective, science-backed essentials.",
+    editorNote: "Products were tested by our editorial team over a 4-week period.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['the-wellness-rituals-the-citys-insiders-swear-by', 'the-fashion-crowd-is-quietly-wearing-this-again', 'inside-the-homes-defining-modern-living'],
+    num: '04'
+  },
+  {
+    id: 5,
+    slug: 'where-the-citys-most-interesting-people-are-spending-their-time',
+    category: 'Culture',
+    subcategory: 'City Guide',
+    title: "Where The City's Most Interesting People Are Spending Their Time",
+    description: "From cafés and galleries to wellness studios and members' clubs, these are the places currently on our radar.",
+    author: 'Culture Desk',
+    authorImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&q=80',
+    date: 'OCT 15, 2026',
+    readingTime: '5 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?w=500&q=80',
+      'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "The energy of a city is dictated by the spaces that foster real connection.",
+    editorNote: "This guide is updated monthly to reflect the changing cultural landscape.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['the-restaurants-everyone-suddenly-wants-a-table-at', 'the-art-openings-worth-rearranging-your-week-for', 'the-playlists-soundtracking-every-good-party-right-now'],
+    num: '05'
+  },
+  {
+    id: 6,
+    slug: 'the-art-openings-worth-rearranging-your-week-for',
+    category: 'Culture',
+    subcategory: 'Art',
+    title: 'The Art Openings Worth Rearranging Your Week For',
+    description: "The galleries, shows and emerging artists pulling the city's creative crowd out of their studios.",
+    author: 'Art Critic',
+    authorImage: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&q=80',
+    date: 'OCT 12, 2026',
+    readingTime: '4 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1518998053401-8789131a4731?w=500&q=80',
+      'https://images.unsplash.com/photo-1544473244-f67971df222d?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "Art is not what you see, but what you make others see.",
+    editorNote: "Exhibition dates are subject to change. Please verify with galleries.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['where-the-citys-most-interesting-people-are-spending-their-time', 'the-founders-building-the-next-big-thing', 'the-fashion-crowd-is-quietly-wearing-this-again'],
+    num: '06'
+  },
+  {
+    id: 7,
+    slug: 'the-playlists-soundtracking-every-good-party-right-now',
+    category: 'Culture',
+    subcategory: 'Music',
+    title: 'The Playlists Soundtracking Every Good Party Right Now',
+    description: "The DJs, producers and sets defining the city's nightlife before they hit the mainstream.",
+    author: 'Music Editor',
+    authorImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80',
+    date: 'OCT 10, 2026',
+    readingTime: '3 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80',
+      'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "The right track at the right moment can elevate a good night into an unforgettable one.",
+    editorNote: "Links to Spotify and Apple Music playlists are included at the end of the article.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['where-the-citys-most-interesting-people-are-spending-their-time', 'the-restaurants-everyone-suddenly-wants-a-table-at', 'the-getaways-everyone-is-quietly-booking'],
+    num: '07'
+  },
+  {
+    id: 8,
+    slug: 'the-wellness-rituals-the-citys-insiders-swear-by',
+    category: 'Beauty',
+    subcategory: 'Wellness',
+    title: "The Wellness Rituals The City's Insiders Swear By",
+    description: "From sunrise recovery sessions to the studios fully booked weeks in advance, this is what wellness looks like now.",
+    author: 'Wellness Editor',
+    authorImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&q=80',
+    date: 'OCT 08, 2026',
+    readingTime: '5 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&q=80',
+      'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "True wellness is no longer about punishing workouts; it's about recovery, longevity, and listening to your body.",
+    editorNote: "Consult with a healthcare professional before starting any new fitness or wellness regimen.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['the-beauty-brands-worth-knowing', 'the-fashion-crowd-is-quietly-wearing-this-again', 'inside-the-homes-defining-modern-living'],
+    num: '08'
+  },
+  {
+    id: 9,
+    slug: 'the-founders-building-the-next-big-thing',
+    category: 'Culture',
+    subcategory: 'Business',
+    title: 'The Founders Building The Next Big Thing',
+    description: "The entrepreneurs, ideas and ventures quietly reshaping how the city works, shops and connects.",
+    author: 'Features Writer',
+    authorImage: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&q=80',
+    date: 'OCT 05, 2026',
+    readingTime: '7 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1556761175-5973dc0f32d7?w=500&q=80',
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "Innovation doesn't happen in isolation. It happens when disparate ideas collide in unexpected ways.",
+    editorNote: "The Blended Stories has no financial interest in any of the companies featured.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['where-the-citys-most-interesting-people-are-spending-their-time', 'the-restaurants-everyone-suddenly-wants-a-table-at', 'the-art-openings-worth-rearranging-your-week-for'],
+    num: '09'
+  },
+  {
+    id: 10,
+    slug: 'the-getaways-everyone-is-quietly-booking',
+    category: 'Lifestyle',
+    subcategory: 'Travel',
+    title: 'The Getaways Everyone Is Quietly Booking',
+    description: "The destinations, stays and itineraries showing up in every well-travelled group chat this season.",
+    author: 'Travel Editor',
+    authorImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80',
+    date: 'OCT 01, 2026',
+    readingTime: '6 MIN READ',
+    heroImage: 'https://images.unsplash.com/photo-1520333789090-1afc82db536a?w=1440&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=500&q=80',
+      'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=500&q=80',
+      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80'
+    ],
+    videoThumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&q=80',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    quote: "The ultimate luxury today is not opulence, but disconnection—a place where time slows down.",
+    editorNote: "Prices and availability were correct at time of publication.",
+    content: [
+      "Before an outfit ever reaches the algorithm, it moves through a much smaller room — a handful of stylists, a few fitting closets, one crowded street corner outside a coffee shop nobody has geotagged yet.",
+      "That's where this season's real signal is coming from: not the runway recap, but the in-between moments — the walk from the car to the studio, the after-show coffee run, the six minutes between one appointment and the next. It's unstyled by design, which is exactly why it's the hardest thing to copy.",
+      "The silhouette doing the quiet rounds this month leans wide through the leg and cropped through the waist, paired with accessories in a single saturated colour — the kind of contrast that reads as considered rather than loud. It photographs like an accident. It never is.",
+      "Look closely and the accessories tell the real story: a single hard-shell bag in a colour that has no business working with anything else in the outfit, worn like punctuation rather than decoration.",
+      "Expect to see it move faster than most trends do this quarter — largely because it costs nothing to shoot and everything to fake."
+    ],
+    relatedArticles: ['inside-the-homes-defining-modern-living', 'the-restaurants-everyone-suddenly-wants-a-table-at', 'the-fashion-crowd-is-quietly-wearing-this-again'],
+    num: '10'
+  }
+];

@@ -1,13 +1,14 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { adminSections } from './sections/config';
+import { adminSections, homeSections, standaloneSections, globalSections } from './sections/config';
 import { apiClient } from './services/api';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  LayoutDashboard, FileText, Image as ImageIcon, 
-  Settings, Users, Moon, Sun, Monitor, Link, 
-  LogOut, PanelLeftClose, PanelLeftOpen, Search, ExternalLink, Loader2
+import {
+  LayoutDashboard, FileText, Image as ImageIcon,
+  Settings, Users, Moon, Sun, Monitor, Link, Star,
+  LogOut, PanelLeftClose, PanelLeftOpen, Search, ExternalLink, Loader2,
+  ChevronRight, Home
 } from 'lucide-react';
 import StatusBadge from './components/StatusBadge';
 import { useAdmin } from './contexts/AdminContext';
@@ -22,14 +23,15 @@ const iconMap: Record<string, React.ReactNode> = {
   'users': <Users className="w-5 h-5" />,
   'layout': <LayoutDashboard className="w-5 h-5" />,
   'search': <Search className="w-5 h-5" />,
-  'settings': <Settings className="w-5 h-5" />
+  'settings': <Settings className="w-5 h-5" />,
+  'star': <Star className="w-5 h-5" />,
 };
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [activeSectionId, setActiveSectionId] = useState<string>('hero');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [pagesOpen, setPagesOpen] = useState(true);
+  const [homeOpen, setHomeOpen] = useState(true);
   const { isSaving, hasUnsavedChanges, status, onSave } = useAdmin();
 
   useEffect(() => {
@@ -54,16 +56,37 @@ export default function AdminDashboard() {
 
   const getBreadcrumb = () => {
     if (activeSectionId === 'media_library') return 'Dashboard / Media Library';
-    const isPage = adminSections.findIndex(s => s.id === activeSectionId) < adminSections.length - 1;
-    if (isPage) return `Dashboard / Pages / Home / ${activeSection.title}`;
+    if (activeSection.group === 'home') return `Dashboard / Pages / Home / ${activeSection.title}`;
     return `Dashboard / ${activeSection.title}`;
+  };
+
+  const renderSidebarItem = (section: typeof adminSections[0], indented = false) => {
+    const isActive = activeSectionId === section.id;
+    return (
+      <li key={section.id}>
+        <button
+          onClick={() => setActiveSectionId(section.id)}
+          className={`w-full flex items-center ${indented ? 'pl-10' : 'px-3'} pr-3 py-2 text-sm font-medium rounded-lg transition-colors relative ${
+            isActive
+              ? 'bg-zinc-900 text-white'
+              : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'
+          }`}
+        >
+          {isActive && isSidebarOpen && <motion.div layoutId="active-indicator" className="absolute left-3 w-1 h-5 bg-white rounded-full" />}
+          <span className={`mr-3 opacity-70 ${!isSidebarOpen && !indented && 'mx-auto'}`}>
+            {iconMap[section.icon] || <FileText className="w-4 h-4" />}
+          </span>
+          {isSidebarOpen && section.title}
+        </button>
+      </li>
+    );
   };
 
   return (
     <div className="flex h-screen bg-black overflow-hidden text-white font-sans selection:bg-white/20 selection:text-white">
       {/* Sidebar */}
       <AnimatePresence initial={false}>
-        <motion.aside 
+        <motion.aside
           initial={{ width: isSidebarOpen ? 280 : 80 }}
           animate={{ width: isSidebarOpen ? 280 : 80 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -78,7 +101,7 @@ export default function AdminDashboard() {
                 <h2 className="text-sm font-semibold tracking-wide text-white">WORKSPACE</h2>
               </motion.div>
             )}
-            <button 
+            <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="text-zinc-500 hover:text-white transition-colors"
             >
@@ -89,87 +112,61 @@ export default function AdminDashboard() {
           <nav className="flex-1 overflow-y-auto py-6 custom-scrollbar">
             <ul className="space-y-1 px-3">
 
-              {/* Pages Group */}
-              <li className="pt-4">
-                <button 
-                  onClick={() => setPagesOpen(!pagesOpen)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider hover:text-zinc-300 transition-colors"
+              {/* ── Pages Label ── */}
+              <li>
+                <div className="px-3 py-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+                  {isSidebarOpen ? 'Pages' : <FileText className="w-5 h-5 mx-auto" />}
+                </div>
+              </li>
+
+              {/* ── Home Group (collapsible) ── */}
+              <li>
+                <button
+                  onClick={() => setHomeOpen(!homeOpen)}
+                  className="w-full flex items-center px-3 py-2 text-sm font-medium text-zinc-400 hover:bg-zinc-900/50 hover:text-white rounded-lg transition-colors"
                 >
-                  {isSidebarOpen ? (
+                  <span className="mr-3 opacity-70">
+                    <Home className="w-5 h-5" />
+                  </span>
+                  {isSidebarOpen && (
                     <>
-                      <span>Pages</span>
-                      <motion.div animate={{ rotate: pagesOpen ? 90 : 0 }}>
-                        <span className="text-lg leading-none">›</span>
+                      <span className="flex-1 text-left">Home</span>
+                      <motion.div animate={{ rotate: homeOpen ? 90 : 0 }} transition={{ duration: 0.2 }}>
+                        <ChevronRight className="w-4 h-4 text-zinc-600" />
                       </motion.div>
                     </>
-                  ) : (
-                    <FileText className="w-5 h-5 mx-auto" />
                   )}
                 </button>
-                
+
                 <AnimatePresence>
-                  {pagesOpen && isSidebarOpen && (
-                    <motion.ul 
+                  {homeOpen && isSidebarOpen && (
+                    <motion.ul
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="mt-2 space-y-1 overflow-hidden"
+                      className="mt-1 space-y-1 overflow-hidden"
                     >
-                      {adminSections.slice(0, -1).map((section) => {
-                        const isActive = activeSectionId === section.id;
-                        return (
-                          <li key={section.id}>
-                            <button
-                              onClick={() => setActiveSectionId(section.id)}
-                              className={`w-full flex items-center pl-10 pr-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                                isActive 
-                                  ? 'bg-zinc-900 text-white' 
-                                  : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'
-                              }`}
-                            >
-                              {isActive && <motion.div layoutId="active-indicator" className="absolute left-3 w-1 h-5 bg-white rounded-full" />}
-                              <span className="mr-3 opacity-70">{iconMap[section.icon] || <FileText className="w-4 h-4" />}</span>
-                              {section.title}
-                            </button>
-                          </li>
-                        );
-                      })}
+                      {homeSections.map((section) => renderSidebarItem(section, true))}
                     </motion.ul>
                   )}
                 </AnimatePresence>
               </li>
 
-              <li className="my-4 border-t border-zinc-800/50"></li>
+              <li className="my-3 border-t border-zinc-800/50"></li>
 
-              {/* Global Sections */}
-              {adminSections.slice(-1).map((section) => {
-                const isActive = activeSectionId === section.id;
-                return (
-                  <li key={section.id}>
-                    <button
-                      onClick={() => setActiveSectionId(section.id)}
-                      className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
-                        isActive 
-                          ? 'bg-zinc-900 text-white' 
-                          : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'
-                      }`}
-                    >
-                      {isActive && isSidebarOpen && <motion.div layoutId="active-indicator" className="absolute left-3 w-1 h-5 bg-white rounded-full" />}
-                      <span className={`${!isSidebarOpen && 'mx-auto'}`}>
-                        {iconMap[section.icon] || <Settings className="w-5 h-5" />}
-                      </span>
-                      {isSidebarOpen && <span className="ml-3">{section.title}</span>}
-                    </button>
-                  </li>
-                );
-              })}
+              {/* ── Standalone Sections (Articles) ── */}
+              {standaloneSections.map((section) => renderSidebarItem(section, false))}
 
+              <li className="my-3 border-t border-zinc-800/50"></li>
+
+              {/* ── Global Sections (Footer) ── */}
+              {globalSections.map((section) => renderSidebarItem(section, false))}
 
             </ul>
           </nav>
 
           <div className="p-4 border-t border-slate-800/50">
-            <button 
+            <button
               onClick={handleLogout}
               className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-lg transition-colors"
             >
@@ -201,21 +198,21 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center relative">
               <Search className="w-4 h-4 absolute left-3 text-zinc-500" />
-              <input 
-                type="text" 
-                placeholder="Search..." 
+              <input
+                type="text"
+                placeholder="Search..."
                 className="pl-9 pr-4 py-1.5 bg-zinc-900 border border-transparent rounded-lg text-sm text-white focus:bg-zinc-900 focus:border-zinc-700 focus:ring-0 transition-all w-48 placeholder-zinc-500"
               />
             </div>
-            <a 
-              href="/" 
-              target="_blank" 
+            <a
+              href="/"
+              target="_blank"
               className="flex items-center px-4 py-1.5 text-sm font-medium text-zinc-300 bg-zinc-900 hover:bg-zinc-800 rounded-lg transition-colors"
             >
               View Site
               <ExternalLink className="w-4 h-4 ml-2" />
             </a>
-            
+
             <div className="w-px h-6 bg-zinc-800 mx-1"></div>
 
             {/* Global Context-Powered Save Buttons */}
@@ -259,7 +256,7 @@ export default function AdminDashboard() {
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-auto p-8 relative">
-          <motion.div 
+          <motion.div
             key={activeSectionId}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
