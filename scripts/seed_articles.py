@@ -11,7 +11,8 @@ load_dotenv(os.path.abspath(os.path.join(os.path.dirname(__file__), '../apps/bac
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../apps/backend')))
 from app.config import settings
 
-client = MongoClient(settings.MONGODB_URI)
+import certifi
+client = MongoClient(settings.MONGODB_URI, tlsCAFile=certifi.where(), tlsAllowInvalidCertificates=True)
 db = client[settings.MONGO_DB_NAME]
 articles_collection = db['articles']
 

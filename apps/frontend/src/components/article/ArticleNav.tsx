@@ -34,7 +34,7 @@ export default function ArticleNav() {
             src="/TBS LOGO-02 white.png"
             alt="The Blended Stories"
             className="no-grayscale"
-            style={{ height: '34px', width: 'auto', mixBlendMode: 'screen', display: 'block' }}
+            style={{ height: 'clamp(64px, 9vw, 88px)', width: 'auto', mixBlendMode: 'screen', display: 'block' }}
           />
         </div>
 

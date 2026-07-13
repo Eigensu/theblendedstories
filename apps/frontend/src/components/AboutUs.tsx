@@ -47,84 +47,87 @@ export default function AboutUs({ data, settings }: { data?: any[], settings?: a
     <section
       id="about-us"
       style={{
+        position: 'relative',
+        width: '100%',
+        height: '100vh',
+        overflow: 'hidden',
         background: 'var(--black)',
-        padding: 'clamp(24px, 3vw, 40px) 0 clamp(40px, 6vw, 80px)',
       }}
     >
-      <div style={{ maxWidth: '1352px', margin: '0 auto', padding: '0 clamp(20px, 3vw, 44px) clamp(24px, 3vw, 40px)' }}>
+      {/* Background Media */}
+      <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
+        {apiSlides.map((s, i) => (
+          <img
+            key={s.img + i}
+            src={s.img}
+            alt="What we cover"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
+              display: 'block',
+              opacity: i === index ? 1 : 0,
+              transition: 'opacity 1s ease',
+            }}
+          />
+        ))}
+        {/* Dark overlay for readability */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(0,0,0,0.5)',
+          zIndex: 1,
+        }} />
+      </div>
 
-        {/* Black bar */}
-        <ScrollReveal delay={0.1}>
-          <div className="aboutus-cover-bar" style={{
-            background: 'var(--black)',
-            padding: 'clamp(12px, 1.5vw, 20px) 0',
-            borderTop: 'none',
-            alignItems: 'center',
-            justifyContent: 'center',
+      {/* Foreground Content */}
+      <div style={{
+        position: 'relative',
+        zIndex: 2,
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0 clamp(20px, 4vw, 40px)',
+      }}>
+        <ScrollReveal delay={0.1} style={{ textAlign: 'center' }}>
+          <h2 style={{
+            fontFamily: "'Fraunces', serif",
+            fontSize: 'clamp(24px, 4vw, 56px)',
+            fontWeight: 400,
+            textTransform: 'uppercase',
+            color: 'white',
+            lineHeight: '1.05',
+            margin: '0 0 clamp(16px, 3vw, 24px)',
+            letterSpacing: '0.01em',
+            textAlign: 'center',
           }}>
-
-            {/* WHAT DO WE COVER? — Fraunces */}
-            <h2 style={{
-              fontFamily: "'Fraunces', serif",
-              fontSize: 'clamp(20px, 2.6vw, 40px)',
-              fontWeight: 400,
-              textTransform: 'uppercase',
-              color: 'white',
-              lineHeight: '1.05',
-              margin: 0,
-              marginTop: 'clamp(-24px, -3vw, -12px)',
-              flexShrink: 0,
-              whiteSpace: 'nowrap',
-              letterSpacing: '0.01em',
-              textAlign: 'center',
-            }}>
-              {title}
-            </h2>
-
-          </div>
+            {title}
+          </h2>
         </ScrollReveal>
-
-        {/* Caption — sits in its own full-width row, truly centered */}
+        
         <p
           key={index}
           style={{
-            marginTop: 'clamp(20px, 3vw, 10px)',
             fontFamily: "'Poppins', sans-serif",
-            fontSize: 'clamp(12px, 1.1vw, 15px)',
+            fontSize: 'clamp(14px, 1.5vw, 20px)',
             fontWeight: 400,
-            color: 'rgba(255,255,255,0.85)',
+            color: 'rgba(255,255,255,0.9)',
             lineHeight: '1.5',
             textAlign: 'center',
             animation: 'fadeUp 0.6s ease-out both',
+            maxWidth: '800px',
+            margin: '0 auto',
           }}
         >
           {slide.caption}
         </p>
       </div>
-
-      {/* Image — full bleed, no horizontal padding */}
-      <ScrollReveal className="img-card">
-        <div style={{ position: 'relative', width: '100%', height: 'clamp(240px, 42vw, 580px)', overflow: 'hidden' }}>
-          {apiSlides.map((s, i) => (
-            <img
-              key={s.img + i}
-              src={s.img}
-              alt="What we cover"
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center',
-                display: 'block',
-                opacity: i === index ? 1 : 0,
-                transition: 'opacity 1s ease',
-              }}
-            />
-          ))}
-        </div>
-      </ScrollReveal>
     </section>
   );
 }

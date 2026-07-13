@@ -10,7 +10,7 @@ import EmbeddedVideo from '@/components/article/EmbeddedVideo';
 import EditorialNote from '@/components/article/EditorialNote';
 import AuthorSection from '@/components/article/AuthorSection';
 import PreviousNextNavigation from '@/components/article/PreviousNextNavigation';
-import ArticleFooter from '@/components/article/ArticleFooter';
+import Footer from '@/components/Footer';
 import { ArticleContentBlock } from '@/types/article';
 
 export const dynamic = 'force-dynamic';
@@ -317,10 +317,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </div>
           </aside>
         </div>
-
-        <ArticleFooter />
       </main>
 
+      <Footer />
     </div>
   );
 }

@@ -125,17 +125,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
                 marginBottom: 'clamp(16px, 2vw, 24px)',
               }} />
 
-              {/* Description */}
-              <p className="theedit-desc" style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: 'clamp(11px, 0.95vw, 13px)',
-                color: 'rgba(255,255,255,0.7)',
-                lineHeight: '1.7',
-                margin: '0 0 24px 0',
-                maxWidth: '420px',
-              }}>
-                {description}
-              </p>
+              {/* Description intentionally removed */}
 
               {/* EXPLORE ALL STORIES */}
               <Link
