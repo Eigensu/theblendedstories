@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 const S = [
   {
@@ -35,11 +36,14 @@ const S = [
 
 export default function MegaMenu() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
+
+  if (pathname?.startsWith('/stories/')) return null;
 
   return (
     <>

@@ -8,7 +8,7 @@ class Database:
 db = Database()
 
 async def connect_to_mongo():
-    db.client = AsyncIOMotorClient(settings.MONGO_URL)
+    db.client = AsyncIOMotorClient(settings.MONGODB_URI)
     db.db = db.client[settings.MONGO_DB_NAME]
     print("Connected to MongoDB")
 

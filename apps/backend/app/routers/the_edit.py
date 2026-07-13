@@ -1,32 +1,33 @@
-from fastapi import APIRouter, Depends
-from app.schemas.cms_schemas import ArticleModel
-from app.services.the_edit_service import get_all, get_by_id, create, update, delete
-from app.utils.responses import success_response
-from app.auth import get_current_admin
+from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+from app.schemas.the_edit import TheEditModel
+from app.services.the_edit_service import TheEditService
 
-router = APIRouter(prefix="/the-edit", tags=["the_edit"])
+router = APIRouter(prefix="/the-edit", tags=["The Edit (Deprecated)"])
+
+def get_service():
+    return TheEditService()
 
 @router.get("/")
-async def list_items():
-    items = await get_all()
-    return success_response(data=items)
+async def get_the_edit(service: TheEditService = Depends(get_service)):
+    # Deprecated endpoint
+    items = await service.get_all()
+    return {"success": True, "data": items}
 
-@router.get("/{item_id}")
-async def get_item(item_id: str):
-    item = await get_by_id(item_id)
-    return success_response(data=item)
+@router.post("/")
+async def create_the_edit(item: TheEditModel, service: TheEditService = Depends(get_service)):
+    result = await service.create(item)
+    return {"success": True, "data": result}
 
-@router.post("/", dependencies=[Depends(get_current_admin)])
-async def create_item(payload: ArticleModel):
-    created = await create(payload)
-    return success_response(data=created, message="Created successfully")
+@router.put("/{item_id}")
+async def update_the_edit(item_id: str, item: TheEditModel, service: TheEditService = Depends(get_service)):
+    result = await service.update(item_id, item)
+    if not result:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return {"success": True, "data": result}
 
-@router.put("/{item_id}", dependencies=[Depends(get_current_admin)])
-async def update_item(item_id: str, payload: ArticleModel):
-    updated = await update(item_id, payload)
-    return success_response(data=updated, message="Updated successfully")
-
-@router.delete("/{item_id}", dependencies=[Depends(get_current_admin)])
-async def delete_item(item_id: str):
-    await delete(item_id)
-    return success_response(message="Deleted successfully")
+@router.delete("/{item_id}")
+async def delete_the_edit(item_id: str, service: TheEditService = Depends(get_service)):
+    if not await service.delete(item_id):
+        raise HTTPException(status_code=404, detail="Item not found")
+    return {"success": True, "message": "Deleted successfully"}

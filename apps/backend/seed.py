@@ -2,7 +2,7 @@ import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.config import settings
 
-client = AsyncIOMotorClient(settings.MONGO_URL)
+client = AsyncIOMotorClient(settings.MONGODB_URI)
 db = client[settings.MONGO_DB_NAME]
 
 INITIAL_DATA = {

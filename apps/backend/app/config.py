@@ -2,8 +2,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 
 class Settings(BaseSettings):
-    MONGO_URL: str = Field("mongodb://localhost:27017", alias="MONGODB_URI")
-    MONGO_DB_NAME: str = "blended_stories"
+    MONGODB_URI: str = "mongodb://localhost:27017"
+    MONGO_DB_NAME: str = "the_blended_stories"
     
     ADMIN_USERNAME: str = Field("admin", min_length=1)
     ADMIN_PASSWORD: str = Field(..., min_length=12)

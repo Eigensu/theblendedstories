@@ -2,7 +2,7 @@ import React from 'react';
 import DynamicArrayEditor from '../components/DynamicArrayEditor';
 
 export default function WhatWeCoverEditor() {
-  const endpoint = '/what-we-cover';
+  const endpoint = '/what-we-cover/';
   const itemTitleField = 'caption';
   const fields = [{name: 'caption', label: 'Caption', type: 'text'}, {name: 'image_url', label: 'Image', type: 'image'}, {name: 'display_order', label: 'Order', type: 'number'}];
   const defaultNewItem = {caption: 'New Slide', image_url: '', visibility: true};

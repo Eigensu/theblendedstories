@@ -4,7 +4,7 @@ from app.database import connect_to_mongo, close_mongo_connection
 from app.utils.exceptions import global_exception_handler
 from app.routers import (
     hero, what_is_tbs, footer,
-    what_we_cover, tbs_nights, the_edit, tbs_talks, media
+    what_we_cover, tbs_nights, articles, tbs_talks, media, the_edit
 )
 from app.auth import oauth2_scheme, verify_password, create_access_token, TokenData
 from fastapi import Depends, HTTPException, status
@@ -27,6 +27,41 @@ app.add_exception_handler(Exception, global_exception_handler)
 @app.on_event("startup")
 async def startup_db_client():
     await connect_to_mongo()
+    
+    # --- PRODUCTION COMPREHENSIVE DB DIAGNOSTIC ---
+    try:
+        from app.database import db
+        print("\n" + "="*50)
+        print("PRODUCTION DB DIAGNOSTIC START")
+        
+        # 1. The database name actually being used
+        actual_db_name = db.db.name
+        print(f"DATABASE NAME IN USE: {actual_db_name}")
+        
+        # 2. All collection names
+        collections_list = await db.db.list_collection_names()
+        print(f"ALL COLLECTIONS: {collections_list}")
+        
+        # 3. For each collection, count and active count
+        cols = ["hero", "what_is_tbs", "tbs_nights", "what_we_cover", "the_edit", "tbs_talks"]
+        for c in cols:
+            coll = db.db[c]
+            total_count = await coll.count_documents({})
+            active_count = await coll.count_documents({"is_active": True})
+            print(f"Collection [{c}] -> Total: {total_count} | Active: {active_count}")
+        
+        # 4. Print the first document from what_we_cover if one exists
+        wwc_doc = await db.db["what_we_cover"].find_one()
+        if wwc_doc:
+            wwc_doc["_id"] = str(wwc_doc["_id"])
+            print(f"FIRST DOC in what_we_cover: {wwc_doc}")
+        else:
+            print("FIRST DOC in what_we_cover: None (collection is empty)")
+            
+        print("PRODUCTION DB DIAGNOSTIC END")
+        print("="*50 + "\n")
+    except Exception as e:
+        print(f"DIAGNOSTIC ERROR: {e}")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
@@ -53,9 +88,10 @@ app.include_router(hero.router)
 app.include_router(what_is_tbs.router)
 app.include_router(what_we_cover.router)
 app.include_router(tbs_nights.router)
-app.include_router(the_edit.router)
+app.include_router(articles.router)
 app.include_router(tbs_talks.router)
 app.include_router(footer.router)
+app.include_router(the_edit.router)
 
 app.include_router(media.router)
 

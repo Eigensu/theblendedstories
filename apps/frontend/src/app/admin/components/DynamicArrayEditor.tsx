@@ -41,7 +41,10 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
   const fetchItems = async () => {
     try {
       const data = await apiClient.get<any[]>(endpoint);
-      const sorted = data.sort((a, b) => a.display_order - b.display_order);
+      console.log(`RAW API DATA FOR ${endpoint}:`, data);
+      console.log("Array?", Array.isArray(data));
+      console.log("Length:", data?.length);
+      const sorted = (Array.isArray(data) ? data : []).sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
       setItems(sorted);
       setOriginalItems(sorted);
     } catch (err) {
@@ -54,7 +57,7 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
   const handleGlobalSave = async (publish: boolean) => {
     setIsSaving(true);
     try {
-      const visibilityField = endpoint === '/the-edit' ? 'published' : 'visibility';
+      const visibilityField = 'visibility';
 
       const payloadItems = items.map(item => ({
         ...item,
@@ -67,9 +70,10 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
       const deletedIds = originalIds.filter(id => !currentIds.includes(id));
 
       // Handle deletions
+      const baseUrl = endpoint.endsWith('/') ? endpoint.slice(0, -1) : endpoint;
       for (const id of deletedIds) {
         if (!id.startsWith('new-')) {
-          await apiClient.delete(`${endpoint}/${id}`);
+          await apiClient.delete(`${baseUrl}/${id}`);
         }
       }
 
@@ -79,7 +83,7 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
           const { id, _id, ...rest } = item;
           await apiClient.post(endpoint, rest);
         } else {
-          await apiClient.put(`${endpoint}/${item.id}`, item);
+          await apiClient.put(`${baseUrl}/${item.id}`, item);
         }
       }
 
@@ -188,7 +192,7 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
                 className="space-y-4"
               >
                 {items.map((item, index) => {
-                  const isVisible = endpoint === '/the-edit' ? item.published : item.visibility;
+                  const isVisible = item.visibility;
                   
                   return (
                   <Draggable key={item.id} draggableId={item.id} index={index}>
@@ -248,7 +252,7 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
                             <button 
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleUpdate(item.id, { [endpoint === '/the-edit' ? 'published' : 'visibility']: !isVisible });
+                                handleUpdate(item.id, { visibility: !isVisible });
                               }}
                               className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
                               title={isVisible ? "Hide" : "Show"}

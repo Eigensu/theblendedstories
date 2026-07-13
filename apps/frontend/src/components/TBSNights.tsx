@@ -67,18 +67,18 @@ export default function TBSNights({ data }: { data?: any }) {
         <ScrollReveal delay={0.12}>
           <div className="nights-content" style={{ maxWidth: '540px' }}>
 
-            <h2 style={{
-              fontFamily: "'Fraunces', serif",
-              fontSize: 'clamp(24px, 3vw, 40px)',
-              fontWeight: 400,
-              textTransform: 'uppercase',
-              color: 'white',
-              margin: '0 0 clamp(12px, 1.5vw, 18px) 0',
-              lineHeight: '1.05',
-              letterSpacing: '0.01em',
-            }}>
-              {title}
-            </h2>
+            <img
+              src="/tbsnights-hero.png"
+              alt={title}
+              className="no-grayscale"
+              style={{
+                height: 'clamp(64px, 8vw, 120px)',
+                width: 'auto',
+                mixBlendMode: 'screen',
+                display: 'block',
+                margin: '0 0 clamp(16px, 2vw, 24px) 0',
+              }}
+            />
 
             <p style={{
               fontFamily: "'Poppins', sans-serif",
