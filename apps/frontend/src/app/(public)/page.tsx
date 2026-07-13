@@ -41,7 +41,7 @@ export default async function Home() {
     fetchCMSData('/what-is-tbs/'),
     fetchCMSData('/what-we-cover/'),
     fetchCMSData('/tbs-nights/'),
-    fetchCMSData('/the-edit/'),
+    fetchCMSData('/articles/?featured=true'),
     fetchCMSData('/tbs-talks/'),
     fetchCMSData('/footer/'),
     fetchCMSData('/settings/')
