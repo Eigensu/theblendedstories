@@ -19,6 +19,7 @@ export interface Article {
   description: string;
   author: string;
   authorImage: string;
+  instagramUrl?: string;
   date: string;
   readingTime: string;
   heroImage: string;

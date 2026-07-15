@@ -5,9 +5,8 @@ import ScrollReveal from './ScrollReveal';
 export default function TBSNights({ data }: { data?: any }) {
   const router = useRouter();
 
-  const videoUrl = data?.video_url || "/tbs-nights.mp4";
+  const videoUrl = "/TBS nights _4.mp4";
   const posterUrl = data?.poster_url || "/tbsnights-hero.png";
-  const title = data?.title || "TBS Nights";
   const subtitle = data?.subtitle || "The conversations that don't happen online.";
   const paragraphs = data?.paragraphs?.length >= 2 ? data.paragraphs : [
     "TBS Nights is an intimate dinner series by The Blended Stories that brings together founders, creatives, tastemakers and cultural voices for meaningful conversations beyond likes, algorithms and timelines.",
@@ -69,7 +68,6 @@ export default function TBSNights({ data }: { data?: any }) {
 
             <img
               src="/tbsnights-hero.png"
-              alt={title}
               className="no-grayscale"
               style={{
                 height: 'clamp(64px, 8vw, 120px)',

@@ -2,7 +2,7 @@
 import ScrollReveal from './ScrollReveal';
 
 const quickLinks = ['Lifestyle & Travel', 'Fashion', 'Beauty & Wellness', 'Culture', 'Events', 'Community'];
-const locations = ['Mumbai', 'Dubai', 'Indore', 'Lucknow', 'Hyderabad', 'Ahmedabad'];
+const locations = ['Mumbai', 'Bangalore', 'Indore'];
 
 const socialIcons = [
   {
@@ -64,7 +64,7 @@ export default function Footer({ data }: { data?: any }) {
   const backgroundUrl = data?.background_url || '/hero-bg.jpg';
   const copyright = data?.copyright || '©2024. All Rights Reserved.';
   const footerQuickLinks = data?.quick_links?.length ? data.quick_links : quickLinks.map((label) => ({ label, url: '#' }));
-  const footerLocations = data?.locations?.length ? data.locations : locations.map((label) => ({ label, url: '#' }));
+  const footerLocations = locations.map((label) => ({ label, url: '#' }));
 
   return (
     <footer

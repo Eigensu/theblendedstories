@@ -214,6 +214,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     videoThumbnail: article.embedded_video?.thumbnail,
     editorNote: article.editorial_note,
     authorImage: article.author_image,
+    instagramUrl: article.instagram_url,
     description: article.subtitle,
     contentBlocks,
   };

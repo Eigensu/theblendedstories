@@ -35,6 +35,7 @@ class ArticleModel(BaseModelMixin):
     author: str
     author_image: str
     author_role: str
+    instagram_url: Optional[str] = None
     
     hero_image: str
     hero_video: Optional[str] = None

@@ -13,7 +13,7 @@ import { useAdmin } from '../contexts/AdminContext';
 type ArrayEditorProps = {
   endpoint: string;
   itemTitleField: string;
-  fields: { name: string; label: string; type: 'text' | 'textarea' | 'image' | 'video' | 'number' }[];
+  fields: { name: string; label: string; type: 'text' | 'textarea' | 'image' | 'video' | 'number'; guidelineKey?: import('../../../constants/imageGuidelines').GuidelineKey }[];
   defaultNewItem: any;
 };
 
@@ -319,6 +319,7 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
                                         url={item[field.name]}
                                         onUploadSuccess={(url) => handleUpdate(item.id, { [field.name]: url })}
                                         onDeleteSuccess={() => handleUpdate(item.id, { [field.name]: null })}
+                                        guidelineKey={field.guidelineKey}
                                       />
                                     </div>
                                   );

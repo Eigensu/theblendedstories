@@ -51,6 +51,7 @@ export type Article = {
   author: string;
   author_image: string;
   author_role: string;
+  instagram_url?: string;
   hero_image: string;
   hero_video?: string;
   cover_image: string;
@@ -322,6 +323,7 @@ function ArticleBlockEditor({ blocks, onChange }: { blocks: ContentBlock[]; onCh
                                 url={block.image}
                                 onUploadSuccess={(image) => updateBlock(block.id, { image })}
                                 onDeleteSuccess={() => updateBlock(block.id, { image: '' })}
+                                guidelineKey="default"
                               />
                             </div>
                             <TextField label="Caption" value={block.caption} onChange={(caption) => updateBlock(block.id, { caption })} />
@@ -580,6 +582,12 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
               value={selectedArticle.slug} 
               onChange={(v) => setSelectedArticle({ ...selectedArticle, slug: v })} 
             />
+
+            <TextField 
+              label="Instagram URL" 
+              value={selectedArticle.instagram_url || ''} 
+              onChange={(v) => setSelectedArticle({ ...selectedArticle, instagram_url: v })} 
+            />
             
             <TextArea 
               label="Subtitle / Description" 
@@ -642,6 +650,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
                 url={selectedArticle.hero_image}
                 onUploadSuccess={(url) => setSelectedArticle({ ...selectedArticle, hero_image: url })}
                 onDeleteSuccess={() => setSelectedArticle({ ...selectedArticle, hero_image: "" })}
+                guidelineKey="articleHero"
               />
             </div>
 
@@ -652,6 +661,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
                 url={selectedArticle.cover_image}
                 onUploadSuccess={(url) => setSelectedArticle({ ...selectedArticle, cover_image: url })}
                 onDeleteSuccess={() => setSelectedArticle({ ...selectedArticle, cover_image: "" })}
+                guidelineKey="articleCover"
               />
             </div>
             
@@ -676,6 +686,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
                           newGallery[index] = { ...item, image: "" };
                           setSelectedArticle({ ...selectedArticle, gallery: newGallery });
                         }}
+                        guidelineKey="galleryImage"
                       />
                       <TextField
                         label="Caption (Optional)"
@@ -730,6 +741,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
                 url={selectedArticle.author_image}
                 onUploadSuccess={(url) => setSelectedArticle({ ...selectedArticle, author_image: url })}
                 onDeleteSuccess={() => setSelectedArticle({ ...selectedArticle, author_image: "" })}
+                guidelineKey="authorImage"
               />
             </div>
           </div>

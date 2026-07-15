@@ -151,6 +151,7 @@ export default function WhatIsTBSEditor({ sectionId }: { sectionId: string }) {
           url={data.image_url} 
           onUploadSuccess={(url) => setData({ ...data, image_url: url })}
           onDeleteSuccess={() => setData({ ...data, image_url: null })}
+          guidelineKey="default"
         />
       </div>
 

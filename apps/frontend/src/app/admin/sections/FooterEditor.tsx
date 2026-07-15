@@ -85,6 +85,7 @@ export default function FooterEditor({ sectionId }: { sectionId: string }) {
             url={data.logo_url} 
             onUploadSuccess={(url) => setData({ ...data, logo_url: url })}
             onDeleteSuccess={() => setData({ ...data, logo_url: null })}
+            guidelineKey="footerLogo"
           />
           <MediaUploader 
             label="Background Image" 
@@ -92,6 +93,7 @@ export default function FooterEditor({ sectionId }: { sectionId: string }) {
             url={data.background_url} 
             onUploadSuccess={(url) => setData({ ...data, background_url: url })}
             onDeleteSuccess={() => setData({ ...data, background_url: null })}
+            guidelineKey="footerBackground"
           />
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, Image as ImageIcon, Film, X, Loader2, Replace } from 'lucide-react';
 import { cn } from './TextField';
+import { IMAGE_GUIDELINES, GuidelineKey } from '../../../constants/imageGuidelines';
 
 type MediaUploaderProps = {
   label: string;
@@ -9,9 +10,10 @@ type MediaUploaderProps = {
   onDeleteSuccess: () => void;
   type?: 'image' | 'video';
   className?: string;
+  guidelineKey?: GuidelineKey;
 };
 
-export default function MediaUploader({ label, url, onUploadSuccess, onDeleteSuccess, type = 'image', className }: MediaUploaderProps) {
+export default function MediaUploader({ label, url, onUploadSuccess, onDeleteSuccess, type = 'image', className, guidelineKey }: MediaUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const [isDragActive, setIsDragActive] = useState(false);
@@ -139,6 +141,17 @@ export default function MediaUploader({ label, url, onUploadSuccess, onDeleteSuc
         </div>
       )}
       {error && <p className="text-red-500 text-sm font-medium mt-2">{error}</p>}
+      
+      {guidelineKey && IMAGE_GUIDELINES[guidelineKey] && (
+        <div className="text-xs text-zinc-400 flex flex-col gap-1 mt-3 p-3 bg-zinc-900/50 rounded-lg border border-zinc-800 w-full max-w-sm">
+           <span className="font-semibold text-zinc-300 mb-1">Recommended Size:</span>
+           <span>Desktop: {IMAGE_GUIDELINES[guidelineKey].desktop}</span>
+           <span>Mobile: {IMAGE_GUIDELINES[guidelineKey].mobile}</span>
+           <span>Aspect Ratio: {IMAGE_GUIDELINES[guidelineKey].aspectRatio}</span>
+           <span>Format: {IMAGE_GUIDELINES[guidelineKey].format}</span>
+           <span>Max Size: {IMAGE_GUIDELINES[guidelineKey].maxSize}</span>
+        </div>
+      )}
     </div>
   );
 }

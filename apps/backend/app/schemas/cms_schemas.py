@@ -64,6 +64,7 @@ class SpeakerModel(BaseModelMixin):
     designation: str
     date: str
     profile_url: Optional[str] = None
+    social_link: Optional[str] = None
     display_order: int
     visibility: bool = True
 

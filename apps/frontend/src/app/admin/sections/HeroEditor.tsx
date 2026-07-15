@@ -99,6 +99,7 @@ export default function HeroEditor({ sectionId }: { sectionId: string }) {
             url={data.video_desktop_url} 
             onUploadSuccess={(url) => setData({ ...data, video_desktop_url: url })}
             onDeleteSuccess={() => setData({ ...data, video_desktop_url: null })}
+            guidelineKey="hero"
           />
           <MediaUploader 
             label="Mobile Video" 
@@ -106,6 +107,7 @@ export default function HeroEditor({ sectionId }: { sectionId: string }) {
             url={data.video_mobile_url} 
             onUploadSuccess={(url) => setData({ ...data, video_mobile_url: url })}
             onDeleteSuccess={() => setData({ ...data, video_mobile_url: null })}
+            guidelineKey="hero"
           />
         </div>
       </div>
