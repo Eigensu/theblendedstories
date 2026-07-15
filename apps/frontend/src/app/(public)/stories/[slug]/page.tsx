@@ -105,7 +105,6 @@ function renderTextBlock(content: string, isIntro: boolean) {
   const paragraphStyle = isIntro
     ? {
         fontFamily: "'Playfair Display', serif",
-        fontStyle: 'italic',
         fontSize: 'clamp(20px, 4vw, 26px)',
         lineHeight: 1.6,
         color: '#e7e6e1',
@@ -120,13 +119,14 @@ function renderTextBlock(content: string, isIntro: boolean) {
       };
 
   const htmlPattern = /<[^>]+>/;
+  const processedContent = content.replace(/<a /gi, '<a target="_blank" rel="noopener noreferrer" class="article-link" ');
 
   return (
-    <div style={wrapperStyle}>
-      {htmlPattern.test(content) ? (
-        <div style={paragraphStyle} dangerouslySetInnerHTML={{ __html: content }} />
+    <div style={wrapperStyle} className="article-body-text">
+      {htmlPattern.test(processedContent) ? (
+        <div style={paragraphStyle} dangerouslySetInnerHTML={{ __html: processedContent }} />
       ) : (
-        <p style={paragraphStyle}>{content}</p>
+        <p style={paragraphStyle}>{processedContent}</p>
       )}
     </div>
   );
