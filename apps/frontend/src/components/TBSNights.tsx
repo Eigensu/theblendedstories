@@ -68,6 +68,7 @@ export default function TBSNights({ data }: { data?: any }) {
 
             <img
               src="/tbsnights-hero.png"
+              alt="TBS Nights"
               className="no-grayscale"
               style={{
                 height: 'clamp(64px, 8vw, 120px)',
