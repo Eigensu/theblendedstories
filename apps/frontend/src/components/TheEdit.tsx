@@ -52,7 +52,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
       } else {
         scrollByCard(1);
       }
-    }, 4000);
+    }, 8000);
     return () => clearInterval(interval);
   }, []);
 

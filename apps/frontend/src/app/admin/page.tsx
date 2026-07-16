@@ -42,6 +42,7 @@ export default function AdminDashboard() {
     }
     apiClient.get('/auth/me').catch(() => {
       localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_refresh_token');
       router.push('/admin/login');
     });
   }, [router]);
@@ -51,6 +52,7 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_refresh_token');
     router.push('/admin/login');
   };
 
