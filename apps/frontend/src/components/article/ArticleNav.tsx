@@ -38,7 +38,7 @@ export default function ArticleNav() {
           />
         </div>
 
-        <div className="flex flex-1 items-center gap-4 md:gap-8 justify-end overflow-x-auto whitespace-nowrap" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="hidden md:flex flex-1 items-center gap-4 md:gap-8 justify-end overflow-x-auto whitespace-nowrap" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           <Link href="/#fashion" className="text-[11px] md:text-[12px] uppercase tracking-[0.18em] font-semibold text-[#f5f4f0] hover:text-white transition-colors" style={{ fontFamily: "'Public Sans', sans-serif", textDecoration: 'none' }}>Fashion</Link>
           <Link href="/#interiors" className="text-[11px] md:text-[12px] uppercase tracking-[0.18em] font-semibold text-[#f5f4f0] hover:text-white transition-colors" style={{ fontFamily: "'Public Sans', sans-serif", textDecoration: 'none' }}>Interiors</Link>
           <Link href="/#culture" className="text-[11px] md:text-[12px] uppercase tracking-[0.18em] font-semibold text-[#f5f4f0] hover:text-white transition-colors" style={{ fontFamily: "'Public Sans', sans-serif", textDecoration: 'none' }}>Culture</Link>
