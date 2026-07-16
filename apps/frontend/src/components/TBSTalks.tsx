@@ -7,24 +7,28 @@ const speakers = [
     name: 'ANITA DONGRE',
     role: 'FASHION DESIGNER\n& ENTREPRENEUR',
     date: 'MAY 28, 2026',
+    social_link: null,
   },
   {
     img: '/karan.png',
     name: 'KARAN KAUSHIK',
     role: 'ARCHITECT\n& FOUNDER',
     date: 'MAY 29, 2026',
+    social_link: null,
   },
   {
     img: '/masaba.png',
     name: 'MASABA GUPTA',
     role: 'ENTREPRENEUR\n& CREATOR',
     date: 'MAY 30, 2026',
+    social_link: null,
   },
   {
     img: '/sarthak.png',
     name: 'SARTHAK AILAWADI',
     role: 'CHEF\n& RESTAURATEUR',
     date: 'MAY 31, 2026',
+    social_link: null,
   },
 ];
 
@@ -35,6 +39,7 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
         name: d.name,
         role: d.designation,
         date: d.date,
+        social_link: d.social_link,
       }))
     : speakers;
 
@@ -125,13 +130,28 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
 
         {/* ── Four speaker cards ── */}
         <div className="talks-grid">
-          {apiSpeakers.map((speaker, idx) => (
+          {apiSpeakers.map((speaker, idx) => {
+            let finalUrl = speaker.social_link;
+            if (finalUrl && !/^https?:\/\//i.test(finalUrl)) {
+              finalUrl = finalUrl.includes('localhost') ? `http://${finalUrl}` : `https://${finalUrl}`;
+            }
+
+            const CardTag = finalUrl ? 'a' : 'div';
+            const linkProps = finalUrl ? {
+              href: finalUrl,
+              target: "_blank",
+              rel: "noopener noreferrer",
+            } : {};
+
+            return (
             <ScrollReveal key={idx} delay={idx * 0.08}>
-              <div className="img-card" style={{
+              <CardTag {...(linkProps as any)} className="img-card" style={{
                 background: '#0a0a0a',
                 border: '1px solid rgba(255,255,255,0.06)',
                 overflow: 'hidden',
-                cursor: 'pointer',
+                cursor: speaker.social_link ? 'pointer' : 'default',
+                display: 'block',
+                textDecoration: 'none',
               }}>
 
                 {/* Portrait photo */}
@@ -210,9 +230,10 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
                   </p>
 
                 </div>
-              </div>
+              </CardTag>
             </ScrollReveal>
-          ))}
+            );
+          })}
         </div>
 
       </div>

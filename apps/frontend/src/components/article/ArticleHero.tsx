@@ -2,11 +2,19 @@ import { Article } from '@/types/article';
 import ShareSection from './ShareSection';
 
 export default function ArticleHero({ article }: { article: Article }) {
+  let finalUrl = article.instagramUrl;
+  if (finalUrl && !/^https?:\/\//i.test(finalUrl)) {
+    finalUrl = finalUrl.includes('localhost') ? `http://${finalUrl}` : `https://${finalUrl}`;
+  }
+
   return (
     <div style={{ position: 'relative', height: '100vh', minHeight: '600px', overflow: 'hidden', background: '#171716', backgroundImage: 'repeating-linear-gradient(135deg, #1d1d1b 0px, #1d1d1b 2px, #171716 2px, #171716 5px)' }}>
-      <img src={article.heroImage} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.35) brightness(0.6) contrast(1.1)' }} />
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.05) 0%, rgba(10,10,10,0.35) 55%, rgba(10,10,10,0.92) 88%, #0a0a0a 100%)' }}></div>
-      <div className="w-full absolute left-0 right-0 flex flex-col items-center text-center" style={{ bottom: 'clamp(32px, 8vh, 76px)', padding: '0 clamp(20px, 4vw, 120px)' }}>
+      {finalUrl && (
+        <a href={finalUrl} target="_blank" rel="noopener noreferrer" style={{ position: 'absolute', inset: 0, zIndex: 10, cursor: 'pointer', display: 'block' }} aria-label="View on Instagram" />
+      )}
+      <img src={article.heroImage} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.35) brightness(0.6) contrast(1.1)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.05) 0%, rgba(10,10,10,0.35) 55%, rgba(10,10,10,0.92) 88%, #0a0a0a 100%)', pointerEvents: 'none' }}></div>
+      <div className="w-full absolute left-0 right-0 flex flex-col items-center text-center" style={{ bottom: 'clamp(32px, 8vh, 76px)', padding: '0 clamp(20px, 4vw, 120px)', pointerEvents: 'none', zIndex: 5 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: 'clamp(12px, 2vh, 22px)' }}>
           <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: '12px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#f5f4f0', fontWeight: 600 }}>{article.category}</span>
           <span style={{ width: '32px', height: '1px', background: 'rgba(245,244,240,0.5)' }}></span>
@@ -23,7 +31,7 @@ export default function ArticleHero({ article }: { article: Article }) {
           <span className="hidden sm:inline" style={{ color: '#5a5952' }}>•</span>
           <span>{article.readingTime}</span>
         </div>
-        <div style={{ marginTop: 'clamp(18px, 3vh, 26px)' }}>
+        <div style={{ marginTop: 'clamp(18px, 3vh, 26px)', pointerEvents: 'auto', zIndex: 20, position: 'relative' }}>
           <ShareSection title={article.title} />
         </div>
       </div>

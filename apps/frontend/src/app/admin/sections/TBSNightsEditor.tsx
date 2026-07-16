@@ -105,6 +105,7 @@ export default function TBSNightsEditor({ sectionId }: { sectionId: string }) {
             url={data.poster_url} 
             onUploadSuccess={(url) => setData({ ...data, poster_url: url })}
             onDeleteSuccess={() => setData({ ...data, poster_url: null })}
+            guidelineKey="tbsNightsPoster"
           />
         </div>
       </div>

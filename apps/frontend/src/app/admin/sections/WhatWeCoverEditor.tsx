@@ -15,7 +15,7 @@ export default function WhatWeCoverEditor() {
       <DynamicArrayEditor 
         endpoint={endpoint}
         itemTitleField={itemTitleField}
-        fields={[{name: 'caption', label: 'Caption', type: 'text'}, {name: 'image_url', label: 'Image', type: 'image'}, {name: 'display_order', label: 'Order', type: 'number'}]}
+        fields={[{name: 'caption', label: 'Caption', type: 'text'}, {name: 'image_url', label: 'Image', type: 'image', guidelineKey: 'whatWeCover' as any}, {name: 'display_order', label: 'Order', type: 'number'}]}
         defaultNewItem={{caption: 'New Slide', image_url: '', visibility: true}}
       />
     </div>

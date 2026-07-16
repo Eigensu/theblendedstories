@@ -65,10 +65,10 @@ INITIAL_DATA = {
         {"cover_image_url": "https://images.unsplash.com/photo-1520333789090-1afc82db536a?w=500&q=80", "title": "The Getaways Everyone Is Quietly Booking", "description": "The destinations, stays and itineraries showing up in every well-travelled group chat this season.", "story_url": None, "display_number": "10", "display_order": 10, "published": True, "is_active": True},
     ],
     "tbs_talks": [
-        {"photo_url": "/anita.png", "name": "ANITA DONGRE", "designation": "FASHION DESIGNER\n& ENTREPRENEUR", "date": "MAY 28, 2026", "profile_url": None, "display_order": 1, "visibility": True, "is_active": True},
-        {"photo_url": "/karan.png", "name": "KARAN KAUSHIK", "designation": "ARCHITECT\n& FOUNDER", "date": "MAY 29, 2026", "profile_url": None, "display_order": 2, "visibility": True, "is_active": True},
-        {"photo_url": "/masaba.png", "name": "MASABA GUPTA", "designation": "ENTREPRENEUR\n& CREATOR", "date": "MAY 30, 2026", "profile_url": None, "display_order": 3, "visibility": True, "is_active": True},
-        {"photo_url": "/sarthak.png", "name": "SARTHAK AILAWADI", "designation": "CHEF\n& RESTAURATEUR", "date": "MAY 31, 2026", "profile_url": None, "display_order": 4, "visibility": True, "is_active": True},
+        {"photo_url": "/anita.png", "name": "ANITA DONGRE", "designation": "FASHION DESIGNER\n& ENTREPRENEUR", "date": "MAY 28, 2026", "profile_url": None, "social_link": None, "display_order": 1, "visibility": True, "is_active": True},
+        {"photo_url": "/karan.png", "name": "KARAN KAUSHIK", "designation": "ARCHITECT\n& FOUNDER", "date": "MAY 29, 2026", "profile_url": None, "social_link": None, "display_order": 2, "visibility": True, "is_active": True},
+        {"photo_url": "/masaba.png", "name": "MASABA GUPTA", "designation": "ENTREPRENEUR\n& CREATOR", "date": "MAY 30, 2026", "profile_url": None, "social_link": None, "display_order": 3, "visibility": True, "is_active": True},
+        {"photo_url": "/sarthak.png", "name": "SARTHAK AILAWADI", "designation": "CHEF\n& RESTAURATEUR", "date": "MAY 31, 2026", "profile_url": None, "social_link": None, "display_order": 4, "visibility": True, "is_active": True},
     ],
     "footer": {
         "logo_url": "/TBS LOGO-02 white.png",

@@ -1,6 +1,27 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import SearchableDropdown from '@/components/SearchableDropdown';
+
+const AGE_OPTIONS = Array.from({ length: 45 - 21 + 1 }, (_, i) => String(21 + i));
+
+const PROFESSION_OPTIONS = [
+  "Entrepreneur", "Founder", "Co-Founder", "Investor", "Venture Capital", 
+  "Angel Investor", "Media", "Journalist", "Content Creator", "Influencer", 
+  "Marketing", "Advertising", "Branding", "Public Relations (PR)", 
+  "Fashion Designer", "Architect", "Interior Designer", "Artist", "Musician", 
+  "Actor", "Filmmaker", "Chef", "Restaurateur", "Hospitality", "Luxury Retail", 
+  "Real Estate", "Technology", "Product Manager", "Software Engineer", 
+  "Consultant", "Lawyer", "Doctor", "Wellness Professional", "Educator", 
+  "Student", "Freelancer", "Other"
+];
+
+const CITY_OPTIONS = [
+  "Ahmedabad", "Bengaluru", "Bhopal", "Bhubaneswar", "Chandigarh", "Chennai", 
+  "Coimbatore", "Delhi", "Goa", "Gurugram", "Hyderabad", "Indore", "Jaipur", 
+  "Kochi", "Kolkata", "Lucknow", "Ludhiana", "Mumbai", "Mysuru", "Nagpur", 
+  "Nashik", "Noida", "Pune", "Raipur", "Surat", "Visakhapatnam", "Vadodara"
+].sort();
 
 function SuccessModal({ onBack }: { onBack: () => void }) {
   return (
@@ -305,7 +326,7 @@ export default function TBSNightsPage() {
   const [submitted, setSubmitted] = useState(false);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
-    fullName: '', age: '', occupation: '', city: '', instagram: '',
+    fullName: '', age: '', profession: '', city: '', instagram: '',
     vibe1: 0, vibe2: 0, vibe3: 0, vibe4: 0, vibe5: 0, vibe6: 0, vibe7: 0,
     somethingElse: '', dinnerTable: '',
     updates: false,
@@ -323,7 +344,7 @@ export default function TBSNightsPage() {
     gap: '28px',
   };
 
-  const aboutValid = !!(form.fullName && form.age && form.occupation && form.city);
+  const aboutValid = !!(form.fullName && form.age && form.profession && form.city);
   const canContinue = step === 0 ? aboutValid : true;
   const isLastStep = step === STEPS.length - 1;
 
@@ -463,14 +484,32 @@ export default function TBSNightsPage() {
                 </F>
                 <TwoCol>
                   <F label="Age" req>
-                    <input type="number" min={0} style={inp} placeholder="Your answer" value={form.age} onChange={set('age')} required />
+                    <SearchableDropdown 
+                      options={AGE_OPTIONS} 
+                      value={form.age} 
+                      onChange={(val) => setForm(prev => ({ ...prev, age: val }))} 
+                      placeholder="Your answer" 
+                      required 
+                    />
                   </F>
-                  <F label="Occupation" req>
-                    <input style={inp} placeholder="Your answer" value={form.occupation} onChange={set('occupation')} required />
+                  <F label="Profession" req>
+                    <SearchableDropdown 
+                      options={PROFESSION_OPTIONS} 
+                      value={form.profession} 
+                      onChange={(val) => setForm(prev => ({ ...prev, profession: val }))} 
+                      placeholder="Your answer" 
+                      required 
+                    />
                   </F>
                 </TwoCol>
                 <F label="City" req>
-                  <input style={inp} placeholder="Your answer" value={form.city} onChange={set('city')} required />
+                  <SearchableDropdown 
+                    options={CITY_OPTIONS} 
+                    value={form.city} 
+                    onChange={(val) => setForm(prev => ({ ...prev, city: val }))} 
+                    placeholder="Select your city" 
+                    required 
+                  />
                 </F>
                 <F label="Instagram handle">
                   <input style={inp} placeholder="@yourhandle" value={form.instagram} onChange={set('instagram')} />
