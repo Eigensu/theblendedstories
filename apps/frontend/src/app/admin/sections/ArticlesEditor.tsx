@@ -158,6 +158,10 @@ const normalizeArticle = (article: Article): Article => {
 
 function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (content: string) => void }) {
   const editorRef = useRef<HTMLDivElement>(null);
+  const [showLinkPrompt, setShowLinkPrompt] = useState(false);
+  const [linkUrl, setLinkUrl] = useState('');
+  const [savedRange, setSavedRange] = useState<Range | null>(null);
+  const [isLinkActive, setIsLinkActive] = useState(false);
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -167,6 +171,33 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
     }
   }, [block.content]);
 
+  useEffect(() => {
+    const handleSelectionChange = () => {
+      if (!editorRef.current) return;
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+      
+      if (!editorRef.current.contains(selection.anchorNode)) {
+        setIsLinkActive(false);
+        return;
+      }
+
+      let node = selection.anchorNode;
+      let active = false;
+      while (node && node !== editorRef.current) {
+        if (node.nodeName === 'A') {
+          active = true;
+          break;
+        }
+        node = node.parentNode;
+      }
+      setIsLinkActive(active);
+    };
+
+    document.addEventListener('selectionchange', handleSelectionChange);
+    return () => document.removeEventListener('selectionchange', handleSelectionChange);
+  }, []);
+
   const applyFormat = (command: string, value?: string) => {
     if (!editorRef.current) return;
     editorRef.current.focus();
@@ -174,16 +205,81 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
     onChange(editorRef.current.innerHTML || '');
   };
 
-  const addLink = () => {
-    const url = prompt('Enter link URL:', 'https://');
-    if (url) {
-      applyFormat('createLink', url);
+  const openLinkPrompt = () => {
+    const selection = window.getSelection();
+    let existingUrl = 'https://';
+    
+    if (selection && selection.rangeCount > 0) {
+      setSavedRange(selection.getRangeAt(0));
+      
+      let node = selection.anchorNode;
+      while (node && node !== editorRef.current) {
+        if (node.nodeName === 'A') {
+          existingUrl = (node as HTMLAnchorElement).href || 'https://';
+          break;
+        }
+        node = node.parentNode;
+      }
     }
+    
+    setShowLinkPrompt(true);
+    setLinkUrl(existingUrl);
+  };
+
+  const applyLink = () => {
+    if (!editorRef.current || !savedRange) {
+      setShowLinkPrompt(false);
+      return;
+    }
+    const selection = window.getSelection();
+    if (selection) {
+      selection.removeAllRanges();
+      selection.addRange(savedRange);
+    }
+    document.execCommand('createLink', false, linkUrl);
+    onChange(editorRef.current.innerHTML || '');
+    setShowLinkPrompt(false);
+    setSavedRange(null);
+  };
+
+  const removeLink = () => {
+    if (!editorRef.current || !savedRange) {
+      setShowLinkPrompt(false);
+      return;
+    }
+    const selection = window.getSelection();
+    if (selection) {
+      selection.removeAllRanges();
+      selection.addRange(savedRange);
+      
+      let node = selection.anchorNode;
+      let aNode: HTMLAnchorElement | null = null;
+      while (node && node !== editorRef.current) {
+        if (node.nodeName === 'A') {
+          aNode = node as HTMLAnchorElement;
+          break;
+        }
+        node = node.parentNode;
+      }
+      
+      if (aNode) {
+        const range = document.createRange();
+        range.selectNodeContents(aNode);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+      
+      document.execCommand('unlink', false);
+    }
+    
+    onChange(editorRef.current.innerHTML || '');
+    setShowLinkPrompt(false);
+    setSavedRange(null);
   };
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2">
+    <div className="space-y-3 relative">
+      <div className="flex items-center gap-2 relative">
         <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat('bold')} className="p-2 rounded-md border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900 transition-colors" title="Bold">
           <Bold className="w-4 h-4" />
         </button>
@@ -194,7 +290,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
           <Underline className="w-4 h-4" />
         </button>
         <div className="w-px h-6 bg-zinc-800 mx-1"></div>
-        <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={addLink} className="p-2 rounded-md border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900 transition-colors" title="Add Link">
+        <button type="button" onMouseDown={(e) => { e.preventDefault(); openLinkPrompt(); }} className={`p-2 rounded-md border transition-colors ${isLinkActive ? 'border-zinc-400 bg-zinc-800 text-white' : 'border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900'}`} title="Add/Edit Link">
           <Link2 className="w-4 h-4" />
         </button>
         <div className="w-px h-6 bg-zinc-800 mx-1"></div>
@@ -204,6 +300,34 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
         <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat('insertUnorderedList')} className="p-2 rounded-md border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900 transition-colors" title="Bullet List">
           <List className="w-4 h-4" />
         </button>
+        
+        {showLinkPrompt && (
+          <div className="absolute top-12 left-0 z-50 flex items-center gap-2 bg-zinc-900 border border-zinc-700 p-2 rounded-lg shadow-xl">
+            <input 
+              type="url"
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
+              className="bg-black text-white text-sm px-3 py-1.5 rounded border border-zinc-800 outline-none focus:border-zinc-500 w-64"
+              placeholder="https://..."
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') applyLink();
+                if (e.key === 'Escape') setShowLinkPrompt(false);
+              }}
+            />
+            <button type="button" onClick={applyLink} className="bg-white text-black px-3 py-1.5 rounded text-sm font-semibold hover:bg-zinc-200 transition-colors">
+              Apply
+            </button>
+            {isLinkActive && (
+              <button type="button" onClick={removeLink} className="bg-red-500/10 text-red-500 hover:bg-red-500/20 px-3 py-1.5 rounded text-sm font-semibold transition-colors">
+                Unlink
+              </button>
+            )}
+            <button type="button" onClick={() => setShowLinkPrompt(false)} className="p-1.5 text-zinc-400 hover:text-white transition-colors ml-1">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </div>
 
       <div
@@ -211,7 +335,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
         contentEditable
         suppressContentEditableWarning
         onInput={() => onChange(editorRef.current?.innerHTML || '')}
-        className="min-h-55 rounded-xl border border-zinc-800 bg-black px-4 py-3 text-sm text-white outline-none focus:border-zinc-500"
+        className="min-h-55 rounded-xl border border-zinc-800 bg-black px-4 py-3 text-sm text-white outline-none focus:border-zinc-500 [&_a]:text-[#AB853C] [&_a]:underline"
         style={{ lineHeight: 1.85, fontFamily: "'Public Sans', sans-serif" }}
       />
     </div>
@@ -318,7 +442,7 @@ function ArticleBlockEditor({ blocks, onChange }: { blocks: ContentBlock[]; onCh
                           <div className="space-y-4">
                             <div className="rounded-2xl border border-zinc-800 bg-black/40 px-6 py-8 text-center">
                               <div className="mx-auto mb-6 h-px w-11 bg-zinc-700" />
-                              <p className="mx-auto max-w-3xl font-['Playfair_Display',serif] text-[clamp(24px,4vw,36px)] italic leading-[1.45] text-zinc-100">
+                              <p className="mx-auto max-w-3xl font-['Bodoni_Moda',serif] text-[clamp(24px,4vw,36px)] italic leading-[1.45] text-zinc-100">
                                 “{block.quote || 'Quote preview'}”
                               </p>
                               <div className="mx-auto mt-6 h-px w-11 bg-zinc-700" />

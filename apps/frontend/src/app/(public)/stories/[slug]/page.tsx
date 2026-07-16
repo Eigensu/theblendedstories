@@ -96,37 +96,15 @@ function getRecommendedArticles(allArticles: any[], currentSlug: string, current
 }
 
 function renderTextBlock(content: string, isIntro: boolean) {
-  const wrapperStyle = {
-    width: '100%',
-    margin: 0,
-    padding: isIntro ? '0 0 clamp(24px, 4vw, 40px)' : '0 0 clamp(20px, 3vw, 28px)',
-  } as const;
-
-  const paragraphStyle = isIntro
-    ? {
-        fontFamily: "'Playfair Display', serif",
-        fontSize: 'clamp(20px, 4vw, 26px)',
-        lineHeight: 1.6,
-        color: '#e7e6e1',
-        margin: 0,
-      }
-    : {
-        fontFamily: "'Public Sans', sans-serif",
-        fontSize: 'clamp(16px, 2.5vw, 18px)',
-        lineHeight: 1.9,
-        color: '#c9c8c3',
-        margin: 0,
-      };
-
   const htmlPattern = /<[^>]+>/;
   const processedContent = content.replace(/<a /gi, '<a target="_blank" rel="noopener noreferrer" class="article-link" ');
 
   return (
-    <div style={wrapperStyle} className="article-body-text">
+    <div className="article-body-text">
       {htmlPattern.test(processedContent) ? (
-        <div style={paragraphStyle} dangerouslySetInnerHTML={{ __html: processedContent }} />
+        <div dangerouslySetInnerHTML={{ __html: processedContent }} />
       ) : (
-        <p style={paragraphStyle}>{processedContent}</p>
+        <p>{processedContent}</p>
       )}
     </div>
   );
@@ -230,7 +208,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
       <main style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', padding: 'clamp(28px, 4vw, 56px) clamp(20px, 4vw, 56px) clamp(56px, 6vw, 96px)' }}>
         <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,7fr)_minmax(320px,3fr)] gap-[clamp(32px,4vw,56px)] items-start">
-          <article style={{ minWidth: 0 }}>
+          <article className="article-page-container" style={{ minWidth: 0 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
               {mappedArticle.contentBlocks && mappedArticle.contentBlocks.length > 0 && (
                 <>
@@ -296,7 +274,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                       <img
                         src={recommendedArticle.cover_image || recommendedArticle.hero_image}
                         alt=""
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.35) brightness(0.65) contrast(1.08)' }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.85)' }}
                       />
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '100%' }}>
@@ -304,7 +282,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                         <span style={{ display: 'block', fontFamily: "'Public Sans', sans-serif", fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#7a7972', marginBottom: '10px' }}>
                           0{index + 1}
                         </span>
-                        <h3 style={{ margin: 0, fontFamily: "'Playfair Display', serif", fontSize: '18px', lineHeight: 1.35, color: '#f5f4f0' }}>
+                        <h3 style={{ margin: 0, fontFamily: "'Bodoni Moda', serif", fontSize: '18px', lineHeight: 1.35, color: '#f5f4f0' }}>
                           {recommendedArticle.title}
                         </h3>
                       </div>
