@@ -12,7 +12,7 @@ export default function ArticleHero({ article }: { article: Article }) {
       {finalUrl && (
         <a href={finalUrl} target="_blank" rel="noopener noreferrer" style={{ position: 'absolute', inset: 0, zIndex: 10, cursor: 'pointer', display: 'block' }} aria-label="View on Instagram" />
       )}
-      <img src={article.heroImage} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.6) contrast(1.1)', pointerEvents: 'none' }} />
+      <img className="no-grayscale" src={article.heroImage} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.6) contrast(1.1)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.05) 0%, rgba(10,10,10,0.35) 55%, rgba(10,10,10,0.92) 88%, #0a0a0a 100%)', pointerEvents: 'none' }}></div>
       <div className="w-full absolute left-0 right-0 flex flex-col items-center text-center" style={{ bottom: 'clamp(32px, 8vh, 76px)', padding: '0 clamp(20px, 4vw, 120px)', pointerEvents: 'none', zIndex: 5 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: 'clamp(12px, 2vh, 22px)' }}>
@@ -23,7 +23,7 @@ export default function ArticleHero({ article }: { article: Article }) {
         <h1 style={{ margin: '0 0 clamp(16px, 3vh, 26px)', fontFamily: "'Bodoni Moda', serif", fontWeight: 600, fontSize: 'clamp(32px, 5vw, 64px)', lineHeight: 1.12, color: '#f5f4f0', maxWidth: '920px' }}>{article.title}</h1>
         <div className="flex flex-wrap justify-center items-center gap-x-[18px] gap-y-[8px]" style={{ fontFamily: "'Public Sans', sans-serif", fontSize: '13px', color: '#c9c8c3' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src={article.authorImage} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', display: 'inline-block', border: '1px solid rgba(245,244,240,0.2)', filter: 'brightness(0.75)' }} />
+            <img className="no-grayscale" src={article.authorImage} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', display: 'inline-block', border: '1px solid rgba(245,244,240,0.2)', filter: 'brightness(0.75)' }} />
             <span style={{ fontWeight: 600, color: '#e7e6e1' }}>{article.author}</span>
           </div>
           <span className="hidden sm:inline" style={{ color: '#5a5952' }}>•</span>

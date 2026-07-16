@@ -16,8 +16,8 @@ class ArticleTopPicksPatch(BaseModel):
 @router.get("/")
 async def list_articles(featured: Optional[bool] = None):
     items = await get_all(featured_only=featured)
-    # Sort by display order
-    items = sorted(items, key=lambda x: x.get("display_order", 0))
+    # Sort by display order (treat 0 as last)
+    items = sorted(items, key=lambda x: x.get("display_order") if x.get("display_order", 0) > 0 else 999999)
     return success_response(data=items)
 
 @router.get("/{slug}")

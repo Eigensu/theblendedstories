@@ -830,34 +830,36 @@ section.touch-color video:not(.no-grayscale),
   width: 100%;
   max-width: 780px; /* Comfortable reading width */
   margin: 0 auto;
-}
-
-.article-body-text p {
   font-family: 'Bodoni Moda', serif;
   font-size: clamp(18px, 2.2vw, 21px);
   line-height: 1.8;
   color: #e7e6e1;
+  margin-bottom: 1.5rem;
+}
+
+.article-body-text p,
+.article-body-text > div {
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-style: normal;
 }
 
-.article-body-text p:last-child {
+.article-body-text p:last-child,
+.article-body-text > div:last-child {
   margin-bottom: 0;
 }
 
-.article-body-text a {
+.article-body-text a,
+.article-body-text a:hover,
+.article-body-text a:active,
+.article-body-text a:visited,
+.article-body-text a:focus {
   color: #FFFFFF;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
   text-decoration-color: #FFFFFF;
-  transition: opacity 0.2s ease;
   cursor: pointer;
-}
-
-.article-body-text a:hover {
-  opacity: 0.8;
 }
 
 .article-body-text h2 {
