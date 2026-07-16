@@ -7,7 +7,7 @@ export default function Gallery({ images }: { images: { image: string, caption?:
       {images.map((img, idx) => (
         <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div className="hover:scale-[1.015] transition-transform duration-300" style={{ aspectRatio: '3/4', overflow: 'hidden' }}>
-            <img src={img.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.35) brightness(0.65) contrast(1.08)', display: 'block' }} />
+            <img src={img.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.9)', display: 'block' }} />
           </div>
           <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: '11px', letterSpacing: '0.06em', color: '#6b6a65' }}>
             {img.caption || `0${idx + 1} — gallery image`}

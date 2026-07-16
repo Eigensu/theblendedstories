@@ -442,7 +442,7 @@ function ArticleBlockEditor({ blocks, onChange }: { blocks: ContentBlock[]; onCh
                           <div className="space-y-4">
                             <div className="rounded-2xl border border-zinc-800 bg-black/40 px-6 py-8 text-center">
                               <div className="mx-auto mb-6 h-px w-11 bg-zinc-700" />
-                              <p className="mx-auto max-w-3xl font-['Playfair_Display',serif] text-[clamp(24px,4vw,36px)] italic leading-[1.45] text-zinc-100">
+                              <p className="mx-auto max-w-3xl font-['Bodoni_Moda',serif] text-[clamp(24px,4vw,36px)] italic leading-[1.45] text-zinc-100">
                                 “{block.quote || 'Quote preview'}”
                               </p>
                               <div className="mx-auto mt-6 h-px w-11 bg-zinc-700" />

@@ -820,7 +820,32 @@ section.touch-color video:not(.no-grayscale),
   }
 }
 
-/* ─── Article Body Rich Text Styles ─── */
+/* ─── Article Body Typography ─── */
+.article-page-container img,
+.article-page-container video {
+  filter: none !important;
+}
+
+.article-body-text {
+  width: 100%;
+  max-width: 780px; /* Comfortable reading width */
+  margin: 0 auto;
+}
+
+.article-body-text p {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(18px, 2.2vw, 21px);
+  line-height: 1.8;
+  color: #e7e6e1;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-style: normal;
+}
+
+.article-body-text p:last-child {
+  margin-bottom: 0;
+}
+
 .article-body-text a {
   color: var(--gold);
   text-decoration: underline;
@@ -828,27 +853,36 @@ section.touch-color video:not(.no-grayscale),
   text-underline-offset: 4px;
   transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
+
 .article-body-text a:hover {
   color: var(--white);
   text-decoration-color: var(--white);
 }
+
 .article-body-text h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Bodoni Moda', serif;
   font-size: clamp(24px, 4vw, 32px);
   margin: 2rem 0 1rem 0;
   color: var(--white);
   font-weight: 500;
 }
+
 .article-body-text ul {
   list-style-type: disc;
   margin: 1.5rem 0 1.5rem 2rem;
 }
+
 .article-body-text ul li {
   margin-bottom: 0.75rem;
-  line-height: 1.9;
+  line-height: 1.8;
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(18px, 2.2vw, 21px);
+  color: #e7e6e1;
 }
+
 .article-body-text strong, .article-body-text b {
   color: var(--white);
   font-weight: 600;
 }
 }
+
