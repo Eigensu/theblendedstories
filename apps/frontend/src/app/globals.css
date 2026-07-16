@@ -545,6 +545,41 @@ section.touch-color video:not(.no-grayscale),
   }
 }
 
+/* ── TheEdit / Top Picks carousel — non-desktop ──
+   Breakpoint mirrors the component's Tailwind `md:` prefix (768px): below it,
+   each page is a 2×2 grid sized to `w-[85vw]` and the row scrolls horizontally.
+   Keep this in sync with md (767.98px) so there is no dead band above 640px
+   where the pages lose their width constraint and balloon past the screen. */
+@media (max-width: 767.98px) {
+  /* Collapse the desktop-only heading offset once the layout stacks. */
+  .the-edit-left {
+    margin-top: 0 !important;
+  }
+  /* The stacked outer must stretch its children so the carousel is bounded to
+     the viewport; otherwise the flex grid sizes to its content and the pages
+     (and cards) overflow far past the screen edge. */
+  .the-edit-outer {
+    align-items: stretch;
+  }
+  .the-edit-grid {
+    width: 100%;
+    max-width: 100%;
+  }
+  /* Restore `display: grid` over the base `display: contents` so each page is a
+     2×2 block. Width/flex are intentionally left to the component's Tailwind
+     classes (`w-[85vw] shrink-0`) — do NOT set width/flex here or it clobbers
+     the viewport-relative page width and the cards balloon to max-content. */
+  .the-edit-page {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 3vw, 18px);
+    scroll-snap-align: start;
+  }
+  .the-edit-grid .the-edit-card {
+    min-width: 0;
+  }
+}
+
 /* ── Mobile: 640px ── */
 @media (max-width: 640px) {
   .grid-4col  { grid-template-columns: 1fr; }
@@ -565,31 +600,6 @@ section.touch-color video:not(.no-grayscale),
 
   /* TBSTalks: keep 2-col on mobile (2×2 grid) */
   .talks-grid { grid-template-columns: repeat(2, 1fr); }
-
-  /* TheEdit: the left block's marginTop is a desktop-only trick to vertically
-     align the heading with the taller carousel; once stacked on mobile it just
-     leaves dead space above "TOP PICKS", so collapse it here. */
-  .the-edit-left {
-    margin-top: 0 !important;
-  }
-
-  /* TheEdit articles: 2×2 grid per page, swipe/arrow between pages */
-  .the-edit-grid {
-    width: 100%;
-  }
-  .the-edit-page {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(12px, 3vw, 18px);
-    flex: 0 0 100%;
-    width: 100%;
-    scroll-snap-align: start;
-  }
-  .the-edit-grid .the-edit-card {
-    flex: none;
-    width: 100%;
-    min-width: 0;
-  }
 
   .footer-bottom-bar {
     flex-direction: column !important;
