@@ -36,6 +36,9 @@ export default function LoginPage() {
       }
 
       localStorage.setItem('admin_token', data.access_token);
+      if (data.refresh_token) {
+        localStorage.setItem('admin_refresh_token', data.refresh_token);
+      }
       router.push('/admin');
     } catch (err: any) {
       setError(err.message);

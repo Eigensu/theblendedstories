@@ -42,8 +42,9 @@ export default function TopPicksEditor({ sectionId }: { sectionId: string }) {
     setIsLoading(true);
     try {
       const response = await apiClient.get<ArticleSummary[]>('/articles/');
-      // Sort by display_order
-      const sorted = [...response].sort((a, b) => a.display_order - b.display_order);
+      // Sort by display_order, treating 0 as last
+      const getOrder = (a: any) => a.display_order > 0 ? a.display_order : 999999;
+      const sorted = [...response].sort((a, b) => getOrder(a) - getOrder(b));
       setArticles(sorted);
       setOriginalArticles(sorted);
     } catch (err) {
@@ -98,7 +99,8 @@ export default function TopPicksEditor({ sectionId }: { sectionId: string }) {
     ));
   };
 
-  const featuredArticles = articles.filter(a => a.featured).sort((a, b) => a.display_order - b.display_order);
+  const getOrder = (a: any) => a.display_order > 0 ? a.display_order : 999999;
+  const featuredArticles = articles.filter(a => a.featured).sort((a, b) => getOrder(a) - getOrder(b));
   const unfeaturedArticles = articles.filter(a => !a.featured);
 
   if (isLoading) {

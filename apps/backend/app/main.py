@@ -6,11 +6,16 @@ from app.routers import (
     hero, what_is_tbs, footer,
     what_we_cover, tbs_nights, articles, tbs_talks, media, the_edit
 )
-from app.auth import oauth2_scheme, verify_password, create_access_token, TokenData
+from app.auth import oauth2_scheme, verify_password, create_access_token, create_refresh_token, TokenData
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from app.config import settings as app_settings
 from app.utils.responses import success_response
+from pydantic import BaseModel
+from jose import jwt, JWTError
+
+class RefreshRequest(BaseModel):
+    refresh_token: str
 
 app = FastAPI(title="The Blended Stories CMS", version="1.0.0")
 
@@ -76,7 +81,29 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token = create_access_token(data={"sub": form_data.username})
-    return {"access_token": access_token, "token_type": "bearer"}
+    refresh_token = create_refresh_token(data={"sub": form_data.username})
+    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+
+@app.post("/auth/refresh")
+async def refresh_token(req: RefreshRequest):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(req.refresh_token, app_settings.JWT_SECRET, algorithms=[app_settings.JWT_ALGORITHM])
+        if payload.get("type") != "refresh":
+            raise credentials_exception
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+        
+    access_token = create_access_token(data={"sub": username})
+    new_refresh_token = create_refresh_token(data={"sub": username})
+    return success_response(data={"access_token": access_token, "refresh_token": new_refresh_token})
 
 @app.get("/auth/me")
 async def get_me(token: str = Depends(oauth2_scheme)):

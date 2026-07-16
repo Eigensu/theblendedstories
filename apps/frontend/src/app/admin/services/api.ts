@@ -13,6 +13,18 @@ const getBaseUrl = () => {
   return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 };
 
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+const subscribeTokenRefresh = (cb: (token: string) => void) => {
+  refreshSubscribers.push(cb);
+};
+
+const onRefreshed = (token: string) => {
+  refreshSubscribers.forEach(cb => cb(token));
+  refreshSubscribers = [];
+};
+
 export const apiClient = {
   async fetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${getBaseUrl()}${endpoint}`;
@@ -33,7 +45,50 @@ export const apiClient = {
 
     if (!response.ok) {
       if (response.status === 401 && typeof window !== 'undefined') {
-        window.location.href = '/admin/login';
+        const refreshToken = localStorage.getItem('admin_refresh_token');
+        if (refreshToken && endpoint !== '/auth/refresh' && endpoint !== '/auth/login') {
+          if (!isRefreshing) {
+            isRefreshing = true;
+            try {
+              const refreshRes = await fetch(`${getBaseUrl()}/auth/refresh`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ refresh_token: refreshToken })
+              });
+              const refreshData = await refreshRes.json();
+              
+              if (refreshRes.ok && refreshData.success) {
+                localStorage.setItem('admin_token', refreshData.data.access_token);
+                localStorage.setItem('admin_refresh_token', refreshData.data.refresh_token);
+                onRefreshed(refreshData.data.access_token);
+                // Retry the original request
+                return this.fetch<T>(endpoint, options);
+              } else {
+                throw new Error('Refresh failed');
+              }
+            } catch (err) {
+              localStorage.removeItem('admin_token');
+              localStorage.removeItem('admin_refresh_token');
+              window.location.href = '/admin/login';
+              throw new ApiError(401, 'Session expired');
+            } finally {
+              isRefreshing = false;
+            }
+          } else {
+            // Queue this request until refresh is done
+            return new Promise((resolve) => {
+              subscribeTokenRefresh((newToken) => {
+                // Retry once we have the new token
+                resolve(this.fetch<T>(endpoint, options));
+              });
+            });
+          }
+        } else {
+          // No refresh token, or the refresh itself failed
+          localStorage.removeItem('admin_token');
+          localStorage.removeItem('admin_refresh_token');
+          window.location.href = '/admin/login';
+        }
       }
       throw new ApiError(response.status, data?.detail || data?.message || 'API request failed');
     }

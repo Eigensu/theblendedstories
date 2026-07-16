@@ -9,7 +9,11 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   const apiArticles = data && data.length > 0
-    ? data.filter(d => d.status === 'published').sort((a: any, b: any) => a.display_order - b.display_order).map((d, index) => ({
+    ? data.filter(d => d.status === 'published').sort((a: any, b: any) => {
+        const orderA = a.display_order > 0 ? a.display_order : 999999;
+        const orderB = b.display_order > 0 ? b.display_order : 999999;
+        return orderA - orderB;
+      }).map((d, index) => ({
         img: d.cover_image || d.hero_image,
         title: d.title,
         desc: d.subtitle,
@@ -52,7 +56,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
       } else {
         scrollByCard(1);
       }
-    }, 4000);
+    }, 8000);
     return () => clearInterval(interval);
   }, []);
 
