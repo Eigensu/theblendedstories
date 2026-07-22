@@ -24,6 +24,7 @@ type TextBlock = {
   id: string;
   type: 'text';
   content: string;
+  fontSize?: 'small' | 'medium' | 'large';
 };
 
 type QuoteBlock = {
@@ -110,6 +111,7 @@ const normalizeBlock = (block: any): ContentBlock | null => {
       id,
       type: 'text',
       content: typeof block.content === 'string' ? block.content : '',
+      fontSize: ['small', 'medium', 'large'].includes(block.fontSize) ? block.fontSize : 'medium',
     };
   }
 
@@ -156,7 +158,7 @@ const normalizeArticle = (article: Article): Article => {
   };
 };
 
-function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (content: string) => void }) {
+function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (updates: Partial<TextBlock>) => void }) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [showLinkPrompt, setShowLinkPrompt] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
@@ -202,7 +204,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
     if (!editorRef.current) return;
     editorRef.current.focus();
     document.execCommand(command, false, value);
-    onChange(editorRef.current.innerHTML || '');
+    onChange({ content: editorRef.current.innerHTML || '' });
   };
 
   const openLinkPrompt = () => {
@@ -237,7 +239,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
       selection.addRange(savedRange);
     }
     document.execCommand('createLink', false, linkUrl);
-    onChange(editorRef.current.innerHTML || '');
+    onChange({ content: editorRef.current.innerHTML || '' });
     setShowLinkPrompt(false);
     setSavedRange(null);
   };
@@ -272,7 +274,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
       document.execCommand('unlink', false);
     }
     
-    onChange(editorRef.current.innerHTML || '');
+    onChange({ content: editorRef.current.innerHTML || '' });
     setShowLinkPrompt(false);
     setSavedRange(null);
   };
@@ -300,6 +302,16 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
         <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat('insertUnorderedList')} className="p-2 rounded-md border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900 transition-colors" title="Bullet List">
           <List className="w-4 h-4" />
         </button>
+        <div className="w-px h-6 bg-zinc-800 mx-1"></div>
+        <select
+          value={block.fontSize || 'medium'}
+          onChange={(e) => onChange({ fontSize: e.target.value as any })}
+          className="bg-zinc-900 border border-zinc-800 text-white text-xs rounded-md px-2 py-1 outline-none focus:border-zinc-500 cursor-pointer"
+        >
+          <option value="small">Small Font</option>
+          <option value="medium">Medium Font</option>
+          <option value="large">Large Font</option>
+        </select>
         
         {showLinkPrompt && (
           <div className="absolute top-12 left-0 z-50 flex items-center gap-2 bg-zinc-900 border border-zinc-700 p-2 rounded-lg shadow-xl">
@@ -334,7 +346,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (con
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
-        onInput={() => onChange(editorRef.current?.innerHTML || '')}
+        onInput={() => onChange({ content: editorRef.current?.innerHTML || '' })}
         className="min-h-55 rounded-xl border border-zinc-800 bg-black px-4 py-3 text-sm text-white outline-none focus:border-zinc-500 [&_a]:text-[#AB853C] [&_a]:underline"
         style={{ lineHeight: 1.85, fontFamily: "'Public Sans', sans-serif" }}
       />
@@ -435,7 +447,7 @@ function ArticleBlockEditor({ blocks, onChange }: { blocks: ContentBlock[]; onCh
 
                       <div className="p-4">
                         {block.type === 'text' && (
-                          <TextBlockEditor block={block} onChange={(content) => updateBlock(block.id, { content })} />
+                          <TextBlockEditor block={block} onChange={(updates) => updateBlock(block.id, updates)} />
                         )}
 
                         {block.type === 'quote' && (

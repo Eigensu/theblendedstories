@@ -8,6 +8,7 @@ export interface ArticleContentBlock {
   author?: string;
   image?: string;
   caption?: string;
+  fontSize?: 'small' | 'medium' | 'large';
 }
 
 export interface Article {

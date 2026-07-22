@@ -847,6 +847,14 @@ section.touch-color video:not(.no-grayscale),
   margin-bottom: 1.5rem;
 }
 
+.article-body-text.font-size-small {
+  font-size: clamp(15px, 1.8vw, 17px);
+}
+
+.article-body-text.font-size-large {
+  font-size: clamp(21px, 2.8vw, 26px);
+}
+
 .article-body-text p,
 .article-body-text > div {
   margin-top: 0;

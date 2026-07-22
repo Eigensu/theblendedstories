@@ -8,6 +8,7 @@ import WhatIsTBSEditor from './WhatIsTBSEditor';
 import FooterEditor from './FooterEditor';
 import WhatWeCoverEditor from './WhatWeCoverEditor';
 import TBSTalksEditor from './TBSTalksEditor';
+import TBSTalksFeaturedEditor from './TBSTalksFeaturedEditor';
 
 // Placeholder component until real ones are built
 const Placeholder = ({ sectionId }: { sectionId: string }) => (
@@ -31,7 +32,8 @@ export const adminSections: AdminSection[] = [
   { id: 'what_we_cover', title: 'What We Cover', collection: 'what-we-cover', icon: 'image', component: WhatWeCoverEditor, order: 3, group: 'home' },
   { id: 'tbs_nights', title: 'TBS Nights', collection: 'tbs-nights', icon: 'moon', component: TBSNightsEditor, order: 4, group: 'home' },
   { id: 'top_picks', title: 'Top Picks', collection: 'articles', icon: 'star', component: TopPicksEditor, order: 5, group: 'home' },
-  { id: 'tbs_talks', title: 'TBS Talks', collection: 'tbs-talks', icon: 'users', component: TBSTalksEditor, order: 6, group: 'home' },
+  { id: 'tbs_talks_featured', title: 'Featured Talks', collection: 'tbs-talks', icon: 'star', component: TBSTalksFeaturedEditor, order: 6, group: 'home' },
+  { id: 'tbs_talks', title: 'TBS Talks', collection: 'tbs-talks', icon: 'users', component: TBSTalksEditor, order: 7, group: 'home' },
 
   // Standalone sections
   { id: 'articles', title: 'Articles', collection: 'articles', icon: 'book', component: ArticlesEditor, order: 7, group: 'standalone' },

@@ -42,7 +42,7 @@ export default async function Home() {
     fetchCMSData('/what-we-cover/'),
     fetchCMSData('/tbs-nights/'),
     fetchCMSData('/articles/?featured=true'),
-    fetchCMSData('/tbs-talks/'),
+    fetchCMSData('/tbs-talks/?featured=true'),
     fetchCMSData('/footer/'),
     fetchCMSData('/settings/')
   ]);

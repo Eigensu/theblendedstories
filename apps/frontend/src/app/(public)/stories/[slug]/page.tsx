@@ -24,6 +24,7 @@ function normalizeBlock(block: any): ArticleContentBlock | null {
       id,
       type: 'text',
       content: typeof block.content === 'string' ? block.content : '',
+      fontSize: ['small', 'medium', 'large'].includes(block.fontSize) ? block.fontSize : 'medium',
     };
   }
 
@@ -95,12 +96,16 @@ function getRecommendedArticles(allArticles: any[], currentSlug: string, current
   return recommendations;
 }
 
-function renderTextBlock(content: string, isIntro: boolean) {
+function renderTextBlock(content: string, isIntro: boolean, fontSize?: 'small' | 'medium' | 'large') {
   const htmlPattern = /<[^>]+>/;
   const processedContent = content.replace(/<a /gi, '<a target="_blank" rel="noopener noreferrer" class="article-link" ');
 
+  let fontSizeClass = '';
+  if (fontSize === 'small') fontSizeClass = 'font-size-small';
+  else if (fontSize === 'large') fontSizeClass = 'font-size-large';
+
   return (
-    <div className="article-body-text">
+    <div className={`article-body-text ${fontSizeClass}`}>
       {htmlPattern.test(processedContent) ? (
         <div dangerouslySetInnerHTML={{ __html: processedContent }} />
       ) : (
@@ -112,7 +117,7 @@ function renderTextBlock(content: string, isIntro: boolean) {
 
 function renderBlock(block: ArticleContentBlock, index: number) {
   if (block.type === 'text') {
-    return <div key={block.id}>{renderTextBlock(block.content || '', index === 0)}</div>;
+    return <div key={block.id}>{renderTextBlock(block.content || '', index === 0, block.fontSize)}</div>;
   }
 
   if (block.type === 'quote') {
