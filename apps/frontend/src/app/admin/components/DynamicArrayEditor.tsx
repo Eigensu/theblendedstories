@@ -7,6 +7,7 @@ import TextField from '../components/TextField';
 import TextArea from '../components/TextArea';
 import MediaUploader from '../components/MediaUploader';
 import { toast } from 'sonner';
+import { handleApiError } from '../services/errorHandler';
 import { cn } from './TextField';
 import { useAdmin } from '../contexts/AdminContext';
 
@@ -47,8 +48,8 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
       const sorted = (Array.isArray(data) ? data : []).sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
       setItems(sorted);
       setOriginalItems(sorted);
-    } catch (err) {
-      toast.error('Failed to fetch items');
+    } catch (err: any) {
+      handleApiError('Failed to fetch items', err);
     } finally {
       setIsLoading(false);
     }
@@ -89,8 +90,8 @@ export default function DynamicArrayEditor({ endpoint, itemTitleField, fields, d
 
       toast.success(publish ? 'Published successfully!' : 'Draft saved successfully!');
       await fetchItems(); // Refresh to get clean state and real IDs
-    } catch (err) {
-      toast.error('Failed to save changes');
+    } catch (err: any) {
+      handleApiError('Failed to save changes', err);
     } finally {
       setIsSaving(false);
     }

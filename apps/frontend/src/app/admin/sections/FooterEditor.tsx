@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 import React, { useState, useEffect } from 'react';
 import { apiClient } from '../services/api';
+import { handleApiError } from '../services/errorHandler';
 import TextField from '../components/TextField';
 import MediaUploader from '../components/MediaUploader';
 import { useAdmin } from '../contexts/AdminContext';
@@ -31,8 +32,8 @@ export default function FooterEditor({ sectionId }: { sectionId: string }) {
       setData(response);
       setOriginalData(response);
       setStatus(response.status);
-    } catch (err) {
-      toast.error('Failed to load Footer data');
+    } catch (err: any) {
+      handleApiError('Failed to load Footer data', err);
     } finally {
       setIsLoading(false);
     }
@@ -52,8 +53,8 @@ export default function FooterEditor({ sectionId }: { sectionId: string }) {
       setOriginalData(updated);
       setStatus(updated.status);
       toast.success(publish ? 'Published successfully!' : 'Draft saved successfully!');
-    } catch (err) {
-      toast.error('Failed to save changes');
+    } catch (err: any) {
+      handleApiError('Failed to save changes', err);
     } finally {
       setIsSaving(false);
     }

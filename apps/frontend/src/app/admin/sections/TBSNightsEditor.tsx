@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 import React, { useState, useEffect } from 'react';
 import { apiClient } from '../services/api';
+import { handleApiError } from '../services/errorHandler';
 import TextField from '../components/TextField';
 import TextArea from '../components/TextArea';
 import MediaUploader from '../components/MediaUploader';
@@ -43,9 +44,9 @@ export default function TBSNightsEditor({ sectionId }: { sectionId: string }) {
       setData(response);
       setOriginalData(response);
       setStatus(response.status);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      toast.error('Failed to load TBS Nights data');
+      handleApiError('Failed to load TBS Nights data', err);
     } finally {
       setIsLoading(false);
     }
@@ -65,8 +66,8 @@ export default function TBSNightsEditor({ sectionId }: { sectionId: string }) {
       setOriginalData(updated);
       setStatus(updated.status);
       toast.success(publish ? 'Published successfully!' : 'Draft saved successfully!');
-    } catch (err) {
-      toast.error('Failed to save changes');
+    } catch (err: any) {
+      handleApiError('Failed to save changes', err);
     } finally {
       setIsSaving(false);
     }

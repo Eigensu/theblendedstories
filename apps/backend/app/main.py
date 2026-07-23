@@ -30,20 +30,11 @@ app.add_middleware(
 app.add_exception_handler(Exception, global_exception_handler)
 
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
-from fastapi import Request, status
-import logging
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from app.utils.exceptions import validation_exception_handler, http_exception_handler
 
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    errors = exc.errors()
-    logging.error(f"Validation Error: {errors}")
-    logging.error(f"Body: {exc.body}")
-    # We return 400 Bad Request to match existing client behavior and make error visible
-    return JSONResponse(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        content={"detail": str(errors), "body": exc.body}
-    )
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 
 
 @app.on_event("startup")

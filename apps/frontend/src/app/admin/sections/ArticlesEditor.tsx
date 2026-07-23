@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { apiClient } from '../services/api';
+import { handleApiError } from '../services/errorHandler';
 import TextField from '../components/TextField';
 import TextArea from '../components/TextArea';
 import MediaUploader from '../components/MediaUploader';
@@ -540,8 +541,8 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
     try {
       const response = await apiClient.get<Article[]>('/articles/');
       setArticles(response.map(normalizeArticle));
-    } catch (err) {
-      toast.error('Failed to load articles');
+    } catch (err: any) {
+      handleApiError('Failed to load articles', err);
     } finally {
       setIsLoading(false);
     }
@@ -566,7 +567,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       setStatus(payload.status);
       setHasUnsavedChanges(false);
     } catch (err: any) {
-      toast.error(err.response?.data?.detail || 'Failed to save article');
+      handleApiError('Failed to save article', err);
     } finally {
       setIsSaving(false);
     }
@@ -578,8 +579,8 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       await apiClient.delete(`/articles/${id}`);
       toast.success('Article deleted');
       fetchArticles();
-    } catch (err) {
-      toast.error('Failed to delete article');
+    } catch (err: any) {
+      handleApiError('Failed to delete article', err);
     }
   };
 
