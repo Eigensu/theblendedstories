@@ -29,6 +29,23 @@ app.add_middleware(
 
 app.add_exception_handler(Exception, global_exception_handler)
 
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from fastapi import Request, status
+import logging
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = exc.errors()
+    logging.error(f"Validation Error: {errors}")
+    logging.error(f"Body: {exc.body}")
+    # We return 400 Bad Request to match existing client behavior and make error visible
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={"detail": str(errors), "body": exc.body}
+    )
+
+
 @app.on_event("startup")
 async def startup_db_client():
     await connect_to_mongo()
