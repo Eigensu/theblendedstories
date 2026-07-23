@@ -67,6 +67,7 @@ class SpeakerModel(BaseModelMixin):
     social_link: Optional[str] = None
     display_order: int
     visibility: bool = True
+    featured: bool = False
 
 class FooterModel(BaseModelMixin):
     logo_url: Optional[str] = None

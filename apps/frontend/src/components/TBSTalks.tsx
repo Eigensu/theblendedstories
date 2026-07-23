@@ -40,8 +40,12 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
         role: d.designation,
         date: d.date,
         social_link: d.social_link,
-      }))
-    : speakers;
+      })).slice(0, 4)
+    : [];
+
+  if (apiSpeakers.length === 0) {
+    return null;
+  }
 
   const subtitle = settings?.tbs_talks_subtitle || "Conversation with people shaping what's next";
   return (

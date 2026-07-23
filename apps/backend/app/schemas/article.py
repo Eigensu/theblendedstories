@@ -24,6 +24,7 @@ class ArticleContentBlockModel(BaseModel):
     author: Optional[str] = None
     image: Optional[str] = None
     caption: Optional[str] = None
+    font_size: Optional[Literal['small', 'medium', 'large']] = 'medium'
 
 class ArticleModel(BaseModelMixin):
     id: Optional[str] = None
