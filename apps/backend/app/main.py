@@ -29,6 +29,14 @@ app.add_middleware(
 
 app.add_exception_handler(Exception, global_exception_handler)
 
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from app.utils.exceptions import validation_exception_handler, http_exception_handler
+
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(StarletteHTTPException, http_exception_handler)
+
+
 @app.on_event("startup")
 async def startup_db_client():
     await connect_to_mongo()

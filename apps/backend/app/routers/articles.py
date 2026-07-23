@@ -36,11 +36,20 @@ async def get_article_by_id(item_id: str):
 
 @router.post("/", dependencies=[Depends(get_current_admin)])
 async def create_article(payload: ArticleModel):
+    # Auto-generate a unique slug for untitled drafts
+    if not payload.slug:
+        import uuid
+        payload.slug = f"untitled-draft-{uuid.uuid4().hex[:8]}"
+        print(f"DEBUG: Auto-generated slug: {payload.slug}")
+    else:
+        print(f"DEBUG: Slug is present: {payload.slug}")
+        
     # Enforce unique slug
     existing = await get_by_slug(payload.slug)
     if existing:
         raise HTTPException(status_code=400, detail="Slug already exists")
     created = await create(payload)
+    print(f"DEBUG: Created data: {created.get('slug')}")
     return success_response(data=created, message="Created successfully")
 
 @router.put("/{item_id}", dependencies=[Depends(get_current_admin)])

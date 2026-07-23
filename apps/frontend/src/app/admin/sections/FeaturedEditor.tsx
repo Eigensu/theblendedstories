@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { apiClient } from '../services/api';
+import { handleApiError } from '../services/errorHandler';
 import { useAdmin } from '../contexts/AdminContext';
 import { Star, StarOff } from 'lucide-react';
 
@@ -59,8 +60,8 @@ export default function FeaturedEditor({
       const sorted = [...response].sort((a, b) => getOrder(a) - getOrder(b));
       setItems(sorted);
       setOriginalItems(sorted);
-    } catch (err) {
-      toast.error('Failed to load items');
+    } catch (err: any) {
+      handleApiError('Failed to load items', err);
     } finally {
       setIsLoading(false);
     }
@@ -91,7 +92,7 @@ export default function FeaturedEditor({
       setOriginalItems([...items]);
       setHasUnsavedChanges(false);
     } catch (err: any) {
-      toast.error(err.message || `Failed to save ${title}`);
+      handleApiError(`Failed to save ${title}`, err);
     } finally {
       setIsSaving(false);
     }

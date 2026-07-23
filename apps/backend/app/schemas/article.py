@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, AliasChoices
 from typing import List, Optional, Literal
 from datetime import datetime
 
@@ -24,7 +24,7 @@ class ArticleContentBlockModel(BaseModel):
     author: Optional[str] = None
     image: Optional[str] = None
     caption: Optional[str] = None
-    font_size: Optional[Literal['small', 'medium', 'large']] = 'medium'
+    font_size: Optional[Literal['small', 'medium', 'large']] = Field(default='medium', validation_alias=AliasChoices('font_size', 'fontSize'))
 
 class ArticleModel(BaseModelMixin):
     id: Optional[str] = None
