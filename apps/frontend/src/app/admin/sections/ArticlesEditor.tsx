@@ -550,6 +550,22 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
 
   const handleSave = async (publish: boolean) => {
     if (!selectedArticle) return;
+
+    // Validate the slug up front so the admin gets a clear reason instead of a
+    // generic 400 from the backend's unique-slug guard.
+    const slug = (selectedArticle.slug || '').trim();
+    if (!slug) {
+      toast.error('Slug is required');
+      return;
+    }
+    const slugTaken = articles.some(
+      (a) => a.slug === slug && a.id !== selectedArticle.id
+    );
+    if (slugTaken) {
+      toast.error(`Slug "${slug}" is already used by another article`);
+      return;
+    }
+
     setIsSaving(true);
     try {
       const payload = normalizeArticle({ ...selectedArticle, status: publish ? 'published' : 'draft' });
@@ -727,9 +743,13 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
               label="Title" 
               value={selectedArticle.title} 
               onChange={(v) => {
-                const slug = v.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-                setSelectedArticle({ ...selectedArticle, title: v, slug: selectedArticle.slug || slug });
-              }} 
+                const auto = v.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                const prevAuto = selectedArticle.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                // Keep tracking the title only while the slug hasn't been manually edited
+                // (i.e. it still matches what the previous title would auto-generate).
+                const keepManual = !!selectedArticle.slug && selectedArticle.slug !== prevAuto;
+                setSelectedArticle({ ...selectedArticle, title: v, slug: keepManual ? selectedArticle.slug : auto });
+              }}
             />
             
             <TextField 
