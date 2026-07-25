@@ -1,12 +1,16 @@
 import React from 'react';
 import { toast } from 'sonner';
+import { ApiError } from './api';
 
 export const handleApiError = (actionName: string, err: any) => {
   // Log to console for developer debugging
   console.error(`[API Error] ${actionName}:`, err);
 
   const responseData = err.response?.data;
-  let detail = responseData?.detail;
+  // apiClient throws ApiError (fetch-based, no `.response`); surface its message
+  // so real reasons like "Slug already exists" reach the user instead of a
+  // generic fallback.
+  let detail = responseData?.detail ?? (err instanceof ApiError ? err.message : undefined);
 
   // Handle generic network or unknown errors
   if (!detail) {
