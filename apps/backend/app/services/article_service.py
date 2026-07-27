@@ -2,6 +2,7 @@ from app.repositories.base_repo import BaseRepository
 from uuid import uuid4
 
 from app.schemas.article import ArticleModel
+from app.services import article_search
 
 repo = BaseRepository("articles")
 
@@ -113,15 +114,23 @@ async def get_by_slug(slug: str):
             return _normalize_article_record(item)
     return None
 
+async def search(query: str, limit: int = 20):
+    """Keyword search over published articles, ranked by relevance."""
+    return await article_search.search(query, get_all, limit=limit)
+
 async def create(payload: ArticleModel):
+    article_search.invalidate_cache()
     return _normalize_article_record(await repo.create(_prepare_article_payload(payload)))
 
 async def update(item_id: str, payload: ArticleModel):
+    article_search.invalidate_cache()
     return _normalize_article_record(await repo.update(item_id, _prepare_article_payload(payload)))
 
 async def patch_fields(item_id: str, fields: dict):
     """Partial update — only sets the provided fields (e.g. featured, display_order)."""
+    article_search.invalidate_cache()
     return _normalize_article_record(await repo.update(item_id, fields))
 
 async def delete(item_id: str):
+    article_search.invalidate_cache()
     return await repo.delete_soft(item_id)

@@ -77,4 +77,59 @@ else:
     print(f"Unauthenticated access failed to block! {res.status_code}")
     sys.exit(1)
 
+print("\n8. Testing GET /articles/search")
+
+# The search route must be declared above /{slug}; if it regresses below it the
+# slug handler swallows the path and answers 404 "Article not found".
+res = requests.get(f"{BASE_URL}/articles/search", params={"q": "the"})
+if res.status_code != 200:
+    print(f"GET /articles/search failed! {res.status_code} {res.text}")
+    print("(A 404 here usually means /search slipped below /{slug} in articles.py)")
+    sys.exit(1)
+results = res.json()["data"]
+print(f"GET /articles/search successful. {len(results)} result(s).")
+
+if results:
+    missing = [k for k in ("slug", "title", "excerpt", "matched_terms", "score")
+               if k not in results[0]]
+    if missing:
+        print(f"Search result missing expected fields: {missing}")
+        sys.exit(1)
+    if "contentBlocks" in results[0]:
+        print("Search results should not carry contentBlocks (payload bloat).")
+        sys.exit(1)
+    print("Search result shape is correct.")
+
+# Drafts must never surface publicly.
+all_articles = requests.get(f"{BASE_URL}/articles/").json()["data"]
+draft_slugs = {a["slug"] for a in all_articles if a.get("status") != "published"}
+if draft_slugs:
+    leaked = draft_slugs & {r["slug"] for r in results}
+    if leaked:
+        print(f"Draft articles leaked into search results: {leaked}")
+        sys.exit(1)
+    print("Draft articles correctly excluded from search.")
+
+res = requests.get(f"{BASE_URL}/articles/search", params={"q": ""})
+if res.status_code != 200 or res.json()["data"] != []:
+    print(f"Empty query should return an empty list! {res.status_code} {res.text}")
+    sys.exit(1)
+print("Empty query correctly returns no results.")
+
+# 400, not 422: validation_exception_handler remaps RequestValidationError app-wide.
+res = requests.get(f"{BASE_URL}/articles/search", params={"q": "the", "limit": 999})
+if res.status_code != 400:
+    print(f"Out-of-range limit should be rejected with 400! Got {res.status_code}")
+    sys.exit(1)
+print("Out-of-range limit correctly rejected.")
+
+# A known slug must still resolve through the sibling route.
+if all_articles:
+    slug = all_articles[0]["slug"]
+    res = requests.get(f"{BASE_URL}/articles/{slug}")
+    if res.status_code != 200:
+        print(f"GET /articles/{slug} regressed! {res.status_code}")
+        sys.exit(1)
+    print("Slug lookup still works alongside the search route.")
+
 print("\nAll automated API tests passed successfully!")

@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import Optional
 from pydantic import BaseModel
 from app.schemas.article import ArticleModel
-from app.services.article_service import get_all, get_by_id, get_by_slug, create, update, patch_fields, delete
+from app.services.article_service import get_all, get_by_id, get_by_slug, create, update, patch_fields, delete, search
 from app.utils.responses import success_response
 from app.auth import get_current_admin
 
@@ -18,6 +18,16 @@ async def list_articles(featured: Optional[bool] = None):
     items = await get_all(featured_only=featured)
     # Sort by display order (treat 0 as last)
     items = sorted(items, key=lambda x: x.get("display_order") if x.get("display_order", 0) > 0 else 999999)
+    return success_response(data=items)
+
+# NOTE: must stay above `/{slug}` — FastAPI matches in declaration order and the
+# single-segment slug route would otherwise swallow /articles/search as a 404.
+@router.get("/search")
+async def search_articles(
+    q: str = Query("", description="Keyword query"),
+    limit: int = Query(20, ge=1, le=50),
+):
+    items = await search(q, limit=limit)
     return success_response(data=items)
 
 @router.get("/{slug}")

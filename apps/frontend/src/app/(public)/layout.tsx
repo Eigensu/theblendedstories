@@ -1,5 +1,6 @@
 import MegaMenu from '@/components/MegaMenu';
 import MobileTouchReveal from '@/components/MobileTouchReveal';
+import SiteSearch from '@/components/search/SiteSearch';
 
 export default function PublicLayout({
   children,
@@ -9,6 +10,7 @@ export default function PublicLayout({
   return (
     <>
       {children}
+      <SiteSearch />
       <MegaMenu />
       <MobileTouchReveal />
     </>
