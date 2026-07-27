@@ -943,3 +943,40 @@ section.touch-color video:not(.no-grayscale),
 .search-dialog::backdrop {
   background: #000;
 }
+
+/* Skeleton placeholders for route-level loading states. The stripe texture is the
+   same one sitting behind the article hero image, so the skeleton reads as the
+   page arriving rather than as a different screen. */
+@keyframes skeletonShimmer {
+  0%   { opacity: 0.55; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.55; }
+}
+
+.skeleton-stripe {
+  background: #171716;
+  background-image: repeating-linear-gradient(
+    135deg,
+    #1d1d1b 0px, #1d1d1b 2px,
+    #171716 2px, #171716 5px
+  );
+}
+
+.skeleton-bar {
+  background: rgba(245, 244, 240, 0.08);
+  border-radius: 2px;
+  animation: skeletonShimmer 1.6s ease-in-out infinite;
+}
+
+.skeleton-bar-soft {
+  background: rgba(245, 244, 240, 0.05);
+  border-radius: 2px;
+  animation: skeletonShimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-bar,
+  .skeleton-bar-soft {
+    animation: none;
+  }
+}
