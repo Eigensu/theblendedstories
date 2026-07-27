@@ -23,36 +23,45 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const DEBOUNCE_MS = 250;
 const MIN_QUERY_LENGTH = 2;
 
+const REGEX_SPECIAL_CHARS = /[.*+?^${}()|[\]\\]/g;
+
 /** Wraps every matched term in <mark> so body hits are readable at a glance. */
-function Highlight({ text, terms }: { text: string; terms: string[] }) {
+function Highlight({ text, terms }: Readonly<{ text: string; terms: string[] }>) {
   const parts = useMemo(() => {
     const usable = terms.filter((t) => t.length > 1);
-    if (!usable.length || !text) return [{ text, hit: false }];
+    if (!usable.length || !text) return [{ key: '0', text, hit: false }];
 
-    const escaped = usable.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const escaped = usable.map((t) => t.replace(REGEX_SPECIAL_CHARS, String.raw`\$&`));
     const pattern = new RegExp(`(${escaped.join('|')})`, 'gi');
 
+    let offset = 0;
     return text
       .split(pattern)
       .filter((chunk) => chunk !== '')
-      .map((chunk) => ({
-        text: chunk,
-        hit: usable.some((t) => t.toLowerCase() === chunk.toLowerCase()),
-      }));
+      .map((chunk) => {
+        // Offset is stable across renders for a given text, unlike a bare index.
+        const key = `${offset}-${chunk}`;
+        offset += chunk.length;
+        return {
+          key,
+          text: chunk,
+          hit: usable.some((t) => t.toLowerCase() === chunk.toLowerCase()),
+        };
+      });
   }, [text, terms]);
 
   return (
     <>
-      {parts.map((part, i) =>
+      {parts.map((part) =>
         part.hit ? (
           <mark
-            key={i}
+            key={part.key}
             style={{ background: 'transparent', color: 'white', fontWeight: 500 }}
           >
             {part.text}
           </mark>
         ) : (
-          <span key={i}>{part.text}</span>
+          <span key={part.key}>{part.text}</span>
         )
       )}
     </>
@@ -62,10 +71,10 @@ function Highlight({ text, terms }: { text: string; terms: string[] }) {
 export default function SearchOverlay({
   open,
   onClose,
-}: {
+}: Readonly<{
   open: boolean;
   onClose: () => void;
-}) {
+}>) {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -73,7 +82,7 @@ export default function SearchOverlay({
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -120,15 +129,21 @@ export default function SearchOverlay({
     return () => clearTimeout(timer);
   }, [trimmed, open]);
 
-  // Reset and lock scroll while open.
+  // Drive the native dialog. showModal() gives us the focus trap, the inert
+  // background and Escape-to-close for free, so none of that is hand-rolled.
   useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
     if (open) {
+      if (!dialog.open) dialog.showModal();
       document.body.style.overflow = 'hidden';
-      // Wait for the fade-in before focusing, or iOS skips the keyboard.
+      // Wait a beat before focusing, or iOS skips the keyboard.
       const t = setTimeout(() => inputRef.current?.focus(), 60);
       return () => clearTimeout(t);
     }
 
+    if (dialog.open) dialog.close();
     document.body.style.overflow = '';
     setQuery('');
     setResults([]);
@@ -147,23 +162,22 @@ export default function SearchOverlay({
     [onClose, router]
   );
 
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      onClose();
-      return;
-    }
+  const moveActive = (delta: number) => {
+    setActiveIndex((prev) => {
+      const next = prev + delta;
+      if (next < 0) return results.length - 1;
+      if (next >= results.length) return 0;
+      return next;
+    });
+  };
 
+  // Escape and the focus trap are handled natively by <dialog>; this only covers
+  // moving through results and opening the highlighted one.
+  const onInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       if (!results.length) return;
       event.preventDefault();
-      const delta = event.key === 'ArrowDown' ? 1 : -1;
-      setActiveIndex((prev) => {
-        const next = prev + delta;
-        if (next < 0) return results.length - 1;
-        if (next >= results.length) return 0;
-        return next;
-      });
+      moveActive(event.key === 'ArrowDown' ? 1 : -1);
       return;
     }
 
@@ -172,24 +186,6 @@ export default function SearchOverlay({
       if (target) {
         event.preventDefault();
         goToResult(target);
-      }
-      return;
-    }
-
-    // Keep focus inside the dialog.
-    if (event.key === 'Tab' && panelRef.current) {
-      const focusables = panelRef.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input'
-      );
-      if (!focusables.length) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
       }
     }
   };
@@ -211,27 +207,19 @@ export default function SearchOverlay({
   };
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={dialogRef}
+      className="search-dialog"
       aria-label="Search stories"
-      // Kept mounted so the fade works, but `inert` pulls the input and result
-      // links out of the tab order and the a11y tree while it's invisible.
-      inert={!open}
-      onKeyDown={onKeyDown}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 240,
-        background: '#000',
-        overflowY: 'auto',
-        opacity: open ? 1 : 0,
-        pointerEvents: open ? 'auto' : 'none',
-        transition: 'opacity 0.3s ease',
+      // Fires on Escape and on the backdrop dismissing the dialog, so React state
+      // stays in step with the element's own open/closed state.
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
       }}
+      onClose={onClose}
     >
       <div
-        ref={panelRef}
         style={{
           maxWidth: '1000px',
           margin: '0 auto',
@@ -240,6 +228,7 @@ export default function SearchOverlay({
         }}
       >
         <button
+          type="button"
           onClick={onClose}
           aria-label="Close search"
           style={{
@@ -290,6 +279,7 @@ export default function SearchOverlay({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={onInputKeyDown}
             placeholder="Search stories, people, places…"
             aria-label="Search stories"
             role="combobox"
@@ -478,6 +468,6 @@ export default function SearchOverlay({
           )}
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

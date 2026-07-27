@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from typing import Optional
+from typing import Annotated, Optional
 from pydantic import BaseModel
 from app.schemas.article import ArticleModel
 from app.services.article_service import get_all, get_by_id, get_by_slug, create, update, patch_fields, delete, search
@@ -24,8 +24,8 @@ async def list_articles(featured: Optional[bool] = None):
 # single-segment slug route would otherwise swallow /articles/search as a 404.
 @router.get("/search")
 async def search_articles(
-    q: str = Query("", description="Keyword query"),
-    limit: int = Query(20, ge=1, le=50),
+    q: Annotated[str, Query(description="Keyword query")] = "",
+    limit: Annotated[int, Query(ge=1, le=50)] = 20,
 ):
     items = await search(q, limit=limit)
     return success_response(data=items)

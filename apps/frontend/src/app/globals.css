@@ -907,3 +907,39 @@ section.touch-color video:not(.no-grayscale),
 }
 }
 
+
+/* Full-screen search dialog. Native <dialog> is display:none while closed, so the
+   fade needs allow-discrete plus @starting-style rather than a plain opacity
+   transition. Browsers without those simply open and close instantly. */
+.search-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: #000;
+  color: white;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.3s ease, overlay 0.3s ease allow-discrete,
+              display 0.3s ease allow-discrete;
+}
+
+.search-dialog[open] {
+  opacity: 1;
+}
+
+@starting-style {
+  .search-dialog[open] {
+    opacity: 0;
+  }
+}
+
+.search-dialog::backdrop {
+  background: #000;
+}

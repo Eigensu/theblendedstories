@@ -49,6 +49,7 @@ export default function SiteSearch() {
     <>
       <button
         ref={triggerRef}
+        type="button"
         onClick={() => setOpen(true)}
         aria-label="Search stories"
         aria-haspopup="dialog"

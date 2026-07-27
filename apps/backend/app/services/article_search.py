@@ -47,28 +47,29 @@ def tokenize(text: str) -> list[str]:
     return _WORD_RE.findall(text.lower())
 
 
+def _text_values(source: Any, keys: tuple[str, ...]) -> list[str]:
+    """Non-empty string values for `keys`, or [] if `source` isn't a dict."""
+    if not isinstance(source, dict):
+        return []
+    values = []
+    for key in keys:
+        value = source.get(key)
+        if isinstance(value, str) and value.strip():
+            values.append(value.strip())
+    return values
+
+
 def _collect_body_text(item: dict[str, Any]) -> str:
     """Flatten every piece of prose in an article into one searchable string."""
     parts: list[str] = []
 
     for block in item.get("contentBlocks") or []:
-        if not isinstance(block, dict):
-            continue
-        for key in ("content", "quote", "author", "caption"):
-            value = block.get(key)
-            if isinstance(value, str) and value.strip():
-                parts.append(value.strip())
+        parts.extend(_text_values(block, ("content", "quote", "author", "caption")))
 
-    for key in ("pull_quote", "quote_author"):
-        value = item.get(key)
-        if isinstance(value, str) and value.strip():
-            parts.append(value.strip())
+    parts.extend(_text_values(item, ("pull_quote", "quote_author")))
 
     for entry in item.get("gallery") or []:
-        if isinstance(entry, dict):
-            caption = entry.get("caption")
-            if isinstance(caption, str) and caption.strip():
-                parts.append(caption.strip())
+        parts.extend(_text_values(entry, ("caption",)))
 
     return "\n".join(parts)
 
@@ -133,6 +134,32 @@ def _token_matches(token: str, all_tokens: set[str]) -> bool:
     return any(candidate.startswith(token) for candidate in all_tokens)
 
 
+def _first_word_boundary_hit(lowered: str, token: str) -> int:
+    """Index of the first occurrence of `token` that starts a word, else -1."""
+    for match in re.finditer(re.escape(token), lowered):
+        if match.start() == 0 or not lowered[match.start() - 1].isalnum():
+            return match.start()
+    return -1
+
+
+def _snippet_bounds(body_text: str, hit_index: int) -> tuple[int, int]:
+    """Window of `_EXCERPT_RADIUS` either side of the hit, snapped to word edges."""
+    start = max(0, hit_index - _EXCERPT_RADIUS)
+    end = min(len(body_text), hit_index + _EXCERPT_RADIUS)
+
+    if start > 0:
+        space = body_text.find(" ", start)
+        if space != -1 and space < hit_index:
+            start = space + 1
+
+    if end < len(body_text):
+        space = body_text.rfind(" ", hit_index, end)
+        if space != -1:
+            end = space
+
+    return start, end
+
+
 def _build_excerpt(body_text: str, tokens: list[str]) -> str:
     """Snippet of body text centred on the first matching token.
 
@@ -147,33 +174,16 @@ def _build_excerpt(body_text: str, tokens: list[str]) -> str:
         return ""
 
     lowered = body_text.lower()
-    best_index = -1
-
+    hit_index = -1
     for token in tokens:
-        for match in re.finditer(re.escape(token), lowered):
-            # Prefer a match at a word boundary over one inside a longer word.
-            if match.start() == 0 or not lowered[match.start() - 1].isalnum():
-                best_index = match.start()
-                break
-        if best_index != -1:
+        hit_index = _first_word_boundary_hit(lowered, token)
+        if hit_index != -1:
             break
 
-    if best_index == -1:
+    if hit_index == -1:
         return ""
 
-    start = max(0, best_index - _EXCERPT_RADIUS)
-    end = min(len(body_text), best_index + _EXCERPT_RADIUS)
-
-    # Don't slice through a word.
-    if start > 0:
-        space = body_text.find(" ", start)
-        if space != -1 and space < best_index:
-            start = space + 1
-    if end < len(body_text):
-        space = body_text.rfind(" ", best_index, end)
-        if space != -1:
-            end = space
-
+    start, end = _snippet_bounds(body_text, hit_index)
     snippet = body_text[start:end].strip().replace("\n", " ")
     prefix = "…" if start > 0 else ""
     suffix = "…" if end < len(body_text) else ""
@@ -219,6 +229,20 @@ async def _get_index(
     return entries
 
 
+def _score_entry(entry: dict[str, Any], tokens: list[str]) -> tuple[float, int]:
+    """Total score for one article, plus how many query tokens it matched."""
+    score = 0.0
+    matched = 0
+
+    for token in tokens:
+        token_score = _token_score(token, entry["weighted"])
+        if token_score > 0 or _token_matches(token, entry["all_tokens"]):
+            matched += 1
+        score += token_score
+
+    return score, matched
+
+
 async def search(
     query: str,
     fetch_articles: Callable[[], Coroutine[Any, Any, list[dict[str, Any]]]],
@@ -240,14 +264,7 @@ async def search(
     loose: list[tuple[float, dict[str, Any]]] = []
 
     for entry in entries:
-        matched = 0
-        score = 0.0
-        for token in tokens:
-            token_score = _token_score(token, entry["weighted"])
-            if token_score > 0 or _token_matches(token, entry["all_tokens"]):
-                matched += 1
-            score += token_score
-
+        score, matched = _score_entry(entry, tokens)
         if score <= 0:
             continue
 
