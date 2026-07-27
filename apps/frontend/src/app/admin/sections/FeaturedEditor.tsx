@@ -185,6 +185,8 @@ export default function FeaturedEditor({
                         {getItemStatus(item)}
                       </span>
                     )}
+                    <span className="text-xs text-zinc-700">•</span>
+                    <span className="text-xs text-zinc-500">{getOrder(item)}</span>
                   </div>
                 </div>
 
@@ -243,6 +245,8 @@ export default function FeaturedEditor({
                       {getItemStatus(item)}
                     </span>
                   )}
+                  <span className="text-xs text-zinc-700">•</span>
+                  <span className="text-xs text-zinc-500">{getOrder(item)}</span>
                 </div>
               </div>
 
