@@ -98,10 +98,38 @@ def _prepare_article_payload(payload: ArticleModel) -> dict:
     data.pop("content", None)
     return data
 
-async def get_all(featured_only: bool = False):
+# Everything a listing needs (cards, prev/next, recommendations) and nothing more.
+# Excludes contentBlocks/content, which dominate the payload and are only ever
+# read for the single article actually being displayed.
+_SUMMARY_FIELDS = (
+    "id",
+    "slug",
+    "title",
+    "subtitle",
+    "category",
+    "author",
+    "cover_image",
+    "hero_image",
+    "reading_time",
+    "publish_date",
+    "featured",
+    "display_order",
+    "status",
+)
+
+
+def _summarize_article_record(item: dict) -> dict:
+    return {field: item.get(field) for field in _SUMMARY_FIELDS}
+
+
+async def get_all(featured_only: bool = False, summary: bool = False):
     items = await repo.get_all()
     if featured_only:
         items = [item for item in items if item.get("featured") is True]
+    if summary:
+        # Skip block normalization entirely — it is pure waste when the blocks
+        # are about to be dropped.
+        return [_summarize_article_record(item) for item in items]
     return [_normalize_article_record(item) for item in items]
 
 async def get_by_id(item_id: str):

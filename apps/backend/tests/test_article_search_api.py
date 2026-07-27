@@ -52,19 +52,15 @@ ARTICLES = [
 ]
 
 
-async def fake_get_all(featured_only: bool = False):
-    return ARTICLES
+async def fake_repo_get_all(query: dict | None = None):
+    return [dict(article) for article in ARTICLES]
 
 
-async def fake_get_by_slug(slug: str):
-    return next((a for a in ARTICLES if a["slug"] == slug), None)
-
-
-# article_service.search() resolves get_all from its own module globals at call
-# time, so patching it here is enough. The router, however, imported get_by_slug
-# into its own namespace, so that one has to be patched on the router module.
-article_service.get_all = fake_get_all
-articles.get_by_slug = fake_get_by_slug
+# Stub at the repository boundary rather than the service. The router imported
+# get_all/get_by_slug into its own namespace, so patching the service module would
+# not affect the routes anyway — and going one level lower means the real
+# normalization and summary projection are exercised rather than mocked away.
+article_service.repo.get_all = fake_repo_get_all
 article_search.invalidate_cache()
 
 app = FastAPI()
@@ -131,6 +127,29 @@ check("bare /search is not matched as a slug",
 
 response = client.get("/articles/the-linen-edit")
 check("slug lookup still resolves", response.status_code == 200, response.status_code)
+
+# The article page and the archive read these off the summary list. Dropping any
+# of them from _SUMMARY_FIELDS breaks prev/next, recommendations or the cards,
+# and it fails silently at render rather than here.
+LISTING_FIELDS = {
+    "id", "slug", "title", "subtitle", "category", "cover_image",
+    "hero_image", "reading_time", "publish_date", "display_order", "status",
+}
+
+response = client.get("/articles/", params={"summary": "true"})
+check("summary list returns 200", response.status_code == 200, response.status_code)
+
+summaries = response.json()["data"]
+check("summary list is not empty", len(summaries) > 0)
+check("summary omits article bodies",
+      all("contentBlocks" not in item for item in summaries))
+check("summary keeps every field the listings render",
+      LISTING_FIELDS.issubset(summaries[0].keys()),
+      sorted(LISTING_FIELDS - set(summaries[0].keys())) or "all present")
+
+response = client.get("/articles/")
+check("unsummarised list still carries bodies",
+      "contentBlocks" in response.json()["data"][0])
 
 print("\nAll search API tests passed." if not failures else f"\n{failures} test(s) failed.")
 sys.exit(1 if failures else 0)

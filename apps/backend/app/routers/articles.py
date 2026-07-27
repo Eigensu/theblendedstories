@@ -14,10 +14,17 @@ class ArticleTopPicksPatch(BaseModel):
     display_order: int
 
 @router.get("/")
-async def list_articles(featured: Optional[bool] = None):
-    items = await get_all(featured_only=featured)
+async def list_articles(
+    featured: Optional[bool] = None,
+    summary: bool = False,
+):
+    """Set summary=true to omit article bodies — listings never render them."""
+    items = await get_all(featured_only=featured, summary=summary)
     # Sort by display order (treat 0 as last)
-    items = sorted(items, key=lambda x: x.get("display_order") if x.get("display_order", 0) > 0 else 999999)
+    # Sort by display order, treating 0/missing/null as last. `or` rather than a
+    # comparison because .get(key, 0) still yields None when the key exists as null,
+    # which used to raise a TypeError and 500 the whole listing.
+    items = sorted(items, key=lambda x: x.get("display_order") or 999999)
     return success_response(data=items)
 
 # NOTE: must stay above `/{slug}` — FastAPI matches in declaration order and the

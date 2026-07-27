@@ -25,7 +25,8 @@ async function fetchCMSData(endpoint: string) {
 }
 
 export default async function StoriesPage() {
-  const allArticles = await fetchCMSData('/articles/');
+  // Cards render title/subtitle/cover only, so the summary projection is enough.
+  const allArticles = await fetchCMSData('/articles/?summary=true');
   
   const publishedArticles = allArticles
     ? allArticles

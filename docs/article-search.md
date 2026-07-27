@@ -80,6 +80,23 @@ remaps validation errors app-wide in `validation_exception_handler`.
 `contentBlocks` is deliberately omitted — the response is refetched on every
 keystroke and full article bodies would make it far too large.
 
+## The summary projection
+
+```
+GET /articles/?summary=true
+```
+
+Returns listing fields only — no `contentBlocks`, no `content`. On the sample data
+that is **43.6 KB → 6.1 KB, an 87% reduction**, and unlike the full list it does not
+grow with article length.
+
+Used by the article page (prev/next and recommendations), the `/stories` archive,
+and `generateStaticParams`. `_SUMMARY_FIELDS` in `article_service.py` defines the
+shape; dropping a field from it breaks those pages silently at render, so
+`test_article_search_api.py` asserts the full set is present.
+
+The unsummarised `GET /articles/` is unchanged and still carries bodies.
+
 ## Scoring
 
 Each article is flattened into weighted buckets of tokens:

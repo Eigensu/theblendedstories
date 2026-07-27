@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -148,8 +149,22 @@ async function fetchCMSData(endpoint: string) {
   }
 }
 
+/**
+ * generateMetadata and the page component both need the article. Wrapping the
+ * fetch in cache() collapses that into a single request per render pass —
+ * without it the page makes the same round trip twice.
+ */
+const getArticle = cache(async (slug: string) => fetchCMSData(`/articles/${slug}`));
+
+/**
+ * Prev/next and recommendations only need listing fields, so this asks for the
+ * summary projection. The unsummarised list carries every article's full body,
+ * which is the bulk of the payload and none of it is rendered here.
+ */
+const getArticleSummaries = cache(async () => fetchCMSData('/articles/?summary=true'));
+
 export async function generateStaticParams() {
-  const articles = await fetchCMSData('/articles/');
+  const articles = await getArticleSummaries();
   if (!articles) return [];
   return articles.filter((a: any) => a.status === 'published').map((article: any) => ({
     slug: article.slug,
@@ -158,8 +173,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
-  const article = await fetchCMSData(`/articles/${resolvedParams.slug}`);
-  if (!article) return { title: 'Article Not Found' };
+  const article = await getArticle(resolvedParams.slug);
+  if (!article || article.status !== 'published') return { title: 'Article Not Found' };
 
   return {
     title: article.seo_title || `${article.title} | The Blended Stories`,
@@ -169,15 +184,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const allArticles = await fetchCMSData('/articles/');
+
+  // Both are deduped by cache(); running them together keeps it to one round trip.
+  const [article, allArticles] = await Promise.all([
+    getArticle(resolvedParams.slug),
+    getArticleSummaries(),
+  ]);
+
+  // The article used to be pulled out of the published-only list, so an unpublished
+  // slug fell through to notFound(). /articles/{slug} applies no status filter, so
+  // the draft check has to be explicit here.
+  if (!article || article.status !== 'published') notFound();
   if (!allArticles) notFound();
 
   const publishedArticles = allArticles.filter((a: any) => a.status === 'published').sort((a: any, b: any) => a.display_order - b.display_order);
   const articleIndex = publishedArticles.findIndex((a: any) => a.slug === resolvedParams.slug);
 
   if (articleIndex === -1) notFound();
-
-  const article = publishedArticles[articleIndex];
   const contentBlocks = getArticleBlocks(article);
   const hasQuoteBlock = contentBlocks.some((block) => block.type === 'quote');
   const recommendedArticles = getRecommendedArticles(allArticles, article.slug, article.category);
