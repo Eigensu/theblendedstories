@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { NAV_BUTTON_STYLE, hasHamburger, navSlotRight } from './nav/navSlots';
 
 const S = [
   {
@@ -43,7 +44,7 @@ export default function MegaMenu() {
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
-  if (pathname?.startsWith('/stories/')) return null;
+  if (!hasHamburger(pathname)) return null;
 
   return (
     <>
@@ -52,20 +53,11 @@ export default function MegaMenu() {
         onClick={() => setOpen(true)}
         aria-label="Open menu"
         style={{
-          position: 'fixed',
-          top: 'var(--px-page)',
-          right: 'var(--px-page)',
-          zIndex: 210,
-          width: '44px',
-          height: '44px',
+          ...NAV_BUTTON_STYLE,
+          right: navSlotRight(0),
           display: open ? 'none' : 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
           gap: '6px',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
         }}
       >
         <span style={{ width: '18px', height: '1px', background: 'white' }} />

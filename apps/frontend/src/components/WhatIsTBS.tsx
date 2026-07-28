@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import ScrollReveal from './ScrollReveal';
-import { RegisterModal } from './Hero';
+import RegisterModal from './auth/RegisterModal';
 
 export default function WhatIsTBS({ data }: { data?: any }) {
   const [modalOpen, setModalOpen] = useState(false);
