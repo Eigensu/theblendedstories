@@ -7,3 +7,6 @@ python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
 cloudinary
+google-auth
+httpx
+email-validator
