@@ -2,20 +2,39 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { NAV_BUTTON_STYLE, hasHamburger, navSlotRight } from './nav/navSlots';
+import NavButton from './nav/NavButton';
+import { hasHamburger } from './nav/navSlots';
 
 const S = [
   {
     title: 'FASHION ',
-    items: ['Fashion', 'Jewellery & Watches', 'Accessories', 'Bridal', 'Trend Reports'],
+    items: [
+      'Fashion',
+      'Jewellery & Watches',
+      'Accessories',
+      'Bridal',
+      'Trend Reports',
+    ],
   },
   {
     title: 'FOOD & DRINK ',
-    items: ['Restaurants', 'Cafés', 'Bars & Cocktails', 'Desserts', 'New Openings'],
+    items: [
+      'Restaurants',
+      'Cafés',
+      'Bars & Cocktails',
+      'Desserts',
+      'New Openings',
+    ],
   },
   {
     title: 'TRAVEL ',
-    items: ['Hotels & Stays', 'Destinations', 'City Guides', 'Weekend Escapes', 'Travel Trends'],
+    items: [
+      'Hotels & Stays',
+      'Destinations',
+      'City Guides',
+      'Weekend Escapes',
+      'Travel Trends',
+    ],
   },
   {
     title: 'BEAUTY &\nWELLNESS ',
@@ -41,7 +60,9 @@ export default function MegaMenu() {
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [open]);
 
   if (!hasHamburger(pathname)) return null;
@@ -49,13 +70,12 @@ export default function MegaMenu() {
   return (
     <>
       {/* Hamburger button — fixed top-right corner */}
-      <button
+      <NavButton
+        slot={0}
+        open={open}
         onClick={() => setOpen(true)}
-        aria-label="Open menu"
+        ariaLabel="Open menu"
         style={{
-          ...NAV_BUTTON_STYLE,
-          right: navSlotRight(0),
-          display: open ? 'none' : 'flex',
           flexDirection: 'column',
           gap: '6px',
         }}
@@ -63,7 +83,7 @@ export default function MegaMenu() {
         <span style={{ width: '18px', height: '1px', background: 'white' }} />
         <span style={{ width: '18px', height: '1px', background: 'white' }} />
         <span style={{ width: '18px', height: '1px', background: 'white' }} />
-      </button>
+      </NavButton>
 
       {/* Expanded mega menu panel */}
       <div
@@ -79,12 +99,14 @@ export default function MegaMenu() {
           transition: 'opacity 0.3s ease',
         }}
       >
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: 'clamp(32px, 5vw, 64px) clamp(20px, 4vw, 48px) 40px',
-          position: 'relative',
-        }}>
+        <div
+          style={{
+            maxWidth: '1400px',
+            margin: '0 auto',
+            padding: 'clamp(32px, 5vw, 64px) clamp(20px, 4vw, 48px) 40px',
+            position: 'relative',
+          }}
+        >
           <button
             onClick={() => setOpen(false)}
             aria-label="Close menu"
@@ -93,13 +115,16 @@ export default function MegaMenu() {
               top: 'var(--px-page)',
               right: 'var(--px-page)',
               zIndex: 230,
-              width: '44px', height: '44px',
+              width: '44px',
+              height: '44px',
               border: 'none',
               background: 'transparent',
               color: 'white',
               fontSize: '16px',
               cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             ✕
@@ -116,19 +141,30 @@ export default function MegaMenu() {
           >
             {S.map((section) => (
               <div key={section.title}>
-                <h3 style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: 'white',
-                  margin: '0 0 18px 0',
-                  whiteSpace: 'pre-line',
-                }}>
+                <h3
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: 'white',
+                    margin: '0 0 18px 0',
+                    whiteSpace: 'pre-line',
+                  }}
+                >
                   {section.title}
                 </h3>
-                <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <ul
+                  style={{
+                    listStyle: 'none',
+                    margin: 0,
+                    padding: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                  }}
+                >
                   {section.items.map((item) => (
                     <li key={item}>
                       <a
@@ -141,8 +177,13 @@ export default function MegaMenu() {
                           textDecoration: 'none',
                           transition: 'color 0.2s ease',
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = 'white')}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.color = 'white')
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.color =
+                            'rgba(255,255,255,0.7)')
+                        }
                       >
                         {item}
                       </a>

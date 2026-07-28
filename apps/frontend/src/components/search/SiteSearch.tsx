@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Search } from 'lucide-react';
 import SearchOverlay from './SearchOverlay';
-import { NAV_BUTTON_STYLE, hasHamburger, navSlotRight } from '../nav/navSlots';
+import NavButton from '../nav/NavButton';
+import { hasHamburger } from '../nav/navSlots';
 
 export default function SiteSearch() {
   const [open, setOpen] = useState(false);
@@ -48,21 +49,15 @@ export default function SiteSearch() {
 
   return (
     <>
-      <button
+      <NavButton
         ref={triggerRef}
-        type="button"
+        slot={slot}
+        open={open}
         onClick={() => setOpen(true)}
-        aria-label="Search stories"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        style={{
-          ...NAV_BUTTON_STYLE,
-          right: navSlotRight(slot),
-          display: open ? 'none' : 'flex',
-        }}
+        ariaLabel="Search stories"
       >
         <Search size={18} strokeWidth={1.5} />
-      </button>
+      </NavButton>
 
       <SearchOverlay open={open} onClose={handleClose} />
     </>
