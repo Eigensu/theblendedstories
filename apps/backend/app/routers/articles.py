@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
-from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException, Query
+from typing import Annotated, Optional
 from pydantic import BaseModel
 from app.schemas.article import ArticleModel
-from app.services.article_service import get_all, get_by_id, get_by_slug, create, update, patch_fields, delete
+from app.services.article_service import get_all, get_by_id, get_by_slug, create, update, patch_fields, delete, search
 from app.utils.responses import success_response
 from app.auth import get_current_admin
 
@@ -14,10 +14,27 @@ class ArticleTopPicksPatch(BaseModel):
     display_order: int
 
 @router.get("/")
-async def list_articles(featured: Optional[bool] = None):
-    items = await get_all(featured_only=featured)
+async def list_articles(
+    featured: Optional[bool] = None,
+    summary: bool = False,
+):
+    """Set summary=true to omit article bodies — listings never render them."""
+    items = await get_all(featured_only=featured, summary=summary)
     # Sort by display order (treat 0 as last)
-    items = sorted(items, key=lambda x: x.get("display_order") if x.get("display_order", 0) > 0 else 999999)
+    # Sort by display order, treating 0/missing/null as last. `or` rather than a
+    # comparison because .get(key, 0) still yields None when the key exists as null,
+    # which used to raise a TypeError and 500 the whole listing.
+    items = sorted(items, key=lambda x: x.get("display_order") or 999999)
+    return success_response(data=items)
+
+# NOTE: must stay above `/{slug}` — FastAPI matches in declaration order and the
+# single-segment slug route would otherwise swallow /articles/search as a 404.
+@router.get("/search")
+async def search_articles(
+    q: Annotated[str, Query(description="Keyword query")] = "",
+    limit: Annotated[int, Query(ge=1, le=50)] = 20,
+):
+    items = await search(q, limit=limit)
     return success_response(data=items)
 
 @router.get("/{slug}")
