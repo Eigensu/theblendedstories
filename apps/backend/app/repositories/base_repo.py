@@ -88,3 +88,9 @@ class BaseRepository:
         )
         docs = await cursor.to_list(length=None)
         return [self._format_doc(doc) for doc in docs]
+
+    async def update_one_by(self, query: Dict[str, Any], data: Dict[str, Any]) -> bool:
+        """Partial update of the first match. Returns whether anything changed."""
+        data["updated_at"] = datetime.utcnow()
+        result = await self.collection.update_one(query, {"$set": data})
+        return result.modified_count > 0
