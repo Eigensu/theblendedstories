@@ -55,25 +55,33 @@ async function refreshSession(): Promise<string | null> {
   const { refresh } = getStoredTokens();
   if (!refresh) return null;
 
-  const response = await fetch(`${API_BASE}/members/auth/refresh`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ refresh_token: refresh }),
-  });
+  // Resolves to null rather than rejecting on any failure, including a network
+  // error. A rejection here would propagate out of every request awaiting the
+  // shared promise below, turning one dropped connection into a hard error
+  // instead of a fall back to signed out.
+  try {
+    const response = await fetch(`${API_BASE}/members/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: refresh }),
+    });
 
-  if (!response.ok) {
-    clearTokens();
+    if (!response.ok) {
+      clearTokens();
+      return null;
+    }
+
+    const body = await response.json();
+    if (!body?.success) {
+      clearTokens();
+      return null;
+    }
+
+    storeTokens(body.data.access_token, body.data.refresh_token);
+    return body.data.access_token as string;
+  } catch {
     return null;
   }
-
-  const body = await response.json();
-  if (!body?.success) {
-    clearTokens();
-    return null;
-  }
-
-  storeTokens(body.data.access_token, body.data.refresh_token);
-  return body.data.access_token as string;
 }
 
 async function request<T>(
@@ -100,9 +108,14 @@ async function request<T>(
   }
 
   if (response.status === 401 && retryOn401) {
-    refreshInFlight = refreshInFlight ?? refreshSession();
+    // Clearing the slot in `finally` — rather than after the await below — is
+    // what keeps a settled refresh from being reused. Clearing after the await
+    // would leave every caller but the first racing on an already-consumed
+    // promise, and would never clear at all if the refresh rejected.
+    refreshInFlight ??= refreshSession().finally(() => {
+      refreshInFlight = null;
+    });
     const newToken = await refreshInFlight;
-    refreshInFlight = null;
 
     // Retry once. `false` here is what stops a persistent 401 from looping.
     if (newToken) return request<T>(endpoint, options, false);
@@ -125,7 +138,11 @@ async function request<T>(
 
 export const memberApi = {
   signInWithGoogle(code: string) {
-    return request<{ access_token: string; refresh_token: string; user: Member }>(
+    return request<{
+      access_token: string;
+      refresh_token: string;
+      user: Member;
+    }>(
       '/members/auth/google',
       { method: 'POST', body: JSON.stringify({ code }) },
       false

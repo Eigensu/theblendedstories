@@ -22,7 +22,8 @@ export default function ProfileButton() {
     if (!menuOpen) return;
 
     const onPointerDown = (event: MouseEvent) => {
-      if (!wrapperRef.current?.contains(event.target as Node)) setMenuOpen(false);
+      if (!wrapperRef.current?.contains(event.target as Node))
+        setMenuOpen(false);
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setMenuOpen(false);
@@ -89,19 +90,27 @@ export default function ProfileButton() {
               padding: '14px 16px',
             }}
           >
-            <p style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: '9.5px', letterSpacing: '0.2em',
-              textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)',
-              margin: '0 0 4px 0',
-            }}>
+            <p
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '9.5px',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.35)',
+                margin: '0 0 4px 0',
+              }}
+            >
               Signed in as
             </p>
-            <p style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: '12.5px', color: 'white',
-              margin: '0 0 14px 0', wordBreak: 'break-all',
-            }}>
+            <p
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '12.5px',
+                color: 'white',
+                margin: '0 0 14px 0',
+                wordBreak: 'break-all',
+              }}
+            >
               {member?.email}
             </p>
             <button
@@ -118,13 +127,19 @@ export default function ProfileButton() {
                 color: 'white',
                 cursor: 'pointer',
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '10px', fontWeight: 600,
-                letterSpacing: '0.2em', textTransform: 'uppercase',
+                fontSize: '10px',
+                fontWeight: 600,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
                 padding: '10px',
                 transition: 'background 0.2s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = 'transparent')
+              }
             >
               Sign out
             </button>

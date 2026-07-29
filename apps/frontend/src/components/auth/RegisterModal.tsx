@@ -105,7 +105,9 @@ function GoogleSignInButton({
   );
 }
 
-export default function RegisterModal({ onClose }: { onClose: () => void }) {
+export default function RegisterModal({
+  onClose,
+}: Readonly<{ onClose: () => void }>) {
   const { signInWithCode } = useMember();
   const [error, setError] = useState<string | null>(null);
 
@@ -119,30 +121,38 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const handleBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onClose();
-  };
-
   return (
     <div
-      onClick={handleBackdrop}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Sign in to The Blended Stories"
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(0,0,0,0.88)',
         zIndex: 200,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 'clamp(40px, 8vh, 80px) 20px',
-        backdropFilter: 'blur(6px)',
         overflowY: 'auto',
       }}
     >
+      {/* Backdrop is a real button so dismissing works by click, Enter and Space. */}
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          border: 'none',
+          cursor: 'default',
+          background: 'rgba(0,0,0,0.88)',
+          backdropFilter: 'blur(6px)',
+        }}
+      />
+
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Sign in to The Blended Stories"
         style={{
           background: '#0a0a0a',
           border: '1px solid rgba(255,255,255,0.12)',
@@ -156,6 +166,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
       >
         {/* Close */}
         <button
+          type="button"
           onClick={onClose}
           style={{
             position: 'absolute',
