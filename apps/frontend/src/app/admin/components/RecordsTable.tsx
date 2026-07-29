@@ -97,6 +97,7 @@ export default function RecordsTable({
           {title}
         </h3>
         <button
+          type="button"
           onClick={handleExportCSV}
           style={{
             display: 'flex',

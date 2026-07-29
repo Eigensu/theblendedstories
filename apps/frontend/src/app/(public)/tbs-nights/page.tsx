@@ -1031,10 +1031,14 @@ export default function TBSNightsPage() {
                   </F>
 
                   <div>
-                    <label style={lbl}>
+                    {/* Labels a radio group, not a single control, so this is a
+                        span wired up with aria-labelledby rather than a label. */}
+                    <span id="dinner-table-label" style={lbl}>
                       Which dinner table sounds most like you?
-                    </label>
+                    </span>
                     <div
+                      role="radiogroup"
+                      aria-labelledby="dinner-table-label"
                       style={{
                         display: 'flex',
                         flexDirection: 'column',

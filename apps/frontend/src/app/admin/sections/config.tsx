@@ -9,9 +9,7 @@ import FooterEditor from './FooterEditor';
 import WhatWeCoverEditor from './WhatWeCoverEditor';
 import TBSTalksEditor from './TBSTalksEditor';
 import TBSTalksFeaturedEditor from './TBSTalksFeaturedEditor';
-import MembersView from './MembersView';
-import SubscribersView from './SubscribersView';
-import WaitlistView from './WaitlistView';
+import CrmView from './CrmView';
 
 // Placeholder component until real ones are built
 const Placeholder = ({ sectionId }: { sectionId: string }) => (
@@ -124,7 +122,7 @@ export const adminSections: AdminSection[] = [
     title: 'Members',
     collection: 'members',
     icon: 'users',
-    component: MembersView,
+    component: CrmView,
     order: 1,
     group: 'crm',
   },
@@ -133,7 +131,7 @@ export const adminSections: AdminSection[] = [
     title: 'Newsletter Subscribers',
     collection: 'newsletter',
     icon: 'mail',
-    component: SubscribersView,
+    component: CrmView,
     order: 2,
     group: 'crm',
   },
@@ -142,7 +140,7 @@ export const adminSections: AdminSection[] = [
     title: 'TBS Nights Waitlist',
     collection: 'tbs-nights',
     icon: 'list',
-    component: WaitlistView,
+    component: CrmView,
     order: 3,
     group: 'crm',
   },
