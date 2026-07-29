@@ -67,3 +67,24 @@ class BaseRepository:
 
     async def count_documents(self) -> int:
         return await self.collection.count_documents({"is_active": True})
+
+    # --- Generic queries -------------------------------------------------
+    # The methods above assume the CMS shape: one document per section, ordered
+    # by display_order. Capture collections (waitlist entries, subscribers) are
+    # ordered by when they arrived instead, which these cover without every such
+    # service reaching past this class into Motor.
+
+    async def find_one_by(self, query: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        return self._format_doc(await self.collection.find_one({**query, "is_active": True}))
+
+    async def find_many(
+        self,
+        query: Optional[Dict[str, Any]] = None,
+        sort_field: str = "created_at",
+        descending: bool = True,
+    ) -> List[Dict[str, Any]]:
+        cursor = self.collection.find({**(query or {}), "is_active": True}).sort(
+            sort_field, -1 if descending else 1
+        )
+        docs = await cursor.to_list(length=None)
+        return [self._format_doc(doc) for doc in docs]

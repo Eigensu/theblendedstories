@@ -36,3 +36,7 @@ dist/
 build/
 .next/
 coverage/
+# Claude Code local config. settings.json stays tracked — it is the shared
+# permission allowlist, not per-machine state.
+.claude/*
+!.claude/settings.json
