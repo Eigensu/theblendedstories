@@ -14,21 +14,6 @@ async def create_entry(data: dict) -> dict:
     return await repo.create(entry)
 
 
-async def get_by_id(entry_id: str) -> dict | None:
-    """Fetch a waitlist entry by ID."""
-    return await repo.get_by_id(entry_id)
-
-
 async def list_entries() -> list[dict]:
-    """List all active waitlist entries, sorted by creation date (newest first)."""
-    return await repo.find_many(
-        query={"is_active": True},
-        sort_field="created_at",
-        descending=True,
-    )
-
-
-async def get_by_email(email: str) -> dict | None:
-    """Find an existing entry by normalized email."""
-    normalized = email.lower().strip()
-    return await repo.find_one_by({"email": normalized, "is_active": True})
+    """List all active waitlist entries, newest first."""
+    return await repo.find_many(sort_field="created_at", descending=True)
