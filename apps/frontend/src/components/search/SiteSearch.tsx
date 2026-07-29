@@ -4,15 +4,17 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Search } from 'lucide-react';
 import SearchOverlay from './SearchOverlay';
+import NavButton from '../nav/NavButton';
+import { hasHamburger } from '../nav/navSlots';
 
 export default function SiteSearch() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const triggerRef = useRef<HTMLButtonElement>(null);
 
-  // MegaMenu hides its hamburger on article pages, so the search icon takes the
-  // corner slot there and sits one button-width inward everywhere else.
-  const hamburgerVisible = !pathname?.startsWith('/stories/');
+  // Outermost of the three corner buttons: search, profile, menu. The hamburger
+  // is absent on article pages, so everything shifts one slot outward there.
+  const slot = hasHamburger(pathname) ? 2 : 1;
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -47,31 +49,15 @@ export default function SiteSearch() {
 
   return (
     <>
-      <button
+      <NavButton
         ref={triggerRef}
-        type="button"
+        slot={slot}
+        open={open}
         onClick={() => setOpen(true)}
-        aria-label="Search stories"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        style={{
-          position: 'fixed',
-          top: 'var(--px-page)',
-          right: hamburgerVisible ? 'calc(var(--px-page) + 44px)' : 'var(--px-page)',
-          zIndex: 210,
-          width: '44px',
-          height: '44px',
-          display: open ? 'none' : 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          color: 'white',
-        }}
+        ariaLabel="Search stories"
       >
         <Search size={18} strokeWidth={1.5} />
-      </button>
+      </NavButton>
 
       <SearchOverlay open={open} onClose={handleClose} />
     </>
