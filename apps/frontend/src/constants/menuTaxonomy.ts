@@ -92,13 +92,17 @@ const DEFAULT_SEEDS: readonly SectionSeed[] = [
  * below for exactly these labels.
  */
 function slugify(label: string): string {
-  return label
-    .replace(/&/g, ' and ') // or "Food & Drink" collapses to "food-drink"
-    .normalize('NFKD') // split accents off, so "Cafés" survives as "cafes"
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-zA-Z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .toLowerCase();
+  return (
+    label
+      .replaceAll('&', ' and ') // or "Food & Drink" collapses to "food-drink"
+      .normalize('NFKD') // split accents off, so "Cafés" survives as "cafes"
+      .replaceAll(/[\u0300-\u036f]/g, '')
+      .replaceAll(/[^a-zA-Z0-9]+/g, '-')
+      // A single `-`, not `-+`: the collapse above already leaves at most one
+      // dash at either end, and `-+$` backtracks super-linearly on a long run.
+      .replaceAll(/^-|-$/g, '')
+      .toLowerCase()
+  );
 }
 
 /**

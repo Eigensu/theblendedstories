@@ -44,7 +44,10 @@ type EditableSection = EditableItem & {
  * plain sequence cannot collide within a session.
  */
 let uidCounter = 0;
-const newUid = () => `row-${(uidCounter += 1)}`;
+const newUid = () => {
+  uidCounter += 1;
+  return `row-${uidCounter}`;
+};
 
 const toEditable = (raw: any): EditableSection[] =>
   Array.isArray(raw)
