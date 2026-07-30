@@ -1,113 +1,125 @@
 'use client';
 
-import { useId, useState, CSSProperties } from 'react';
+import { useState, CSSProperties } from 'react';
+import { useGoogleLogin } from '@react-oauth/google';
+import { useMember } from '@/contexts/MemberContext';
 
-type FieldKey = 'name' | 'email' | 'password';
+const GOOGLE_CONFIGURED = Boolean(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
 
-type Field = {
-  key: FieldKey;
-  label: string;
-  type: string;
-  placeholder: string;
+const baseTextStyle: CSSProperties = {
+  fontFamily: "'Poppins', sans-serif",
+  lineHeight: '1.6',
+  textAlign: 'center',
 };
 
-const FIELDS: Record<FieldKey, Field> = {
-  name: {
-    key: 'name',
-    label: 'Full Name',
-    type: 'text',
-    placeholder: 'Your name',
-  },
-  email: {
-    key: 'email',
-    label: 'Email',
-    type: 'email',
-    placeholder: 'your@email.com',
-  },
-  password: {
-    key: 'password',
-    label: 'Password',
-    type: 'password',
-    placeholder: '••••••••',
-  },
-};
-
-const TABS = {
-  join: {
-    label: 'Become a Member',
-    heading: 'Get Blended.',
-    blurb:
-      'Join the community. Get early access, exclusive drops, and stories worth reading.',
-    submit: 'Get Blended',
-    fields: [FIELDS.name, FIELDS.email, FIELDS.password],
-  },
-  signin: {
-    label: 'Sign In',
-    heading: 'Welcome Back.',
-    blurb: null,
-    submit: 'Sign In',
-    fields: [FIELDS.email, FIELDS.password],
-  },
-} as const;
-
-type TabKey = keyof typeof TABS;
-
-const POPPINS = "'Poppins', sans-serif";
-
-const headingStyle: CSSProperties = {
-  fontFamily: "'Fraunces', serif",
-  fontSize: 'clamp(20px, 3vw, 26px)',
-  fontWeight: 400,
-  color: 'white',
-  textTransform: 'uppercase',
-  letterSpacing: '0.04em',
-};
-
-const labelStyle: CSSProperties = {
-  fontFamily: POPPINS,
-  fontSize: '10px',
-  letterSpacing: '0.15em',
-  textTransform: 'uppercase',
+const captionStyle: CSSProperties = {
+  ...baseTextStyle,
+  fontSize: '12px',
   color: 'rgba(255,255,255,0.45)',
-  display: 'block',
-  marginBottom: '6px',
+  marginBottom: '22px',
 };
 
-const inputStyle: CSSProperties = {
-  width: '100%',
-  background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.12)',
-  color: 'white',
-  padding: '9px 12px',
-  fontFamily: POPPINS,
-  fontSize: '13px',
-  outline: 'none',
-  borderRadius: '2px',
-};
-
-const submitStyle: CSSProperties = {
-  marginTop: '4px',
-  background: 'white',
-  color: 'black',
-  border: 'none',
-  cursor: 'pointer',
-  fontFamily: POPPINS,
+const smallTextStyle: CSSProperties = {
+  ...baseTextStyle,
   fontSize: '11px',
-  fontWeight: 600,
-  letterSpacing: '0.22em',
-  textTransform: 'uppercase',
-  padding: '12px',
-  transition: 'opacity 0.2s ease',
+  color: 'rgba(255,255,255,0.38)',
+  marginTop: '18px',
 };
+
+/**
+ * The Google button lives in its own component because `useGoogleLogin` throws
+ * unless a GoogleOAuthProvider is above it, and hooks cannot be called
+ * conditionally. Keeping it here means the hook only ever runs on the branch
+ * where the provider is actually mounted.
+ */
+function GoogleSignInButton({
+  onSignedIn,
+  onFailed,
+}: {
+  onSignedIn: (code: string) => Promise<void>;
+  onFailed: () => void;
+}) {
+  const [pending, setPending] = useState(false);
+
+  // Auth-code flow rather than the implicit one: the popup hands back a code
+  // that only our backend can exchange, so the client secret never ships to
+  // the browser.
+  const startGoogleLogin = useGoogleLogin({
+    flow: 'auth-code',
+    onSuccess: async ({ code }) => {
+      try {
+        await onSignedIn(code);
+      } finally {
+        setPending(false);
+      }
+    },
+    onError: () => {
+      setPending(false);
+      onFailed();
+    },
+    onNonOAuthError: () => {
+      // The user closed or dismissed the popup — not an error worth shouting about.
+      setPending(false);
+    },
+  });
+
+  const buttonStyle: CSSProperties = {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+    background: 'white',
+    color: 'black',
+    border: 'none',
+    cursor: pending ? 'wait' : 'pointer',
+    fontFamily: "'Poppins', sans-serif",
+    fontSize: '11px',
+    fontWeight: 600,
+    letterSpacing: '0.22em',
+    textTransform: 'uppercase',
+    padding: '13px 12px',
+    opacity: pending ? 0.7 : 1,
+    transition: 'opacity 0.2s ease',
+  };
+
+  return (
+    <button
+      type="button"
+      disabled={pending}
+      onClick={() => {
+        setPending(true);
+        startGoogleLogin();
+      }}
+      style={buttonStyle}
+      onMouseEnter={(e) => {
+        if (!pending) e.currentTarget.style.opacity = '0.85';
+      }}
+      onMouseLeave={(e) => {
+        if (!pending) e.currentTarget.style.opacity = '1';
+      }}
+    >
+      <GoogleMark />
+      {pending ? 'Signing in…' : 'Continue with Google'}
+    </button>
+  );
+}
 
 export default function RegisterModal({
   onClose,
 }: Readonly<{ onClose: () => void }>) {
-  const [tab, setTab] = useState<TabKey>('join');
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
-  const fieldIdPrefix = useId();
+  const { signInWithCode } = useMember();
+  const [error, setError] = useState<string | null>(null);
 
-  const active = TABS[tab];
+  const handleSignedIn = async (code: string) => {
+    setError(null);
+    try {
+      await signInWithCode(code);
+      onClose();
+    } catch {
+      setError('We could not complete your sign-in. Please try again.');
+    }
+  };
 
   return (
     <div
@@ -140,7 +152,7 @@ export default function RegisterModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Join The Blended Stories"
+        aria-label="Sign in to The Blended Stories"
         style={{
           background: '#0a0a0a',
           border: '1px solid rgba(255,255,255,0.12)',
@@ -152,6 +164,7 @@ export default function RegisterModal({
           position: 'relative',
         }}
       >
+        {/* Close */}
         <button
           type="button"
           onClick={onClose}
@@ -171,7 +184,8 @@ export default function RegisterModal({
           ✕
         </button>
 
-        <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+        {/* Logo */}
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           <img
             src="/TBS LOGO-02 white.png"
             alt="The Blended Stories"
@@ -186,102 +200,98 @@ export default function RegisterModal({
           />
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            borderBottom: '1px solid rgba(255,255,255,0.1)',
-            marginBottom: '20px',
-          }}
-        >
-          {(Object.keys(TABS) as TabKey[]).map((key) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setTab(key)}
-              aria-pressed={tab === key}
-              style={{
-                flex: 1,
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: POPPINS,
-                fontSize: '11px',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: tab === key ? 'white' : 'rgba(255,255,255,0.35)',
-                paddingBottom: '12px',
-                borderBottom:
-                  tab === key ? '1px solid white' : '1px solid transparent',
-                marginBottom: '-1px',
-                transition: 'color 0.2s ease',
-              }}
-            >
-              {TABS[key].label}
-            </button>
-          ))}
-        </div>
-
         <h2
           style={{
-            ...headingStyle,
-            marginBottom: active.blurb ? '6px' : '16px',
+            fontFamily: "'Fraunces', serif",
+            fontSize: 'clamp(20px, 3vw, 26px)',
+            fontWeight: 400,
+            color: 'white',
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em',
+            marginBottom: '8px',
+            textAlign: 'center',
           }}
         >
-          {active.heading}
+          Get Blended.
         </h2>
 
-        {active.blurb && (
+        <p style={captionStyle}>
+          Join the community. Get early access, exclusive drops, and stories
+          worth reading.
+        </p>
+
+        {GOOGLE_CONFIGURED ? (
+          <GoogleSignInButton
+            onSignedIn={handleSignedIn}
+            onFailed={() =>
+              setError('We could not complete your sign-in. Please try again.')
+            }
+          />
+        ) : (
           <p
             style={{
-              fontFamily: POPPINS,
+              ...baseTextStyle,
               fontSize: '12px',
-              color: 'rgba(255,255,255,0.45)',
-              lineHeight: '1.5',
-              marginBottom: '16px',
+              color: 'rgba(255,255,255,0.5)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              padding: '14px',
             }}
           >
-            {active.blurb}
+            Sign-in is not configured yet.
           </p>
         )}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {active.fields.map(({ key, label, type, placeholder }) => {
-            const id = `${fieldIdPrefix}-${key}`;
-            return (
-              <div key={key}>
-                <label htmlFor={id} style={labelStyle}>
-                  {label}
-                </label>
-                <input
-                  id={id}
-                  type={type}
-                  placeholder={placeholder}
-                  value={form[key]}
-                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                  style={inputStyle}
-                  onFocus={(e) =>
-                    (e.currentTarget.style.borderColor =
-                      'rgba(255,255,255,0.4)')
-                  }
-                  onBlur={(e) =>
-                    (e.currentTarget.style.borderColor =
-                      'rgba(255,255,255,0.12)')
-                  }
-                />
-              </div>
-            );
-          })}
-
-          <button
-            type="button"
-            style={submitStyle}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+        {error && (
+          <p
+            role="alert"
+            style={{
+              ...baseTextStyle,
+              fontSize: '11.5px',
+              color: '#ff9a9a',
+              marginTop: '12px',
+            }}
           >
-            {active.submit}
-          </button>
-        </div>
+            {error}
+          </p>
+        )}
+
+        {/* Newsletter disclosure — signing in subscribes you, so say so here. */}
+        <p style={{ ...smallTextStyle, lineHeight: '1.7' }}>
+          Signing in subscribes you to The Blended Stories newsletter — your
+          invite to what&apos;s happening, who&apos;s going, and what not to
+          miss. You can unsubscribe anytime.
+        </p>
       </div>
     </div>
+  );
+}
+
+/** Google's four-colour mark. Inline so it needs no network request. */
+function GoogleMark() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 48 48"
+      aria-hidden="true"
+      style={{ flexShrink: 0 }}
+    >
+      <path
+        fill="#EA4335"
+        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+      />
+      <path
+        fill="#4285F4"
+        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.97-6.19z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+      />
+    </svg>
   );
 }

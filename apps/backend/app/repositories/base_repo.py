@@ -70,9 +70,11 @@ class BaseRepository:
 
     # --- Generic queries -------------------------------------------------
     # The methods above assume the CMS shape: one document per section, ordered
-    # by display_order. Capture collections (waitlist entries, subscribers) are
-    # ordered by when they arrived instead, which these cover without every such
-    # service reaching past this class into Motor.
+    # by display_order. Capture collections do not fit that: waitlist entries
+    # and subscribers are ordered by when they arrived, and members are keyed on
+    # a natural field (an email, a Google subject) that has to be looked up
+    # directly. These cover both without every such service reaching past this
+    # class into Motor.
 
     async def find_one_by(self, query: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         return self._format_doc(await self.collection.find_one({**query, "is_active": True}))

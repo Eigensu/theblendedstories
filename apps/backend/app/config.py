@@ -15,6 +15,22 @@ class Settings(BaseSettings):
     CLOUDINARY_API_KEY: str = ""
     CLOUDINARY_API_SECRET: str = ""
 
+    # Google sign-in for site members. Empty means the feature is off and
+    # POST /auth/google returns 503 rather than failing deep inside the exchange.
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+
+    # Origins allowed to call this API. Comma-separated in the environment.
+    CORS_ORIGINS: str = "http://localhost:3000,https://theblendedstories.in,https://www.theblendedstories.in"
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+
+    @property
+    def google_enabled(self) -> bool:
+        return bool(self.GOOGLE_CLIENT_ID and self.GOOGLE_CLIENT_SECRET)
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()

@@ -1,11 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { memberApi } from '@/services/memberApi';
 
 export default function NewsletterPopup() {
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && sessionStorage.getItem('tbs_nl_v2')) return;
@@ -18,11 +21,24 @@ export default function NewsletterPopup() {
     setVisible(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    setSubmitted(true);
-    sessionStorage.setItem('tbs_nl_v2', '1');
+    if (!email || pending) return;
+
+    setPending(true);
+    setError(null);
+    try {
+      await memberApi.subscribeToNewsletter(email);
+      setSubmitted(true);
+      // Only suppress the popup once the address is actually stored. Setting
+      // this before the request would mean a failed subscribe silently hides
+      // the popup for the rest of the session and the email is lost.
+      sessionStorage.setItem('tbs_nl_v2', '1');
+    } catch {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setPending(false);
+    }
   };
 
   if (!visible) return null;
@@ -157,11 +173,12 @@ export default function NewsletterPopup() {
                   />
                   <button
                     type="submit"
+                    disabled={pending}
                     style={{
                       background: 'white',
                       color: 'black',
                       border: 'none',
-                      cursor: 'pointer',
+                      cursor: pending ? 'wait' : 'pointer',
                       padding: '0 16px',
                       fontFamily: "'Poppins', sans-serif",
                       fontSize: '10px',
@@ -169,14 +186,27 @@ export default function NewsletterPopup() {
                       letterSpacing: '0.18em',
                       textTransform: 'uppercase',
                       whiteSpace: 'nowrap',
+                      opacity: pending ? 0.7 : 1,
                       transition: 'opacity 0.2s ease',
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-                    onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+                    onMouseEnter={(e) => { if (!pending) e.currentTarget.style.opacity = '0.85'; }}
+                    onMouseLeave={(e) => { if (!pending) e.currentTarget.style.opacity = '1'; }}
                   >
-                    Subscribe
+                    {pending ? 'Sending…' : 'Subscribe'}
                   </button>
                 </div>
+
+                {error && (
+                  <p role="alert" style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: '11px',
+                    color: '#ff9a9a',
+                    lineHeight: '1.6',
+                    marginBottom: '8px',
+                  }}>
+                    {error}
+                  </p>
+                )}
 
                 {/* Tagline */}
                 <p style={{

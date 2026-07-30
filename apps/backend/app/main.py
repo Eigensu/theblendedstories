@@ -4,7 +4,8 @@ from app.database import connect_to_mongo, close_mongo_connection
 from app.utils.exceptions import global_exception_handler
 from app.routers import (
     hero, what_is_tbs, footer,
-    what_we_cover, tbs_nights, articles, tbs_talks, media, the_edit
+    what_we_cover, tbs_nights, articles, tbs_talks, media, the_edit,
+    members, newsletter
 )
 from app.auth import oauth2_scheme, verify_password, create_access_token, create_refresh_token, TokenData
 from fastapi import Depends, HTTPException, status
@@ -19,9 +20,11 @@ class RefreshRequest(BaseModel):
 
 app = FastAPI(title="The Blended Stories CMS", version="1.0.0")
 
+# Restricted to known origins rather than "*": this API now issues member
+# session tokens, so any page that can call it can act as a signed-in reader.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=app_settings.cors_origin_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -127,6 +130,9 @@ app.include_router(articles.router)
 app.include_router(tbs_talks.router)
 app.include_router(footer.router)
 app.include_router(the_edit.router)
+
+app.include_router(members.router)
+app.include_router(newsletter.router)
 
 app.include_router(media.router)
 
