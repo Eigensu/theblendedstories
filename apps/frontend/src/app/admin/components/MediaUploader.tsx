@@ -1,7 +1,17 @@
 import React, { useState, useRef } from 'react';
-import { UploadCloud, Image as ImageIcon, Film, X, Loader2, Replace } from 'lucide-react';
+import {
+  UploadCloud,
+  Image as ImageIcon,
+  Film,
+  X,
+  Loader2,
+  Replace,
+} from 'lucide-react';
 import { cn } from './TextField';
-import { IMAGE_GUIDELINES, GuidelineKey } from '../../../constants/imageGuidelines';
+import {
+  IMAGE_GUIDELINES,
+  GuidelineKey,
+} from '../../../constants/imageGuidelines';
 
 type MediaUploaderProps = {
   label: string;
@@ -13,7 +23,15 @@ type MediaUploaderProps = {
   guidelineKey?: GuidelineKey;
 };
 
-export default function MediaUploader({ label, url, onUploadSuccess, onDeleteSuccess, type = 'image', className, guidelineKey }: MediaUploaderProps) {
+export default function MediaUploader({
+  label,
+  url,
+  onUploadSuccess,
+  onDeleteSuccess,
+  type = 'image',
+  className,
+  guidelineKey,
+}: MediaUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const [isDragActive, setIsDragActive] = useState(false);
@@ -28,13 +46,16 @@ export default function MediaUploader({ label, url, onUploadSuccess, onDeleteSuc
     formData.append('file', file);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/media/upload`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('admin_token')}`
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/media/upload`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
+          },
+          body: formData,
+        }
+      );
 
       const data = await response.json();
       if (!response.ok || !data.success) {
@@ -53,12 +74,12 @@ export default function MediaUploader({ label, url, onUploadSuccess, onDeleteSuc
     e.preventDefault();
     setIsDragActive(true);
   };
-  
+
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragActive(false);
   };
-  
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragActive(false);
@@ -66,27 +87,33 @@ export default function MediaUploader({ label, url, onUploadSuccess, onDeleteSuc
   };
 
   return (
-    <div className={cn("mb-6", className)}>
-      <label className="block text-sm font-semibold text-white mb-2">{label}</label>
-      
+    <div className={cn('mb-6', className)}>
+      <label className="block text-sm font-semibold text-white mb-2">
+        {label}
+      </label>
+
       {url ? (
         <div className="relative group rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 shadow-sm aspect-video max-w-sm">
           {type === 'image' ? (
-            <img src={url} alt="Uploaded media" className="w-full h-full object-cover" />
+            <img
+              src={url}
+              alt="Uploaded media"
+              className="w-full h-full object-cover"
+            />
           ) : (
             <video src={url} className="w-full h-full object-cover" controls />
           )}
-          
+
           {/* Overlay actions on hover */}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-3">
-            <button 
+            <button
               onClick={() => inputRef.current?.click()}
               className="bg-black/90 text-white border border-zinc-700 p-2 rounded-full hover:bg-zinc-900 hover:scale-105 transition-all shadow-sm"
               title="Replace"
             >
               <Replace className="w-5 h-5" />
             </button>
-            <button 
+            <button
               onClick={onDeleteSuccess}
               className="bg-black/90 text-white border border-zinc-700 p-2 rounded-full hover:bg-red-950 hover:text-red-500 hover:border-red-500 hover:scale-105 transition-all shadow-sm"
               title="Remove"
@@ -94,27 +121,38 @@ export default function MediaUploader({ label, url, onUploadSuccess, onDeleteSuc
               <X className="w-5 h-5" />
             </button>
           </div>
-          <input 
-            type="file" 
+          <input
+            type="file"
             ref={inputRef}
-            className="hidden" 
-            accept={type === 'image' ? 'image/*' : 'video/*'} 
-            onChange={(e) => handleFileChange(e.target.files?.[0])} 
-            disabled={isUploading} 
+            className="hidden"
+            accept={type === 'image' ? 'image/*' : 'video/*'}
+            onChange={(e) => handleFileChange(e.target.files?.[0])}
+            disabled={isUploading}
           />
         </div>
       ) : (
-        <div 
+        // Not a <button>: it wraps the file input, and a form control cannot be
+        // nested inside a button. role + tabIndex + onKeyDown gives keyboard
+        // users the same access to the picker.
+        <div
+          role="button"
+          tabIndex={0}
           className={cn(
-            "flex flex-col items-center justify-center w-full max-w-sm h-48 rounded-xl border-2 border-dashed transition-all duration-200 cursor-pointer",
-            isDragActive 
-              ? "border-white bg-zinc-900" 
-              : "border-zinc-800 bg-zinc-950 hover:bg-zinc-900 hover:border-zinc-700"
+            'flex flex-col items-center justify-center w-full max-w-sm h-48 rounded-xl border-2 border-dashed transition-all duration-200 cursor-pointer',
+            isDragActive
+              ? 'border-white bg-zinc-900'
+              : 'border-zinc-800 bg-zinc-950 hover:bg-zinc-900 hover:border-zinc-700'
           )}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              inputRef.current?.click();
+            }
+          }}
         >
           {isUploading ? (
             <div className="flex flex-col items-center text-zinc-400">
@@ -124,32 +162,40 @@ export default function MediaUploader({ label, url, onUploadSuccess, onDeleteSuc
           ) : (
             <div className="flex flex-col items-center text-zinc-500">
               <UploadCloud className="w-10 h-10 mb-3 text-zinc-600" />
-              <span className="text-sm font-semibold text-white">Click or drag to upload</span>
+              <span className="text-sm font-semibold text-white">
+                Click or drag to upload
+              </span>
               <span className="text-xs text-zinc-500 mt-1">
                 {type === 'image' ? 'SVG, PNG, JPG or GIF' : 'MP4, WebM or OGG'}
               </span>
             </div>
           )}
-          <input 
-            type="file" 
+          <input
+            type="file"
             ref={inputRef}
-            className="hidden" 
-            accept={type === 'image' ? 'image/*' : 'video/*'} 
-            onChange={(e) => handleFileChange(e.target.files?.[0])} 
-            disabled={isUploading} 
+            className="hidden"
+            accept={type === 'image' ? 'image/*' : 'video/*'}
+            onChange={(e) => handleFileChange(e.target.files?.[0])}
+            disabled={isUploading}
           />
         </div>
       )}
-      {error && <p className="text-red-500 text-sm font-medium mt-2">{error}</p>}
-      
+      {error && (
+        <p className="text-red-500 text-sm font-medium mt-2">{error}</p>
+      )}
+
       {guidelineKey && IMAGE_GUIDELINES[guidelineKey] && (
         <div className="text-xs text-zinc-400 flex flex-col gap-1 mt-3 p-3 bg-zinc-900/50 rounded-lg border border-zinc-800 w-full max-w-sm">
-           <span className="font-semibold text-zinc-300 mb-1">Recommended Size:</span>
-           <span>Desktop: {IMAGE_GUIDELINES[guidelineKey].desktop}</span>
-           <span>Mobile: {IMAGE_GUIDELINES[guidelineKey].mobile}</span>
-           <span>Aspect Ratio: {IMAGE_GUIDELINES[guidelineKey].aspectRatio}</span>
-           <span>Format: {IMAGE_GUIDELINES[guidelineKey].format}</span>
-           <span>Max Size: {IMAGE_GUIDELINES[guidelineKey].maxSize}</span>
+          <span className="font-semibold text-zinc-300 mb-1">
+            Recommended Size:
+          </span>
+          <span>Desktop: {IMAGE_GUIDELINES[guidelineKey].desktop}</span>
+          <span>Mobile: {IMAGE_GUIDELINES[guidelineKey].mobile}</span>
+          <span>
+            Aspect Ratio: {IMAGE_GUIDELINES[guidelineKey].aspectRatio}
+          </span>
+          <span>Format: {IMAGE_GUIDELINES[guidelineKey].format}</span>
+          <span>Max Size: {IMAGE_GUIDELINES[guidelineKey].maxSize}</span>
         </div>
       )}
     </div>
