@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Footer from '@/components/Footer';
 import { TopicArticleGrid } from '@/components/topics/TopicArticleCard';
+import TopicBreadcrumb from '@/components/topics/TopicBreadcrumb';
 import {
   findKeyword,
   findSection,
@@ -60,14 +61,6 @@ export default async function KeywordPage({
     new Set(exactMatches.map((article) => article.slug))
   );
 
-  const eyebrowStyle = {
-    fontFamily: "'Poppins', sans-serif",
-    fontSize: 'clamp(10px, 0.85vw, 12px)',
-    color: 'rgba(255,255,255,0.45)',
-    letterSpacing: '0.12em',
-    textTransform: 'uppercase',
-  } as const;
-
   return (
     <div
       style={{
@@ -89,16 +82,9 @@ export default async function KeywordPage({
         }}
       >
         <div style={{ marginBottom: 'clamp(32px, 5vw, 64px)' }}>
-          <Link
-            href={sectionPath(section.slug)}
-            style={{
-              ...eyebrowStyle,
-              textDecoration: 'none',
-              display: 'inline-block',
-            }}
-          >
-            {section.label}
-          </Link>
+          <TopicBreadcrumb
+            section={{ label: section.label, href: sectionPath(section.slug) }}
+          />
 
           <h1
             style={{
@@ -106,7 +92,7 @@ export default async function KeywordPage({
               fontSize: 'clamp(36px, 5vw, 64px)',
               fontWeight: 400,
               color: 'white',
-              margin: 'clamp(12px, 1.5vw, 18px) 0 0 0',
+              margin: 0,
               lineHeight: '0.9',
               textTransform: 'uppercase',
               letterSpacing: '-0.01em',

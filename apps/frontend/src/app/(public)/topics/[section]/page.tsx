@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Footer from '@/components/Footer';
 import { TopicArticleGrid } from '@/components/topics/TopicArticleCard';
+import TopicBreadcrumb from '@/components/topics/TopicBreadcrumb';
 import { findSection } from '@/constants/menuTaxonomy';
 import { fetchMenuSections } from '@/services/menuApi';
 import {
@@ -72,6 +73,8 @@ export default async function SectionPage({
         }}
       >
         <div style={{ marginBottom: 'clamp(32px, 5vw, 64px)' }}>
+          <TopicBreadcrumb />
+
           <h1
             style={{
               fontFamily: "'Fraunces', serif",
