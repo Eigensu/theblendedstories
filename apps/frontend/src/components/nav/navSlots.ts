@@ -32,6 +32,20 @@ export function navSlotRight(index: number): string {
   return `calc(var(--px-page) + ${index * SLOT_WIDTH}px)`;
 }
 
+/** Breathing room between the leftmost button and whatever sits beside it. */
+const SLOT_CLEARANCE = 16;
+
+/**
+ * How far in from the right edge `count` buttons reach, plus a gap.
+ *
+ * The buttons are `position: fixed`, so they occupy no space in flow and nothing
+ * pushes back against them — any header that lays out its own content along the
+ * top of the page has to subtract this or it will run underneath them.
+ */
+export function navSlotsReservedRight(count: number): string {
+  return `calc(var(--px-page) + ${count * SLOT_WIDTH + SLOT_CLEARANCE}px)`;
+}
+
 /**
  * Shared styling for the corner buttons. Keeping this here is what stops the
  * three from drifting apart on size, colour, or stacking order.
