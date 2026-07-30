@@ -1,60 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import NavButton from './nav/NavButton';
 import { hasHamburger } from './nav/navSlots';
+import {
+  keywordPath,
+  sectionPath,
+  type MenuSection,
+} from '@/constants/menuTaxonomy';
 
-const S = [
-  {
-    title: 'FASHION ',
-    items: [
-      'Fashion',
-      'Jewellery & Watches',
-      'Accessories',
-      'Bridal',
-      'Trend Reports',
-    ],
-  },
-  {
-    title: 'FOOD & DRINK ',
-    items: [
-      'Restaurants',
-      'Cafés',
-      'Bars & Cocktails',
-      'Desserts',
-      'New Openings',
-    ],
-  },
-  {
-    title: 'TRAVEL ',
-    items: [
-      'Hotels & Stays',
-      'Destinations',
-      'City Guides',
-      'Weekend Escapes',
-      'Travel Trends',
-    ],
-  },
-  {
-    title: 'BEAUTY &\nWELLNESS ',
-    items: ['Beauty', 'Skincare', 'Hair & Makeup', 'Wellness', 'Treatments'],
-  },
-  {
-    title: 'DESIGN ',
-    items: ['Interiors', 'Architecture', 'Home Décor', 'Furniture', 'Styling'],
-  },
-  {
-    title: 'CULTURE ',
-    items: ['People', 'Arts', 'Entertainment', 'Events', 'TBS Talks'],
-  },
-  {
-    title: 'THE BLENDED EDIT',
-    items: ['Curated ', 'Weekend ', 'Monthly ', 'Luxury ', 'Best Of'],
-  },
-];
-
-export default function MegaMenu() {
+export default function MegaMenu({ sections }: { sections: MenuSection[] }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -96,7 +53,13 @@ export default function MegaMenu() {
           overflowY: 'auto',
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'auto' : 'none',
-          transition: 'opacity 0.3s ease',
+          // The panel stays mounted when closed, so pointer-events alone would leave
+          // every menu link in the tab order — reachable by keyboard and able to
+          // navigate away from an invisible overlay. `visibility` takes it out of the
+          // tab order too, and transitioning it holds the flip to `hidden` until the
+          // fade has finished rather than cutting it off.
+          visibility: open ? 'visible' : 'hidden',
+          transition: 'opacity 0.3s ease, visibility 0.3s ease',
         }}
       >
         <div
@@ -134,26 +97,36 @@ export default function MegaMenu() {
             className="mega-menu-grid"
             style={{
               display: 'grid',
-              gridTemplateColumns: `repeat(${S.length}, 1fr)`,
+              gridTemplateColumns: `repeat(${sections.length}, 1fr)`,
               gap: 'clamp(12px, 1.5vw, 24px)',
               marginTop: 'clamp(40px, 5vw, 56px)',
             }}
           >
-            {S.map((section) => (
-              <div key={section.title}>
+            {sections.map((section) => (
+              <div key={section.slug}>
                 <h3
                   style={{
-                    fontFamily: "'Poppins', sans-serif",
                     fontSize: '13px',
                     fontWeight: 600,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: 'white',
                     margin: '0 0 18px 0',
-                    whiteSpace: 'pre-line',
                   }}
                 >
-                  {section.title}
+                  <Link
+                    href={sectionPath(section.slug)}
+                    onClick={() => setOpen(false)}
+                    style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      color: 'white',
+                      textDecoration: 'none',
+                      whiteSpace: 'pre-line',
+                    }}
+                  >
+                    {section.menuTitle}
+                  </Link>
                 </h3>
                 <ul
                   style={{
@@ -166,9 +139,9 @@ export default function MegaMenu() {
                   }}
                 >
                   {section.items.map((item) => (
-                    <li key={item}>
-                      <a
-                        href="#"
+                    <li key={item.slug}>
+                      <Link
+                        href={keywordPath(section.slug, item.slug)}
                         onClick={() => setOpen(false)}
                         style={{
                           fontFamily: "'Poppins', sans-serif",
@@ -185,8 +158,8 @@ export default function MegaMenu() {
                             'rgba(255,255,255,0.7)')
                         }
                       >
-                        {item}
-                      </a>
+                        {item.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>

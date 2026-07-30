@@ -6,6 +6,7 @@ import TopPicksEditor from './TopPicksEditor';
 import TBSNightsEditor from './TBSNightsEditor';
 import WhatIsTBSEditor from './WhatIsTBSEditor';
 import FooterEditor from './FooterEditor';
+import MenuEditor from './MenuEditor';
 import WhatWeCoverEditor from './WhatWeCoverEditor';
 import TBSTalksEditor from './TBSTalksEditor';
 import TBSTalksFeaturedEditor from './TBSTalksFeaturedEditor';
@@ -107,12 +108,21 @@ export const adminSections: AdminSection[] = [
 
   // Global sections
   {
+    id: 'menu',
+    title: 'Menu & Keywords',
+    collection: 'menu',
+    icon: 'menu',
+    component: MenuEditor,
+    order: 8,
+    group: 'global',
+  },
+  {
     id: 'footer',
     title: 'Footer',
     collection: 'footer',
     icon: 'layout',
     component: FooterEditor,
-    order: 8,
+    order: 9,
     group: 'global',
   },
 
