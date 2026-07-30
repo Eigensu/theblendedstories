@@ -11,7 +11,9 @@ import {
   type MenuSection,
 } from '@/constants/menuTaxonomy';
 
-export default function MegaMenu({ sections }: { sections: MenuSection[] }) {
+export default function MegaMenu({
+  sections,
+}: Readonly<{ sections: MenuSection[] }>) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -71,6 +73,7 @@ export default function MegaMenu({ sections }: { sections: MenuSection[] }) {
           }}
         >
           <button
+            type="button"
             onClick={() => setOpen(false)}
             aria-label="Close menu"
             style={{

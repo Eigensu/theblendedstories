@@ -31,95 +31,88 @@ export interface MenuSection extends MenuKeyword {
 }
 
 /**
+ * Shipped taxonomy, as `[label, words, menuTitle?]`.
+ *
+ * Written as a table rather than as spelled-out objects: the object form repeated
+ * the same seven-key shape thirty-five times, which is a lot of surface for a typo
+ * to hide in and, being pure boilerplate, told a reader nothing the labels do not.
+ */
+type SectionSeed = readonly [
+  label: string,
+  words: readonly string[],
+  menuTitle?: string,
+];
+
+const DEFAULT_SEEDS: readonly SectionSeed[] = [
+  [
+    'Fashion',
+    [
+      'Fashion',
+      'Jewellery & Watches',
+      'Accessories',
+      'Bridal',
+      'Trend Reports',
+    ],
+  ],
+  [
+    'Food & Drink',
+    ['Restaurants', 'Cafés', 'Bars & Cocktails', 'Desserts', 'New Openings'],
+  ],
+  [
+    'Travel',
+    [
+      'Hotels & Stays',
+      'Destinations',
+      'City Guides',
+      'Weekend Escapes',
+      'Travel Trends',
+    ],
+  ],
+  // Two lines, because one would overflow its menu column.
+  [
+    'Beauty & Wellness',
+    ['Beauty', 'Skincare', 'Hair & Makeup', 'Wellness', 'Treatments'],
+    'BEAUTY &\nWELLNESS',
+  ],
+  [
+    'Design',
+    ['Interiors', 'Architecture', 'Home Décor', 'Furniture', 'Styling'],
+  ],
+  ['Culture', ['People', 'Arts', 'Entertainment', 'Events', 'TBS Talks']],
+  ['The Blended Edit', ['Curated', 'Weekend', 'Monthly', 'Luxury', 'Best Of']],
+];
+
+/**
+ * Slug for a label. **Must stay in step with `slugify` in the backend's
+ * `menu_service`** — that one mints the slugs stored on articles, this one only
+ * derives the fallback taxonomy, and the two disagreeing would mean a link in the
+ * offline menu pointing somewhere the database never had.
+ *
+ * `tests/test_menu_service.py` asserts the Python side produces exactly the slugs
+ * below for exactly these labels.
+ */
+function slugify(label: string): string {
+  return label
+    .replace(/&/g, ' and ') // or "Food & Drink" collapses to "food-drink"
+    .normalize('NFKD') // split accents off, so "Cafés" survives as "cafes"
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toLowerCase();
+}
+
+/**
  * Shipped taxonomy. Kept in step with the backend's `DEFAULT_MENU_SECTIONS` so a
  * cold database and an unreachable backend both render the same menu.
  */
-export const DEFAULT_MENU_SECTIONS: MenuSection[] = [
-  {
-    slug: 'fashion',
-    label: 'Fashion',
-    menuTitle: 'FASHION',
-    items: [
-      { slug: 'fashion', label: 'Fashion' },
-      { slug: 'jewellery-and-watches', label: 'Jewellery & Watches' },
-      { slug: 'accessories', label: 'Accessories' },
-      { slug: 'bridal', label: 'Bridal' },
-      { slug: 'trend-reports', label: 'Trend Reports' },
-    ],
-  },
-  {
-    slug: 'food-and-drink',
-    label: 'Food & Drink',
-    menuTitle: 'FOOD & DRINK',
-    items: [
-      { slug: 'restaurants', label: 'Restaurants' },
-      { slug: 'cafes', label: 'Cafés' },
-      { slug: 'bars-and-cocktails', label: 'Bars & Cocktails' },
-      { slug: 'desserts', label: 'Desserts' },
-      { slug: 'new-openings', label: 'New Openings' },
-    ],
-  },
-  {
-    slug: 'travel',
-    label: 'Travel',
-    menuTitle: 'TRAVEL',
-    items: [
-      { slug: 'hotels-and-stays', label: 'Hotels & Stays' },
-      { slug: 'destinations', label: 'Destinations' },
-      { slug: 'city-guides', label: 'City Guides' },
-      { slug: 'weekend-escapes', label: 'Weekend Escapes' },
-      { slug: 'travel-trends', label: 'Travel Trends' },
-    ],
-  },
-  {
-    slug: 'beauty-and-wellness',
-    label: 'Beauty & Wellness',
-    menuTitle: 'BEAUTY &\nWELLNESS',
-    items: [
-      { slug: 'beauty', label: 'Beauty' },
-      { slug: 'skincare', label: 'Skincare' },
-      { slug: 'hair-and-makeup', label: 'Hair & Makeup' },
-      { slug: 'wellness', label: 'Wellness' },
-      { slug: 'treatments', label: 'Treatments' },
-    ],
-  },
-  {
-    slug: 'design',
-    label: 'Design',
-    menuTitle: 'DESIGN',
-    items: [
-      { slug: 'interiors', label: 'Interiors' },
-      { slug: 'architecture', label: 'Architecture' },
-      { slug: 'home-decor', label: 'Home Décor' },
-      { slug: 'furniture', label: 'Furniture' },
-      { slug: 'styling', label: 'Styling' },
-    ],
-  },
-  {
-    slug: 'culture',
-    label: 'Culture',
-    menuTitle: 'CULTURE',
-    items: [
-      { slug: 'people', label: 'People' },
-      { slug: 'arts', label: 'Arts' },
-      { slug: 'entertainment', label: 'Entertainment' },
-      { slug: 'events', label: 'Events' },
-      { slug: 'tbs-talks', label: 'TBS Talks' },
-    ],
-  },
-  {
-    slug: 'the-blended-edit',
-    label: 'The Blended Edit',
-    menuTitle: 'THE BLENDED EDIT',
-    items: [
-      { slug: 'curated', label: 'Curated' },
-      { slug: 'weekend', label: 'Weekend' },
-      { slug: 'monthly', label: 'Monthly' },
-      { slug: 'luxury', label: 'Luxury' },
-      { slug: 'best-of', label: 'Best Of' },
-    ],
-  },
-];
+export const DEFAULT_MENU_SECTIONS: MenuSection[] = DEFAULT_SEEDS.map(
+  ([label, words, menuTitle]) => ({
+    slug: slugify(label),
+    label,
+    menuTitle: menuTitle ?? label.toUpperCase(),
+    items: words.map((word) => ({ slug: slugify(word), label: word })),
+  })
+);
 
 /**
  * Coerce the API payload into `MenuSection[]`.

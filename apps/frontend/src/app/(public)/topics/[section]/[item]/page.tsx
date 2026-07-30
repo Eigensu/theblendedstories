@@ -36,9 +36,9 @@ export async function generateMetadata({
 
 export default async function KeywordPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ section: string; item: string }>;
-}) {
+}>) {
   const { section: sectionSlug, item: itemSlug } = await params;
   const [menuSections, allArticles] = await Promise.all([
     fetchMenuSections(),

@@ -27,7 +27,7 @@ export default function SelectField({
   disabled = false,
   hint,
   className,
-}: SelectFieldProps) {
+}: Readonly<SelectFieldProps>) {
   return (
     <div className={cn('mb-6', className)}>
       <label className="block text-sm font-semibold text-white mb-2">

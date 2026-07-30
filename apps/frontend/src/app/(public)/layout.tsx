@@ -7,9 +7,9 @@ import { fetchMenuSections } from '@/services/menuApi';
 
 export default async function PublicLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   // MegaMenu is a client component, so the taxonomy is read here and passed down.
   // `fetchMenuSections` is cached per render pass, so the /topics pages reading it
   // too costs nothing extra.

@@ -22,10 +22,10 @@ export function articleEyebrow(
 export default function TopicArticleCard({
   article,
   sections,
-}: {
+}: Readonly<{
   article: ArticleSummary;
   sections: MenuSection[];
-}) {
+}>) {
   const eyebrow = articleEyebrow(sections, article);
 
   return (
@@ -133,10 +133,10 @@ export default function TopicArticleCard({
 export function TopicArticleGrid({
   articles,
   sections,
-}: {
+}: Readonly<{
   articles: ArticleSummary[];
   sections: MenuSection[];
-}) {
+}>) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
       {articles.map((article) => (
