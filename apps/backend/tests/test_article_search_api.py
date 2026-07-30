@@ -134,6 +134,8 @@ check("slug lookup still resolves", response.status_code == 200, response.status
 LISTING_FIELDS = {
     "id", "slug", "title", "subtitle", "category", "cover_image",
     "hero_image", "reading_time", "publish_date", "display_order", "status",
+    # The /topics keyword pages group and rank off these.
+    "primary_keyword", "sub_keyword",
 }
 
 response = client.get("/articles/", params={"summary": "true"})

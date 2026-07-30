@@ -4,7 +4,13 @@ import { apiClient } from '../services/api';
 import { handleApiError } from '../services/errorHandler';
 import TextField from '../components/TextField';
 import TextArea from '../components/TextArea';
+import SelectField, { SelectOption } from '../components/SelectField';
 import MediaUploader from '../components/MediaUploader';
+import {
+  findSection,
+  normalizeMenuSections,
+  type MenuSection,
+} from '@/constants/menuTaxonomy';
 import { useAdmin } from '../contexts/AdminContext';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Search, Plus, Edit2, Trash2, ArrowLeft, X, GripVertical, Copy, Bold, Italic, Underline, Link2, Heading2, List } from 'lucide-react';
@@ -50,6 +56,10 @@ export type Article = {
   slug: string;
   subtitle?: string;
   category: string;
+  /** Mega-menu section slug, e.g. `fashion`. Drives which /topics page lists it. */
+  primary_keyword?: string;
+  /** Slug of an item beneath the primary, e.g. `bridal`. */
+  sub_keyword?: string;
   author: string;
   author_image: string;
   author_role: string;
@@ -73,6 +83,21 @@ export type Article = {
   display_order: number;
   status: string;
 };
+
+// Both dropdowns are driven off the menu taxonomy managed in Menu & Keywords, so
+// the values an editor can save here are exactly the ones the /topics routes know
+// how to resolve.
+const sectionOptions = (sections: MenuSection[]): SelectOption[] =>
+  sections.map((section) => ({ value: section.slug, label: section.label }));
+
+const keywordOptionsFor = (
+  sections: MenuSection[],
+  sectionSlug: string | undefined
+): SelectOption[] =>
+  findSection(sections, sectionSlug)?.items.map((item) => ({
+    value: item.slug,
+    label: item.label,
+  })) || [];
 
 const createBlockId = () => {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
@@ -516,6 +541,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
   const [originalArticle, setOriginalArticle] = useState<Article | null>(null);
   const [mode, setMode] = useState<'list' | 'edit'>('list');
   const [isLoading, setIsLoading] = useState(true);
+  const [menuSections, setMenuSections] = useState<MenuSection[]>([]);
 
   const { setHasUnsavedChanges, setIsSaving, registerSaveHandler, setStatus } = useAdmin();
 
@@ -526,6 +552,15 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       setStatus('published');
     }
   }, [mode]);
+
+  // Fetched once rather than per edit: the keyword dropdowns need it, and a failure
+  // here should not block editing an article, so it degrades to empty dropdowns.
+  useEffect(() => {
+    apiClient
+      .get<{ sections?: unknown }>('/menu/')
+      .then((data) => setMenuSections(normalizeMenuSections(data?.sections)))
+      .catch((err) => handleApiError('Failed to load menu keywords', err));
+  }, []);
 
   useEffect(() => {
     if (mode === 'edit') {
@@ -605,6 +640,8 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       title: '',
       slug: '',
       category: '',
+      primary_keyword: '',
+      sub_keyword: '',
       author: '',
       author_image: '',
       author_role: 'Contributing Editor',
@@ -642,6 +679,13 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       content: nextContent,
     });
   };
+
+  // Sub keywords are scoped to the chosen section, so the list is empty until a
+  // primary is picked — which is also when the field unlocks.
+  const subKeywordOptions = keywordOptionsFor(
+    menuSections,
+    selectedArticle?.primary_keyword
+  );
 
   if (mode === 'list') {
     return (
@@ -783,11 +827,42 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
               />
             </div>
             
-            <TextField 
-              label="Publish Date (YYYY-MM-DD)" 
-              value={selectedArticle.publish_date} 
-              onChange={(v) => setSelectedArticle({ ...selectedArticle, publish_date: v })} 
+            <TextField
+              label="Publish Date (YYYY-MM-DD)"
+              value={selectedArticle.publish_date}
+              onChange={(v) => setSelectedArticle({ ...selectedArticle, publish_date: v })}
             />
+
+            <div className="grid grid-cols-2 gap-4">
+              <SelectField
+                label="Primary Keyword (menu section)"
+                value={selectedArticle.primary_keyword || ''}
+                options={sectionOptions(menuSections)}
+                hint="Decides which menu section lists this article."
+                // Changing the section invalidates the sub keyword — it names an item
+                // that only exists beneath the old primary, so it is cleared rather
+                // than left pointing at nothing.
+                onChange={(v) =>
+                  setSelectedArticle({
+                    ...selectedArticle,
+                    primary_keyword: v,
+                    sub_keyword: '',
+                  })
+                }
+              />
+              <SelectField
+                label="Sub Keyword"
+                value={selectedArticle.sub_keyword || ''}
+                options={subKeywordOptions}
+                disabled={!selectedArticle.primary_keyword}
+                hint={
+                  selectedArticle.primary_keyword
+                    ? 'Ranks the article to the top of this keyword’s page.'
+                    : 'Pick a primary keyword first.'
+                }
+                onChange={(v) => setSelectedArticle({ ...selectedArticle, sub_keyword: v })}
+              />
+            </div>
           </div>
 
           <div className="p-6 bg-[#111111] rounded-2xl border border-zinc-800/50 space-y-6">

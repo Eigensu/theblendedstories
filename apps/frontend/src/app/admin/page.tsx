@@ -29,6 +29,7 @@ import {
   Home,
   Mail,
   List,
+  Menu as MenuIcon,
 } from 'lucide-react';
 import StatusBadge from './components/StatusBadge';
 import { useAdmin } from './contexts/AdminContext';
@@ -47,6 +48,7 @@ const iconMap: Record<string, React.ReactNode> = {
   star: <Star className="w-5 h-5" />,
   mail: <Mail className="w-5 h-5" />,
   list: <List className="w-5 h-5" />,
+  menu: <MenuIcon className="w-5 h-5" />,
 };
 
 export default function AdminDashboard() {

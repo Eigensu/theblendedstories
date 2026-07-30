@@ -107,6 +107,10 @@ _SUMMARY_FIELDS = (
     "title",
     "subtitle",
     "category",
+    # The /topics pages filter and group entirely off these two, and they read the
+    # summary list — drop either and every keyword page renders empty.
+    "primary_keyword",
+    "sub_keyword",
     "author",
     "cover_image",
     "hero_image",

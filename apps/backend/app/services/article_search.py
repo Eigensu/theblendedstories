@@ -85,7 +85,15 @@ def _build_entry(item: dict[str, Any]) -> dict[str, Any]:
     weighted = [
         (_TITLE_WEIGHT, tokenize(field("title"))),
         (_SUBTITLE_WEIGHT, tokenize(field("subtitle"))),
-        (_CATEGORY_WEIGHT, tokenize(field("category"))),
+        # Keywords sit in the category bucket: they are the same kind of signal, and
+        # their slugs tokenize into the words an editor would actually search for
+        # ("beauty-and-wellness" -> beauty, and, wellness).
+        (
+            _CATEGORY_WEIGHT,
+            tokenize(
+                f"{field('category')} {field('primary_keyword')} {field('sub_keyword')}"
+            ),
+        ),
         (_AUTHOR_WEIGHT, tokenize(f"{field('author')} {field('author_role')}")),
         (
             _SUMMARY_WEIGHT,

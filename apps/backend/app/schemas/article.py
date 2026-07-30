@@ -32,7 +32,16 @@ class ArticleModel(BaseModelMixin):
     slug: str
     subtitle: Optional[str] = None
     category: str
-    
+
+    # Menu taxonomy. `primary_keyword` is a mega-menu section slug ("fashion"),
+    # `sub_keyword` one of the items beneath it ("bridal"); a sub keyword is only
+    # meaningful alongside its primary. Both are optional so existing articles and
+    # in-progress drafts keep saving — they simply don't appear on /topics pages
+    # until an editor files them. The canonical list lives in the frontend at
+    # src/constants/menuTaxonomy.ts and is enforced by the admin dropdowns.
+    primary_keyword: Optional[str] = None
+    sub_keyword: Optional[str] = None
+
     author: str
     author_image: str
     author_role: str

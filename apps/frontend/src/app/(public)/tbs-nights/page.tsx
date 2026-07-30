@@ -521,6 +521,24 @@ const STEPS = [
   { label: 'A little extra' },
 ];
 
+/** The seven ratings on step 2, named once so the gate cannot drift from the inputs. */
+const VIBE_KEYS = [
+  'vibe1',
+  'vibe2',
+  'vibe3',
+  'vibe4',
+  'vibe5',
+  'vibe6',
+  'vibe7',
+] as const;
+
+/** What is still missing on each step, shown while its button is disabled. */
+const STEP_HINTS = [
+  'Add your email, name, age, profession and city to continue.',
+  'Rate all seven statements to continue.',
+  'Choose the dinner table that sounds most like you to submit.',
+];
+
 function StepList({ current }: { current: number }) {
   return (
     <div
@@ -644,7 +662,15 @@ export default function TBSNightsPage() {
     form.profession &&
     form.city
   );
-  const canContinue = step === 0 ? aboutValid : true;
+  // Every rating starts at 0 and the API only accepts 1 to 5, so an untouched
+  // slider is a rejected submission.
+  const vibesValid = VIBE_KEYS.every((key) => form[key] >= 1 && form[key] <= 5);
+  const extraValid = !!form.dinnerTable;
+
+  // Each step gates its own required fields. Only step 0 did, so the wizard walked
+  // an unanswered form all the way to Submit and let the backend refuse it — a
+  // round trip, and a generic error, for something the form already knew.
+  const canContinue = [aboutValid, vibesValid, extraValid][step] ?? true;
   const isLastStep = step === STEPS.length - 1;
 
   const nextBtnStyle: React.CSSProperties = {
@@ -1107,6 +1133,23 @@ export default function TBSNightsPage() {
             )}
           </div>
 
+          {/* A greyed-out button with no explanation is a dead end — say what is
+              still missing rather than leaving the reader to hunt for it. */}
+          {!canContinue && (
+            <p
+              id="tbs-step-hint"
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '12px',
+                color: 'rgba(255,255,255,0.4)',
+                margin: '20px 0 0 0',
+                textAlign: 'right',
+              }}
+            >
+              {STEP_HINTS[step]}
+            </p>
+          )}
+
           {/* ── Bottom nav ── */}
           <div className="tbs-wizard-nav">
             {step > 0 ? (
@@ -1150,6 +1193,7 @@ export default function TBSNightsPage() {
             <button
               type="button"
               disabled={!canContinue || pending}
+              aria-describedby={canContinue ? undefined : 'tbs-step-hint'}
               onClick={(e) => {
                 if (!canContinue || pending) return;
                 if (isLastStep) {
