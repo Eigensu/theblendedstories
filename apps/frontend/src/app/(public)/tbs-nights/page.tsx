@@ -75,7 +75,7 @@ const CITY_OPTIONS = [
   'Surat',
   'Visakhapatnam',
   'Vadodara',
-].sort();
+].sort((a, b) => a.localeCompare(b));
 
 function SuccessModal({ onBack }: { onBack: () => void }) {
   return (

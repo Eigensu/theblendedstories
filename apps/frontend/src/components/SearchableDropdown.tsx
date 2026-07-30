@@ -9,24 +9,33 @@ interface SearchableDropdownProps {
   required?: boolean;
 }
 
-export default function SearchableDropdown({ options, value, onChange, placeholder = "Select an option", required = false }: SearchableDropdownProps) {
+export default function SearchableDropdown({
+  options,
+  value,
+  onChange,
+  placeholder = 'Select an option',
+  required = false,
+}: SearchableDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const filteredOptions = options.filter(opt => 
+  const filteredOptions = options.filter((opt) =>
     opt.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -45,16 +54,16 @@ export default function SearchableDropdown({ options, value, onChange, placehold
   return (
     <div className="relative w-full" ref={wrapperRef}>
       {/* Hidden input for HTML5 required validation */}
-      <input 
-        type="text" 
-        value={value} 
-        onChange={() => {}} 
-        required={required} 
-        className="absolute opacity-0 pointer-events-none w-0 h-0" 
+      <input
+        type="text"
+        value={value}
+        onChange={() => {}}
+        required={required}
+        className="absolute opacity-0 pointer-events-none w-0 h-0"
         tabIndex={-1}
       />
-      
-      <div 
+
+      <div
         className="flex items-center justify-between w-full cursor-pointer"
         style={{
           background: 'transparent',
@@ -77,25 +86,29 @@ export default function SearchableDropdown({ options, value, onChange, placehold
         }}
       >
         <span className="truncate">{value || placeholder}</span>
-        <ChevronDown 
-          size={16} 
+        <ChevronDown
+          size={16}
           className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          color="rgba(255,255,255,0.5)" 
+          color="rgba(255,255,255,0.5)"
         />
       </div>
 
       {isOpen && (
-        <div 
+        <div
           className="absolute z-50 w-full mt-2 rounded-lg border border-zinc-800 shadow-xl overflow-hidden"
           style={{
             background: '#111',
             maxHeight: '280px',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}
         >
           <div className="flex items-center px-3 py-2 border-b border-zinc-800 bg-[#1a1a1a]">
-            <Search size={14} color="rgba(255,255,255,0.4)" className="mr-2 shrink-0" />
+            <Search
+              size={14}
+              color="rgba(255,255,255,0.4)"
+              className="mr-2 shrink-0"
+            />
             <input
               ref={inputRef}
               type="text"
@@ -106,17 +119,18 @@ export default function SearchableDropdown({ options, value, onChange, placehold
               onClick={(e) => e.stopPropagation()}
             />
           </div>
-          
+
           <div className="overflow-y-auto flex-1 p-1">
             {filteredOptions.length > 0 ? (
               filteredOptions.map((opt, idx) => (
-                <div
+                <button
                   key={idx}
-                  className="px-3 py-2.5 text-xs text-zinc-300 hover:text-white hover:bg-zinc-800 rounded cursor-pointer transition-colors font-['Poppins']"
+                  type="button"
+                  className="block w-full text-left px-3 py-2.5 text-xs text-zinc-300 hover:text-white hover:bg-zinc-800 rounded cursor-pointer transition-colors font-['Poppins']"
                   onClick={() => handleSelect(opt)}
                 >
                   {opt}
-                </div>
+                </button>
               ))
             ) : (
               <div className="px-3 py-4 text-xs text-zinc-500 text-center font-['Poppins']">
