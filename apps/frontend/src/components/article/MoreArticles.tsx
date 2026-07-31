@@ -75,7 +75,7 @@ export default function MoreArticles({ articles }: { articles: MoreArticle[] }) 
                 <div
                   className="flex flex-wrap items-center gap-x-[10px] gap-y-[4px]"
                   style={{
-                    fontFamily: "'Public Sans', sans-serif",
+                    fontFamily: "'Poppins', sans-serif",
                     fontSize: '11px',
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',

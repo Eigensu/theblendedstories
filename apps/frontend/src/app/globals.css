@@ -909,7 +909,7 @@ section.touch-color video:not(.no-grayscale),
   width: 100%;
   max-width: 780px; /* Comfortable reading width */
   margin: 0 auto;
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: clamp(18px, 2.2vw, 21px);
   line-height: 1.8;
   color: #e7e6e1;
@@ -950,7 +950,7 @@ section.touch-color video:not(.no-grayscale),
 }
 
 .article-body-text h2 {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Fraunces', serif;
   font-size: clamp(24px, 4vw, 32px);
   margin: 2rem 0 1rem 0;
   color: var(--white);
@@ -965,7 +965,7 @@ section.touch-color video:not(.no-grayscale),
 .article-body-text ul li {
   margin-bottom: 0.75rem;
   line-height: 1.8;
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: clamp(18px, 2.2vw, 21px);
   color: #e7e6e1;
 }

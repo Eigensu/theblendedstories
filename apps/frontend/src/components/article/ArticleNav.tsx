@@ -47,7 +47,7 @@ export default function ArticleNav() {
             href="/#top-picks"
             className="inline-flex items-center gap-3 text-[#f5f4f0] hover:text-white transition-colors"
             style={{
-              fontFamily: "'Public Sans', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               fontSize: '12px',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
@@ -74,7 +74,7 @@ export default function ArticleNav() {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', paddingRight: NAV_GUTTER }}
         >
           {SECTION_LINKS.map(({ label, href }) => (
-            <Link key={href} href={href} className="text-[11px] md:text-[12px] uppercase tracking-[0.18em] font-semibold text-[#f5f4f0] hover:text-white transition-colors" style={{ fontFamily: "'Public Sans', sans-serif", textDecoration: 'none' }}>{label}</Link>
+            <Link key={href} href={href} className="text-[11px] md:text-[12px] uppercase tracking-[0.18em] font-semibold text-[#f5f4f0] hover:text-white transition-colors" style={{ fontFamily: "'Poppins', sans-serif", textDecoration: 'none' }}>{label}</Link>
           ))}
         </div>
       </div>

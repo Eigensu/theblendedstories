@@ -199,7 +199,7 @@ export default function Footer({ data }: { data?: any }) {
           <ScrollReveal className="footer-quicklinks-col" style={{ width: '100%' }}>
             <div>
               <h4 style={{
-                fontFamily: "'Bodoni Moda', serif",
+                fontFamily: "'Fraunces', serif",
                 fontSize: 'clamp(16px, 1.5vw, 22px)',
                 fontStyle: 'italic',
                 fontWeight: 400,
@@ -231,7 +231,7 @@ export default function Footer({ data }: { data?: any }) {
           <ScrollReveal delay={0.1} className="footer-locations-col" style={{ width: '100%' }}>
             <div>
               <h4 style={{
-                fontFamily: "'Bodoni Moda', serif",
+                fontFamily: "'Fraunces', serif",
                 fontSize: 'clamp(16px, 1.5vw, 22px)',
                 fontStyle: 'italic',
                 fontWeight: 400,
@@ -274,7 +274,7 @@ export default function Footer({ data }: { data?: any }) {
           <ScrollReveal delay={0.2} className="footer-follow-us" style={{ width: '100%' }}>
             <div style={{ textAlign: 'center' }}>
               <h4 style={{
-                fontFamily: "'Bodoni Moda', serif",
+                fontFamily: "'Fraunces', serif",
                 fontSize: 'clamp(16px, 1.5vw, 22px)',
                 fontStyle: 'italic',
                 fontWeight: 400,

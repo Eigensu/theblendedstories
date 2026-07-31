@@ -419,7 +419,7 @@ export default async function ArticlePage({
               >
                 <span
                   style={{
-                    fontFamily: "'Public Sans', sans-serif",
+                    fontFamily: "'Poppins', sans-serif",
                     fontSize: '11px',
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',
@@ -486,7 +486,7 @@ export default async function ArticlePage({
                           <span
                             style={{
                               display: 'block',
-                              fontFamily: "'Public Sans', sans-serif",
+                              fontFamily: "'Poppins', sans-serif",
                               fontSize: '11px',
                               letterSpacing: '0.18em',
                               textTransform: 'uppercase',
@@ -511,7 +511,7 @@ export default async function ArticlePage({
                         <span
                           style={{
                             display: 'block',
-                            fontFamily: "'Public Sans', sans-serif",
+                            fontFamily: "'Poppins', sans-serif",
                             fontSize: '11px',
                             letterSpacing: '0.08em',
                             textTransform: 'uppercase',

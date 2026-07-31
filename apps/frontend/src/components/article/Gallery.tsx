@@ -9,7 +9,7 @@ export default function Gallery({ images }: { images: { image: string, caption?:
           <div className="hover:scale-[1.015] transition-transform duration-300" style={{ aspectRatio: '3/4', overflow: 'hidden' }}>
             <img src={img.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.9)', display: 'block' }} />
           </div>
-          <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: '11px', letterSpacing: '0.06em', color: '#6b6a65' }}>
+          <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: '11px', letterSpacing: '0.06em', color: '#6b6a65' }}>
             {img.caption || `0${idx + 1} — gallery image`}
           </span>
         </div>
