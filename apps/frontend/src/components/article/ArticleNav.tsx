@@ -6,16 +6,16 @@ import { navSlotsReservedRight } from '../nav/navSlots';
 const HEADER_PX = 'clamp(20px, 5vw, 64px)';
 
 /**
- * The account and search buttons are pinned to the top-right corner of every page
- * by `(public)/layout.tsx`. They are `position: fixed`, so they take no space in
- * flow and the section links ran straight underneath them — `Culture` sat behind
- * the avatar. This is the gutter the links stop at instead.
+ * The account, search and location buttons are pinned to the top-right corner of
+ * every page by `(public)/layout.tsx`. They are `position: fixed`, so they take no
+ * space in flow and the section links ran straight underneath them — `Culture`
+ * sat behind the avatar. This is the gutter the links stop at instead.
  *
  * `max()` guards the subtraction: the two clamps do not scale together, and a
  * viewport where the header padding is the larger of the two would otherwise pull
  * the links back out past the page edge.
  */
-const NAV_GUTTER = `max(0px, calc(${navSlotsReservedRight(2)} - ${HEADER_PX}))`;
+const NAV_GUTTER = `max(0px, calc(${navSlotsReservedRight(3)} - ${HEADER_PX}))`;
 
 /**
  * The three shortcuts the article header carries, as the design fixes them.

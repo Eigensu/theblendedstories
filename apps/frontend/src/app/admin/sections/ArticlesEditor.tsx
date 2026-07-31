@@ -11,6 +11,13 @@ import {
   normalizeMenuSections,
   type MenuSection,
 } from '@/constants/menuTaxonomy';
+import {
+  findRegion,
+  normalizeLocationRegions,
+  DEFAULT_LOCATION_MAIN,
+  DEFAULT_LOCATION_SUB,
+  type LocationRegion,
+} from '@/constants/locationTaxonomy';
 import { useAdmin } from '../contexts/AdminContext';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Search, Plus, Edit2, Trash2, ArrowLeft, X, GripVertical, Copy, Bold, Italic, Underline, Link2, Heading2, List } from 'lucide-react';
@@ -60,6 +67,10 @@ export type Article = {
   primary_keyword?: string;
   /** Slug of an item beneath the primary, e.g. `bridal`. */
   sub_keyword?: string;
+  /** Region slug, e.g. `india`. Drives which city the article is filed under. */
+  location_main?: string;
+  /** Slug of a city beneath the region, e.g. `mumbai`. */
+  location_sub?: string;
   author: string;
   author_image: string;
   author_role: string;
@@ -97,6 +108,20 @@ const keywordOptionsFor = (
   findSection(sections, sectionSlug)?.items.map((item) => ({
     value: item.slug,
     label: item.label,
+  })) || [];
+
+// Same pairing as the keyword dropdowns above, driven off the location taxonomy
+// managed in Locations instead of Menu & Keywords.
+const regionOptions = (regions: LocationRegion[]): SelectOption[] =>
+  regions.map((region) => ({ value: region.slug, label: region.label }));
+
+const cityOptionsFor = (
+  regions: LocationRegion[],
+  regionSlug: string | undefined
+): SelectOption[] =>
+  findRegion(regions, regionSlug)?.cities.map((city) => ({
+    value: city.slug,
+    label: city.label,
   })) || [];
 
 const createBlockId = () => {
@@ -542,6 +567,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
   const [mode, setMode] = useState<'list' | 'edit'>('list');
   const [isLoading, setIsLoading] = useState(true);
   const [menuSections, setMenuSections] = useState<MenuSection[]>([]);
+  const [locationRegions, setLocationRegions] = useState<LocationRegion[]>([]);
 
   const { setHasUnsavedChanges, setIsSaving, registerSaveHandler, setStatus } = useAdmin();
 
@@ -560,6 +586,15 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       .get<{ sections?: unknown }>('/menu/')
       .then((data) => setMenuSections(normalizeMenuSections(data?.sections)))
       .catch((err) => handleApiError('Failed to load menu keywords', err));
+  }, []);
+
+  // Same fetch-once-and-degrade-to-empty treatment as the menu taxonomy: a
+  // failure here should not block editing an article's other fields.
+  useEffect(() => {
+    apiClient
+      .get<{ regions?: unknown }>('/locations/')
+      .then((data) => setLocationRegions(normalizeLocationRegions(data?.regions)))
+      .catch((err) => handleApiError('Failed to load locations', err));
   }, []);
 
   useEffect(() => {
@@ -642,6 +677,8 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       category: '',
       primary_keyword: '',
       sub_keyword: '',
+      location_main: DEFAULT_LOCATION_MAIN,
+      location_sub: DEFAULT_LOCATION_SUB,
       author: '',
       author_image: '',
       author_role: 'Contributing Editor',
@@ -685,6 +722,12 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
   const subKeywordOptions = keywordOptionsFor(
     menuSections,
     selectedArticle?.primary_keyword
+  );
+
+  // City options are scoped to the chosen region, same rule as sub keywords above.
+  const cityOptions = cityOptionsFor(
+    locationRegions,
+    selectedArticle?.location_main
   );
 
   if (mode === 'list') {
@@ -861,6 +904,37 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
                     : 'Pick a primary keyword first.'
                 }
                 onChange={(v) => setSelectedArticle({ ...selectedArticle, sub_keyword: v })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <SelectField
+                label="Region"
+                value={selectedArticle.location_main || ''}
+                options={regionOptions(locationRegions)}
+                hint="Which region this article is filed under."
+                // Changing the region invalidates the city — it names a place that
+                // only exists beneath the old region, so it is cleared rather than
+                // left pointing at nothing.
+                onChange={(v) =>
+                  setSelectedArticle({
+                    ...selectedArticle,
+                    location_main: v,
+                    location_sub: '',
+                  })
+                }
+              />
+              <SelectField
+                label="City"
+                value={selectedArticle.location_sub || ''}
+                options={cityOptions}
+                disabled={!selectedArticle.location_main}
+                hint={
+                  selectedArticle.location_main
+                    ? 'Readers browsing this city will see this article.'
+                    : 'Pick a region first.'
+                }
+                onChange={(v) => setSelectedArticle({ ...selectedArticle, location_sub: v })}
               />
             </div>
           </div>

@@ -8,10 +8,10 @@
  *
  * Slots run right to left from the page edge:
  *
- *   ┌──────────────────────────────────────────┐
- *   │                        [2]  [1]  [0]  ←──┤ --px-page
- *   │                       search prof menu   │
- *   └──────────────────────────────────────────┘
+ *   ┌────────────────────────────────────────────────┐
+ *   │                       [3]  [2]  [1]  [0]  ←────┤ --px-page
+ *   │                       loc search prof menu     │
+ *   └────────────────────────────────────────────────┘
  */
 
 /** Width of each button, and therefore the gap between slot centres. */

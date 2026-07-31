@@ -42,6 +42,14 @@ class ArticleModel(BaseModelMixin):
     primary_keyword: Optional[str] = None
     sub_keyword: Optional[str] = None
 
+    # Location taxonomy, same shape as the keyword pair above: `location_main`
+    # is a region slug ("india"), `location_sub` a city slug beneath it
+    # ("mumbai"). Both optional so existing articles keep saving; the CMS
+    # backfills new articles to the default location on create. See
+    # `location_service` for the canonical list and slug rules.
+    location_main: Optional[str] = None
+    location_sub: Optional[str] = None
+
     author: str
     author_image: str
     author_role: str

@@ -1,8 +1,20 @@
 'use client';
+import { useEffect, useState } from 'react';
 import ScrollReveal from './ScrollReveal';
+import { useLocation } from '@/contexts/LocationContext';
+import {
+  DEFAULT_LOCATION_REGIONS,
+  normalizeLocationRegions,
+  type LocationRegion,
+} from '@/constants/locationTaxonomy';
+import {
+  DEFAULT_MENU_SECTIONS,
+  normalizeMenuSections,
+  sectionPath,
+  type MenuSection,
+} from '@/constants/menuTaxonomy';
 
-const quickLinks = ['Lifestyle & Travel', 'Fashion', 'Beauty & Wellness', 'Culture', 'Events', 'Community'];
-const locations = ['Mumbai', 'Bangalore', 'Indore'];
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 const socialIcons = [
   {
@@ -60,11 +72,66 @@ const socialIcons = [
 ];
 
 export default function Footer({ data }: { data?: any }) {
+  const [regions, setRegions] = useState<LocationRegion[]>(DEFAULT_LOCATION_REGIONS);
+  const [menuSections, setMenuSections] = useState<MenuSection[]>(DEFAULT_MENU_SECTIONS);
+  const { locationMain, locationSub, setLocation } = useLocation();
+
+  // Client-side fetch rather than a prop: Footer renders on five different pages,
+  // and a taxonomy this rarely changes isn't worth threading through every one of
+  // their server components. Falls back to the shipped defaults on any failure,
+  // same as the server-side fetches used elsewhere.
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${API_BASE}/locations/`, { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (cancelled || !json?.success) return;
+        const parsed = normalizeLocationRegions(json.data?.regions);
+        if (parsed.length > 0) setRegions(parsed);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${API_BASE}/menu/`, { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (cancelled || !json?.success) return;
+        const parsed = normalizeMenuSections(json.data?.sections);
+        if (parsed.length > 0) setMenuSections(parsed);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const logoUrl = data?.logo_url || '/TBS LOGO-02 white.png';
   const backgroundUrl = data?.background_url || '/hero-bg.jpg';
   const copyright = data?.copyright || '©2024. All Rights Reserved.';
-  const footerQuickLinks = data?.quick_links?.length ? data.quick_links : quickLinks.map((label) => ({ label, url: '#' }));
-  const footerLocations = locations.map((label) => ({ label, url: '#' }));
+
+  // Same section list the mega-menu shows, so "Quick Links" always matches what
+  // the header actually navigates to — Fashion, Food & Drink, Travel, Beauty &
+  // Wellness, Design, Culture, The Blended Edit.
+  const footerQuickLinks = menuSections.map((section) => ({
+    label: section.label,
+    url: sectionPath(section.slug),
+  }));
+
+  // Every city across every region, flattened — the footer column has no room for
+  // per-region grouping the way the LocationSwitcher dropdown does.
+  const footerLocations = regions.flatMap((region) =>
+    region.cities.map((city) => ({
+      label: city.label,
+      regionSlug: region.slug,
+      citySlug: city.slug,
+      active: region.slug === locationMain && city.slug === locationSub,
+    }))
+  );
 
   return (
     <footer
@@ -174,19 +241,30 @@ export default function Footer({ data }: { data?: any }) {
                 Locations
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {footerLocations.map(({ label, url }: { label: string; url: string }) => (
-                  <a key={label} href={url || '#'} style={{
-                    fontFamily: "'Montserrat', sans-serif",
-                    fontSize: 'clamp(13px, 1.1vw, 15px)',
-                    color: 'white',
-                    textDecoration: 'none',
-                    transition: 'opacity 0.2s ease',
-                  }}
+                {footerLocations.map(({ label, regionSlug, citySlug, active }) => (
+                  <button
+                    key={`${regionSlug}-${citySlug}`}
+                    type="button"
+                    onClick={() => setLocation(regionSlug, citySlug)}
+                    aria-current={active ? 'true' : undefined}
+                    style={{
+                      fontFamily: "'Montserrat', sans-serif",
+                      fontSize: 'clamp(13px, 1.1vw, 15px)',
+                      color: 'white',
+                      background: 'none',
+                      border: 'none',
+                      padding: 0,
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      opacity: active ? 1 : 0.75,
+                      fontWeight: active ? 600 : 400,
+                      transition: 'opacity 0.2s ease',
+                    }}
                     onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
-                    onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+                    onMouseLeave={(e) => (e.currentTarget.style.opacity = active ? '1' : '0.75')}
                   >
                     {label}
-                  </a>
+                  </button>
                 ))}
               </nav>
             </div>

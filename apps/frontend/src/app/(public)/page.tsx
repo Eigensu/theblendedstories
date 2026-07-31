@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import Hero from '@/components/Hero';
 import NewsletterPopup from '@/components/NewsletterPopup';
 import WhatIsTBS from '@/components/WhatIsTBS';
@@ -6,6 +7,14 @@ import TBSNights from '@/components/TBSNights';
 import TheEdit from '@/components/TheEdit';
 import TBSTalks from '@/components/TBSTalks';
 import Footer from '@/components/Footer';
+import {
+  LOCATION_MAIN_COOKIE,
+  LOCATION_SUB_COOKIE,
+} from '@/contexts/LocationContext';
+import {
+  DEFAULT_LOCATION_MAIN,
+  DEFAULT_LOCATION_SUB,
+} from '@/constants/locationTaxonomy';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,6 +35,15 @@ async function fetchCMSData(endpoint: string) {
 }
 
 export default async function Home() {
+  // The visitor's chosen city, set by LocationSwitcher — falls back to the
+  // shipped default (India/Mumbai) for a first-time visitor with no cookie yet.
+  const cookieStore = await cookies();
+  const locationMain =
+    cookieStore.get(LOCATION_MAIN_COOKIE)?.value || DEFAULT_LOCATION_MAIN;
+  const locationSub =
+    cookieStore.get(LOCATION_SUB_COOKIE)?.value || DEFAULT_LOCATION_SUB;
+  const locationQuery = `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
+
   // Fetch all CMS data in parallel
   const [
     heroData,
@@ -41,7 +59,7 @@ export default async function Home() {
     fetchCMSData('/what-is-tbs/'),
     fetchCMSData('/what-we-cover/'),
     fetchCMSData('/tbs-nights/'),
-    fetchCMSData('/articles/?featured=true'),
+    fetchCMSData(`/articles/?featured=true&${locationQuery}`),
     fetchCMSData('/tbs-talks/?featured=true'),
     fetchCMSData('/footer/'),
     fetchCMSData('/settings/')

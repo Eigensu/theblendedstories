@@ -111,6 +111,8 @@ _SUMMARY_FIELDS = (
     # summary list — drop either and every keyword page renders empty.
     "primary_keyword",
     "sub_keyword",
+    "location_main",
+    "location_sub",
     "author",
     "cover_image",
     "hero_image",
@@ -126,10 +128,19 @@ def _summarize_article_record(item: dict) -> dict:
     return {field: item.get(field) for field in _SUMMARY_FIELDS}
 
 
-async def get_all(featured_only: bool = False, summary: bool = False):
+async def get_all(
+    featured_only: bool = False,
+    summary: bool = False,
+    location_main: str | None = None,
+    location_sub: str | None = None,
+):
     items = await repo.get_all()
     if featured_only:
         items = [item for item in items if item.get("featured") is True]
+    if location_main:
+        items = [item for item in items if item.get("location_main") == location_main]
+    if location_sub:
+        items = [item for item in items if item.get("location_sub") == location_sub]
     if summary:
         # Skip block normalization entirely — it is pure waste when the blocks
         # are about to be dropped.

@@ -17,9 +17,16 @@ class ArticleTopPicksPatch(BaseModel):
 async def list_articles(
     featured: Optional[bool] = None,
     summary: bool = False,
+    location_main: Optional[str] = None,
+    location_sub: Optional[str] = None,
 ):
     """Set summary=true to omit article bodies — listings never render them."""
-    items = await get_all(featured_only=featured, summary=summary)
+    items = await get_all(
+        featured_only=featured,
+        summary=summary,
+        location_main=location_main,
+        location_sub=location_sub,
+    )
     # Sort by display order (treat 0 as last)
     # Sort by display order, treating 0/missing/null as last. `or` rather than a
     # comparison because .get(key, 0) still yields None when the key exists as null,
