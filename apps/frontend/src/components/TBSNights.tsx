@@ -101,12 +101,15 @@ export default function TBSNights({ data }: { data?: any }) {
           // its left edge lines up with that section's image. The mobile rules
           // in globals.css override all of this with !important, which beats a
           // normal inline declaration.
+          // height is set explicitly rather than left to `auto` + `bottom`:
+          // on an absolutely positioned *replaced* element `auto` resolves to
+          // the intrinsic height, `bottom` is then dropped as over-constrained,
+          // and the video overflows the section instead of ending at the inset.
           position: 'absolute',
           top: 'clamp(20px, 3vw, 44px)',
           left: 'clamp(20px, 3vw, 44px)',
-          bottom: 'clamp(20px, 3vw, 44px)',
           width: 'calc(48% - clamp(20px, 3vw, 44px))',
-          height: 'auto',
+          height: 'calc(100% - 2 * clamp(20px, 3vw, 44px))',
           objectFit: 'cover', objectPosition: 'center',
           zIndex: 0,
         }}
