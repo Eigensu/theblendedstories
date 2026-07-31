@@ -1,6 +1,5 @@
 import { Article } from '@/types/article';
 import { formatArticleDate, formatReadingTime } from '@/lib/articleMeta';
-import ShareSection from './ShareSection';
 
 export default function ArticleHero({ article }: { article: Article }) {
   const metaParts = [formatArticleDate(article.date), formatReadingTime(article.readingTime)].filter(Boolean);
@@ -46,9 +45,6 @@ export default function ArticleHero({ article }: { article: Article }) {
             <img className="no-grayscale" src={article.authorImage} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', display: 'inline-block', border: '1px solid rgba(245,244,240,0.2)', filter: 'brightness(0.75)' }} />
             <span style={{ fontWeight: 600, color: '#e7e6e1' }}>{article.author}</span>
           </div>
-        </div>
-        <div style={{ marginTop: 'clamp(18px, 3vh, 26px)', pointerEvents: 'auto', zIndex: 20, position: 'relative' }}>
-          <ShareSection title={article.title} />
         </div>
       </div>
     </div>
