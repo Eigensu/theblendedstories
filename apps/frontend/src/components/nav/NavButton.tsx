@@ -1,10 +1,12 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import { NAV_BUTTON_STYLE, navSlotRight } from './navSlots';
+import { NAV_BUTTON_STYLE, navSlotOffset, type NavSide } from './navSlots';
 
 export interface NavButtonProps {
   slot: number;
+  /** Which page edge the button pins to. The hamburger is the only one on the left. */
+  side?: NavSide;
   /**
    * Whether the overlay covers the button. Full-screen overlays hide it; a
    * dropdown anchored to the button does not, which is why `expanded` is
@@ -25,6 +27,7 @@ const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
   (
     {
       slot,
+      side = 'right',
       open,
       expanded,
       onClick,
@@ -44,7 +47,7 @@ const NavButton = forwardRef<HTMLButtonElement, NavButtonProps>(
       aria-expanded={expanded ?? open}
       style={{
         ...NAV_BUTTON_STYLE,
-        right: navSlotRight(slot),
+        ...navSlotOffset(side, slot),
         display: open ? 'none' : 'flex',
         ...style,
       }}

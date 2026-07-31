@@ -1,21 +1,21 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import { User } from 'lucide-react';
 import RegisterModal from '../auth/RegisterModal';
 import { useMember } from '@/contexts/MemberContext';
 import NavButton from './NavButton';
-import { hasHamburger, navSlotRight } from './navSlots';
+import { navSlotRight } from './navSlots';
 
 export default function ProfileButton() {
   const [modalOpen, setModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const pathname = usePathname();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { member, loading, signOut } = useMember();
 
-  const slot = hasHamburger(pathname) ? 1 : 0;
+  // Innermost right-corner button. The hamburger pins to the left corner, so this
+  // no longer shifts outward on the article pages that hide it.
+  const slot = 0;
 
   // Dismiss the account menu on an outside click or Escape.
   useEffect(() => {

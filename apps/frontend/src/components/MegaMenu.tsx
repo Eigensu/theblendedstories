@@ -28,9 +28,10 @@ export default function MegaMenu({
 
   return (
     <>
-      {/* Hamburger button — fixed top-right corner */}
+      {/* Hamburger button — fixed top-left corner */}
       <NavButton
         slot={0}
+        side="left"
         open={open}
         onClick={() => setOpen(true)}
         ariaLabel="Open menu"
@@ -77,9 +78,11 @@ export default function MegaMenu({
             onClick={() => setOpen(false)}
             aria-label="Close menu"
             style={{
+              // Sits exactly where the hamburger was, so the control the reader
+              // just pressed is the control that closes the panel.
               position: 'fixed',
               top: 'var(--px-page)',
-              right: 'var(--px-page)',
+              left: 'var(--px-page)',
               zIndex: 230,
               width: '44px',
               height: '44px',

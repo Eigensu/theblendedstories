@@ -24,7 +24,8 @@ export default async function PublicLayout({
   return (
     <AuthProviders>
       {children}
-      {/* Corner buttons, rendered right to left: menu, profile, search, location. */}
+      {/* Corner buttons: menu alone on the left; profile, search then location
+          running right to left from the right edge. */}
       <SiteSearch />
       <ProfileButton />
       <MegaMenu sections={menuSections} />
