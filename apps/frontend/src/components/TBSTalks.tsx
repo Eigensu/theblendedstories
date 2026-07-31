@@ -102,36 +102,6 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
               {subtitle}
             </p>
 
-            {/* VIEW ALL TALKS — below tagline, right-aligned */}
-            <div className="talks-view-all-row" style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              marginTop: 'clamp(12px, 2vw, 20px)',
-            }}>
-              <Link
-                href="/talks"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: 'clamp(9px, 0.8vw, 11px)',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.7)',
-                  textDecoration: 'none',
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.color = 'white'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-              >
-                VIEW ALL TALKS
-                <svg width="32" height="10" viewBox="0 0 32 10" fill="none">
-                  <line x1="0" y1="5" x2="26" y2="5" stroke="white" strokeWidth="1" strokeOpacity="0.7" />
-                  <polyline points="21,1 30,5 21,9" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.7" strokeLinejoin="round" />
-                </svg>
-              </Link>
-            </div>
           </div>
         </ScrollReveal>
 
@@ -241,6 +211,15 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
             </ScrollReveal>
             );
           })}
+        </div>
+
+        {/* ── View all talks ── */}
+        {/* Closes the section under the cards on every width, rather than sitting
+            beside the tagline where it read as part of the heading. */}
+        <div className="talks-view-all-row tbs-outline-btn-row">
+          <Link href="/talks" className="tbs-outline-btn">
+            View all talks
+          </Link>
         </div>
 
       </div>

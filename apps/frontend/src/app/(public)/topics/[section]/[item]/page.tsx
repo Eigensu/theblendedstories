@@ -171,20 +171,11 @@ export default async function KeywordPage({
           </div>
         )}
 
-        <div style={{ marginTop: 'clamp(32px, 4vw, 48px)' }}>
-          <Link
-            href={sectionPath(section.slug)}
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: 'clamp(11px, 0.9vw, 13px)',
-              color: 'rgba(255,255,255,0.55)',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              borderBottom: '1px solid rgba(255,255,255,0.25)',
-              paddingBottom: '4px',
-            }}
-          >
+        <div
+          className="tbs-outline-btn-row"
+          style={{ marginTop: 'clamp(32px, 4vw, 48px)' }}
+        >
+          <Link href={sectionPath(section.slug)} className="tbs-outline-btn">
             All {section.label} stories
           </Link>
         </div>

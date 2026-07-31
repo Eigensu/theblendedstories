@@ -193,20 +193,13 @@ export default async function SectionPage({
           </>
         )}
 
-        <div style={{ marginTop: 'clamp(24px, 3vw, 40px)' }}>
-          <Link
-            href="/stories"
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: 'clamp(11px, 0.9vw, 13px)',
-              color: 'rgba(255,255,255,0.55)',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              borderBottom: '1px solid rgba(255,255,255,0.25)',
-              paddingBottom: '4px',
-            }}
-          >
+        {/* Same treatment as the keyword page's "All <section> stories", which
+            sits in the same spot on the page a reader lands on next. */}
+        <div
+          className="tbs-outline-btn-row"
+          style={{ marginTop: 'clamp(24px, 3vw, 40px)' }}
+        >
+          <Link href="/stories" className="tbs-outline-btn">
             View all stories
           </Link>
         </div>
