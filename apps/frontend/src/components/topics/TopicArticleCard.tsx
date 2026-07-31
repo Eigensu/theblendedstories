@@ -31,7 +31,7 @@ export default function TopicArticleCard({
   return (
     <Link
       href={`/stories/${article.slug}`}
-      className="group block focus:outline-none"
+      className="group img-card block focus:outline-none"
       style={{ textDecoration: 'none' }}
     >
       <div
@@ -137,8 +137,10 @@ export function TopicArticleGrid({
   articles: ArticleSummary[];
   sections: MenuSection[];
 }>) {
+  // `.topic-grid` scopes the colour-on-hover rule in globals.css to these cards,
+  // the same way `.talks-archive` does for the talks page.
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
+    <div className="topic-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
       {articles.map((article) => (
         <TopicArticleCard
           key={article.slug}
