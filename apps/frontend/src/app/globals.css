@@ -314,7 +314,8 @@ video:not(.no-grayscale) {
 #talks     .img-card:hover img:not(.no-grayscale),
 .talks-archive .img-card:hover img:not(.no-grayscale),
 .article-recommended .img-card:hover img:not(.no-grayscale),
-.more-articles .img-card:hover img:not(.no-grayscale) {
+.more-articles .img-card:hover img:not(.no-grayscale),
+.topic-grid .img-card:hover img:not(.no-grayscale) {
   filter: var(--img-color) !important;
 }
 
@@ -1015,35 +1016,124 @@ section.touch-color video:not(.no-grayscale),
   background: #000;
 }
 
-/* The "Home" chip above the heading on the /topics pages, and repeated in their
-   loading skeleton so it does not shift when the real page arrives. A class rather
-   than inline styles because the pages rendering it are server components and it
-   needs hover and focus states. */
-.topic-home-chip {
+/* The "Home" link in the top-left corner of the /topics and /talks pages, and
+   repeated in their loading skeleton so it does not shift when the real page
+   arrives. A class rather than inline styles because the pages rendering it are
+   server components and it needs hover and focus states.
+
+   The corner buttons are fixed in a 44px box at top: var(--px-page) (see
+   nav/navSlots.ts), so matching both puts this on their exact centre line, and the
+   44px left offset is slot 1 — immediately right of the hamburger. Keep the two in
+   step. z-index stays below the mega menu panel's 220 so opening the menu covers
+   it, the same way it covers the buttons. */
+.topic-home-link {
+  position: fixed;
+  top: var(--px-page);
+  left: calc(var(--px-page) + 44px);
+  z-index: 210;
+  height: 44px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.75);
+  gap: 9px;
+  color: rgba(255, 255, 255, 0.62);
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(10px, 0.85vw, 12px);
-  letter-spacing: 0.16em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  transition: color 0.25s ease;
 }
 
-.topic-home-chip:hover {
+/* Hairline against the hamburger, so the pair reads as one nav cluster rather
+   than two unrelated controls that happen to sit side by side. */
+.topic-home-link::before {
+  content: '';
+  width: 1px;
+  height: 14px;
+  margin-right: 5px;
+  background: rgba(255, 255, 255, 0.22);
+  transition: background 0.25s ease;
+}
+
+.topic-home-arrow {
+  font-size: 13px;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+/* An underline that grows from the left, rather than the box outline this used to
+   carry: quieter beside the icon row, and it leaves the label on the buttons'
+   centre line instead of padding it off. */
+.topic-home-label {
+  position: relative;
+  padding-bottom: 3px;
+}
+
+.topic-home-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.topic-home-link:hover {
   color: white;
-  border-color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.07);
 }
 
-.topic-home-chip:focus-visible {
+.topic-home-link:hover::before {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.topic-home-link:hover .topic-home-arrow {
+  transform: translateX(-3px);
+}
+
+.topic-home-link:hover .topic-home-label::after {
+  transform: scaleX(1);
+}
+
+.topic-home-link:focus-visible {
   outline: 1px solid white;
-  outline-offset: 3px;
+  outline-offset: 6px;
+}
+
+/* The section crumb that the keyword page passes. It stays above the heading, as
+   context for it, now that Home has moved to the corner — the leading rule is the
+   same one drawn under the heading, so the two bracket the title. */
+.topic-section-crumb {
+  display: flex;
+  align-items: center;
+  margin-bottom: clamp(16px, 2vw, 24px);
+}
+
+.topic-section-crumb::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  margin-right: 12px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.topic-section-crumb a {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(10px, 0.85vw, 12px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.topic-section-crumb a:hover {
+  color: white;
 }
 
 /* Skeleton placeholders for route-level loading states. The stripe texture is the
