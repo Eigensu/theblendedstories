@@ -364,7 +364,7 @@ export default async function ArticlePage({
             </div>
           </article>
 
-          <aside className="xl:sticky xl:top-24" style={{ minWidth: 0 }}>
+          <aside className="xl:sticky xl:top-24 article-recommended" style={{ minWidth: 0 }}>
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
             >
@@ -397,12 +397,12 @@ export default async function ArticlePage({
                   gap: '16px',
                 }}
               >
-                {recommendedArticles.map(
+                {recommendedArticles.slice(0, 4).map(
                   (recommendedArticle: any, index: number) => (
                     <Link
                       key={recommendedArticle.slug}
                       href={`/stories/${recommendedArticle.slug}`}
-                      className="group"
+                      className="group img-card"
                       style={{
                         display: 'grid',
                         gridTemplateColumns: '96px minmax(0,1fr)',
@@ -430,7 +430,9 @@ export default async function ArticlePage({
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
-                            filter: 'brightness(0.85)',
+                            // No filter here: the global grayscale rule sets one
+                            // with !important, so an inline value never applied.
+                            // Colour on hover comes from .article-recommended.
                           }}
                         />
                       </div>
@@ -459,7 +461,7 @@ export default async function ArticlePage({
                           <h3
                             style={{
                               margin: 0,
-                              fontFamily: "'Bodoni Moda', serif",
+                              fontFamily: "'Fraunces', serif",
                               fontSize: '18px',
                               lineHeight: 1.35,
                               color: '#f5f4f0',

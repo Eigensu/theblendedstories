@@ -312,7 +312,9 @@ video:not(.no-grayscale) {
    section rule (1,1,1) and only the hovered card goes to colour. */
 #top-picks .img-card:hover img:not(.no-grayscale),
 #talks     .img-card:hover img:not(.no-grayscale),
-.talks-archive .img-card:hover img:not(.no-grayscale) {
+.talks-archive .img-card:hover img:not(.no-grayscale),
+.article-recommended .img-card:hover img:not(.no-grayscale),
+.more-articles .img-card:hover img:not(.no-grayscale) {
   filter: var(--img-color) !important;
 }
 

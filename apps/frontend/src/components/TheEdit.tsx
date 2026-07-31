@@ -135,7 +135,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
                 fontSize: '9px',
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.35)',
+                color: 'white',
                 writingMode: 'vertical-rl',
                 transform: 'rotate(180deg)',
               }}>
@@ -145,7 +145,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
                 width: '4px',
                 height: '4px',
                 borderRadius: '50%',
-                background: 'rgba(255,255,255,0.35)',
+                background: 'white',
               }} />
             </div>
 
