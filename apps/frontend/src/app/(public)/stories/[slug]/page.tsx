@@ -10,6 +10,8 @@ import Gallery from '@/components/article/Gallery';
 import EmbeddedVideo from '@/components/article/EmbeddedVideo';
 import EditorialNote from '@/components/article/EditorialNote';
 import AuthorSection from '@/components/article/AuthorSection';
+import ArticleNewsletter from '@/components/article/ArticleNewsletter';
+import MoreArticles from '@/components/article/MoreArticles';
 import PreviousNextNavigation from '@/components/article/PreviousNextNavigation';
 import Footer from '@/components/Footer';
 import { ArticleContentBlock } from '@/types/article';
@@ -397,6 +399,8 @@ export default async function ArticlePage({
                   authorRole={article.author_role}
                 />
               </div>
+
+              <ArticleNewsletter />
             </div>
           </article>
 
@@ -526,6 +530,10 @@ export default async function ArticlePage({
           </aside>
         </div>
       </main>
+
+      {/* Full-width below the two-column layout, sharing the sidebar's divider
+          treatment. Reuses the recommendation list the sidebar is built from. */}
+      <MoreArticles articles={recommendedArticles.slice(0, 4)} />
 
       <Footer />
     </div>

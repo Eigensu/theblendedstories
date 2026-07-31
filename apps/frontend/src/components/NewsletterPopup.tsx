@@ -76,9 +76,9 @@ export default function NewsletterPopup() {
         className="img-card"
         style={{
           background: '#0d0d0d',
-          border: '1px solid rgba(255,255,255,0.1)',
+          border: '1px solid white',
           width: '100%',
-          maxWidth: '380px',
+          maxWidth: '320px',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -90,7 +90,7 @@ export default function NewsletterPopup() {
             alt=""
             style={{
               width: '100%',
-              height: '200px',
+              height: '160px',
               objectFit: 'cover',
               objectPosition: 'center',
               display: 'block',
@@ -111,7 +111,13 @@ export default function NewsletterPopup() {
               src="/TBS LOGO-02 white.png"
               alt="The Blended Stories"
               className="no-grayscale"
-              style={{ height: '240px', width: 'auto', mixBlendMode: 'screen' }}
+              style={{
+                height: '190px',
+                width: 'auto',
+                maxWidth: '80%',
+                objectFit: 'contain',
+                mixBlendMode: 'screen',
+              }}
             />
           </div>
           {/* Close button */}
@@ -141,7 +147,7 @@ export default function NewsletterPopup() {
         </div>
 
         {/* Body */}
-        <div style={{ padding: '24px 24px 28px' }}>
+        <div style={{ padding: '20px 20px 24px' }}>
           {submitted ? (
             <div style={{ textAlign: 'center', padding: '16px 0' }}>
               <p
@@ -189,12 +195,12 @@ export default function NewsletterPopup() {
               <h2
                 style={{
                   fontFamily: "'Fraunces', serif",
-                  fontSize: 'clamp(18px, 4vw, 22px)',
+                  fontSize: 'clamp(16px, 3.4vw, 19px)',
                   fontWeight: 400,
                   color: 'white',
                   letterSpacing: '0.03em',
                   lineHeight: '1.2',
-                  marginBottom: '20px',
+                  marginBottom: '16px',
                 }}
               >
                 JOIN THE BLENDED STORIES.
@@ -227,10 +233,14 @@ export default function NewsletterPopup() {
                     required
                     style={{
                       flex: 1,
+                      // Without this the input's intrinsic width (min-width:
+                      // auto) refuses to shrink and the Subscribe button
+                      // overflows the card on narrow screens.
+                      minWidth: 0,
                       background: 'transparent',
                       border: 'none',
                       outline: 'none',
-                      padding: '11px 14px',
+                      padding: '10px 12px',
                       color: 'white',
                       fontFamily: "'Poppins', sans-serif",
                       fontSize: '12px',
@@ -240,15 +250,16 @@ export default function NewsletterPopup() {
                     type="submit"
                     disabled={pending}
                     style={{
+                      flexShrink: 0,
                       background: 'white',
                       color: 'black',
                       border: 'none',
                       cursor: pending ? 'wait' : 'pointer',
-                      padding: '0 16px',
+                      padding: '0 14px',
                       fontFamily: "'Poppins', sans-serif",
-                      fontSize: '10px',
+                      fontSize: '9px',
                       fontWeight: 600,
-                      letterSpacing: '0.18em',
+                      letterSpacing: '0.14em',
                       textTransform: 'uppercase',
                       whiteSpace: 'nowrap',
                       opacity: pending ? 0.7 : 1,

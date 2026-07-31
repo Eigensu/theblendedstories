@@ -28,6 +28,18 @@ export default function TBSNights({ data }: { data?: any }) {
         background: '#000',
       }}
     >
+      {/* Mobile-only logo. On mobile the order is logo → video → text, and the
+          video is a sibling of .nights-inner while the desktop logo lives deep
+          inside it, so CSS order can't interleave them. Hidden on desktop. */}
+      {/* Sizing lives entirely in globals.css — this copy only ever renders
+          at mobile widths, so there is no desktop size to declare here. */}
+      <img
+        src="/tbsnights-hero.png"
+        alt="TBS Nights"
+        className="no-grayscale nights-logo-mobile"
+        style={{ mixBlendMode: 'screen' }}
+      />
+
       {/* Background — grayscale by default, full colour on section hover */}
       <video
         src={videoUrl}
@@ -69,7 +81,7 @@ export default function TBSNights({ data }: { data?: any }) {
             <img
               src="/tbsnights-hero.png"
               alt="TBS Nights"
-              className="no-grayscale"
+              className="no-grayscale nights-logo-desktop"
               style={{
                 height: 'clamp(64px, 8vw, 120px)',
                 width: 'auto',

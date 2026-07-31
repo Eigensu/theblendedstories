@@ -4,6 +4,50 @@ import ScrollReveal from './ScrollReveal';
 
 import Link from 'next/link';
 const PAGE_SIZE = 4;
+// Top Picks shows a fixed shortlist. Editors can flag any number of articles as
+// featured in the admin, so cap here rather than trusting the API to be curated.
+const MAX_PICKS = 5;
+
+// Outlined CTA matching the TBS Nights "Join the Waitlist" button. Rendered
+// twice — inside the left panel on desktop, and below the carousel once the
+// layout stacks — because the two sit at different nesting levels and CSS
+// order can't move one across the other. Only one is ever visible.
+function ExploreAllButton({ className }: { className: string }) {
+  return (
+    <Link
+      href="/stories"
+      className={className}
+      style={{
+        // `display` is deliberately left to globals.css — an inline value
+        // would outrank the stylesheet and both copies would render.
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '14px',
+        border: '1px solid rgba(255,255,255,0.8)',
+        background: 'transparent',
+        color: 'white',
+        padding: '14px 36px',
+        fontFamily: "'Poppins', sans-serif",
+        fontSize: 'clamp(10px, 0.85vw, 12px)',
+        letterSpacing: '0.18em',
+        textTransform: 'uppercase',
+        textDecoration: 'none',
+        whiteSpace: 'nowrap',
+        transition: 'background 0.2s ease, border-color 0.2s ease',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+        e.currentTarget.style.borderColor = 'white';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = 'transparent';
+        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.8)';
+      }}
+    >
+      EXPLORE ALL STORIES
+    </Link>
+  );
+}
 
 export default function TheEdit({ data, settings }: { data?: any[], settings?: any }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -12,8 +56,15 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
     ? data.filter(d => d.status === 'published').sort((a: any, b: any) => {
         const orderA = a.display_order > 0 ? a.display_order : 999999;
         const orderB = b.display_order > 0 ? b.display_order : 999999;
-        return orderA - orderB;
-      }).map((d, index) => ({
+        if (orderA !== orderB) return orderA - orderB;
+        // Most featured articles share display_order 0, so without a tie-break
+        // the section renders in whatever order Mongo happens to return —
+        // newest first, then slug so the result is stable across requests.
+        const dateA = Date.parse(a.created_at ?? '') || 0;
+        const dateB = Date.parse(b.created_at ?? '') || 0;
+        if (dateA !== dateB) return dateB - dateA;
+        return String(a.slug ?? '').localeCompare(String(b.slug ?? ''));
+      }).slice(0, MAX_PICKS).map((d, index) => ({
         img: d.cover_image || d.hero_image,
         title: d.title,
         desc: d.subtitle,
@@ -77,7 +128,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
 
         {/* ── Left panel ── */}
         <ScrollReveal>
-          <div className="the-edit-left" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 1.5vw, 20px)', marginTop: 'clamp(120px, 16vw, 220px)' }}>
+          <div className="the-edit-left" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 1.5vw, 20px)' }}>
 
             {/* LATEST FEATURES — vertical, parallel with the title block, vertically centered */}
             <div className="the-edit-vertical-label" style={{
@@ -131,41 +182,13 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
 
               {/* Description intentionally removed */}
 
-              {/* EXPLORE ALL STORIES */}
-              <Link
-                href="/stories"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '14px',
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: 'clamp(10px, 0.85vw, 12px)',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.7)',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid rgba(255,255,255,0.25)',
-                  paddingBottom: '6px',
-                  transition: 'color 0.2s, border-color 0.2s',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.7)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)';
-                }}
-              >
-                EXPLORE ALL STORIES
-                <span style={{ fontSize: '16px', fontWeight: 300 }}>→</span>
-              </Link>
+              <ExploreAllButton className="the-edit-explore-desktop" />
             </div>
 
           </div>
         </ScrollReveal>
 
-        {/* ── Right: carousel of 10 article cards ── */}
+        {/* ── Right: carousel of the Top Picks cards ── */}
         <div style={{ flex: 1, minWidth: 0, position: 'relative' }}>
 
           <div className="the-edit-grid" ref={scrollerRef} style={{ display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory' }}>
@@ -249,6 +272,8 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
             ))}
           </div>
         </div>
+
+        <ExploreAllButton className="the-edit-explore-mobile" />
 
       </div>
     </section>
