@@ -15,6 +15,7 @@ export default function MoreArticles({ articles }: { articles: MoreArticle[] }) 
 
   return (
     <section
+      className="more-articles"
       style={{
         width: '100%',
         maxWidth: '1440px',
@@ -31,7 +32,7 @@ export default function MoreArticles({ articles }: { articles: MoreArticle[] }) 
         <h2
           style={{
             margin: '0 0 clamp(28px, 4vw, 48px)',
-            fontFamily: "'Bodoni Moda', serif",
+            fontFamily: "'Fraunces', serif",
             fontWeight: 500,
             fontSize: 'clamp(28px, 4vw, 46px)',
             lineHeight: 1.1,
@@ -48,7 +49,7 @@ export default function MoreArticles({ articles }: { articles: MoreArticle[] }) 
               <Link
                 key={article.slug}
                 href={`/stories/${article.slug}`}
-                className="group"
+                className="group img-card"
                 style={{ display: 'block', textDecoration: 'none' }}
               >
                 <div
@@ -75,7 +76,7 @@ export default function MoreArticles({ articles }: { articles: MoreArticle[] }) 
                 <div
                   className="flex flex-wrap items-center gap-x-[10px] gap-y-[4px]"
                   style={{
-                    fontFamily: "'Public Sans', sans-serif",
+                    fontFamily: "'Poppins', sans-serif",
                     fontSize: '11px',
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',
@@ -98,7 +99,7 @@ export default function MoreArticles({ articles }: { articles: MoreArticle[] }) 
                 <h3
                   style={{
                     margin: 0,
-                    fontFamily: "'Bodoni Moda', serif",
+                    fontFamily: "'Fraunces', serif",
                     fontWeight: 400,
                     fontSize: 'clamp(15px, 1.4vw, 20px)',
                     lineHeight: 1.35,

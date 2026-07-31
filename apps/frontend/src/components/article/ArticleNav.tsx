@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { keywordPath, sectionPath } from '@/constants/menuTaxonomy';
-import { navSlotsReservedRight } from '../nav/navSlots';
+import { NAV_SLOT_SIZE, navSlotsReservedRight } from '../nav/navSlots';
 
 /** Horizontal padding of the header. Shared so the reserved gutter can subtract it. */
 const HEADER_PX = 'clamp(20px, 5vw, 64px)';
@@ -36,18 +36,25 @@ export default function ArticleNav() {
     <header
       className="absolute top-0 left-0 right-0 z-50 w-full"
       style={{
-        padding: `clamp(32px, 4vw, 40px) ${HEADER_PX}`,
+        // Top padding and row height mirror the fixed corner buttons, which sit
+        // at top: var(--px-page) in a 44px box. Matching both puts the section
+        // links on their exact centre line; the previous clamp() was unrelated
+        // to theirs and left the links 13-17px high, varying with the viewport.
+        padding: `var(--px-page) ${HEADER_PX}`,
         boxSizing: 'border-box',
         background: 'transparent',
       }}
     >
-      <div className="relative flex items-center justify-between w-full">
+      <div
+        className="relative flex items-center justify-between w-full"
+        style={{ minHeight: `${NAV_SLOT_SIZE}px` }}
+      >
         <div className="w-[88px] flex justify-start">
           <Link
             href="/#top-picks"
             className="inline-flex items-center gap-3 text-[#f5f4f0] hover:text-white transition-colors"
             style={{
-              fontFamily: "'Public Sans', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               fontSize: '12px',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
@@ -74,7 +81,7 @@ export default function ArticleNav() {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', paddingRight: NAV_GUTTER }}
         >
           {SECTION_LINKS.map(({ label, href }) => (
-            <Link key={href} href={href} className="text-[11px] md:text-[12px] uppercase tracking-[0.18em] font-semibold text-[#f5f4f0] hover:text-white transition-colors" style={{ fontFamily: "'Public Sans', sans-serif", textDecoration: 'none' }}>{label}</Link>
+            <Link key={href} href={href} className="text-[11px] md:text-[12px] uppercase tracking-[0.18em] font-semibold text-[#f5f4f0] hover:text-white transition-colors" style={{ fontFamily: "'Poppins', sans-serif", textDecoration: 'none' }}>{label}</Link>
           ))}
         </div>
       </div>

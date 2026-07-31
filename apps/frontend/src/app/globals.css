@@ -312,7 +312,9 @@ video:not(.no-grayscale) {
    section rule (1,1,1) and only the hovered card goes to colour. */
 #top-picks .img-card:hover img:not(.no-grayscale),
 #talks     .img-card:hover img:not(.no-grayscale),
-.talks-archive .img-card:hover img:not(.no-grayscale) {
+.talks-archive .img-card:hover img:not(.no-grayscale),
+.article-recommended .img-card:hover img:not(.no-grayscale),
+.more-articles .img-card:hover img:not(.no-grayscale) {
   filter: var(--img-color) !important;
 }
 
@@ -519,7 +521,9 @@ section.touch-color video:not(.no-grayscale),
   .the-edit-explore-desktop { display: none; }
   .the-edit-explore-mobile {
     display: inline-flex;
-    align-self: flex-start;
+    /* center rather than stretch, so the button keeps its content width
+       instead of spanning the full column. */
+    align-self: center;
     margin-top: clamp(28px, 5vw, 44px);
   }
   /* 2 cards per viewport once stacked, and only 4 in total — the 5th onward
@@ -907,7 +911,7 @@ section.touch-color video:not(.no-grayscale),
   width: 100%;
   max-width: 780px; /* Comfortable reading width */
   margin: 0 auto;
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: clamp(18px, 2.2vw, 21px);
   line-height: 1.8;
   color: #e7e6e1;
@@ -948,7 +952,7 @@ section.touch-color video:not(.no-grayscale),
 }
 
 .article-body-text h2 {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Fraunces', serif;
   font-size: clamp(24px, 4vw, 32px);
   margin: 2rem 0 1rem 0;
   color: var(--white);
@@ -963,7 +967,7 @@ section.touch-color video:not(.no-grayscale),
 .article-body-text ul li {
   margin-bottom: 0.75rem;
   line-height: 1.8;
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: clamp(18px, 2.2vw, 21px);
   color: #e7e6e1;
 }

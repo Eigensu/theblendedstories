@@ -22,6 +22,14 @@
 /** Width of each button, and therefore the gap between slot centres. */
 const SLOT_WIDTH = 44;
 
+/**
+ * The buttons' box size. A header that lays out its own row along the top of the
+ * page gives that row this height and a `var(--px-page)` top padding, which puts
+ * its contents on the same centre line as the buttons. Without it the two are
+ * positioned by unrelated rules and drift apart as the viewport changes.
+ */
+export const NAV_SLOT_SIZE = SLOT_WIDTH;
+
 /** Which page edge a button is pinned to. */
 export type NavSide = 'left' | 'right';
 

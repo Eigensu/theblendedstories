@@ -9,10 +9,8 @@ import PullQuote from '@/components/article/PullQuote';
 import Gallery from '@/components/article/Gallery';
 import EmbeddedVideo from '@/components/article/EmbeddedVideo';
 import EditorialNote from '@/components/article/EditorialNote';
-import AuthorSection from '@/components/article/AuthorSection';
 import ArticleNewsletter from '@/components/article/ArticleNewsletter';
 import MoreArticles from '@/components/article/MoreArticles';
-import PreviousNextNavigation from '@/components/article/PreviousNextNavigation';
 import Footer from '@/components/Footer';
 import { ArticleContentBlock } from '@/types/article';
 
@@ -269,13 +267,6 @@ export default async function ArticlePage({
     article.category
   );
 
-  const prevArticle =
-    articleIndex > 0 ? publishedArticles[articleIndex - 1] : undefined;
-  const nextArticle =
-    articleIndex < publishedArticles.length - 1
-      ? publishedArticles[articleIndex + 1]
-      : undefined;
-
   // Map backend article model to frontend props shape
   const mappedArticle = {
     ...article,
@@ -367,44 +358,13 @@ export default async function ArticlePage({
                 <EditorialNote note={mappedArticle.editorNote} />
               )}
 
-              {(prevArticle || nextArticle) && (
-                <div style={{ marginTop: 'clamp(12px, 2vw, 24px)' }}>
-                  <PreviousNextNavigation
-                    prevArticle={
-                      prevArticle
-                        ? {
-                            ...prevArticle,
-                            description: prevArticle.subtitle,
-                            url: `/stories/${prevArticle.slug}`,
-                          }
-                        : undefined
-                    }
-                    nextArticle={
-                      nextArticle
-                        ? {
-                            ...nextArticle,
-                            description: nextArticle.subtitle,
-                            url: `/stories/${nextArticle.slug}`,
-                          }
-                        : undefined
-                    }
-                  />
-                </div>
-              )}
-
               <div style={{ marginTop: 'clamp(28px, 4vw, 48px)' }}>
-                <AuthorSection
-                  author={mappedArticle.author}
-                  authorImage={mappedArticle.authorImage}
-                  authorRole={article.author_role}
-                />
+                <ArticleNewsletter />
               </div>
-
-              <ArticleNewsletter />
             </div>
           </article>
 
-          <aside className="xl:sticky xl:top-24" style={{ minWidth: 0 }}>
+          <aside className="xl:sticky xl:top-24 article-recommended" style={{ minWidth: 0 }}>
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
             >
@@ -419,7 +379,7 @@ export default async function ArticlePage({
               >
                 <span
                   style={{
-                    fontFamily: "'Public Sans', sans-serif",
+                    fontFamily: "'Poppins', sans-serif",
                     fontSize: '11px',
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',
@@ -437,12 +397,12 @@ export default async function ArticlePage({
                   gap: '16px',
                 }}
               >
-                {recommendedArticles.map(
+                {recommendedArticles.slice(0, 4).map(
                   (recommendedArticle: any, index: number) => (
                     <Link
                       key={recommendedArticle.slug}
                       href={`/stories/${recommendedArticle.slug}`}
-                      className="group"
+                      className="group img-card"
                       style={{
                         display: 'grid',
                         gridTemplateColumns: '96px minmax(0,1fr)',
@@ -470,7 +430,9 @@ export default async function ArticlePage({
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
-                            filter: 'brightness(0.85)',
+                            // No filter here: the global grayscale rule sets one
+                            // with !important, so an inline value never applied.
+                            // Colour on hover comes from .article-recommended.
                           }}
                         />
                       </div>
@@ -486,7 +448,7 @@ export default async function ArticlePage({
                           <span
                             style={{
                               display: 'block',
-                              fontFamily: "'Public Sans', sans-serif",
+                              fontFamily: "'Poppins', sans-serif",
                               fontSize: '11px',
                               letterSpacing: '0.18em',
                               textTransform: 'uppercase',
@@ -499,7 +461,7 @@ export default async function ArticlePage({
                           <h3
                             style={{
                               margin: 0,
-                              fontFamily: "'Bodoni Moda', serif",
+                              fontFamily: "'Fraunces', serif",
                               fontSize: '18px',
                               lineHeight: 1.35,
                               color: '#f5f4f0',
@@ -511,7 +473,7 @@ export default async function ArticlePage({
                         <span
                           style={{
                             display: 'block',
-                            fontFamily: "'Public Sans', sans-serif",
+                            fontFamily: "'Poppins', sans-serif",
                             fontSize: '11px',
                             letterSpacing: '0.08em',
                             textTransform: 'uppercase',

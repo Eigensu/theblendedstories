@@ -399,7 +399,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
         suppressContentEditableWarning
         onInput={() => onChange({ content: editorRef.current?.innerHTML || '' })}
         className="min-h-55 rounded-xl border border-zinc-800 bg-black px-4 py-3 text-sm text-white outline-none focus:border-zinc-500 [&_a]:text-[#AB853C] [&_a]:underline"
-        style={{ lineHeight: 1.85, fontFamily: "'Public Sans', sans-serif" }}
+        style={{ lineHeight: 1.85, fontFamily: "'Poppins', sans-serif" }}
       />
     </div>
   );

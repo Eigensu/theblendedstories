@@ -23,13 +23,13 @@ export default function AuthorSection({ author, authorImage, authorRole }: { aut
       <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-[26px]" style={{ borderTop: '1px solid rgba(245,244,240,0.14)', borderBottom: '1px solid rgba(245,244,240,0.14)', padding: 'clamp(24px, 4vw, 44px) 0' }}>
         <img src={authorImage} alt="" style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '1px solid rgba(245,244,240,0.16)', filter: 'grayscale(0.3) brightness(0.75)' }} className="mx-auto sm:mx-0" />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'inherit' }}>
-          <span style={{ display: 'block', fontFamily: "'Playfair Display', serif", fontSize: '21px', color: '#f5f4f0', marginBottom: '4px' }}>
+          <span style={{ display: 'block', fontFamily: "'Fraunces', serif", fontSize: '21px', color: '#f5f4f0', marginBottom: '4px' }}>
             {author}
           </span>
-          <span style={{ display: 'block', fontFamily: "'Public Sans', sans-serif", fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7a7972', marginBottom: '14px' }}>
+          <span style={{ display: 'block', fontFamily: "'Poppins', sans-serif", fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7a7972', marginBottom: '14px' }}>
             {authorRole || 'Contributing Editor'}
           </span>
-          <p style={{ margin: 0, fontFamily: "'Public Sans', sans-serif", fontSize: '14px', lineHeight: 1.7, color: '#a3a19b', maxWidth: '480px' }}>
+          <p style={{ margin: 0, fontFamily: "'Poppins', sans-serif", fontSize: '14px', lineHeight: 1.7, color: '#a3a19b', maxWidth: '480px' }}>
             A brief bio for the author explaining their role and what they write about for the publication.
           </p>
         </div>
@@ -39,7 +39,7 @@ export default function AuthorSection({ author, authorImage, authorRole }: { aut
           style={{
             border: '1px solid rgba(245,244,240,0.3)',
             padding: '11px 22px',
-            fontFamily: "'Public Sans', sans-serif",
+            fontFamily: "'Poppins', sans-serif",
             fontSize: '12px',
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
