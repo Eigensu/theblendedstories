@@ -15,7 +15,9 @@ class TBSTalksFeaturedPatch(BaseModel):
 @router.get("/")
 async def list_items(featured: Optional[bool] = None):
     items = await get_all(featured_only=featured)
-    items = sorted(items, key=lambda x: x.get("display_order") if x.get("display_order", 0) > 0 else 999999)
+    # `or` rather than a comparison: display_order is null on older documents and
+    # `None > 0` raises, 500-ing the whole listing. Falsy (null/0) sorts last, as before.
+    items = sorted(items, key=lambda x: x.get("display_order") or 999999)
     return success_response(data=items)
 
 @router.get("/{item_id}")
