@@ -519,7 +519,9 @@ section.touch-color video:not(.no-grayscale),
   .the-edit-explore-desktop { display: none; }
   .the-edit-explore-mobile {
     display: inline-flex;
-    align-self: flex-start;
+    /* center rather than stretch, so the button keeps its content width
+       instead of spanning the full column. */
+    align-self: center;
     margin-top: clamp(28px, 5vw, 44px);
   }
   /* 2 cards per viewport once stacked, and only 4 in total — the 5th onward
