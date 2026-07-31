@@ -1,8 +1,13 @@
 import { Article } from '@/types/article';
 import { formatArticleDate, formatReadingTime } from '@/lib/articleMeta';
 
+/** Stand-in when an article carries no author portrait — author_image is an
+ *  empty string on most records, which rendered as a blank ringed circle. */
+const TBS_LOGO = '/TBS LOGO-02 white.png';
+
 export default function ArticleHero({ article }: { article: Article }) {
   const metaParts = [formatArticleDate(article.date), formatReadingTime(article.readingTime)].filter(Boolean);
+  const hasAuthorImage = Boolean(article.authorImage?.trim());
 
   let finalUrl = article.instagramUrl;
   if (finalUrl && !/^https?:\/\//i.test(finalUrl)) {
@@ -42,7 +47,24 @@ export default function ArticleHero({ article }: { article: Article }) {
         )}
         <div className="flex flex-wrap justify-center items-center gap-x-[18px] gap-y-[8px]" style={{ fontFamily: "'Poppins', sans-serif", fontSize: '13px', color: '#c9c8c3' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img className="no-grayscale" src={article.authorImage} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', display: 'inline-block', border: '1px solid rgba(245,244,240,0.2)', filter: 'brightness(0.75)' }} />
+            <img
+              className="no-grayscale"
+              src={hasAuthorImage ? article.authorImage : TBS_LOGO}
+              alt=""
+              style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: '50%',
+                display: 'inline-block',
+                border: '1px solid rgba(245,244,240,0.2)',
+                // The logo is a wide wordmark, so it has to be fitted inside the
+                // circle rather than cover-cropped to a sliver of its middle, and
+                // it is already dim enough not to want the portrait's dimming.
+                objectFit: hasAuthorImage ? 'cover' : 'contain',
+                padding: hasAuthorImage ? 0 : '3px',
+                filter: hasAuthorImage ? 'brightness(0.75)' : undefined,
+              }}
+            />
             <span style={{ fontWeight: 600, color: '#e7e6e1' }}>{article.author}</span>
           </div>
         </div>
