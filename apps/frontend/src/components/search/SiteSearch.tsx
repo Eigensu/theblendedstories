@@ -1,20 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import { Search } from 'lucide-react';
 import SearchOverlay from './SearchOverlay';
 import NavButton from '../nav/NavButton';
-import { hasHamburger } from '../nav/navSlots';
 
 export default function SiteSearch() {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
   const triggerRef = useRef<HTMLButtonElement>(null);
-
-  // Outermost of the three corner buttons: search, profile, menu. The hamburger
-  // is absent on article pages, so everything shifts one slot outward there.
-  const slot = hasHamburger(pathname) ? 2 : 1;
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -49,9 +42,12 @@ export default function SiteSearch() {
 
   return (
     <>
+      {/* Outer of the two right-corner buttons: search, then account. The
+          hamburger pins to the left corner, so this slot no longer shifts on the
+          article pages that hide it. */}
       <NavButton
         ref={triggerRef}
-        slot={slot}
+        slot={1}
         open={open}
         onClick={() => setOpen(true)}
         ariaLabel="Search stories"

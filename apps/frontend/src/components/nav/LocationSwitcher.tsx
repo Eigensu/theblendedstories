@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import { MapPin } from 'lucide-react';
 import NavButton from './NavButton';
-import { hasHamburger, navSlotRight } from './navSlots';
+import { navSlotRight } from './navSlots';
 import { useLocation } from '@/contexts/LocationContext';
 import { locationLabel, type LocationRegion } from '@/constants/locationTaxonomy';
 
@@ -18,13 +17,12 @@ export default function LocationSwitcher({
   regions,
 }: Readonly<{ regions: LocationRegion[] }>) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { locationMain, locationSub, setLocation } = useLocation();
 
-  // One slot further out than the account button, which itself shifts in on
-  // article pages — see navSlots.ts for why every corner button agrees on this.
-  const slot = (hasHamburger(pathname) ? 1 : 0) + 2;
+  // Outermost of the three right-corner buttons. The hamburger pins to the left
+  // corner, so this no longer shifts on the article pages that hide it.
+  const slot = 2;
 
   useEffect(() => {
     if (!open) return;

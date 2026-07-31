@@ -201,6 +201,11 @@ body {
   --fs-nav:        clamp(11px, 0.9vw, 14px);
   --fs-ghost:      clamp(56px, 9vw,   120px);
   --px-page:       clamp(20px, 4vw,   44px);
+  /* How far in from a page edge one fixed corner button reaches, plus a gap.
+     Mirrors navSlotsReservedRight(1) in nav/navSlots.ts — keep the two in step.
+     Layouts that draw their own content in a top corner subtract this, since the
+     button is fixed and takes no space in flow to push back against. */
+  --nav-slot-reserve: calc(var(--px-page) + 60px);
   --gap-grid:      clamp(20px, 3vw,   44px);
   --py-section:    clamp(80px, 10vw,  160px);
 }
@@ -671,7 +676,10 @@ section.touch-color video:not(.no-grayscale),
   overflow-y: auto;
   scrollbar-width: none;
   box-sizing: border-box;
-  padding: clamp(24px, 4.5vh, 48px) clamp(28px, 3vw, 48px);
+  /* The sidebar draws its label and back link in the top-left corner, which is
+     where the hamburger sits — clear it rather than let the button cover them. */
+  padding: max(clamp(24px, 4.5vh, 48px), var(--nav-slot-reserve))
+           clamp(28px, 3vw, 48px) clamp(24px, 4.5vh, 48px);
   display: flex;
   flex-direction: column;
   border-right: 1px solid rgba(255,255,255,0.08);
@@ -772,7 +780,7 @@ section.touch-color video:not(.no-grayscale),
   .tbs-wizard-sidebar {
     height: auto;
     overflow: visible;
-    padding: 24px 20px 20px;
+    padding: max(24px, var(--nav-slot-reserve)) 20px 20px;
     border-right: none;
     border-bottom: 1px solid rgba(255,255,255,0.1);
   }
