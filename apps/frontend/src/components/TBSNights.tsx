@@ -96,8 +96,17 @@ export default function TBSNights({ data }: { data?: any }) {
         preload="auto"
         className="nights-bg-img"
         style={{
-          position: 'absolute', top: 0, left: 0, bottom: 0,
-          width: '48%', height: '100%',
+          // Inset by the same gutter the WhatIsTBS section uses, so the video
+          // reads as its own block instead of bleeding to the section edges and
+          // its left edge lines up with that section's image. The mobile rules
+          // in globals.css override all of this with !important, which beats a
+          // normal inline declaration.
+          position: 'absolute',
+          top: 'clamp(20px, 3vw, 44px)',
+          left: 'clamp(20px, 3vw, 44px)',
+          bottom: 'clamp(20px, 3vw, 44px)',
+          width: 'calc(48% - clamp(20px, 3vw, 44px))',
+          height: 'auto',
           objectFit: 'cover', objectPosition: 'center',
           zIndex: 0,
         }}
