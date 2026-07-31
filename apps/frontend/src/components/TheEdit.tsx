@@ -3,10 +3,11 @@ import { useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 
 import Link from 'next/link';
-const PAGE_SIZE = 4;
 // Top Picks shows a fixed shortlist. Editors can flag any number of articles as
 // featured in the admin, so cap here rather than trusting the API to be curated.
-const MAX_PICKS = 5;
+// Two viewports' worth on laptop; CSS hides everything past the 4th on mobile,
+// where a viewport holds 2 cards rather than 4.
+const MAX_PICKS = 8;
 
 // Outlined CTA matching the TBS Nights "Join the Waitlist" button. Rendered
 // twice — inside the left panel on desktop, and below the carousel once the
@@ -73,25 +74,16 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
       }))
     : [];
 
-  const pages = Array.from({ length: Math.ceil(apiArticles.length / PAGE_SIZE) }, (_, i) =>
-    apiArticles.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
-  );
-
   const title = settings?.the_edit_title || 'TOP PICKS';
   const description = settings?.the_edit_description || 'A curated selection of our most recent and essential stories. Everything you need to know, styled for the way you live.';
 
-  const scrollByCard = (direction: 1 | -1) => {
+  // One viewport of cards at a time — 2 on mobile, 4 on laptop. Card widths are
+  // set in CSS so the step is just the scroller's own width, no per-breakpoint
+  // arithmetic here.
+  const scrollByPage = (direction: 1 | -1) => {
     const el = scrollerRef.current;
     if (!el) return;
-    const page = el.querySelector<HTMLElement>('.the-edit-page');
-    if (page && page.offsetWidth > 0) {
-      // Mobile: scroll a full 2×2 page at a time.
-      el.scrollBy({ left: (page.offsetWidth + 20) * direction, behavior: 'smooth' });
-      return;
-    }
-    const card = el.querySelector<HTMLElement>('.the-edit-card');
-    const step = card ? card.offsetWidth + 20 : el.clientWidth * 0.8;
-    el.scrollBy({ left: step * direction, behavior: 'smooth' });
+    el.scrollBy({ left: el.clientWidth * direction, behavior: 'smooth' });
   };
 
   // Auto-advance the carousel — no manual arrows, so this is the only way
@@ -105,7 +97,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
       if (atEnd) {
         el.scrollTo({ left: 0, behavior: 'smooth' });
       } else {
-        scrollByCard(1);
+        scrollByPage(1);
       }
     }, 8000);
     return () => clearInterval(interval);
@@ -192,9 +184,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
         <div style={{ flex: 1, minWidth: 0, position: 'relative' }}>
 
           <div className="the-edit-grid" ref={scrollerRef} style={{ display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory' }}>
-            {pages.map((pageGroup, pageIndex) => (
-              <div key={pageIndex} className="the-edit-page grid grid-rows-2 grid-cols-2 gap-2.5 md:gap-5 w-[85vw] md:w-full shrink-0 md:grid-rows-1 md:grid-cols-4" style={{ scrollSnapAlign: 'start' }}>
-                {pageGroup.map((article: any) => (
+            {apiArticles.map((article: any) => (
                   <Link
                     href={article.url}
                     key={article.num}
@@ -267,8 +257,6 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
                       {article.desc}
                     </p>
                   </Link>
-                ))}
-              </div>
             ))}
           </div>
         </div>

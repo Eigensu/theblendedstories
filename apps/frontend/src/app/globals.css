@@ -346,10 +346,31 @@ section.touch-color video:not(.no-grayscale),
 }
 
 /* ─── TBSTalks grid ─── */
+/* Single scroll-snapped row, 4 cards per viewport on laptop and 2 once
+   stacked. Cards are wrapped in ScrollReveal, so the flex items are those
+   wrappers rather than the cards themselves — hence the `> *`. */
 .talks-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(10px, 1.5vw, 20px);
+  --card-gap: clamp(10px, 1.5vw, 20px);
+  --cards-per-view: 4;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: var(--card-gap);
+  scrollbar-width: none;
+}
+.talks-grid::-webkit-scrollbar {
+  display: none;
+}
+.talks-grid > * {
+  flex: 0 0
+    calc(
+      (100% - (var(--cards-per-view) - 1) * var(--card-gap)) /
+        var(--cards-per-view)
+    );
+  min-width: 0;
+  scroll-snap-align: start;
 }
 
 /* ─── TheEdit layout ─── */
@@ -379,17 +400,24 @@ section.touch-color video:not(.no-grayscale),
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  gap: clamp(14px, 1.5vw, 22px);
+  gap: var(--card-gap);
   scrollbar-width: none;
 }
 .the-edit-grid::-webkit-scrollbar {
   display: none;
 }
-.the-edit-page {
-  display: contents;
+/* Single row, 4 cards per viewport on laptop. --gap must match the row's own
+   gap or the 4th card is pushed out and the snap points drift. */
+.the-edit-grid {
+  --card-gap: clamp(14px, 1.5vw, 22px);
+  --cards-per-view: 4;
 }
 .the-edit-grid .the-edit-card {
-  flex: 0 0 clamp(180px, 18vw, 230px);
+  flex: 0 0
+    calc(
+      (100% - (var(--cards-per-view) - 1) * var(--card-gap)) /
+        var(--cards-per-view)
+    );
   scroll-snap-align: start;
 }
 
@@ -450,8 +478,10 @@ section.touch-color video:not(.no-grayscale),
     text-align: center !important;
   }
 
-  /* TBSTalks: 4-col → 2-col */
-  .talks-grid { grid-template-columns: repeat(2, 1fr); }
+  /* TBSTalks: 2 cards per viewport once stacked, and only 4 in total — the
+     5th onward would need a third and fourth swipe. */
+  .talks-grid { --cards-per-view: 2; }
+  .talks-grid > *:nth-child(n + 5) { display: none; }
 
   /* TBSTalks header: logo was overflowing its box and getting cropped; tagline/link sat flush against the screen edge */
   .talks-logo-wrap {
@@ -492,8 +522,13 @@ section.touch-color video:not(.no-grayscale),
     align-self: flex-start;
     margin-top: clamp(28px, 5vw, 44px);
   }
-  .the-edit-grid .the-edit-card {
-    flex-basis: clamp(200px, 60vw, 260px);
+  /* 2 cards per viewport once stacked, and only 4 in total — the 5th onward
+     would need a third and fourth swipe. */
+  .the-edit-grid {
+    --cards-per-view: 2;
+  }
+  .the-edit-grid .the-edit-card:nth-child(n + 5) {
+    display: none;
   }
   .the-edit-vertical-label { display: none !important; }
 }
@@ -592,31 +627,17 @@ section.touch-color video:not(.no-grayscale),
   }
 }
 
-/* ── TheEdit / Top Picks carousel — non-desktop ──
-   Breakpoint mirrors the component's Tailwind `md:` prefix (768px): below it,
-   each page is a 2×2 grid sized to `w-[85vw]` and the row scrolls horizontally.
-   Keep this in sync with md (767.98px) so there is no dead band above 640px
-   where the pages lose their width constraint and balloon past the screen. */
+/* ── TheEdit / Top Picks carousel — non-desktop ── */
 @media (max-width: 767.98px) {
   /* The stacked outer must stretch its children so the carousel is bounded to
-     the viewport; otherwise the flex grid sizes to its content and the pages
-     (and cards) overflow far past the screen edge. */
+     the viewport; otherwise the flex row sizes to its content and the cards
+     overflow far past the screen edge. */
   .the-edit-outer {
     align-items: stretch;
   }
   .the-edit-grid {
     width: 100%;
     max-width: 100%;
-  }
-  /* Restore `display: grid` over the base `display: contents` so each page is a
-     2×2 block. Width/flex are intentionally left to the component's Tailwind
-     classes (`w-[85vw] shrink-0`) — do NOT set width/flex here or it clobbers
-     the viewport-relative page width and the cards balloon to max-content. */
-  .the-edit-page {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(12px, 3vw, 18px);
-    scroll-snap-align: start;
   }
   .the-edit-grid .the-edit-card {
     min-width: 0;
@@ -640,9 +661,6 @@ section.touch-color video:not(.no-grayscale),
   }
 
   .press-grid { grid-template-columns: 1fr !important; }
-
-  /* TBSTalks: keep 2-col on mobile (2×2 grid) */
-  .talks-grid { grid-template-columns: repeat(2, 1fr); }
 
   .footer-bottom-bar {
     flex-direction: column !important;
