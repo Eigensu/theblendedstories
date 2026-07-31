@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import ScrollReveal from './ScrollReveal';
 
 const speakers = [
@@ -105,8 +106,8 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
               justifyContent: 'flex-end',
               marginTop: 'clamp(12px, 2vw, 20px)',
             }}>
-              <a
-                href="#"
+              <Link
+                href="/talks"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -127,7 +128,7 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
                   <line x1="0" y1="5" x2="26" y2="5" stroke="white" strokeWidth="1" strokeOpacity="0.7" />
                   <polyline points="21,1 30,5 21,9" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.7" strokeLinejoin="round" />
                 </svg>
-              </a>
+              </Link>
             </div>
           </div>
         </ScrollReveal>
