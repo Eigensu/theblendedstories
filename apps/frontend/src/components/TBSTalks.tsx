@@ -41,7 +41,9 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
         role: d.designation,
         date: d.date,
         social_link: d.social_link,
-      })).slice(0, 4)
+      // Two viewports' worth on laptop; CSS hides everything past the 4th on
+      // mobile, where a viewport holds 2 cards rather than 4.
+      })).slice(0, 8)
     : [];
 
   if (apiSpeakers.length === 0) {
@@ -133,7 +135,7 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
           </div>
         </ScrollReveal>
 
-        {/* ── Four speaker cards ── */}
+        {/* ── Speaker cards: one scroll-snapped row ── */}
         <div className="talks-grid">
           {apiSpeakers.map((speaker, idx) => {
             let finalUrl = speaker.social_link;
