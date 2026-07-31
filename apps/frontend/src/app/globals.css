@@ -508,13 +508,6 @@ section.touch-color video:not(.no-grayscale),
     font-size: clamp(15px, 2.4vw, 18px) !important;
     padding: 0 16px !important;
   }
-  .talks-view-all-row {
-    padding: 0 16px !important;
-  }
-  .talks-view-all-row a {
-    font-size: clamp(11px, 1.6vw, 13px) !important;
-  }
-
   /* TheEdit: stack left panel above cards */
   .the-edit-outer { flex-direction: column; align-items: stretch; }
   .the-edit-left { width: 100%; }
@@ -1014,6 +1007,52 @@ section.touch-color video:not(.no-grayscale),
 
 .search-dialog::backdrop {
   background: #000;
+}
+
+/* ─── Shared outlined CTA ─── */
+/* The same button as TBS Nights' "Join the Waitlist" and The Edit's "Explore all
+   stories", as a class so server components can use it too — those two predate
+   this and still carry the values inline with JS hover handlers, so keep the
+   numbers here in step with them.
+
+   `.tbs-outline-btn-row` is the centred row for a CTA that closes a section. */
+.tbs-outline-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 14px 36px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: transparent;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(10px, 0.85vw, 12px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.tbs-outline-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+.tbs-outline-btn:focus-visible {
+  outline: 1px solid white;
+  outline-offset: 3px;
+}
+
+.tbs-outline-btn-row {
+  display: flex;
+  justify-content: center;
+}
+
+/* TBS Talks' CTA sits under the card row, clear of the cards' bottom edge. */
+.talks-view-all-row {
+  margin-top: clamp(28px, 4vw, 44px);
 }
 
 /* The "Home" link in the top-left corner of the /topics and /talks pages, and
