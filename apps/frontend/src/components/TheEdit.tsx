@@ -4,6 +4,9 @@ import ScrollReveal from './ScrollReveal';
 
 import Link from 'next/link';
 const PAGE_SIZE = 4;
+// Top Picks shows a fixed shortlist. Editors can flag any number of articles as
+// featured in the admin, so cap here rather than trusting the API to be curated.
+const MAX_PICKS = 5;
 
 export default function TheEdit({ data, settings }: { data?: any[], settings?: any }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -12,8 +15,15 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
     ? data.filter(d => d.status === 'published').sort((a: any, b: any) => {
         const orderA = a.display_order > 0 ? a.display_order : 999999;
         const orderB = b.display_order > 0 ? b.display_order : 999999;
-        return orderA - orderB;
-      }).map((d, index) => ({
+        if (orderA !== orderB) return orderA - orderB;
+        // Most featured articles share display_order 0, so without a tie-break
+        // the section renders in whatever order Mongo happens to return —
+        // newest first, then slug so the result is stable across requests.
+        const dateA = Date.parse(a.created_at ?? '') || 0;
+        const dateB = Date.parse(b.created_at ?? '') || 0;
+        if (dateA !== dateB) return dateB - dateA;
+        return String(a.slug ?? '').localeCompare(String(b.slug ?? ''));
+      }).slice(0, MAX_PICKS).map((d, index) => ({
         img: d.cover_image || d.hero_image,
         title: d.title,
         desc: d.subtitle,
@@ -165,7 +175,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
           </div>
         </ScrollReveal>
 
-        {/* ── Right: carousel of 10 article cards ── */}
+        {/* ── Right: carousel of the Top Picks cards ── */}
         <div style={{ flex: 1, minWidth: 0, position: 'relative' }}>
 
           <div className="the-edit-grid" ref={scrollerRef} style={{ display: 'flex', overflowX: 'auto', scrollSnapType: 'x mandatory' }}>

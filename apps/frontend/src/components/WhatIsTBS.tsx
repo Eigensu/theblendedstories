@@ -113,8 +113,8 @@ export default function WhatIsTBS({ data }: { data?: any }) {
                 fontWeight: 600,
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
-                color: 'black',
-                background: 'white',
+                color: 'white',
+                background: 'transparent',
                 border: '1px solid white',
                 cursor: 'pointer',
                 padding: '0 clamp(24px, 3vw, 36px)',
@@ -124,12 +124,12 @@ export default function WhatIsTBS({ data }: { data?: any }) {
                 whiteSpace: 'nowrap',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = 'white';
-              }}
-              onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
                 e.currentTarget.style.color = 'black';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'white';
               }}
             >
               {buttonText}

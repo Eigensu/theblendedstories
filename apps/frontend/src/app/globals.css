@@ -324,6 +324,10 @@ section.touch-color video:not(.no-grayscale),
 }
 
 /* ─── TBS Nights layout ─── */
+/* Shown only on mobile, where the logo sits above the video banner. */
+.nights-logo-mobile {
+  display: none;
+}
 .nights-inner {
   max-width: 1440px;
   width: 100%;
@@ -494,22 +498,32 @@ section.touch-color video:not(.no-grayscale),
   /* Disable fixed bg on mobile — iOS doesn't support background-attachment:fixed */
   .fixed-bg-section { background-attachment: scroll, scroll !important; }
 
-  /* TBSNights: text first, video banner below it on mobile */
+  /* TBSNights on mobile: logo, then video banner, then text */
   #nights {
     min-height: 0 !important;
     display: flex !important;
     flex-direction: column !important;
   }
+  .nights-logo-mobile {
+    display: block;
+    order: 0;
+    align-self: flex-start;
+    padding: clamp(28px, 6vw, 44px) clamp(20px, 4vw, 60px)
+      clamp(20px, 4vw, 28px);
+  }
+  .nights-logo-desktop {
+    display: none !important;
+  }
   .nights-bg-img {
     position: relative !important;
     inset: auto !important;
-    order: 2;
+    order: 1;
     width: 100% !important;
     height: clamp(220px, 56vw, 340px) !important;
     display: block;
   }
   .nights-inner {
-    order: 1;
+    order: 2;
     flex-direction: column !important;
     align-items: flex-start !important;
     padding-top: clamp(28px, 6vw, 44px) !important;

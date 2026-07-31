@@ -227,6 +227,10 @@ export default function NewsletterPopup() {
                     required
                     style={{
                       flex: 1,
+                      // Without this the input's intrinsic width (min-width:
+                      // auto) refuses to shrink and the Subscribe button
+                      // overflows the card on narrow screens.
+                      minWidth: 0,
                       background: 'transparent',
                       border: 'none',
                       outline: 'none',
@@ -240,6 +244,7 @@ export default function NewsletterPopup() {
                     type="submit"
                     disabled={pending}
                     style={{
+                      flexShrink: 0,
                       background: 'white',
                       color: 'black',
                       border: 'none',
