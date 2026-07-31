@@ -285,22 +285,15 @@ export default function Footer({ data }: { data?: any }) {
               }}>
                 Follow Us
               </h4>
-              <div className="footer-social-icons" style={{ display: 'flex', gap: '14px', flexWrap: 'nowrap', justifyContent: 'center' }}>
+              {/* Row and box geometry live in globals.css so the mobile rules can
+                  tighten them — inline values would outrank the stylesheet. */}
+              <div className="footer-social-icons">
                 {socialIcons.map(({ label, icon }) => (
                   <a
                     key={label}
                     href="#"
                     aria-label={label}
-                    style={{
-                      width: '52px', height: '52px', borderRadius: '50%',
-                      background: 'transparent',
-                      border: '1px solid rgba(255,255,255,0.6)',
-                      color: 'white',
-                      display: 'flex', alignItems: 'center',
-                      justifyContent: 'center', flexShrink: 0,
-                      boxSizing: 'border-box',
-                      transition: 'transform 0.2s ease, background 0.2s ease',
-                    }}
+                    className="footer-social-icon"
                     onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
                     onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                   >
