@@ -1,12 +1,21 @@
 'use client';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import ScrollReveal from './ScrollReveal';
 
+// The seeded poster is the TBS Nights wordmark, not a still from the film. Used
+// as a poster it gets object-fit: cover'd into the banner, so on mobile the
+// section showed a giant cropped logo until playback began. Treat it as "no
+// poster" so the video starts on black instead; a real still uploaded from the
+// admin still comes through.
+const WORDMARK = '/tbsnights-hero.png';
+
 export default function TBSNights({ data }: { data?: any }) {
   const router = useRouter();
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const videoUrl = "/TBS nights _4.mp4";
-  const posterUrl = data?.poster_url || "/tbsnights-hero.png";
+  const posterUrl = data?.poster_url && data.poster_url !== WORDMARK ? data.poster_url : undefined;
   const subtitle = data?.subtitle || "The conversations that don't happen online.";
   const paragraphs = data?.paragraphs?.length >= 2 ? data.paragraphs : [
     "TBS Nights is an intimate dinner series by The Blended Stories that brings together founders, creatives, tastemakers and cultural voices for meaningful conversations beyond likes, algorithms and timelines.",
@@ -14,6 +23,41 @@ export default function TBSNights({ data }: { data?: any }) {
   ];
   const buttonText = data?.button_text || "JOIN THE WAITLIST";
   const buttonLink = data?.button_link || "/tbs-nights";
+
+  // `autoPlay` alone is unreliable on phones: iOS declines it in Low Power Mode
+  // and mobile Chrome can defer it until the element is on screen, which left
+  // the banner sitting on a frozen first frame. Re-ask for playback when the
+  // video scrolls into view, once it has buffered, and on the first tap
+  // anywhere — the gesture is what unblocks Low Power Mode.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const play = () => { video.play().catch(() => {}); };
+
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => { if (entry.isIntersecting) play(); }),
+      { threshold: 0.1 }
+    );
+    observer.observe(video);
+
+    const stopListening = () => {
+      video.removeEventListener('canplay', play);
+      window.removeEventListener('touchstart', play);
+      window.removeEventListener('click', play);
+    };
+
+    video.addEventListener('canplay', play);
+    video.addEventListener('playing', stopListening);
+    window.addEventListener('touchstart', play, { passive: true });
+    window.addEventListener('click', play);
+
+    return () => {
+      observer.disconnect();
+      video.removeEventListener('playing', stopListening);
+      stopListening();
+    };
+  }, []);
 
   return (
     <section
@@ -42,12 +86,14 @@ export default function TBSNights({ data }: { data?: any }) {
 
       {/* Background — grayscale by default, full colour on section hover */}
       <video
+        ref={videoRef}
         src={videoUrl}
         poster={posterUrl}
         autoPlay
         loop
         muted
         playsInline
+        preload="auto"
         className="nights-bg-img"
         style={{
           position: 'absolute', top: 0, left: 0, bottom: 0,

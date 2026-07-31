@@ -41,7 +41,9 @@ INITIAL_DATA = {
     ],
     "tbs_nights": {
         "video_url": "/tbs-nights.mp4",
-        "poster_url": "/tbsnights-hero.png",
+        # No poster: tbsnights-hero.png is the wordmark, and cover-fitting it
+        # into the banner showed a giant cropped logo before playback started.
+        "poster_url": None,
         "title": "TBS Nights",
         "subtitle": "The conversations that don't happen online.",
         "paragraphs": [

@@ -560,10 +560,13 @@ section.touch-color video:not(.no-grayscale),
   .nights-logo-mobile {
     display: block;
     order: 0;
-    /* Width-driven at the same scale as .talks-logo-img. A height clamp
-       collapses to its 64px floor at phone widths, which rendered the
-       wordmark far smaller than the TBS Talks one. */
-    width: min(480px, 82%);
+    /* Width-driven, sized so the *wordmark* matches the TBS Talks one. The two
+       PNGs bake in very different amounts of empty space: the artwork fills 95%
+       of tbsnights-hero.png but only 65% of tbstalks-logo.png, so giving both
+       the same box width (min(480px, 82%)) rendered Nights ~1.8x larger.
+       min(330px, 46%) lands the drawn wordmark within a few px of Talks' at
+       every phone width. */
+    width: min(330px, 46%);
     height: auto;
     object-fit: contain;
     /* Bottom gap matches .nights-inner's top padding so the video sits with
