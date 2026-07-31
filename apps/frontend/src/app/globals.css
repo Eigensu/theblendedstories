@@ -356,11 +356,22 @@ section.touch-color video:not(.no-grayscale),
 .the-edit-outer {
   display: flex;
   gap: clamp(32px, 4vw, 64px);
-  align-items: flex-start;
+  /* Centres the "TOP PICKS" / LATEST FEATURES panel against the card
+     carousel. Every stacked breakpoint below must reset this to stretch —
+     centring a column shrink-wraps the carousel and it overflows. */
+  align-items: center;
 }
 .the-edit-left {
   flex-shrink: 0;
   width: clamp(160px, 18vw, 240px);
+}
+/* Two copies of the "Explore all stories" CTA; exactly one shows at a time.
+   The stacked copy takes over below 1024px, where it sits under the cards. */
+.the-edit-explore-desktop {
+  display: inline-flex;
+}
+.the-edit-explore-mobile {
+  display: none;
 }
 .the-edit-grid {
   display: flex;
@@ -472,8 +483,15 @@ section.touch-color video:not(.no-grayscale),
   }
 
   /* TheEdit: stack left panel above cards */
-  .the-edit-outer { flex-direction: column; }
+  .the-edit-outer { flex-direction: column; align-items: stretch; }
   .the-edit-left { width: 100%; }
+  /* Swap the CTA from the heading panel to below the carousel. */
+  .the-edit-explore-desktop { display: none; }
+  .the-edit-explore-mobile {
+    display: inline-flex;
+    align-self: flex-start;
+    margin-top: clamp(28px, 5vw, 44px);
+  }
   .the-edit-grid .the-edit-card {
     flex-basis: clamp(200px, 60vw, 260px);
   }
@@ -507,9 +525,15 @@ section.touch-color video:not(.no-grayscale),
   .nights-logo-mobile {
     display: block;
     order: 0;
-    align-self: flex-start;
-    padding: clamp(28px, 6vw, 44px) clamp(20px, 4vw, 60px)
-      clamp(20px, 4vw, 28px);
+    /* Width-driven at the same scale as .talks-logo-img. A height clamp
+       collapses to its 64px floor at phone widths, which rendered the
+       wordmark far smaller than the TBS Talks one. */
+    width: min(480px, 82%);
+    height: auto;
+    object-fit: contain;
+    /* Bottom gap matches .nights-inner's top padding so the video sits with
+       equal breathing room above and below. */
+    padding: clamp(28px, 6vw, 44px) 0;
   }
   .nights-logo-desktop {
     display: none !important;
@@ -518,7 +542,10 @@ section.touch-color video:not(.no-grayscale),
     position: relative !important;
     inset: auto !important;
     order: 1;
-    width: 100% !important;
+    /* Inset by the same gutter .nights-inner uses below it (2× its
+       horizontal padding), so the video's edges line up with the text
+       rather than bleeding to the screen edge. */
+    width: calc(100% - clamp(40px, 8vw, 120px)) !important;
     height: clamp(220px, 56vw, 340px) !important;
     display: block;
   }
@@ -571,10 +598,6 @@ section.touch-color video:not(.no-grayscale),
    Keep this in sync with md (767.98px) so there is no dead band above 640px
    where the pages lose their width constraint and balloon past the screen. */
 @media (max-width: 767.98px) {
-  /* Collapse the desktop-only heading offset once the layout stacks. */
-  .the-edit-left {
-    margin-top: 0 !important;
-  }
   /* The stacked outer must stretch its children so the carousel is bounded to
      the viewport; otherwise the flex grid sizes to its content and the pages
      (and cards) overflow far past the screen edge. */
