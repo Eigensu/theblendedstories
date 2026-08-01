@@ -602,6 +602,11 @@ section.touch-color video:not(.no-grayscale),
   /* Disable fixed bg on mobile — iOS doesn't support background-attachment:fixed */
   .fixed-bg-section { background-attachment: scroll, scroll !important; }
 
+  /* Lift the wordmark: the 60px of head room the brand block carries reads as
+     a dead band once the footer is only a phone wide. !important because the
+     padding shorthand is inline on the element. */
+  .footer-brand { padding-top: 24px !important; }
+
   /* TBSNights on mobile: logo, then video banner, then text */
   #nights {
     min-height: 0 !important;

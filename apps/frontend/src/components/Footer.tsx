@@ -162,7 +162,7 @@ export default function Footer({ data }: { data?: any }) {
       }}
     >
       {/* ── Brand section ── */}
-      <div style={{
+      <div className="footer-brand" style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
