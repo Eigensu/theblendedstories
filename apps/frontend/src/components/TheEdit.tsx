@@ -132,6 +132,10 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
               gap: '8px',
               flexShrink: 0,
               marginTop: '6px',
+              // Fixed rather than content-width so the CTA below can be pulled
+              // back by exactly this column plus the gap and land flush with
+              // the label. globals.css reads the same value.
+              width: 'var(--edit-label-col)',
             }}>
               <span style={{
                 fontFamily: "'Poppins', sans-serif",

@@ -424,17 +424,28 @@ section.touch-color video:not(.no-grayscale),
 .the-edit-left {
   flex-shrink: 0;
   width: clamp(160px, 18vw, 240px);
+  /* Width of the vertical "LATEST FEATURES" strip. Set here rather than left
+     to the text's own width so the CTA can be offset by an exact amount. */
+  --edit-label-col: 16px;
 }
 /* Two copies of the "Explore all stories" CTA; exactly one shows at a time.
    The stacked copy takes over below 1024px, where it sits under the cards. */
 .the-edit-explore-desktop {
   display: inline-flex;
   /* The CTA is wider than the 240px panel, so it used to push right into the
-     carousel. Pull it back over the gap between the vertical label and the
-     heading so it grows leftward instead. Exactly the gap and no more: the
-     label's own column stays clear, so the two never collide however short
-     the heading wraps. */
-  margin-left: calc(-1 * clamp(12px, 1.5vw, 20px));
+     carousel. Pull it back across both the gap and the label column so its
+     left edge lines up under the "LATEST FEATURES" text and it grows leftward
+     instead of into the cards. */
+  margin-left: calc(-1 * (clamp(12px, 1.5vw, 20px) + var(--edit-label-col)));
+}
+/* Under ~1200px the heading sets smaller and its block gets shorter, so the CTA
+   rides up level with the label's dot — flush would put the button's border
+   through it. Clear only the gap across that band; below 1024px the stacked
+   copy takes over and this stops mattering. */
+@media (max-width: 1200px) {
+  .the-edit-explore-desktop {
+    margin-left: calc(-1 * clamp(12px, 1.5vw, 20px));
+  }
 }
 .the-edit-explore-mobile {
   display: none;
