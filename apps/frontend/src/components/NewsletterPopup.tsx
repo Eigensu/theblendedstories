@@ -177,20 +177,6 @@ export default function NewsletterPopup() {
             </div>
           ) : (
             <>
-              {/* Label */}
-              <p
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: '10px',
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.4)',
-                  marginBottom: '8px',
-                }}
-              >
-                First Timer?
-              </p>
-
               {/* Headline */}
               <h2
                 style={{
@@ -200,21 +186,39 @@ export default function NewsletterPopup() {
                   color: 'white',
                   letterSpacing: '0.03em',
                   lineHeight: '1.2',
+                  marginBottom: '10px',
+                }}
+              >
+                Don&apos;t Miss The Next Story.
+              </h2>
+
+              {/* Section strip */}
+              <p
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: '10px',
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.4)',
+                  marginBottom: '12px',
+                }}
+              >
+                Fashion. Food. Culture. Travel.
+              </p>
+
+              {/* Pitch */}
+              <p
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: '12px',
+                  color: 'rgba(255,255,255,0.55)',
+                  lineHeight: '1.6',
                   marginBottom: '16px',
                 }}
               >
-                JOIN THE BLENDED STORIES.
-                <br />
-                <em
-                  style={{
-                    fontStyle: 'italic',
-                    color: 'rgba(255,255,255,0.65)',
-                  }}
-                >
-                  &amp; just like that{' '}
-                </em>{' '}
-                you&apos;re in the know.
-              </h2>
+                Join thousands of readers discovering the stories, places and
+                people shaping what&apos;s happening now.
+              </p>
 
               {/* Email form */}
               <form onSubmit={handleSubmit}>
@@ -300,8 +304,7 @@ export default function NewsletterPopup() {
                     lineHeight: '1.6',
                   }}
                 >
-                  Your invite to what&apos;s happening, who&apos;s going, and
-                  what not to miss.
+                  Your weekly edit. Straight to your inbox.
                 </p>
               </form>
             </>
