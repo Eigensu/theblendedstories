@@ -11,6 +11,43 @@ def _new_block_id() -> str:
     return str(uuid4())
 
 
+def _normalize_image_items(block: dict) -> list[dict]:
+    """Collect an image block's row of images.
+
+    `images` is the current shape. Blocks written before it existed carry a
+    single `image`/`caption` pair at the top level, so those fall back to a
+    one-item row and read identically.
+    """
+    items: list[dict] = []
+    raw_items = block.get("images")
+
+    if isinstance(raw_items, list):
+        for raw_item in raw_items:
+            if not isinstance(raw_item, dict):
+                continue
+            image = raw_item.get("image") or ""
+            if not image:
+                continue
+            items.append(
+                {
+                    "image": image,
+                    "caption": raw_item.get("caption") or "",
+                    "link": raw_item.get("link") or "",
+                }
+            )
+
+    if not items and block.get("image"):
+        items.append(
+            {
+                "image": block["image"],
+                "caption": block.get("caption") or "",
+                "link": block.get("link") or "",
+            }
+        )
+
+    return items
+
+
 def _normalize_block(block: dict) -> dict | None:
     if not isinstance(block, dict):
         return None
@@ -34,11 +71,17 @@ def _normalize_block(block: dict) -> dict | None:
         }
 
     if block_type == "image":
+        images = _normalize_image_items(block)
+        first_image = images[0] if images else {}
         return {
             "id": block_id,
             "type": "image",
-            "image": block.get("image") or "",
-            "caption": block.get("caption") or "",
+            "images": images,
+            # Mirrors of the first image, kept so anything still reading the
+            # single-image shape renders instead of going blank.
+            "image": first_image.get("image", ""),
+            "caption": first_image.get("caption", ""),
+            "link": first_image.get("link", ""),
         }
 
     return None

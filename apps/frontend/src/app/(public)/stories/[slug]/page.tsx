@@ -12,9 +12,43 @@ import EditorialNote from '@/components/article/EditorialNote';
 import ArticleNewsletter from '@/components/article/ArticleNewsletter';
 import MoreArticles from '@/components/article/MoreArticles';
 import Footer from '@/components/Footer';
-import { ArticleContentBlock } from '@/types/article';
+import { ArticleContentBlock, ArticleImageItem } from '@/types/article';
 
 export const dynamic = 'force-dynamic';
+
+/**
+ * Mirror of `_normalize_image_items` in article_service: an image block carries
+ * its row in `images`, and blocks written before that field existed carry a
+ * single top-level `image`/`caption` pair instead.
+ */
+function normalizeImageItems(block: any): ArticleImageItem[] {
+  const items: ArticleImageItem[] = Array.isArray(block.images)
+    ? block.images
+        .filter(
+          (item: any) =>
+            item && typeof item === 'object' && typeof item.image === 'string' && item.image
+        )
+        .map((item: any) => ({
+          image: item.image,
+          caption: typeof item.caption === 'string' ? item.caption : '',
+          link: typeof item.link === 'string' ? item.link : '',
+        }))
+    : [];
+
+  if (items.length > 0) return items;
+
+  if (typeof block.image === 'string' && block.image) {
+    return [
+      {
+        image: block.image,
+        caption: typeof block.caption === 'string' ? block.caption : '',
+        link: typeof block.link === 'string' ? block.link : '',
+      },
+    ];
+  }
+
+  return [];
+}
 
 function normalizeBlock(block: any): ArticleContentBlock | null {
   if (!block || typeof block !== 'object') return null;
@@ -28,9 +62,6 @@ function normalizeBlock(block: any): ArticleContentBlock | null {
       id,
       type: 'text',
       content: typeof block.content === 'string' ? block.content : '',
-      fontSize: ['small', 'medium', 'large'].includes(block.fontSize)
-        ? block.fontSize
-        : 'medium',
     };
   }
 
@@ -44,11 +75,16 @@ function normalizeBlock(block: any): ArticleContentBlock | null {
   }
 
   if (block.type === 'image') {
+    const images = normalizeImageItems(block);
+    const [firstImage] = images;
     return {
       id,
       type: 'image',
-      image: typeof block.image === 'string' ? block.image : '',
-      caption: typeof block.caption === 'string' ? block.caption : '',
+      images,
+      // Mirrors of the first image, matching what the service writes.
+      image: firstImage?.image || '',
+      caption: firstImage?.caption || '',
+      link: firstImage?.link || '',
     };
   }
 
@@ -115,23 +151,15 @@ function getRecommendedArticles(
   return recommendations;
 }
 
-function renderTextBlock(
-  content: string,
-  isIntro: boolean,
-  fontSize?: 'small' | 'medium' | 'large'
-) {
+function renderTextBlock(content: string, isIntro: boolean) {
   const htmlPattern = /<[^>]+>/;
   const processedContent = content.replace(
     /<a /gi,
     '<a target="_blank" rel="noopener noreferrer" class="article-link" '
   );
 
-  let fontSizeClass = '';
-  if (fontSize === 'small') fontSizeClass = 'font-size-small';
-  else if (fontSize === 'large') fontSizeClass = 'font-size-large';
-
   return (
-    <div className={`article-body-text ${fontSizeClass}`}>
+    <div className="article-body-text">
       {htmlPattern.test(processedContent) ? (
         <div dangerouslySetInnerHTML={{ __html: processedContent }} />
       ) : (
@@ -144,9 +172,7 @@ function renderTextBlock(
 function renderBlock(block: ArticleContentBlock, index: number) {
   if (block.type === 'text') {
     return (
-      <div key={block.id}>
-        {renderTextBlock(block.content || '', index === 0, block.fontSize)}
-      </div>
+      <div key={block.id}>{renderTextBlock(block.content || '', index === 0)}</div>
     );
   }
 
@@ -158,13 +184,9 @@ function renderBlock(block: ArticleContentBlock, index: number) {
   }
 
   if (block.type === 'image') {
-    if (!block.image) return null;
-    return (
-      <Gallery
-        key={block.id}
-        images={[{ image: block.image, caption: block.caption }]}
-      />
-    );
+    const images = block.images || [];
+    if (images.length === 0) return null;
+    return <Gallery key={block.id} images={images} layout="row" />;
   }
 
   return null;
