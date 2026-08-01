@@ -126,6 +126,13 @@ def _normalize_article_record(item: dict | None) -> dict | None:
 
 def _prepare_article_payload(payload: ArticleModel) -> dict:
     data = payload.model_dump(exclude_unset=True, exclude={"id"})
+
+    # A title keeps the line breaks an editor typed — the hero renders it with
+    # `white-space: pre-line`. Only the outer whitespace goes, so a stray
+    # trailing Enter cannot leave a gap under the title.
+    if isinstance(data.get("title"), str):
+        data["title"] = data["title"].strip()
+
     incoming_blocks = data.get("contentBlocks") or []
     normalized_blocks = []
 
