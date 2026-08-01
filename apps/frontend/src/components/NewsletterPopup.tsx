@@ -177,6 +177,20 @@ export default function NewsletterPopup() {
             </div>
           ) : (
             <>
+              {/* Label */}
+              <p
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: '10px',
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.4)',
+                  marginBottom: '8px',
+                }}
+              >
+                First Time Here?
+              </p>
+
               {/* Headline */}
               <h2
                 style={{
@@ -192,14 +206,15 @@ export default function NewsletterPopup() {
                 Don&apos;t Miss The Next Story.
               </h2>
 
-              {/* Section strip */}
+              {/* Sections. Left in title case, with tighter tracking than the
+                  label above, so the two short lines either side of the
+                  headline don't read as the same repeated strip. */}
               <p
                 style={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: '10px',
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.4)',
+                  fontSize: '11px',
+                  letterSpacing: '0.08em',
+                  color: 'rgba(255,255,255,0.5)',
                   marginBottom: '12px',
                 }}
               >
