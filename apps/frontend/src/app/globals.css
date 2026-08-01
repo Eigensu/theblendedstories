@@ -428,26 +428,33 @@ section.touch-color video:not(.no-grayscale),
      to the text's own width so the CTA can be offset by an exact amount. */
   --edit-label-col: 16px;
 }
-/* Two copies of the "Explore all stories" CTA; exactly one shows at a time.
-   The stacked copy takes over below 1024px, where it sits under the cards. */
-.the-edit-explore-desktop {
-  display: inline-flex;
-  /* The CTA is wider than the 240px panel, so it used to push right into the
-     carousel. Pull it back across both the gap and the label column so its
-     left edge lines up under the "LATEST FEATURES" text and it grows leftward
-     instead of into the cards. */
+/* Two copies of the "All stories" CTA; exactly one shows at a time. The stacked
+   copy takes over below 1024px, where it sits under the cards.
+
+   Every rule here is written against .tbs-outline-btn as well, because that
+   class is declared further down the file and would otherwise win `display` on
+   equal specificity — leaving both copies on screen at once. */
+.tbs-outline-btn.the-edit-explore-desktop {
+  /* The box spans the heading panel exactly: pulling it back over the label
+     column and the gap puts its left edge under the vertical "LATEST FEATURES"
+     text, and the width then carries the right edge out to the end of "PICKS".
+     Before this the button sized itself to its own label and pushed into the
+     carousel. */
+  display: flex;
+  width: calc(100% + clamp(12px, 1.5vw, 20px) + var(--edit-label-col));
   margin-left: calc(-1 * (clamp(12px, 1.5vw, 20px) + var(--edit-label-col)));
 }
 /* Under ~1200px the heading sets smaller and its block gets shorter, so the CTA
-   rides up level with the label's dot — flush would put the button's border
-   through it. Clear only the gap across that band; below 1024px the stacked
+   rides up level with the label's dot — reaching under the label would draw the
+   box around it. Stop at the gap across that band; below 1024px the stacked
    copy takes over and this stops mattering. */
 @media (max-width: 1200px) {
-  .the-edit-explore-desktop {
+  .tbs-outline-btn.the-edit-explore-desktop {
+    width: calc(100% + clamp(12px, 1.5vw, 20px));
     margin-left: calc(-1 * clamp(12px, 1.5vw, 20px));
   }
 }
-.the-edit-explore-mobile {
+.tbs-outline-btn.the-edit-explore-mobile {
   display: none;
 }
 .the-edit-grid {
@@ -565,8 +572,8 @@ section.touch-color video:not(.no-grayscale),
   .the-edit-outer { flex-direction: column; align-items: stretch; }
   .the-edit-left { width: 100%; }
   /* Swap the CTA from the heading panel to below the carousel. */
-  .the-edit-explore-desktop { display: none; }
-  .the-edit-explore-mobile {
+  .tbs-outline-btn.the-edit-explore-desktop { display: none; }
+  .tbs-outline-btn.the-edit-explore-mobile {
     display: inline-flex;
     /* center rather than stretch, so the button keeps its content width
        instead of spanning the full column. */

@@ -9,43 +9,21 @@ import Link from 'next/link';
 // where a viewport holds 2 cards rather than 4.
 const MAX_PICKS = 8;
 
-// Outlined CTA matching the TBS Nights "Join the Waitlist" button. Rendered
-// twice — inside the left panel on desktop, and below the carousel once the
-// layout stacks — because the two sit at different nesting levels and CSS
-// order can't move one across the other. Only one is ever visible.
+// The shared outlined CTA, same as TBS Talks' "View all talks" and TBS Nights'
+// "Join the Waitlist" — .tbs-outline-btn carries the border, type and hover, so
+// nothing is styled inline here. Rendered twice: inside the left panel on
+// desktop, and below the carousel once the layout stacks, because the two sit
+// at different nesting levels and CSS order can't move one across the other.
+// Which copy shows is decided in globals.css.
+//
+// The label is "All stories", not "Explore all stories": on desktop the box is
+// sized to the heading panel, and the longer copy could not sit inside it
+// without either shrinking the type below the site's other CTAs or spilling
+// back over the carousel.
 function ExploreAllButton({ className }: { className: string }) {
   return (
-    <Link
-      href="/stories"
-      className={className}
-      style={{
-        // `display` is deliberately left to globals.css — an inline value
-        // would outrank the stylesheet and both copies would render.
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '14px',
-        border: '1px solid rgba(255,255,255,0.8)',
-        background: 'transparent',
-        color: 'white',
-        padding: '14px 36px',
-        fontFamily: "'Poppins', sans-serif",
-        fontSize: 'clamp(10px, 0.85vw, 12px)',
-        letterSpacing: '0.18em',
-        textTransform: 'uppercase',
-        textDecoration: 'none',
-        whiteSpace: 'nowrap',
-        transition: 'background 0.2s ease, border-color 0.2s ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-        e.currentTarget.style.borderColor = 'white';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'transparent';
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.8)';
-      }}
-    >
-      EXPLORE ALL STORIES
+    <Link href="/stories" className={`tbs-outline-btn ${className}`}>
+      All stories
     </Link>
   );
 }
