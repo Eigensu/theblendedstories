@@ -18,6 +18,14 @@ import {
   DEFAULT_LOCATION_SUB,
   type LocationRegion,
 } from '@/constants/locationTaxonomy';
+import {
+  normalizeContentBlock,
+  type NormalizedContentBlock,
+  type NormalizedImageBlock,
+  type NormalizedImageItem,
+  type NormalizedQuoteBlock,
+  type NormalizedTextBlock,
+} from '@/lib/articleBlocks';
 import { useAdmin } from '../contexts/AdminContext';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Search, Plus, Edit2, Trash2, ArrowLeft, X, GripVertical, Copy, Bold, Italic, Underline, Link2, Heading2, List } from 'lucide-react';
@@ -36,38 +44,15 @@ type GalleryItem = {
 
 type ContentBlockType = 'text' | 'quote' | 'image';
 
-type TextBlock = {
-  id: string;
-  type: 'text';
-  content: string;
-};
-
-type QuoteBlock = {
-  id: string;
-  type: 'quote';
-  quote: string;
-  author: string;
-};
-
-type ImageBlockItem = {
-  image: string;
-  caption: string;
-  /** Instagram (or any) URL the image opens when a reader clicks it. */
-  link: string;
-};
-
-type ImageBlock = {
-  id: string;
-  type: 'image';
-  /** The row of images this block renders. */
-  images: ImageBlockItem[];
-  /** Mirrors of `images[0]`, kept for blocks written before the row existed. */
-  image: string;
-  caption: string;
-  link: string;
-};
-
-type ContentBlock = TextBlock | QuoteBlock | ImageBlock;
+// The block shapes live in @/lib/articleBlocks alongside the normalizer that
+// produces them, so the editor and the story page cannot drift apart.
+type TextBlock = NormalizedTextBlock;
+type QuoteBlock = NormalizedQuoteBlock;
+/** `{ image, caption, link }`, every field a string. The link is the Instagram
+ *  (or any) URL the image opens when a reader clicks it. */
+type ImageBlockItem = NormalizedImageItem;
+type ImageBlock = NormalizedImageBlock;
+type ContentBlock = NormalizedContentBlock;
 
 export type Article = {
   id?: string;
@@ -172,77 +157,8 @@ const createImageBlock = (): ImageBlock => ({
   link: '',
 });
 
-/**
- * Mirror of `_normalize_image_items` in article_service: an image block carries
- * its row in `images`, and blocks written before that field existed carry a
- * single top-level `image`/`caption` pair instead.
- */
-const normalizeImageItems = (block: any): ImageBlockItem[] => {
-  const items: ImageBlockItem[] = Array.isArray(block.images)
-    ? block.images
-        .filter(
-          (item: any) =>
-            item && typeof item === 'object' && typeof item.image === 'string' && item.image
-        )
-        .map((item: any) => ({
-          image: item.image,
-          caption: typeof item.caption === 'string' ? item.caption : '',
-          link: typeof item.link === 'string' ? item.link : '',
-        }))
-    : [];
-
-  if (items.length > 0) return items;
-
-  if (typeof block.image === 'string' && block.image) {
-    return [
-      {
-        image: block.image,
-        caption: typeof block.caption === 'string' ? block.caption : '',
-        link: typeof block.link === 'string' ? block.link : '',
-      },
-    ];
-  }
-
-  return [];
-};
-
-const normalizeBlock = (block: any): ContentBlock | null => {
-  if (!block || typeof block !== 'object') return null;
-
-  const id = typeof block.id === 'string' && block.id ? block.id : createBlockId();
-
-  if (block.type === 'text') {
-    return {
-      id,
-      type: 'text',
-      content: typeof block.content === 'string' ? block.content : '',
-    };
-  }
-
-  if (block.type === 'quote') {
-    return {
-      id,
-      type: 'quote',
-      quote: typeof block.quote === 'string' ? block.quote : '',
-      author: typeof block.author === 'string' ? block.author : '',
-    };
-  }
-
-  if (block.type === 'image') {
-    const images = normalizeImageItems(block);
-    const [firstImage] = images;
-    return {
-      id,
-      type: 'image',
-      images,
-      image: firstImage?.image || '',
-      caption: firstImage?.caption || '',
-      link: firstImage?.link || '',
-    };
-  }
-
-  return null;
-};
+const normalizeBlock = (block: any): ContentBlock | null =>
+  normalizeContentBlock(block, createBlockId);
 
 const blocksToLegacyContent = (blocks: ContentBlock[]) => {
   return blocks

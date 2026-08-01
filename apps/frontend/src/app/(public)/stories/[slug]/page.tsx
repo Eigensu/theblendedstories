@@ -12,83 +12,16 @@ import EditorialNote from '@/components/article/EditorialNote';
 import ArticleNewsletter from '@/components/article/ArticleNewsletter';
 import MoreArticles from '@/components/article/MoreArticles';
 import Footer from '@/components/Footer';
-import { ArticleContentBlock, ArticleImageItem } from '@/types/article';
+import { ArticleContentBlock } from '@/types/article';
+import { normalizeContentBlock } from '@/lib/articleBlocks';
 
 export const dynamic = 'force-dynamic';
 
-/**
- * Mirror of `_normalize_image_items` in article_service: an image block carries
- * its row in `images`, and blocks written before that field existed carry a
- * single top-level `image`/`caption` pair instead.
- */
-function normalizeImageItems(block: any): ArticleImageItem[] {
-  const items: ArticleImageItem[] = Array.isArray(block.images)
-    ? block.images
-        .filter(
-          (item: any) =>
-            item && typeof item === 'object' && typeof item.image === 'string' && item.image
-        )
-        .map((item: any) => ({
-          image: item.image,
-          caption: typeof item.caption === 'string' ? item.caption : '',
-          link: typeof item.link === 'string' ? item.link : '',
-        }))
-    : [];
-
-  if (items.length > 0) return items;
-
-  if (typeof block.image === 'string' && block.image) {
-    return [
-      {
-        image: block.image,
-        caption: typeof block.caption === 'string' ? block.caption : '',
-        link: typeof block.link === 'string' ? block.link : '',
-      },
-    ];
-  }
-
-  return [];
-}
-
 function normalizeBlock(block: any): ArticleContentBlock | null {
-  if (!block || typeof block !== 'object') return null;
-
-  const id =
-    typeof block.id === 'string' && block.id
-      ? block.id
-      : `${block.type || 'block'}-${crypto.randomUUID()}`;
-  if (block.type === 'text') {
-    return {
-      id,
-      type: 'text',
-      content: typeof block.content === 'string' ? block.content : '',
-    };
-  }
-
-  if (block.type === 'quote') {
-    return {
-      id,
-      type: 'quote',
-      quote: typeof block.quote === 'string' ? block.quote : '',
-      author: typeof block.author === 'string' ? block.author : '',
-    };
-  }
-
-  if (block.type === 'image') {
-    const images = normalizeImageItems(block);
-    const [firstImage] = images;
-    return {
-      id,
-      type: 'image',
-      images,
-      // Mirrors of the first image, matching what the service writes.
-      image: firstImage?.image || '',
-      caption: firstImage?.caption || '',
-      link: firstImage?.link || '',
-    };
-  }
-
-  return null;
+  return normalizeContentBlock(
+    block,
+    () => `${block?.type || 'block'}-${crypto.randomUUID()}`
+  );
 }
 
 function legacyContentToBlocks(content: string[] = []): ArticleContentBlock[] {
