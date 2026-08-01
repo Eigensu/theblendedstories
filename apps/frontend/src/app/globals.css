@@ -25,6 +25,42 @@
   --white-50: rgba(255, 255, 255, 0.50);
   --overlay-heavy: rgba(0, 0, 0, 0.80);
   --overlay-medium: rgba(0, 0, 0, 0.60);
+
+  /* ─── Article type scale ───
+     Fixed sizes, not clamps: every story renders at exactly one of two sizes
+     per role — the desktop value below, or the mobile value swapped in at
+     767.98px. Nothing in between, so a headline reads the same on a 1280px
+     laptop as on a 1920px monitor. These are the only sizes the story page
+     should set for these four roles; change them here, not at the call site.
+
+                      desktop   mobile
+       headline         56px  /  34px   hero <h1>
+       sub headline     22px  /  17px   hero subtitle (article.subtitle)
+       article body     20px  /  17px   .article-body-text and its lists
+       quote            32px  /  22px   PullQuote
+       section head     30px  /  24px   <h2> inside the body copy          */
+  --fs-article-headline: 56px;
+  --lh-article-headline: 1.12;
+  --fs-article-subheadline: 22px;
+  --lh-article-subheadline: 1.5;
+  --fs-article-body: 20px;
+  --lh-article-body: 1.8;
+  --fs-article-quote: 32px;
+  --lh-article-quote: 1.45;
+  --fs-article-section-head: 30px;
+}
+
+/* The single article-typography breakpoint. Kept next to the tokens rather
+   than filed with the layout breakpoints further down so the two halves of
+   each size stay visible together. */
+@media (max-width: 767.98px) {
+  :root {
+    --fs-article-headline: 34px;
+    --fs-article-subheadline: 17px;
+    --fs-article-body: 17px;
+    --fs-article-quote: 22px;
+    --fs-article-section-head: 24px;
+  }
 }
 
 html {
@@ -393,6 +429,12 @@ section.touch-color video:not(.no-grayscale),
    The stacked copy takes over below 1024px, where it sits under the cards. */
 .the-edit-explore-desktop {
   display: inline-flex;
+  /* The CTA is wider than the 240px panel, so it used to push right into the
+     carousel. Pull it back over the gap between the vertical label and the
+     heading so it grows leftward instead. Exactly the gap and no more: the
+     label's own column stays clear, so the two never collide however short
+     the heading wraps. */
+  margin-left: calc(-1 * clamp(12px, 1.5vw, 20px));
 }
 .the-edit-explore-mobile {
   display: none;
@@ -928,16 +970,15 @@ section.touch-color video:not(.no-grayscale),
   filter: none !important;
 }
 
-/* One body size for every article, the way a magazine sets its text. The clamp
-   is the whole responsive story: 18px on phones, scaling to 21px on desktop —
-   the range long-form publishers settle on for sustained reading. */
+/* One body size for every article, the way a magazine sets its text: 20px on
+   desktop, 17px on phones, from the tokens at the top of this file. */
 .article-body-text {
   width: 100%;
   max-width: 780px; /* Comfortable reading width */
   margin: 0 auto;
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(18px, 2.2vw, 21px);
-  line-height: 1.8;
+  font-size: var(--fs-article-body);
+  line-height: var(--lh-article-body);
   color: #e7e6e1;
   margin-bottom: 1.5rem;
 }
@@ -969,7 +1010,7 @@ section.touch-color video:not(.no-grayscale),
 
 .article-body-text h2 {
   font-family: 'Fraunces', serif;
-  font-size: clamp(24px, 4vw, 32px);
+  font-size: var(--fs-article-section-head);
   margin: 2rem 0 1rem 0;
   color: var(--white);
   font-weight: 500;
@@ -982,9 +1023,9 @@ section.touch-color video:not(.no-grayscale),
 
 .article-body-text ul li {
   margin-bottom: 0.75rem;
-  line-height: 1.8;
+  line-height: var(--lh-article-body);
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(18px, 2.2vw, 21px);
+  font-size: var(--fs-article-body);
   color: #e7e6e1;
 }
 
@@ -1072,9 +1113,12 @@ section.touch-color video:not(.no-grayscale),
   justify-content: center;
 }
 
-/* TBS Talks' CTA sits under the card row, clear of the cards' bottom edge. */
+/* TBS Talks' CTA sits under the card row, clear of the cards' bottom edge. The
+   section's own bottom padding is only a few pixels, so the clearance from the
+   next section has to come from here or the button sits on its top edge. */
 .talks-view-all-row {
   margin-top: clamp(28px, 4vw, 44px);
+  margin-bottom: clamp(32px, 4vw, 56px);
 }
 
 /* The "Home" link in the top-left corner of the /topics and /talks pages, and

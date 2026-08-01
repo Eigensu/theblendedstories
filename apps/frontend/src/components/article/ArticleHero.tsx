@@ -40,15 +40,19 @@ export default function ArticleHero({ article }: { article: Article }) {
             </span>
           ))}
         </div>
-        {/* pre-line so an editor can break the title where they want it: a
+        {/* Headline and sub headline are set from the article type scale in
+            globals.css — one fixed size on desktop, one on mobile. Do not put
+            a size back inline here; the tokens are the single source.
+
+            pre-line so an editor can break the title where they want it: a
             newline typed in the CMS renders as a line break here, while runs of
             spaces still collapse. Everywhere else the title appears (cards,
             prev/next, search) keeps the default white-space, which folds that
             same newline back into a space. */}
-        <h1 style={{ margin: '0 0 clamp(12px, 2vh, 18px)', fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 'clamp(32px, 5vw, 64px)', lineHeight: 1.12, color: '#f5f4f0', maxWidth: '920px', whiteSpace: 'pre-line' }}>{article.title}</h1>
+        <h1 style={{ margin: '0 0 clamp(12px, 2vh, 18px)', fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 'var(--fs-article-headline)', lineHeight: 'var(--lh-article-headline)', color: '#f5f4f0', maxWidth: '920px', whiteSpace: 'pre-line' }}>{article.title}</h1>
         {/* Subtitle — mapped from the backend's `subtitle` field. */}
         {article.description && (
-          <p style={{ margin: '0 0 clamp(16px, 3vh, 26px)', fontFamily: "'Poppins', sans-serif", fontStyle: 'italic', fontWeight: 400, fontSize: 'clamp(16px, 1.8vw, 22px)', lineHeight: 1.5, color: '#c9c8c3', maxWidth: '720px' }}>{article.description}</p>
+          <p style={{ margin: '0 0 clamp(16px, 3vh, 26px)', fontFamily: "'Poppins', sans-serif", fontStyle: 'italic', fontWeight: 400, fontSize: 'var(--fs-article-subheadline)', lineHeight: 'var(--lh-article-subheadline)', color: '#c9c8c3', maxWidth: '720px' }}>{article.description}</p>
         )}
         <div className="flex flex-wrap justify-center items-center gap-x-[18px] gap-y-[8px]" style={{ fontFamily: "'Poppins', sans-serif", fontSize: '13px', color: '#c9c8c3' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

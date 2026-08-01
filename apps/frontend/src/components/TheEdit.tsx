@@ -120,15 +120,18 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
 
         {/* ── Left panel ── */}
         <ScrollReveal>
-          <div className="the-edit-left" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 1.5vw, 20px)' }}>
+          <div className="the-edit-left" style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(12px, 1.5vw, 20px)' }}>
 
-            {/* LATEST FEATURES — vertical, parallel with the title block, vertically centered */}
+            {/* LATEST FEATURES — vertical, riding alongside the headline rather
+                than the whole panel, so it sits level with "TOP PICKS" and
+                leaves the gutter below it free for the CTA to reach into. */}
             <div className="the-edit-vertical-label" style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               gap: '8px',
               flexShrink: 0,
+              marginTop: '6px',
             }}>
               <span style={{
                 fontFamily: "'Poppins', sans-serif",
