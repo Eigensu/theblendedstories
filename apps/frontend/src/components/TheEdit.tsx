@@ -15,15 +15,10 @@ const MAX_PICKS = 8;
 // desktop, and below the carousel once the layout stacks, because the two sit
 // at different nesting levels and CSS order can't move one across the other.
 // Which copy shows is decided in globals.css.
-//
-// The label is "All stories", not "Explore all stories": on desktop the box is
-// sized to the heading panel, and the longer copy could not sit inside it
-// without either shrinking the type below the site's other CTAs or spilling
-// back over the carousel.
 function ExploreAllButton({ className }: { className: string }) {
   return (
     <Link href="/stories" className={`tbs-outline-btn ${className}`}>
-      All stories
+      Explore all stories
     </Link>
   );
 }
@@ -98,22 +93,19 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
 
         {/* ── Left panel ── */}
         <ScrollReveal>
-          <div className="the-edit-left" style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(12px, 1.5vw, 20px)' }}>
+          {/* Two-row grid, laid out in globals.css: the label and the heading
+              share the top row, and the CTA spans both columns underneath, so
+              it runs from the label's edge to the last letter of the heading. */}
+          <div className="the-edit-left">
 
             {/* LATEST FEATURES — vertical, riding alongside the headline rather
-                than the whole panel, so it sits level with "TOP PICKS" and
-                leaves the gutter below it free for the CTA to reach into. */}
+                than the whole panel, so it sits level with "TOP PICKS". */}
             <div className="the-edit-vertical-label" style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               gap: '8px',
-              flexShrink: 0,
               marginTop: '6px',
-              // Fixed rather than content-width so the CTA below can be pulled
-              // back by exactly this column plus the gap and land flush with
-              // the label. globals.css reads the same value.
-              width: 'var(--edit-label-col)',
             }}>
               <span style={{
                 fontFamily: "'Poppins', sans-serif",
@@ -134,7 +126,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
               }} />
             </div>
 
-            <div>
+            <div className="the-edit-heading-col">
               {/* THE EDIT heading */}
               <div style={{ marginBottom: 'clamp(16px, 2vw, 24px)' }}>
                 <h2 style={{
@@ -158,9 +150,9 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
               }} />
 
               {/* Description intentionally removed */}
-
-              <ExploreAllButton className="the-edit-explore-desktop" />
             </div>
+
+            <ExploreAllButton className="the-edit-explore-desktop" />
 
           </div>
         </ScrollReveal>
