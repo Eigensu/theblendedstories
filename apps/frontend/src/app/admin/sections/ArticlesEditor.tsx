@@ -121,12 +121,29 @@ const cityOptionsFor = (
     label: city.label,
   })) || [];
 
+let blockIdFallbackCounter = 0;
+
 const createBlockId = () => {
-  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
-    return crypto.randomUUID();
+  // Typed as Partial on purpose: lib.dom declares these as always present, so
+  // checking for them against the real type narrows the fallbacks to `never`.
+  const webCrypto: Partial<Crypto> | undefined =
+    typeof crypto === 'undefined' ? undefined : crypto;
+
+  if (typeof webCrypto?.randomUUID === 'function') {
+    return webCrypto.randomUUID();
   }
 
-  return `block-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  // randomUUID needs a secure context; getRandomValues does not, so this covers
+  // a plain-http origin without falling back to Math.random.
+  if (typeof webCrypto?.getRandomValues === 'function') {
+    const bytes = webCrypto.getRandomValues(new Uint8Array(8));
+    return `block-${Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')}`;
+  }
+
+  // No Web Crypto at all. Nothing here needs to be unguessable — a block id
+  // only has to be unique within one article — so a counter off the clock does.
+  blockIdFallbackCounter += 1;
+  return `block-${Date.now()}-${blockIdFallbackCounter}`;
 };
 
 const createTextBlock = (content = '<p><br /></p>'): TextBlock => ({
