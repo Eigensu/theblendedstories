@@ -9,43 +9,16 @@ import Link from 'next/link';
 // where a viewport holds 2 cards rather than 4.
 const MAX_PICKS = 8;
 
-// Outlined CTA matching the TBS Nights "Join the Waitlist" button. Rendered
-// twice — inside the left panel on desktop, and below the carousel once the
-// layout stacks — because the two sit at different nesting levels and CSS
-// order can't move one across the other. Only one is ever visible.
+// The shared outlined CTA, same as TBS Talks' "View all talks" and TBS Nights'
+// "Join the Waitlist" — .tbs-outline-btn carries the border, type and hover, so
+// nothing is styled inline here. Rendered twice: inside the left panel on
+// desktop, and below the carousel once the layout stacks, because the two sit
+// at different nesting levels and CSS order can't move one across the other.
+// Which copy shows is decided in globals.css.
 function ExploreAllButton({ className }: { className: string }) {
   return (
-    <Link
-      href="/stories"
-      className={className}
-      style={{
-        // `display` is deliberately left to globals.css — an inline value
-        // would outrank the stylesheet and both copies would render.
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '14px',
-        border: '1px solid rgba(255,255,255,0.8)',
-        background: 'transparent',
-        color: 'white',
-        padding: '14px 36px',
-        fontFamily: "'Poppins', sans-serif",
-        fontSize: 'clamp(10px, 0.85vw, 12px)',
-        letterSpacing: '0.18em',
-        textTransform: 'uppercase',
-        textDecoration: 'none',
-        whiteSpace: 'nowrap',
-        transition: 'background 0.2s ease, border-color 0.2s ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-        e.currentTarget.style.borderColor = 'white';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'transparent';
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.8)';
-      }}
-    >
-      EXPLORE ALL STORIES
+    <Link href="/stories" className={`tbs-outline-btn ${className}`}>
+      Explore all stories
     </Link>
   );
 }
@@ -120,15 +93,19 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
 
         {/* ── Left panel ── */}
         <ScrollReveal>
-          <div className="the-edit-left" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 1.5vw, 20px)' }}>
+          {/* Two-row grid, laid out in globals.css: the label and the heading
+              share the top row, and the CTA spans both columns underneath, so
+              it runs from the label's edge to the last letter of the heading. */}
+          <div className="the-edit-left">
 
-            {/* LATEST FEATURES — vertical, parallel with the title block, vertically centered */}
+            {/* LATEST FEATURES — vertical, riding alongside the headline rather
+                than the whole panel, so it sits level with "TOP PICKS". */}
             <div className="the-edit-vertical-label" style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               gap: '8px',
-              flexShrink: 0,
+              marginTop: '6px',
             }}>
               <span style={{
                 fontFamily: "'Poppins', sans-serif",
@@ -149,7 +126,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
               }} />
             </div>
 
-            <div>
+            <div className="the-edit-heading-col">
               {/* THE EDIT heading */}
               <div style={{ marginBottom: 'clamp(16px, 2vw, 24px)' }}>
                 <h2 style={{
@@ -173,9 +150,9 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
               }} />
 
               {/* Description intentionally removed */}
-
-              <ExploreAllButton className="the-edit-explore-desktop" />
             </div>
+
+            <ExploreAllButton className="the-edit-explore-desktop" />
 
           </div>
         </ScrollReveal>
