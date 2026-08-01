@@ -18,6 +18,18 @@ export function formatArticleDate(raw?: string) {
   return `${Number(day)} ${name} ${year}`;
 }
 
+/**
+ * Folds an editor's hand-placed line breaks back into spaces.
+ *
+ * A title is stored with the newlines the editor typed, which the article hero
+ * honours via `white-space: pre-line`. Anywhere the title goes somewhere a line
+ * break makes no sense — a `<title>` tag, an `alt`, a plain-text field — run it
+ * through this first.
+ */
+export function toSingleLine(raw?: string) {
+  return (raw ?? '').replace(/\s+/g, ' ').trim();
+}
+
 /** "5 Min Read" → "5 MIN", matching the compact meta rows. */
 export function formatReadingTime(raw?: string) {
   return (raw ?? '').replace(/\s*read\s*$/i, '').toUpperCase();

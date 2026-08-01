@@ -40,7 +40,12 @@ export default function ArticleHero({ article }: { article: Article }) {
             </span>
           ))}
         </div>
-        <h1 style={{ margin: '0 0 clamp(12px, 2vh, 18px)', fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 'clamp(32px, 5vw, 64px)', lineHeight: 1.12, color: '#f5f4f0', maxWidth: '920px' }}>{article.title}</h1>
+        {/* pre-line so an editor can break the title where they want it: a
+            newline typed in the CMS renders as a line break here, while runs of
+            spaces still collapse. Everywhere else the title appears (cards,
+            prev/next, search) keeps the default white-space, which folds that
+            same newline back into a space. */}
+        <h1 style={{ margin: '0 0 clamp(12px, 2vh, 18px)', fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 'clamp(32px, 5vw, 64px)', lineHeight: 1.12, color: '#f5f4f0', maxWidth: '920px', whiteSpace: 'pre-line' }}>{article.title}</h1>
         {/* Subtitle — mapped from the backend's `subtitle` field. */}
         {article.description && (
           <p style={{ margin: '0 0 clamp(16px, 3vh, 26px)', fontFamily: "'Poppins', sans-serif", fontStyle: 'italic', fontWeight: 400, fontSize: 'clamp(16px, 1.8vw, 22px)', lineHeight: 1.5, color: '#c9c8c3', maxWidth: '720px' }}>{article.description}</p>

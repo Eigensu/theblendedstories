@@ -14,6 +14,7 @@ import MoreArticles from '@/components/article/MoreArticles';
 import Footer from '@/components/Footer';
 import { ArticleContentBlock } from '@/types/article';
 import { normalizeContentBlock } from '@/lib/articleBlocks';
+import { toSingleLine } from '@/lib/articleMeta';
 
 export const dynamic = 'force-dynamic';
 
@@ -182,7 +183,9 @@ export async function generateMetadata({
     return { title: 'Article Not Found' };
 
   return {
-    title: article.seo_title || `${article.title} | The Blended Stories`,
+    // toSingleLine because the title carries the editor's hand-placed breaks,
+    // which belong in the hero, not in a <title> tag.
+    title: article.seo_title || `${toSingleLine(article.title)} | The Blended Stories`,
     description: article.seo_description || article.subtitle,
   };
 }

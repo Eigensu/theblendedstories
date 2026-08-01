@@ -849,9 +849,15 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
           <div className="p-6 bg-[#111111] rounded-2xl border border-zinc-800/50 space-y-6">
             <h3 className="text-lg font-medium text-white border-b border-zinc-800 pb-4">Basic Info</h3>
             
-            <TextField 
-              label="Title" 
-              value={selectedArticle.title} 
+            {/* A textarea rather than an input so Enter inserts a break. The
+                article hero renders the title with white-space: pre-line, so
+                wherever the editor breaks the line is where it breaks on the
+                page; every other place the title appears folds it back to a
+                space. */}
+            <TextArea
+              label="Title (press Enter to break the line)"
+              rows={2}
+              value={selectedArticle.title}
               onChange={(v) => {
                 const auto = v.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
                 const prevAuto = selectedArticle.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
