@@ -30,6 +30,8 @@ type EmbeddedVideo = {
 type GalleryItem = {
   image: string;
   caption?: string;
+  /** Instagram (or any) URL the image opens when a reader clicks it. */
+  link?: string;
 };
 
 type ContentBlockType = 'text' | 'quote' | 'image';
@@ -38,7 +40,6 @@ type TextBlock = {
   id: string;
   type: 'text';
   content: string;
-  fontSize?: 'small' | 'medium' | 'large';
 };
 
 type QuoteBlock = {
@@ -48,11 +49,22 @@ type QuoteBlock = {
   author: string;
 };
 
+type ImageBlockItem = {
+  image: string;
+  caption: string;
+  /** Instagram (or any) URL the image opens when a reader clicks it. */
+  link: string;
+};
+
 type ImageBlock = {
   id: string;
   type: 'image';
+  /** The row of images this block renders. */
+  images: ImageBlockItem[];
+  /** Mirrors of `images[0]`, kept for blocks written before the row existed. */
   image: string;
   caption: string;
+  link: string;
 };
 
 type ContentBlock = TextBlock | QuoteBlock | ImageBlock;
@@ -145,12 +157,54 @@ const createQuoteBlock = (): QuoteBlock => ({
   author: '',
 });
 
+const createImageBlockItem = (): ImageBlockItem => ({
+  image: '',
+  caption: '',
+  link: '',
+});
+
 const createImageBlock = (): ImageBlock => ({
   id: createBlockId(),
   type: 'image',
+  images: [createImageBlockItem()],
   image: '',
   caption: '',
+  link: '',
 });
+
+/**
+ * Mirror of `_normalize_image_items` in article_service: an image block carries
+ * its row in `images`, and blocks written before that field existed carry a
+ * single top-level `image`/`caption` pair instead.
+ */
+const normalizeImageItems = (block: any): ImageBlockItem[] => {
+  const items: ImageBlockItem[] = Array.isArray(block.images)
+    ? block.images
+        .filter(
+          (item: any) =>
+            item && typeof item === 'object' && typeof item.image === 'string' && item.image
+        )
+        .map((item: any) => ({
+          image: item.image,
+          caption: typeof item.caption === 'string' ? item.caption : '',
+          link: typeof item.link === 'string' ? item.link : '',
+        }))
+    : [];
+
+  if (items.length > 0) return items;
+
+  if (typeof block.image === 'string' && block.image) {
+    return [
+      {
+        image: block.image,
+        caption: typeof block.caption === 'string' ? block.caption : '',
+        link: typeof block.link === 'string' ? block.link : '',
+      },
+    ];
+  }
+
+  return [];
+};
 
 const normalizeBlock = (block: any): ContentBlock | null => {
   if (!block || typeof block !== 'object') return null;
@@ -162,7 +216,6 @@ const normalizeBlock = (block: any): ContentBlock | null => {
       id,
       type: 'text',
       content: typeof block.content === 'string' ? block.content : '',
-      fontSize: ['small', 'medium', 'large'].includes(block.fontSize) ? block.fontSize : 'medium',
     };
   }
 
@@ -176,11 +229,15 @@ const normalizeBlock = (block: any): ContentBlock | null => {
   }
 
   if (block.type === 'image') {
+    const images = normalizeImageItems(block);
+    const [firstImage] = images;
     return {
       id,
       type: 'image',
-      image: typeof block.image === 'string' ? block.image : '',
-      caption: typeof block.caption === 'string' ? block.caption : '',
+      images,
+      image: firstImage?.image || '',
+      caption: firstImage?.caption || '',
+      link: firstImage?.link || '',
     };
   }
 
@@ -353,17 +410,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
         <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat('insertUnorderedList')} className="p-2 rounded-md border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900 transition-colors" title="Bullet List">
           <List className="w-4 h-4" />
         </button>
-        <div className="w-px h-6 bg-zinc-800 mx-1"></div>
-        <select
-          value={block.fontSize || 'medium'}
-          onChange={(e) => onChange({ fontSize: e.target.value as any })}
-          className="bg-zinc-900 border border-zinc-800 text-white text-xs rounded-md px-2 py-1 outline-none focus:border-zinc-500 cursor-pointer"
-        >
-          <option value="small">Small Font</option>
-          <option value="medium">Medium Font</option>
-          <option value="large">Large Font</option>
-        </select>
-        
+
         {showLinkPrompt && (
           <div className="absolute top-12 left-0 z-50 flex items-center gap-2 bg-zinc-900 border border-zinc-700 p-2 rounded-lg shadow-xl">
             <input 
@@ -405,6 +452,75 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
   );
 }
 
+function ImageBlockEditor({ block, onChange }: { block: ImageBlock; onChange: (updates: Partial<ImageBlock>) => void }) {
+  // The row in `images` is the real value; the top-level image/caption/link are
+  // rewritten from the first entry so a reader on the old shape still renders.
+  const setImages = (images: ImageBlockItem[]) => {
+    const [firstImage] = images;
+    onChange({
+      images,
+      image: firstImage?.image || '',
+      caption: firstImage?.caption || '',
+      link: firstImage?.link || '',
+    });
+  };
+
+  const updateImage = (index: number, updates: Partial<ImageBlockItem>) => {
+    setImages(block.images.map((item, i) => (i === index ? { ...item, ...updates } : item)));
+  };
+
+  return (
+    <div className="space-y-4">
+      <p className="text-xs text-zinc-500">
+        Every image added here renders side by side as a single row on the article page.
+        Add an Instagram link to make an image clickable.
+      </p>
+
+      {block.images.map((item, index) => (
+        <div key={index} className="flex items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-900/40 p-4">
+          <div className="flex-1 space-y-3">
+            <MediaUploader
+              label={`Image ${index + 1}`}
+              type="image"
+              url={item.image}
+              onUploadSuccess={(image) => updateImage(index, { image })}
+              onDeleteSuccess={() => updateImage(index, { image: '' })}
+              guidelineKey="default"
+            />
+            <TextField
+              label="Caption"
+              value={item.caption}
+              onChange={(caption) => updateImage(index, { caption })}
+            />
+            <TextField
+              label="Instagram Link (Optional)"
+              value={item.link}
+              onChange={(link) => updateImage(index, { link })}
+              placeholder="https://www.instagram.com/p/..."
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setImages(block.images.filter((_, i) => i !== index))}
+            className="rounded-md border border-zinc-800 p-2 text-zinc-500 hover:text-red-400 hover:border-red-900/60 hover:bg-red-950/30 transition-colors"
+            title="Remove image"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={() => setImages([...block.images, createImageBlockItem()])}
+        className="flex items-center justify-center w-full p-4 border border-dashed border-zinc-700 rounded-lg text-sm text-zinc-400 hover:text-white hover:border-zinc-500 transition-colors"
+      >
+        <Plus className="w-4 h-4 mr-2" /> Add Image To This Row
+      </button>
+    </div>
+  );
+}
+
 function ArticleBlockEditor({ blocks, onChange }: { blocks: ContentBlock[]; onChange: (blocks: ContentBlock[]) => void }) {
   const updateBlock = (blockId: string, updates: Partial<ContentBlock>) => {
     onChange(blocks.map((block) => (block.id === blockId ? { ...block, ...updates } as ContentBlock : block)));
@@ -418,6 +534,10 @@ function ArticleBlockEditor({ blocks, onChange }: { blocks: ContentBlock[]; onCh
     const duplicatedBlock: ContentBlock = {
       ...currentBlock,
       id: createBlockId(),
+      // Copied, or editing one copy's row would edit the other's.
+      ...(currentBlock.type === 'image'
+        ? { images: currentBlock.images.map((item) => ({ ...item })) }
+        : {}),
     } as ContentBlock;
 
     const nextBlocks = [...blocks];
@@ -519,20 +639,7 @@ function ArticleBlockEditor({ blocks, onChange }: { blocks: ContentBlock[]; onCh
                         )}
 
                         {block.type === 'image' && (
-                          <div className="space-y-4">
-                            <div className="space-y-3">
-                              <label className="block text-sm font-medium text-zinc-300">Image</label>
-                              <MediaUploader
-                                label="Image"
-                                type="image"
-                                url={block.image}
-                                onUploadSuccess={(image) => updateBlock(block.id, { image })}
-                                onDeleteSuccess={() => updateBlock(block.id, { image: '' })}
-                                guidelineKey="default"
-                              />
-                            </div>
-                            <TextField label="Caption" value={block.caption} onChange={(caption) => updateBlock(block.id, { caption })} />
-                          </div>
+                          <ImageBlockEditor block={block} onChange={(updates) => updateBlock(block.id, updates)} />
                         )}
                       </div>
                     </div>
@@ -1017,7 +1124,17 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
                         value={item.caption || ''}
                         onChange={(val) => {
                           const newGallery = [...selectedArticle.gallery];
-                          newGallery[index].caption = val;
+                          newGallery[index] = { ...item, caption: val };
+                          setSelectedArticle({ ...selectedArticle, gallery: newGallery });
+                        }}
+                      />
+                      <TextField
+                        label="Instagram Link (Optional)"
+                        value={item.link || ''}
+                        placeholder="https://www.instagram.com/p/..."
+                        onChange={(val) => {
+                          const newGallery = [...selectedArticle.gallery];
+                          newGallery[index] = { ...item, link: val };
                           setSelectedArticle({ ...selectedArticle, gallery: newGallery });
                         }}
                       />

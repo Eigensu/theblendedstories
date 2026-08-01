@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, AliasChoices
+from pydantic import BaseModel, Field
 from typing import List, Optional, Literal
 from datetime import datetime
 
@@ -15,6 +15,13 @@ class EmbeddedVideoModel(BaseModel):
 class GalleryItemModel(BaseModel):
     image: str
     caption: Optional[str] = None
+    # Instagram (or any) URL the image opens when a reader clicks it.
+    link: Optional[str] = None
+
+class ArticleImageItemModel(BaseModel):
+    image: str
+    caption: Optional[str] = None
+    link: Optional[str] = None
 
 class ArticleContentBlockModel(BaseModel):
     id: str
@@ -22,9 +29,13 @@ class ArticleContentBlockModel(BaseModel):
     content: Optional[str] = None
     quote: Optional[str] = None
     author: Optional[str] = None
+    # An image block holds a row of images in `images`. `image`/`caption`/`link`
+    # mirror the first entry so documents written before the row existed — and
+    # any reader still on the single-image shape — keep working.
+    images: List[ArticleImageItemModel] = Field(default_factory=list)
     image: Optional[str] = None
     caption: Optional[str] = None
-    font_size: Optional[Literal['small', 'medium', 'large']] = Field(default='medium', validation_alias=AliasChoices('font_size', 'fontSize'))
+    link: Optional[str] = None
 
 class ArticleModel(BaseModelMixin):
     id: Optional[str] = None

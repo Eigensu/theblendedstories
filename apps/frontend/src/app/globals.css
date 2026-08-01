@@ -928,6 +928,9 @@ section.touch-color video:not(.no-grayscale),
   filter: none !important;
 }
 
+/* One body size for every article, the way a magazine sets its text. The clamp
+   is the whole responsive story: 18px on phones, scaling to 21px on desktop —
+   the range long-form publishers settle on for sustained reading. */
 .article-body-text {
   width: 100%;
   max-width: 780px; /* Comfortable reading width */
@@ -937,14 +940,6 @@ section.touch-color video:not(.no-grayscale),
   line-height: 1.8;
   color: #e7e6e1;
   margin-bottom: 1.5rem;
-}
-
-.article-body-text.font-size-small {
-  font-size: clamp(15px, 1.8vw, 17px);
-}
-
-.article-body-text.font-size-large {
-  font-size: clamp(21px, 2.8vw, 26px);
 }
 
 .article-body-text p,

@@ -1,14 +1,24 @@
 export type ArticleContentBlockType = 'text' | 'quote' | 'image';
 
+export interface ArticleImageItem {
+  image: string;
+  caption?: string;
+  /** Instagram (or any) URL the image opens when a reader clicks it. */
+  link?: string;
+}
+
 export interface ArticleContentBlock {
   id: string;
   type: ArticleContentBlockType;
   content?: string;
   quote?: string;
   author?: string;
+  /** An image block's row of images. */
+  images?: ArticleImageItem[];
+  /** Mirrors of `images[0]`, kept for blocks written before the row existed. */
   image?: string;
   caption?: string;
-  fontSize?: 'small' | 'medium' | 'large';
+  link?: string;
 }
 
 export interface Article {
