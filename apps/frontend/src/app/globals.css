@@ -671,11 +671,19 @@ section.touch-color video:not(.no-grayscale),
      the image gradually as you scroll into it. */
   #talks { background: var(--black) !important; }
   #newsletter {
+    /* Where the drawn TBS wordmark ends, measured from the footer's top edge.
+       Its box is clamp(260px, 38vw, 480px) tall and starts 10px above the
+       footer (60px section padding minus the logo's -70px margin); the artwork
+       inside the PNG ends ~64% of the way down that box. */
+    --footer-logo-bottom: calc(0.64 * clamp(260px, 38vw, 480px) - 10px);
+    /* The image is held back only until the wordmark, so it reads as sitting
+       directly under the logo rather than starting a screen further down. */
     background-image:
       linear-gradient(to bottom,
-        rgba(0,0,0,1)    0%,
-        rgba(0,0,0,1)    25%,
-        rgba(0,0,0,0.5)  58%,
+        rgba(0,0,0,1)    0px,
+        rgba(0,0,0,1)    calc(var(--footer-logo-bottom) - 48px),
+        rgba(0,0,0,0.5)  var(--footer-logo-bottom),
+        rgba(0,0,0,0.5)  62%,
         rgba(0,0,0,1)    100%
       ),
       url('/hero-bg.jpg') !important;
