@@ -71,7 +71,7 @@ export default function ShareSection({ title = '' }: ShareSectionProps) {
           color: '#0a0a0a',
           padding: '8px 16px',
           borderRadius: '4px',
-          fontFamily: "'Public Sans', sans-serif",
+          fontFamily: "'Poppins', sans-serif",
           fontSize: '12px',
           fontWeight: 600,
           whiteSpace: 'nowrap',
@@ -82,7 +82,7 @@ export default function ShareSection({ title = '' }: ShareSectionProps) {
           {toastMessage}
         </div>
       )}
-      <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#7a7972', marginRight: '4px' }}>
+      <span style={{ fontFamily: "'Poppins', sans-serif", fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#7a7972', marginRight: '4px' }}>
         Share This Story
       </span>
       <div className="flex flex-wrap items-center gap-3">

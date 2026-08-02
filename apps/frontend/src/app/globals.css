@@ -25,6 +25,42 @@
   --white-50: rgba(255, 255, 255, 0.50);
   --overlay-heavy: rgba(0, 0, 0, 0.80);
   --overlay-medium: rgba(0, 0, 0, 0.60);
+
+  /* ─── Article type scale ───
+     Fixed sizes, not clamps: every story renders at exactly one of two sizes
+     per role — the desktop value below, or the mobile value swapped in at
+     767.98px. Nothing in between, so a headline reads the same on a 1280px
+     laptop as on a 1920px monitor. These are the only sizes the story page
+     should set for these four roles; change them here, not at the call site.
+
+                      desktop   mobile
+       headline         56px  /  34px   hero <h1>
+       sub headline     22px  /  17px   hero subtitle (article.subtitle)
+       article body     20px  /  17px   .article-body-text and its lists
+       quote            32px  /  22px   PullQuote
+       section head     30px  /  24px   <h2> inside the body copy          */
+  --fs-article-headline: 56px;
+  --lh-article-headline: 1.12;
+  --fs-article-subheadline: 22px;
+  --lh-article-subheadline: 1.5;
+  --fs-article-body: 20px;
+  --lh-article-body: 1.8;
+  --fs-article-quote: 32px;
+  --lh-article-quote: 1.45;
+  --fs-article-section-head: 30px;
+}
+
+/* The single article-typography breakpoint. Kept next to the tokens rather
+   than filed with the layout breakpoints further down so the two halves of
+   each size stay visible together. */
+@media (max-width: 767.98px) {
+  :root {
+    --fs-article-headline: 34px;
+    --fs-article-subheadline: 17px;
+    --fs-article-body: 17px;
+    --fs-article-quote: 22px;
+    --fs-article-section-head: 24px;
+  }
 }
 
 html {
@@ -312,7 +348,10 @@ video:not(.no-grayscale) {
    section rule (1,1,1) and only the hovered card goes to colour. */
 #top-picks .img-card:hover img:not(.no-grayscale),
 #talks     .img-card:hover img:not(.no-grayscale),
-.talks-archive .img-card:hover img:not(.no-grayscale) {
+.talks-archive .img-card:hover img:not(.no-grayscale),
+.article-recommended .img-card:hover img:not(.no-grayscale),
+.more-articles .img-card:hover img:not(.no-grayscale),
+.topic-grid .img-card:hover img:not(.no-grayscale) {
   filter: var(--img-color) !important;
 }
 
@@ -385,15 +424,35 @@ section.touch-color video:not(.no-grayscale),
 .the-edit-left {
   flex-shrink: 0;
   width: clamp(160px, 18vw, 240px);
+  /* Width of the vertical "LATEST FEATURES" strip. Set here rather than left to
+     the text's own width so the grid has a definite first track. */
+  --edit-label-col: 16px;
+  /* Label and heading share the top row; the CTA spans both columns below it.
+     The heading track is min-content, which for a title that wraps is the width
+     of its longest word — so the track is exactly as wide as "PICKS", and a CTA
+     spanning the row ends on that final S. The panel keeps its own width, so
+     the few leftover pixels fall to the right of the grid and the carousel does
+     not move. Two rows is also what keeps the CTA off the vertical label: it
+     cannot ride up into row 1 however short the heading wraps. */
+  display: grid;
+  grid-template-columns: var(--edit-label-col) min-content;
+  column-gap: clamp(12px, 1.5vw, 20px);
+  align-items: start;
+  justify-content: start;
 }
-/* Two copies of the "Explore all stories" CTA; exactly one shows at a time.
-   The stacked copy takes over below 1024px, where it sits under the cards. */
-.the-edit-explore-desktop {
-  display: inline-flex;
+.the-edit-vertical-label {
+  grid-column: 1;
+  grid-row: 1;
 }
-.the-edit-explore-mobile {
-  display: none;
+.the-edit-heading-col {
+  grid-column: 2;
+  grid-row: 1;
 }
+/* The two copies of the CTA — one in this panel, one under the carousel — are
+   styled next to .tbs-outline-btn at the end of this file, outside @layer base.
+   They have to override that class's own `display`, and an unlayered rule beats
+   a layered one at any specificity, so from in here they lost and both copies
+   rendered at once. */
 .the-edit-grid {
   display: flex;
   flex-wrap: nowrap;
@@ -505,23 +564,13 @@ section.touch-color video:not(.no-grayscale),
     font-size: clamp(15px, 2.4vw, 18px) !important;
     padding: 0 16px !important;
   }
-  .talks-view-all-row {
-    padding: 0 16px !important;
-  }
-  .talks-view-all-row a {
-    font-size: clamp(11px, 1.6vw, 13px) !important;
-  }
-
   /* TheEdit: stack left panel above cards */
   .the-edit-outer { flex-direction: column; align-items: stretch; }
-  .the-edit-left { width: 100%; }
-  /* Swap the CTA from the heading panel to below the carousel. */
-  .the-edit-explore-desktop { display: none; }
-  .the-edit-explore-mobile {
-    display: inline-flex;
-    align-self: flex-start;
-    margin-top: clamp(28px, 5vw, 44px);
-  }
+  /* Back to normal flow: the vertical label is hidden at this width, and the
+     grid would otherwise hold its empty column open beside the heading. */
+  .the-edit-left { width: 100%; display: block; }
+  /* The CTA swap to below the carousel happens with the other CTA rules at the
+     end of this file — see the note above .the-edit-grid. */
   /* 2 cards per viewport once stacked, and only 4 in total — the 5th onward
      would need a third and fourth swipe. */
   .the-edit-grid {
@@ -550,6 +599,11 @@ section.touch-color video:not(.no-grayscale),
   .about-card-stagger { padding-top: 0 !important; }
   /* Disable fixed bg on mobile — iOS doesn't support background-attachment:fixed */
   .fixed-bg-section { background-attachment: scroll, scroll !important; }
+
+  /* Lift the wordmark: the 60px of head room the brand block carries reads as
+     a dead band once the footer is only a phone wide. !important because the
+     padding shorthand is inline on the element. */
+  .footer-brand { padding-top: 24px !important; }
 
   /* TBSNights on mobile: logo, then video banner, then text */
   #nights {
@@ -638,6 +692,31 @@ section.touch-color video:not(.no-grayscale),
   }
 }
 
+/* ─── Footer: Follow Us icons ─── */
+/* The glyph is the whole mark — the ringed circle it used to sit in is gone — so
+   the box exists only to keep a comfortable tap target, and the gap now reads
+   glyph to glyph rather than ring to ring. That makes the same numbers look far
+   wider apart than they did with the ring drawn, which is why the row is tighter
+   than the 14px it carried before, and tighter again on mobile. */
+.footer-social-icons {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.footer-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 44px;
+  height: 44px;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
 /* ── TheEdit / Top Picks carousel — non-desktop ── */
 @media (max-width: 767.98px) {
   /* The stacked outer must stretch its children so the carousel is bounded to
@@ -682,9 +761,11 @@ section.touch-color video:not(.no-grayscale),
   .footer-follow-us { grid-column: span 2; }
   /* Locations: add right breathing room so text doesn't crowd the phone edge */
   .footer-locations-col { padding-right: 16px !important; }
-  /* Follow Us: center heading + icons on mobile */
+  /* Follow Us: center heading on mobile, and close the icon row up — six marks
+     with a phone's worth of width to sit in read as one group, not six. */
   .footer-follow-us { text-align: center; }
-  .footer-social-icons { justify-content: center !important; }
+  .footer-social-icons { gap: 0; }
+  .footer-social-icon { width: 38px; height: 38px; }
   /* Quick Links / Locations: center heading + link list on mobile */
   .footer-quicklinks-col,
   .footer-locations-col {
@@ -911,23 +992,17 @@ section.touch-color video:not(.no-grayscale),
   filter: none !important;
 }
 
+/* One body size for every article, the way a magazine sets its text: 20px on
+   desktop, 17px on phones, from the tokens at the top of this file. */
 .article-body-text {
   width: 100%;
   max-width: 780px; /* Comfortable reading width */
   margin: 0 auto;
-  font-family: 'Bodoni Moda', serif;
-  font-size: clamp(18px, 2.2vw, 21px);
-  line-height: 1.8;
+  font-family: 'Poppins', sans-serif;
+  font-size: var(--fs-article-body);
+  line-height: var(--lh-article-body);
   color: #e7e6e1;
   margin-bottom: 1.5rem;
-}
-
-.article-body-text.font-size-small {
-  font-size: clamp(15px, 1.8vw, 17px);
-}
-
-.article-body-text.font-size-large {
-  font-size: clamp(21px, 2.8vw, 26px);
 }
 
 .article-body-text p,
@@ -956,8 +1031,8 @@ section.touch-color video:not(.no-grayscale),
 }
 
 .article-body-text h2 {
-  font-family: 'Bodoni Moda', serif;
-  font-size: clamp(24px, 4vw, 32px);
+  font-family: 'Fraunces', serif;
+  font-size: var(--fs-article-section-head);
   margin: 2rem 0 1rem 0;
   color: var(--white);
   font-weight: 500;
@@ -970,9 +1045,9 @@ section.touch-color video:not(.no-grayscale),
 
 .article-body-text ul li {
   margin-bottom: 0.75rem;
-  line-height: 1.8;
-  font-family: 'Bodoni Moda', serif;
-  font-size: clamp(18px, 2.2vw, 21px);
+  line-height: var(--lh-article-body);
+  font-family: 'Poppins', sans-serif;
+  font-size: var(--fs-article-body);
   color: #e7e6e1;
 }
 
@@ -1019,35 +1094,210 @@ section.touch-color video:not(.no-grayscale),
   background: #000;
 }
 
-/* The "Home" chip above the heading on the /topics pages, and repeated in their
-   loading skeleton so it does not shift when the real page arrives. A class rather
-   than inline styles because the pages rendering it are server components and it
-   needs hover and focus states. */
-.topic-home-chip {
+/* ─── Shared outlined CTA ─── */
+/* The same button as TBS Nights' "Join the Waitlist" and The Edit's "Explore all
+   stories", as a class so server components can use it too — those two predate
+   this and still carry the values inline with JS hover handlers, so keep the
+   numbers here in step with them.
+
+   `.tbs-outline-btn-row` is the centred row for a CTA that closes a section. */
+.tbs-outline-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.75);
+  justify-content: center;
+  gap: 14px;
+  padding: 14px 36px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: transparent;
+  color: white;
   font-family: 'Poppins', sans-serif;
   font-size: clamp(10px, 0.85vw, 12px);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.topic-home-chip:hover {
-  color: white;
-  border-color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.07);
+.tbs-outline-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
 }
 
-.topic-home-chip:focus-visible {
+.tbs-outline-btn:focus-visible {
   outline: 1px solid white;
   outline-offset: 3px;
+}
+
+.tbs-outline-btn-row {
+  display: flex;
+  justify-content: center;
+}
+
+/* Top Picks renders the same CTA twice — once inside the heading panel, once
+   under the carousel for the stacked layout — because the two sit at different
+   nesting levels and CSS order cannot move one across the other. Exactly one is
+   shown at a time, and these rules are the only thing that decides which.
+   They live here rather than with the rest of the section's layout because they
+   override .tbs-outline-btn above: an unlayered rule beats a layered one at any
+   specificity, so from inside @layer base they lost and both copies rendered. */
+.tbs-outline-btn.the-edit-explore-desktop {
+  /* Row 2 of the panel grid, spanning the label column, the gap and the
+     heading. That span is what sets the box's width — left edge under the
+     vertical label, right edge on the heading's last letter. Side padding is
+     cut right back from the shared 36px: the text is centred and the box is
+     already sized, so padding only sets a floor — and if the label ever grows
+     past it (a wider font, a shorter title) the grid widens the heading track
+     to fit, which quietly walks the right edge off the last letter. */
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+.tbs-outline-btn.the-edit-explore-mobile {
+  display: none;
+}
+@media (max-width: 1024px) {
+  .tbs-outline-btn.the-edit-explore-desktop {
+    display: none;
+  }
+  .tbs-outline-btn.the-edit-explore-mobile {
+    display: inline-flex;
+    /* Centred rather than stretched, so the button keeps its content width
+       instead of spanning the full column. */
+    align-self: center;
+    margin-top: clamp(28px, 5vw, 44px);
+  }
+}
+
+/* TBS Talks' CTA sits under the card row, clear of the cards' bottom edge. The
+   section's own bottom padding is only a few pixels, so the clearance from the
+   next section has to come from here or the button sits on its top edge. */
+.talks-view-all-row {
+  margin-top: clamp(28px, 4vw, 44px);
+  margin-bottom: clamp(32px, 4vw, 56px);
+}
+
+/* The "Home" link in the top-left corner of the /topics and /talks pages, and
+   repeated in their loading skeleton so it does not shift when the real page
+   arrives. A class rather than inline styles because the pages rendering it are
+   server components and it needs hover and focus states.
+
+   The corner buttons are fixed in a 44px box at top: var(--px-page) (see
+   nav/navSlots.ts), so matching both puts this on their exact centre line, and the
+   44px left offset is slot 1 — immediately right of the hamburger. Keep the two in
+   step. z-index stays below the mega menu panel's 220 so opening the menu covers
+   it, the same way it covers the buttons. */
+.topic-home-link {
+  position: fixed;
+  top: var(--px-page);
+  left: calc(var(--px-page) + 44px);
+  z-index: 210;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(255, 255, 255, 0.62);
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+/* Hairline against the hamburger, so the pair reads as one nav cluster rather
+   than two unrelated controls that happen to sit side by side. */
+.topic-home-link::before {
+  content: '';
+  width: 1px;
+  height: 14px;
+  margin-right: 5px;
+  background: rgba(255, 255, 255, 0.22);
+  transition: background 0.25s ease;
+}
+
+.topic-home-arrow {
+  font-size: 13px;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+/* An underline that grows from the left, rather than the box outline this used to
+   carry: quieter beside the icon row, and it leaves the label on the buttons'
+   centre line instead of padding it off. */
+.topic-home-label {
+  position: relative;
+  padding-bottom: 3px;
+}
+
+.topic-home-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.topic-home-link:hover {
+  color: white;
+}
+
+.topic-home-link:hover::before {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.topic-home-link:hover .topic-home-arrow {
+  transform: translateX(-3px);
+}
+
+.topic-home-link:hover .topic-home-label::after {
+  transform: scaleX(1);
+}
+
+.topic-home-link:focus-visible {
+  outline: 1px solid white;
+  outline-offset: 6px;
+}
+
+/* The section crumb that the keyword page passes. It stays above the heading, as
+   context for it, now that Home has moved to the corner — the leading rule is the
+   same one drawn under the heading, so the two bracket the title. */
+.topic-section-crumb {
+  display: flex;
+  align-items: center;
+  margin-bottom: clamp(16px, 2vw, 24px);
+}
+
+.topic-section-crumb::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  margin-right: 12px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.topic-section-crumb a {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(10px, 0.85vw, 12px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.topic-section-crumb a:hover {
+  color: white;
 }
 
 /* Skeleton placeholders for route-level loading states. The stripe texture is the

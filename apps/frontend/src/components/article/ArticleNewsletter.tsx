@@ -50,7 +50,7 @@ export default function ArticleNewsletter() {
       <p
         style={{
           margin: '0 0 clamp(18px, 2.5vw, 26px)',
-          fontFamily: "'Public Sans', sans-serif",
+          fontFamily: "'Poppins', sans-serif",
           fontSize: '14px',
           lineHeight: 1.7,
           color: '#a3a19b',
@@ -67,7 +67,7 @@ export default function ArticleNewsletter() {
           role="status"
           style={{
             margin: 0,
-            fontFamily: "'Public Sans', sans-serif",
+            fontFamily: "'Poppins', sans-serif",
             fontSize: '14px',
             lineHeight: 1.7,
             color: '#f5f4f0',
@@ -95,7 +95,7 @@ export default function ArticleNewsletter() {
                 outline: 'none',
                 padding: '14px 16px',
                 color: '#f5f4f0',
-                fontFamily: "'Public Sans', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontSize: '14px',
               }}
             />
@@ -110,7 +110,7 @@ export default function ArticleNewsletter() {
                 border: 'none',
                 cursor: pending ? 'wait' : 'pointer',
                 padding: '14px 32px',
-                fontFamily: "'Public Sans', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontSize: '12px',
                 fontWeight: 600,
                 letterSpacing: '0.14em',
@@ -128,7 +128,7 @@ export default function ArticleNewsletter() {
               role="alert"
               style={{
                 margin: '12px 0 0',
-                fontFamily: "'Public Sans', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontSize: '13px',
                 color: '#ff9a9a',
               }}

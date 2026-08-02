@@ -7,7 +7,7 @@ export default function EmbeddedVideo({ videoUrl, thumbnail }: { videoUrl: strin
           ▶
         </span>
       </div>
-      <span style={{ display: 'block', fontFamily: "'Public Sans', sans-serif", fontSize: '11px', letterSpacing: '0.06em', color: '#6b6a65', marginBottom: '56px', textAlign: 'left' }}>
+      <span style={{ display: 'block', fontFamily: "'Poppins', sans-serif", fontSize: '11px', letterSpacing: '0.06em', color: '#6b6a65', marginBottom: '56px', textAlign: 'left' }}>
         Embedded — backstage footage, 0:42
       </span>
     </div>

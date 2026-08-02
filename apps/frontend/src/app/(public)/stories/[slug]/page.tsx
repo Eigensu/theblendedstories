@@ -9,52 +9,20 @@ import PullQuote from '@/components/article/PullQuote';
 import Gallery from '@/components/article/Gallery';
 import EmbeddedVideo from '@/components/article/EmbeddedVideo';
 import EditorialNote from '@/components/article/EditorialNote';
-import AuthorSection from '@/components/article/AuthorSection';
 import ArticleNewsletter from '@/components/article/ArticleNewsletter';
 import MoreArticles from '@/components/article/MoreArticles';
-import PreviousNextNavigation from '@/components/article/PreviousNextNavigation';
 import Footer from '@/components/Footer';
 import { ArticleContentBlock } from '@/types/article';
+import { normalizeContentBlock } from '@/lib/articleBlocks';
+import { toSingleLine } from '@/lib/articleMeta';
 
 export const dynamic = 'force-dynamic';
 
 function normalizeBlock(block: any): ArticleContentBlock | null {
-  if (!block || typeof block !== 'object') return null;
-
-  const id =
-    typeof block.id === 'string' && block.id
-      ? block.id
-      : `${block.type || 'block'}-${crypto.randomUUID()}`;
-  if (block.type === 'text') {
-    return {
-      id,
-      type: 'text',
-      content: typeof block.content === 'string' ? block.content : '',
-      fontSize: ['small', 'medium', 'large'].includes(block.fontSize)
-        ? block.fontSize
-        : 'medium',
-    };
-  }
-
-  if (block.type === 'quote') {
-    return {
-      id,
-      type: 'quote',
-      quote: typeof block.quote === 'string' ? block.quote : '',
-      author: typeof block.author === 'string' ? block.author : '',
-    };
-  }
-
-  if (block.type === 'image') {
-    return {
-      id,
-      type: 'image',
-      image: typeof block.image === 'string' ? block.image : '',
-      caption: typeof block.caption === 'string' ? block.caption : '',
-    };
-  }
-
-  return null;
+  return normalizeContentBlock(
+    block,
+    () => `${block?.type || 'block'}-${crypto.randomUUID()}`
+  );
 }
 
 function legacyContentToBlocks(content: string[] = []): ArticleContentBlock[] {
@@ -117,23 +85,15 @@ function getRecommendedArticles(
   return recommendations;
 }
 
-function renderTextBlock(
-  content: string,
-  isIntro: boolean,
-  fontSize?: 'small' | 'medium' | 'large'
-) {
+function renderTextBlock(content: string, isIntro: boolean) {
   const htmlPattern = /<[^>]+>/;
   const processedContent = content.replace(
     /<a /gi,
     '<a target="_blank" rel="noopener noreferrer" class="article-link" '
   );
 
-  let fontSizeClass = '';
-  if (fontSize === 'small') fontSizeClass = 'font-size-small';
-  else if (fontSize === 'large') fontSizeClass = 'font-size-large';
-
   return (
-    <div className={`article-body-text ${fontSizeClass}`}>
+    <div className="article-body-text">
       {htmlPattern.test(processedContent) ? (
         <div dangerouslySetInnerHTML={{ __html: processedContent }} />
       ) : (
@@ -146,9 +106,7 @@ function renderTextBlock(
 function renderBlock(block: ArticleContentBlock, index: number) {
   if (block.type === 'text') {
     return (
-      <div key={block.id}>
-        {renderTextBlock(block.content || '', index === 0, block.fontSize)}
-      </div>
+      <div key={block.id}>{renderTextBlock(block.content || '', index === 0)}</div>
     );
   }
 
@@ -160,13 +118,9 @@ function renderBlock(block: ArticleContentBlock, index: number) {
   }
 
   if (block.type === 'image') {
-    if (!block.image) return null;
-    return (
-      <Gallery
-        key={block.id}
-        images={[{ image: block.image, caption: block.caption }]}
-      />
-    );
+    const images = block.images || [];
+    if (images.length === 0) return null;
+    return <Gallery key={block.id} images={images} layout="row" />;
   }
 
   return null;
@@ -229,7 +183,9 @@ export async function generateMetadata({
     return { title: 'Article Not Found' };
 
   return {
-    title: article.seo_title || `${article.title} | The Blended Stories`,
+    // toSingleLine because the title carries the editor's hand-placed breaks,
+    // which belong in the hero, not in a <title> tag.
+    title: article.seo_title || `${toSingleLine(article.title)} | The Blended Stories`,
     description: article.seo_description || article.subtitle,
   };
 }
@@ -268,13 +224,6 @@ export default async function ArticlePage({
     article.slug,
     article.category
   );
-
-  const prevArticle =
-    articleIndex > 0 ? publishedArticles[articleIndex - 1] : undefined;
-  const nextArticle =
-    articleIndex < publishedArticles.length - 1
-      ? publishedArticles[articleIndex + 1]
-      : undefined;
 
   // Map backend article model to frontend props shape
   const mappedArticle = {
@@ -367,44 +316,13 @@ export default async function ArticlePage({
                 <EditorialNote note={mappedArticle.editorNote} />
               )}
 
-              {(prevArticle || nextArticle) && (
-                <div style={{ marginTop: 'clamp(12px, 2vw, 24px)' }}>
-                  <PreviousNextNavigation
-                    prevArticle={
-                      prevArticle
-                        ? {
-                            ...prevArticle,
-                            description: prevArticle.subtitle,
-                            url: `/stories/${prevArticle.slug}`,
-                          }
-                        : undefined
-                    }
-                    nextArticle={
-                      nextArticle
-                        ? {
-                            ...nextArticle,
-                            description: nextArticle.subtitle,
-                            url: `/stories/${nextArticle.slug}`,
-                          }
-                        : undefined
-                    }
-                  />
-                </div>
-              )}
-
               <div style={{ marginTop: 'clamp(28px, 4vw, 48px)' }}>
-                <AuthorSection
-                  author={mappedArticle.author}
-                  authorImage={mappedArticle.authorImage}
-                  authorRole={article.author_role}
-                />
+                <ArticleNewsletter />
               </div>
-
-              <ArticleNewsletter />
             </div>
           </article>
 
-          <aside className="xl:sticky xl:top-24" style={{ minWidth: 0 }}>
+          <aside className="xl:sticky xl:top-24 article-recommended" style={{ minWidth: 0 }}>
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
             >
@@ -419,7 +337,7 @@ export default async function ArticlePage({
               >
                 <span
                   style={{
-                    fontFamily: "'Public Sans', sans-serif",
+                    fontFamily: "'Poppins', sans-serif",
                     fontSize: '11px',
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',
@@ -437,12 +355,12 @@ export default async function ArticlePage({
                   gap: '16px',
                 }}
               >
-                {recommendedArticles.map(
+                {recommendedArticles.slice(0, 4).map(
                   (recommendedArticle: any, index: number) => (
                     <Link
                       key={recommendedArticle.slug}
                       href={`/stories/${recommendedArticle.slug}`}
-                      className="group"
+                      className="group img-card"
                       style={{
                         display: 'grid',
                         gridTemplateColumns: '96px minmax(0,1fr)',
@@ -470,7 +388,9 @@ export default async function ArticlePage({
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
-                            filter: 'brightness(0.85)',
+                            // No filter here: the global grayscale rule sets one
+                            // with !important, so an inline value never applied.
+                            // Colour on hover comes from .article-recommended.
                           }}
                         />
                       </div>
@@ -486,7 +406,7 @@ export default async function ArticlePage({
                           <span
                             style={{
                               display: 'block',
-                              fontFamily: "'Public Sans', sans-serif",
+                              fontFamily: "'Poppins', sans-serif",
                               fontSize: '11px',
                               letterSpacing: '0.18em',
                               textTransform: 'uppercase',
@@ -499,7 +419,7 @@ export default async function ArticlePage({
                           <h3
                             style={{
                               margin: 0,
-                              fontFamily: "'Bodoni Moda', serif",
+                              fontFamily: "'Fraunces', serif",
                               fontSize: '18px',
                               lineHeight: 1.35,
                               color: '#f5f4f0',
@@ -511,7 +431,7 @@ export default async function ArticlePage({
                         <span
                           style={{
                             display: 'block',
-                            fontFamily: "'Public Sans', sans-serif",
+                            fontFamily: "'Poppins', sans-serif",
                             fontSize: '11px',
                             letterSpacing: '0.08em',
                             textTransform: 'uppercase',
