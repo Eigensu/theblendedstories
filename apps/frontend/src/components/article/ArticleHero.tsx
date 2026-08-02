@@ -41,12 +41,16 @@ export default function ArticleHero({ article }: { article: Article }) {
         {article.description && (
           <p style={{ margin: '0 0 clamp(16px, 3vh, 26px)', fontFamily: "'Bodoni Moda', serif", fontStyle: 'italic', fontWeight: 400, fontSize: 'clamp(16px, 1.8vw, 22px)', lineHeight: 1.5, color: '#c9c8c3', maxWidth: '720px' }}>{article.description}</p>
         )}
-        <div className="flex flex-wrap justify-center items-center gap-x-[18px] gap-y-[8px]" style={{ fontFamily: "'Public Sans', sans-serif", fontSize: '13px', color: '#c9c8c3' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img className="no-grayscale" src={article.authorImage} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', display: 'inline-block', border: '1px solid rgba(245,244,240,0.2)', filter: 'brightness(0.75)' }} />
-            <span style={{ fontWeight: 600, color: '#e7e6e1' }}>{article.author}</span>
+        {/* Byline as type rather than an avatar: the author image is optional in
+            the CMS, so stories without one fell back to the TBS placeholder and
+            showed a bare logo disc under the subtitle. Rendered only when there
+            is a name, so an empty author doesn't leave a stray "By". */}
+        {article.author && (
+          <div className="flex flex-wrap justify-center items-baseline gap-x-[9px] gap-y-[4px]" style={{ fontFamily: "'Public Sans', sans-serif", fontSize: '12px', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+            <span style={{ color: '#a3a19b' }}>By</span>
+            <span style={{ color: '#f5f4f0', fontWeight: 500 }}>{article.author}</span>
           </div>
-        </div>
+        )}
         <div style={{ marginTop: 'clamp(18px, 3vh, 26px)', pointerEvents: 'auto', zIndex: 20, position: 'relative' }}>
           <ShareSection title={article.title} />
         </div>

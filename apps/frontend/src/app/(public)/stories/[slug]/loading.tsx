@@ -88,27 +88,13 @@ export default function Loading() {
             />
           </div>
 
-          {/* Author avatar, name, date, reading time */}
+          {/* Byline — a single "By Author Name" line, matching the hero */}
           <div
-            className="flex flex-wrap justify-center items-center gap-x-[18px] gap-y-[8px]"
-            style={{ height: '28px' }}
+            className="flex flex-wrap justify-center items-center gap-x-[9px] gap-y-[8px]"
+            style={{ height: '14px' }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                className="skeleton-bar"
-                style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(245,244,240,0.2)',
-                }}
-              />
-              <div className="skeleton-bar" style={{ width: '96px', height: '11px' }} />
-            </div>
-            <span className="hidden sm:inline" style={{ color: '#5a5952' }}>•</span>
-            <div className="skeleton-bar" style={{ width: '84px', height: '11px' }} />
-            <span className="hidden sm:inline" style={{ color: '#5a5952' }}>•</span>
-            <div className="skeleton-bar" style={{ width: '72px', height: '11px' }} />
+            <div className="skeleton-bar" style={{ width: '22px', height: '11px' }} />
+            <div className="skeleton-bar" style={{ width: '128px', height: '11px' }} />
           </div>
         </div>
       </div>
