@@ -94,13 +94,15 @@ function getRecommendedArticles(
  * Now", 31 of 52 paragraphs are blank, 1548px of a 10183px page.
  *
  * Paragraph margins already space the copy, so drop the empty ones on the way
- * in. The pattern matches a block only when everything between its tags is
- * whitespace or an empty formatting tag, and that is what makes it safe: a
- * block holding text, an <img>, or anything else not on the list simply does
- * not match, so it cannot be removed by accident.
+ * in. A block matches only when everything between its tags is whitespace, an
+ * &nbsp;, or an empty <br>/<span> — across the 37 published articles those are
+ * the only two tags that ever appear inside a blank block. Anything else, text
+ * or an <img> included, stops it matching, so a block carrying content cannot
+ * be removed. A paste shape not on the list just goes unstripped until its tag
+ * is added, which is the safe direction to fail in.
  */
 const BLANK_BLOCK =
-  /<(p|div)\b[^>]*>(?:[\s ]|&nbsp;|&#160;|<br\s*\/?>|<\/?(?:span|font|o:p|b|i|u|em|strong)\b[^>]*>)*<\/\1>/gi;
+  /<(p|div)\b[^>]*>(?:\s|&nbsp;|<\/?(?:br|span)\b[^>]*>)*<\/\1>/gi;
 
 function stripBlankBlocks(html: string) {
   return html.replace(BLANK_BLOCK, '');
