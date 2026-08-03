@@ -85,9 +85,30 @@ function getRecommendedArticles(
   return recommendations;
 }
 
+/**
+ * Editors space their copy by pressing Enter, which the rich-text editor stores
+ * as <p><br></p>. Those blank paragraphs are the real reason a story can show
+ * more than a screen of nothing before its next image: each costs its own line
+ * height plus the 1.5rem margin every paragraph carries — about 54px on a phone
+ * — and they arrive in runs. In "The Hair Treatments Everyone's Booking Right
+ * Now", 31 of 52 paragraphs are blank, 1548px of a 10183px page.
+ *
+ * Paragraph margins already space the copy, so drop the empty ones on the way
+ * in. The pattern matches a block only when everything between its tags is
+ * whitespace or an empty formatting tag, and that is what makes it safe: a
+ * block holding text, an <img>, or anything else not on the list simply does
+ * not match, so it cannot be removed by accident.
+ */
+const BLANK_BLOCK =
+  /<(p|div)\b[^>]*>(?:[\s ]|&nbsp;|&#160;|<br\s*\/?>|<\/?(?:span|font|o:p|b|i|u|em|strong)\b[^>]*>)*<\/\1>/gi;
+
+function stripBlankBlocks(html: string) {
+  return html.replace(BLANK_BLOCK, '');
+}
+
 function renderTextBlock(content: string, isIntro: boolean) {
   const htmlPattern = /<[^>]+>/;
-  const processedContent = content.replace(
+  const processedContent = stripBlankBlocks(content).replace(
     /<a /gi,
     '<a target="_blank" rel="noopener noreferrer" class="article-link" '
   );
