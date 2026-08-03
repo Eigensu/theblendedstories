@@ -1021,7 +1021,10 @@ section.touch-color video:not(.no-grayscale),
 
 .article-body-text p,
 .article-body-text > div {
-  font-size: var(--fs-article-body);
+  /* !important because pasted paragraphs carry their own inline font-size
+     ("font-size: 13px" straight out of Safari), and an inline style beats any
+     ordinary rule no matter how specific. */
+  font-size: var(--fs-article-body) !important;
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-style: normal;
@@ -1059,17 +1062,89 @@ section.touch-color video:not(.no-grayscale),
   margin: 1.5rem 0 1.5rem 2rem;
 }
 
-.article-body-text ul li {
+/* Every list item, not just the ones under a <ul> — pasted lists arrive as
+   <ol> too, and Google Docs writes the font onto the <li> itself. The
+   white-space override is for the "white-space: pre" it pastes alongside,
+   which stops the line wrapping and pushes the page sideways on a phone. */
+.article-body-text li {
   margin-bottom: 0.75rem;
-  line-height: var(--lh-article-body);
-  font-family: 'Poppins', sans-serif;
-  font-size: var(--fs-article-body);
+  line-height: var(--lh-article-body) !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: var(--fs-article-body) !important;
+  white-space: normal !important;
   color: #e7e6e1;
 }
 
 .article-body-text strong, .article-body-text b {
   color: var(--white);
   font-weight: 600;
+}
+
+/* Article images, in the three shapes Gallery renders. Sizing lives here rather
+   than inline on the component so the phone caps below can exist at all — a
+   media query cannot reach into a style attribute. */
+.article-gallery-media {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+.article-gallery-media img {
+  display: block;
+}
+
+/* Standalone gallery at the foot of the article: a fixed 3:4 crop, several
+   across on desktop, one per row on a phone. */
+.article-gallery-media--tile {
+  aspect-ratio: 3 / 4;
+}
+
+.article-gallery-media--tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A lone inline image keeps its own proportions — capped so a tall portrait
+   doesn't swallow the screen — rather than being cropped to someone else's. */
+.article-gallery-media--single img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: clamp(250px, 50vh, 700px);
+}
+
+/* Two or more read as one strip: matched heights, letterboxed not cropped, so
+   a portrait and a landscape can sit side by side without either losing its
+   subject. The faint backing fills whatever the letterboxing leaves. */
+.article-gallery-media--strip {
+  height: clamp(180px, 30vh, 450px);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.article-gallery-media--strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Phones get fixed caps instead of the viewport-height clamps above: 50vh is
+   half a screen either way, so a phone turned sideways would otherwise render
+   these at a third the height it does upright. Same breakpoint as the type. */
+@media (max-width: 767.98px) {
+  .article-gallery-media--tile {
+    aspect-ratio: auto;
+    height: 320px;
+  }
+
+  .article-gallery-media--single img {
+    max-height: 320px;
+  }
+
+  .article-gallery-media--strip {
+    height: 200px;
+  }
 }
 }
 

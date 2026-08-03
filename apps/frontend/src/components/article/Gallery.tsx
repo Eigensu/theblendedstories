@@ -20,62 +20,35 @@ export default function Gallery({
 
   const isRow = layout === 'row';
 
+  // A lone inline image is sized from its own proportions; put a second one
+  // beside it and they letterbox to a shared height instead. See the
+  // .article-gallery-media rules in globals.css.
+  let shape: 'tile' | 'single' | 'strip' = 'tile';
+  if (isRow) shape = images.length === 1 ? 'single' : 'strip';
+
   return (
     <div
       className={
         isRow
-          ? 'flex w-full gap-[22px] overflow-x-auto my-[clamp(24px,4vw,40px)]'
-          : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[22px] w-full my-[clamp(24px,4vw,40px)]'
+          ? 'flex w-full gap-[22px] overflow-x-auto my-[clamp(16px,2.5vw,28px)]'
+          : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[22px] w-full my-[clamp(16px,2.5vw,28px)]'
       }
     >
       {images.map((img, idx) => {
-        const isSingleInline = isRow && images.length === 1;
         const media = (
           <div
-            className="hover:scale-[1.015] transition-transform duration-300"
-            style={
-              isRow
-                ? {
-                    width: '100%',
-                    height: isSingleInline ? 'auto' : 'clamp(180px, 30vh, 450px)',
-                    overflow: 'hidden',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    backgroundColor: isSingleInline ? 'transparent' : 'rgba(255,255,255,0.03)',
-                  }
-                : { aspectRatio: '3/4', overflow: 'hidden' }
-            }
+            className={`article-gallery-media article-gallery-media--${shape} hover:scale-[1.015] transition-transform duration-300`}
           >
-            <img
-              src={img.image}
-              alt={img.caption || ''}
-              style={
-                isRow
-                  ? {
-                      width: isSingleInline ? 'auto' : '100%',
-                      maxWidth: isSingleInline ? '100%' : undefined,
-                      height: isSingleInline ? 'auto' : '100%',
-                      maxHeight: isSingleInline ? 'clamp(250px, 50vh, 700px)' : undefined,
-                      objectFit: isSingleInline ? undefined : 'contain',
-                      filter: 'brightness(0.9)',
-                      display: 'block',
-                    }
-                  : {
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      filter: 'brightness(0.9)',
-                      display: 'block',
-                    }
-              }
-            />
+            <img src={img.image} alt={img.caption || ''} />
           </div>
         );
 
         return (
           <div
             key={idx}
-            className={isRow ? 'flex-1 min-w-[min(180px,45%)] sm:min-w-0' : undefined}
+            className={
+              isRow ? 'flex-1 min-w-[min(180px,45%)] sm:min-w-0' : undefined
+            }
             style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
             {img.link ? (
