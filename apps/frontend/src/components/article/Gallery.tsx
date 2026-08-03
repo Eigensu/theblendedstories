@@ -24,26 +24,50 @@ export default function Gallery({
     <div
       className={
         isRow
-          ? 'flex w-full gap-[22px] overflow-x-auto my-[clamp(40px,6vw,64px)]'
-          : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[22px] w-full my-[clamp(40px,6vw,64px)]'
+          ? 'flex w-full gap-[22px] overflow-x-auto my-[clamp(24px,4vw,40px)]'
+          : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[22px] w-full my-[clamp(24px,4vw,40px)]'
       }
     >
       {images.map((img, idx) => {
+        const isSingleInline = isRow && images.length === 1;
         const media = (
           <div
             className="hover:scale-[1.015] transition-transform duration-300"
-            style={{ aspectRatio: '3/4', overflow: 'hidden' }}
+            style={
+              isRow
+                ? {
+                    width: '100%',
+                    height: isSingleInline ? 'auto' : 'clamp(180px, 30vh, 450px)',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    backgroundColor: isSingleInline ? 'transparent' : 'rgba(255,255,255,0.03)',
+                  }
+                : { aspectRatio: '3/4', overflow: 'hidden' }
+            }
           >
             <img
               src={img.image}
               alt={img.caption || ''}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                filter: 'brightness(0.9)',
-                display: 'block',
-              }}
+              style={
+                isRow
+                  ? {
+                      width: isSingleInline ? 'auto' : '100%',
+                      maxWidth: isSingleInline ? '100%' : undefined,
+                      height: isSingleInline ? 'auto' : '100%',
+                      maxHeight: isSingleInline ? 'clamp(250px, 50vh, 700px)' : undefined,
+                      objectFit: isSingleInline ? undefined : 'contain',
+                      filter: 'brightness(0.9)',
+                      display: 'block',
+                    }
+                  : {
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      filter: 'brightness(0.9)',
+                      display: 'block',
+                    }
+              }
             />
           </div>
         );
