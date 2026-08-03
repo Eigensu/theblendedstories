@@ -2,31 +2,33 @@
    Tailwind v4 processes @import rules at build time; an external @import url()
    placed before it may be dropped or reordered past non-import rules,
    causing browsers to silently ignore the whole font request. */
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @layer base {
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-:root {
-  --img-gs: saturate(0);
-  --img-color: saturate(1.001);
-  --black: #000000;
-  --white: #FFFFFF;
-  --dark-navy: #050D18;
-  --gold: #AB853C;
-  --white-04: rgba(255, 255, 255, 0.04);
-  --white-08: rgba(255, 255, 255, 0.08);
-  --white-20: rgba(255, 255, 255, 0.20);
-  --white-40: rgba(255, 255, 255, 0.40);
-  --white-50: rgba(255, 255, 255, 0.50);
-  --overlay-heavy: rgba(0, 0, 0, 0.80);
-  --overlay-medium: rgba(0, 0, 0, 0.60);
+  :root {
+    --img-gs: saturate(0);
+    --img-color: saturate(1.001);
+    --black: #000000;
+    --white: #ffffff;
+    --dark-navy: #050d18;
+    --gold: #ab853c;
+    --white-04: rgba(255, 255, 255, 0.04);
+    --white-08: rgba(255, 255, 255, 0.08);
+    --white-20: rgba(255, 255, 255, 0.2);
+    --white-40: rgba(255, 255, 255, 0.4);
+    --white-50: rgba(255, 255, 255, 0.5);
+    --overlay-heavy: rgba(0, 0, 0, 0.8);
+    --overlay-medium: rgba(0, 0, 0, 0.6);
 
-  /* ─── Article type scale ───
+    /* ─── Article type scale ───
      Fixed sizes, not clamps: every story renders at exactly one of two sizes
      per role — the desktop value below, or the mobile value swapped in at
      767.98px. Nothing in between, so a headline reads the same on a 1280px
@@ -39,1024 +41,1233 @@
        article body     20px  /  17px   .article-body-text and its lists
        quote            32px  /  22px   PullQuote
        section head     30px  /  24px   <h2> inside the body copy          */
-  --fs-article-headline: 56px;
-  --lh-article-headline: 1.12;
-  --fs-article-subheadline: 22px;
-  --lh-article-subheadline: 1.5;
-  --fs-article-body: 20px;
-  --lh-article-body: 1.8;
-  --fs-article-quote: 32px;
-  --lh-article-quote: 1.45;
-  --fs-article-section-head: 30px;
-}
+    --fs-article-headline: 56px;
+    --lh-article-headline: 1.12;
+    --fs-article-subheadline: 22px;
+    --lh-article-subheadline: 1.5;
+    --fs-article-body: 20px;
+    --lh-article-body: 1.8;
+    --fs-article-quote: 32px;
+    --lh-article-quote: 1.45;
+    --fs-article-section-head: 30px;
+  }
 
-/* The single article-typography breakpoint. Kept next to the tokens rather
+  /* The single article-typography breakpoint. Kept next to the tokens rather
    than filed with the layout breakpoints further down so the two halves of
    each size stay visible together. */
-@media (max-width: 767.98px) {
-  :root {
-    --fs-article-headline: 34px;
-    --fs-article-subheadline: 17px;
-    --fs-article-body: 17px;
-    --fs-article-quote: 22px;
-    --fs-article-section-head: 24px;
+  @media (max-width: 767.98px) {
+    :root {
+      --fs-article-headline: 34px;
+      --fs-article-subheadline: 17px;
+      --fs-article-body: 17px;
+      --fs-article-quote: 22px;
+      --fs-article-section-head: 24px;
+    }
   }
-}
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  background: var(--black);
-  color: var(--white);
-  font-family: 'Montserrat', sans-serif;
-  overflow-x: hidden;
-  /* Match Figma's antialiasing: thinner strokes, especially on script + serif fonts */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    /* Match Figma's antialiasing: thinner strokes, especially on script + serif fonts */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
 
-/* ─── Custom Scrollbar ─── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+  /* ─── Custom Scrollbar ─── */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
 
-/* ─── Custom Cursor ─── */
-.custom-cursor {
-  position: fixed;
-  width: 12px;
-  height: 12px;
-  background: white;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, border 0.2s ease;
-  mix-blend-mode: difference;
-}
-.custom-cursor.expanded {
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.1);
-  border: 1.5px solid white;
-}
+  /* ─── Custom Cursor ─── */
+  .custom-cursor {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition:
+      width 0.2s ease,
+      height 0.2s ease,
+      background 0.2s ease,
+      border 0.2s ease;
+    mix-blend-mode: difference;
+  }
+  .custom-cursor.expanded {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.5px solid white;
+  }
 
-/* ─── Animations ─── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes expandWidth {
-  from { width: 0; }
-  to   { width: 100%; }
-}
+  /* ─── Animations ─── */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes expandWidth {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
 
-.animate-fade-in-down {
-  animation: fadeInDown 0.5s ease forwards;
-}
+  .animate-fade-in-down {
+    animation: fadeInDown 0.5s ease forwards;
+  }
 
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-1 {
+    transition-delay: 0.1s;
+  }
+  .reveal-delay-2 {
+    transition-delay: 0.2s;
+  }
+  .reveal-delay-3 {
+    transition-delay: 0.3s;
+  }
 
-.divider-reveal {
-  width: 0;
-  transition: width 1s ease;
-}
-.divider-reveal.visible {
-  width: 100%;
-}
+  .divider-reveal {
+    width: 0;
+    transition: width 1s ease;
+  }
+  .divider-reveal.visible {
+    width: 100%;
+  }
 
-/* ─── Layout ─── */
-.page-wrapper {
-  max-width: 1440px;
-  margin: 0 auto;
-}
+  /* ─── Layout ─── */
+  .page-wrapper {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
 
-.section-inner {
-  max-width: 1352px;
-  margin: 0 auto;
-  padding: 0 44px;
-}
+  .section-inner {
+    max-width: 1352px;
+    margin: 0 auto;
+    padding: 0 44px;
+  }
 
-/* ─── Dividers ─── */
-.h-divider {
-  width: 100%;
-  height: 1px;
-  background: var(--white-20);
-}
+  /* ─── Dividers ─── */
+  .h-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--white-20);
+  }
 
-/* ─── Glow Blob ─── */
-.glow-blob {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  border-radius: 50%;
-  background: conic-gradient(from 180deg at 50% 50%, #FFFFFF 0deg, #050D18 360deg);
-  filter: blur(100px);
-  opacity: 0.08;
-  pointer-events: none;
-}
+  /* ─── Glow Blob ─── */
+  .glow-blob {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 180deg at 50% 50%,
+      #ffffff 0deg,
+      #050d18 360deg
+    );
+    filter: blur(100px);
+    opacity: 0.08;
+    pointer-events: none;
+  }
 
-/* ─── CTA Buttons ─── */
-.btn-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--white);
-  background: transparent;
-  color: var(--white);
-  font-family: 'Bodoni Moda', serif;
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.25s ease, transform 0.25s ease;
-  text-decoration: none;
-}
-.btn-pill:hover {
-  background: var(--white-08);
-  transform: scale(1.02);
-}
-.btn-pill-large {
-  width: 223px;
-  height: 60px;
-  border-radius: 30px;
-  filter: drop-shadow(0px 16px 16px var(--white-04));
-}
-.btn-pill-small {
-  width: 228px;
-  height: 44px;
-  border-radius: 25px;
-}
-.btn-pill-join {
-  width: 163px;
-  height: 60px;
-  border-radius: 40px;
-}
-.btn-pill-view {
-  width: 193px;
-  height: 44px;
-  border-radius: 25px;
-}
-.btn-separator {
-  display: inline-block;
-  width: 16px;
-  height: 1px;
-  background: var(--white-40);
-  margin-left: 12px;
-}
+  /* ─── CTA Buttons ─── */
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--white);
+    background: transparent;
+    color: var(--white);
+    font-family: 'Bodoni Moda', serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background 0.25s ease,
+      transform 0.25s ease;
+    text-decoration: none;
+  }
+  .btn-pill:hover {
+    background: var(--white-08);
+    transform: scale(1.02);
+  }
+  .btn-pill-large {
+    width: 223px;
+    height: 60px;
+    border-radius: 30px;
+    filter: drop-shadow(0px 16px 16px var(--white-04));
+  }
+  .btn-pill-small {
+    width: 228px;
+    height: 44px;
+    border-radius: 25px;
+  }
+  .btn-pill-join {
+    width: 163px;
+    height: 60px;
+    border-radius: 40px;
+  }
+  .btn-pill-view {
+    width: 193px;
+    height: 44px;
+    border-radius: 25px;
+  }
+  .btn-separator {
+    display: inline-block;
+    width: 16px;
+    height: 1px;
+    background: var(--white-40);
+    margin-left: 12px;
+  }
 
-/* ─── Fluid Typography Variables ─── */
-:root {
-  --fs-hero:       clamp(32px, 5.5vw, 72px);
-  --fs-section:    clamp(28px, 4.5vw, 64px);
-  --fs-section-md: clamp(22px, 3vw,   40px);
-  --fs-script:     clamp(36px, 5vw,   64px);
-  --fs-subtitle:   clamp(18px, 2.5vw, 32px);
-  --fs-card-h:     clamp(20px, 2.5vw, 32px);
-  --fs-body:       clamp(13px, 1vw,   14px);
-  --fs-btn:        clamp(13px, 1vw,   16px);
-  --fs-nav:        clamp(11px, 0.9vw, 14px);
-  --fs-ghost:      clamp(56px, 9vw,   120px);
-  --px-page:       clamp(20px, 4vw,   44px);
-  /* How far in from a page edge one fixed corner button reaches, plus a gap.
+  /* ─── Fluid Typography Variables ─── */
+  :root {
+    --fs-hero: clamp(32px, 5.5vw, 72px);
+    --fs-section: clamp(28px, 4.5vw, 64px);
+    --fs-section-md: clamp(22px, 3vw, 40px);
+    --fs-script: clamp(36px, 5vw, 64px);
+    --fs-subtitle: clamp(18px, 2.5vw, 32px);
+    --fs-card-h: clamp(20px, 2.5vw, 32px);
+    --fs-body: clamp(13px, 1vw, 14px);
+    --fs-btn: clamp(13px, 1vw, 16px);
+    --fs-nav: clamp(11px, 0.9vw, 14px);
+    --fs-ghost: clamp(56px, 9vw, 120px);
+    --px-page: clamp(20px, 4vw, 44px);
+    /* How far in from a page edge one fixed corner button reaches, plus a gap.
      Mirrors navSlotsReservedRight(1) in nav/navSlots.ts — keep the two in step.
      Layouts that draw their own content in a top corner subtract this, since the
      button is fixed and takes no space in flow to push back against. */
-  --nav-slot-reserve: calc(var(--px-page) + 60px);
-  --gap-grid:      clamp(20px, 3vw,   44px);
-  --py-section:    clamp(80px, 10vw,  160px);
-}
+    --nav-slot-reserve: calc(var(--px-page) + 60px);
+    --gap-grid: clamp(20px, 3vw, 44px);
+    --py-section: clamp(80px, 10vw, 160px);
+  }
 
-/* ─── Responsive Content Container ─── */
-.content-container {
-  width: 100%;
-  max-width: 1352px;
-  margin: 0 auto;
-  padding: 0 var(--px-page);
-}
+  /* ─── Responsive Content Container ─── */
+  .content-container {
+    width: 100%;
+    max-width: 1352px;
+    margin: 0 auto;
+    padding: 0 var(--px-page);
+  }
 
-/* ─── Responsive Grids ─── */
-.grid-2col {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--gap-grid);
-}
-.grid-3col {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--gap-grid);
-}
-.grid-4col {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--gap-grid);
-}
+  /* ─── Responsive Grids ─── */
+  .grid-2col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--gap-grid);
+  }
+  .grid-3col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--gap-grid);
+  }
+  .grid-4col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gap-grid);
+  }
 
-/* ─── Navbar responsive show/hide ─── */
-.nav-links-desktop {
-  display: flex;
-}
-.nav-search-label {
-  display: inline;
-}
+  /* ─── Navbar responsive show/hide ─── */
+  .nav-links-desktop {
+    display: flex;
+  }
+  .nav-search-label {
+    display: inline;
+  }
 
-/* ─── Explore section responsive ─── */
-.explore-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  max-width: 1440px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 var(--px-page);
-}
-.explore-cards {
-  display: flex;
-  gap: clamp(16px, 2vw, 36px);
-  align-items: flex-start;
-  flex-wrap: nowrap;
-}
+  /* ─── Explore section responsive ─── */
+  .explore-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 var(--px-page);
+  }
+  .explore-cards {
+    display: flex;
+    gap: clamp(16px, 2vw, 36px);
+    align-items: flex-start;
+    flex-wrap: nowrap;
+  }
 
-/* ─── WhatIsTBS layout ─── */
-.whatis-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 60px;
-  max-width: 1352px;
-  margin: 0 auto;
-}
+  /* ─── WhatIsTBS layout ─── */
+  .whatis-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    max-width: 1352px;
+    margin: 0 auto;
+  }
 
-/* ─── Grayscale / Color-Reveal Theme ─── */
-/*
+  /* ─── Grayscale / Color-Reveal Theme ─── */
+  /*
   All images are monochrome by default.
   Color is revealed when the user hovers over the card or section.
   Logos and decorative icons carry the .no-grayscale class to opt out.
 */
-/* Use CSS custom properties so Turbopack cannot optimise the values away.
+  /* Use CSS custom properties so Turbopack cannot optimise the values away.
    --img-gs  = saturate(0)     → fully desaturated (grayscale)
    --img-color = saturate(1.001) → visually identical to 1 but not collapsed */
-img:not(.no-grayscale),
-video:not(.no-grayscale) {
-  filter: var(--img-gs) !important;
-  transition: filter 0.65s ease;
-}
+  img:not(.no-grayscale),
+  video:not(.no-grayscale) {
+    filter: var(--img-gs) !important;
+    transition: filter 0.65s ease;
+  }
 
-/* Hero video responsive switching */
-.hero-video-mobile { display: none; }
-.hero-video-desktop { display: block; }
+  /* Hero video responsive switching */
+  .hero-video-mobile {
+    display: none;
+  }
+  .hero-video-desktop {
+    display: block;
+  }
 
-@media (max-width: 767px) {
-  .hero-video-desktop { display: none; }
-  .hero-video-mobile  { display: block; }
-}
+  @media (max-width: 767px) {
+    .hero-video-desktop {
+      display: none;
+    }
+    .hero-video-mobile {
+      display: block;
+    }
+  }
 
-/* Section-level reveal — entire section lights up on cursor enter */
-#hero:hover     img:not(.no-grayscale),
-#hero:hover     video:not(.no-grayscale),
-#about:hover    img:not(.no-grayscale),
-#about-us:hover img:not(.no-grayscale),
-#explore:hover  img:not(.no-grayscale),
-#news:hover     img:not(.no-grayscale),
-#nights:hover   img:not(.no-grayscale),
-#press:hover    img:not(.no-grayscale) {
-  filter: var(--img-color) !important;
-}
+  /* Section-level reveal — entire section lights up on cursor enter */
+  #hero:hover img:not(.no-grayscale),
+  #hero:hover video:not(.no-grayscale),
+  #about:hover img:not(.no-grayscale),
+  #about-us:hover img:not(.no-grayscale),
+  #explore:hover img:not(.no-grayscale),
+  #news:hover img:not(.no-grayscale),
+  #nights:hover img:not(.no-grayscale),
+  #press:hover img:not(.no-grayscale) {
+    filter: var(--img-color) !important;
+  }
 
-/* The Edit + TBS Talks — individual card hover only.
+  /* The Edit + TBS Talks — individual card hover only.
    Uses scoped selector (specificity 1,2,1) so it beats the base
    section rule (1,1,1) and only the hovered card goes to colour. */
-#top-picks .img-card:hover img:not(.no-grayscale),
-#talks     .img-card:hover img:not(.no-grayscale),
-.talks-archive .img-card:hover img:not(.no-grayscale),
-.article-recommended .img-card:hover img:not(.no-grayscale),
-.more-articles .img-card:hover img:not(.no-grayscale),
-.topic-grid .img-card:hover img:not(.no-grayscale) {
-  filter: var(--img-color) !important;
-}
+  #top-picks .img-card:hover img:not(.no-grayscale),
+  #talks .img-card:hover img:not(.no-grayscale),
+  .talks-archive .img-card:hover img:not(.no-grayscale),
+  .article-recommended .img-card:hover img:not(.no-grayscale),
+  .more-articles .img-card:hover img:not(.no-grayscale),
+  .topic-grid .img-card:hover img:not(.no-grayscale) {
+    filter: var(--img-color) !important;
+  }
 
-/* Mobile tap reveal — JS adds .touch-color on touchstart */
-section.touch-color img:not(.no-grayscale),
-section.touch-color video:not(.no-grayscale),
-.img-card.touch-color img:not(.no-grayscale) {
-  filter: var(--img-color) !important;
-}
+  /* Mobile tap reveal — JS adds .touch-color on touchstart */
+  section.touch-color img:not(.no-grayscale),
+  section.touch-color video:not(.no-grayscale),
+  .img-card.touch-color img:not(.no-grayscale) {
+    filter: var(--img-color) !important;
+  }
 
-/* ─── TBS Nights layout ─── */
-/* Shown only on mobile, where the logo sits above the video banner. */
-.nights-logo-mobile {
-  display: none;
-}
-.nights-inner {
-  max-width: 1440px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 var(--px-page);
-  display: flex;
-  justify-content: flex-end;
-}
+  /* ─── TBS Nights layout ─── */
+  /* Shown only on mobile, where the logo sits above the video banner. */
+  .nights-logo-mobile {
+    display: none;
+  }
+  .nights-inner {
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 var(--px-page);
+    display: flex;
+    justify-content: flex-end;
+  }
 
-/* ─── AboutUs cover bar ─── */
-.aboutus-cover-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: clamp(24px, 4vw, 60px);
-}
+  /* ─── AboutUs cover bar ─── */
+  .aboutus-cover-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(24px, 4vw, 60px);
+  }
 
-/* ─── TBSTalks grid ─── */
-/* Single scroll-snapped row, 4 cards per viewport on laptop and 2 once
+  /* ─── TBSTalks grid ─── */
+  /* Single scroll-snapped row, 4 cards per viewport on laptop and 2 once
    stacked. Cards are wrapped in ScrollReveal, so the flex items are those
    wrappers rather than the cards themselves — hence the `> *`. */
-.talks-grid {
-  --card-gap: clamp(10px, 1.5vw, 20px);
-  --cards-per-view: 4;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  gap: var(--card-gap);
-  scrollbar-width: none;
-}
-.talks-grid::-webkit-scrollbar {
-  display: none;
-}
-.talks-grid > * {
-  flex: 0 0
-    calc(
-      (100% - (var(--cards-per-view) - 1) * var(--card-gap)) /
-        var(--cards-per-view)
-    );
-  min-width: 0;
-  scroll-snap-align: start;
-}
+  .talks-grid {
+    --card-gap: clamp(10px, 1.5vw, 20px);
+    --cards-per-view: 4;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: var(--card-gap);
+    scrollbar-width: none;
+  }
+  .talks-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .talks-grid > * {
+    flex: 0 0
+      calc(
+        (100% - (var(--cards-per-view) - 1) * var(--card-gap)) /
+          var(--cards-per-view)
+      );
+    min-width: 0;
+    scroll-snap-align: start;
+  }
 
-/* ─── TheEdit layout ─── */
-.the-edit-outer {
-  display: flex;
-  gap: clamp(32px, 4vw, 64px);
-  /* Centres the "TOP PICKS" / LATEST FEATURES panel against the card
+  /* ─── TheEdit layout ─── */
+  .the-edit-outer {
+    display: flex;
+    gap: clamp(32px, 4vw, 64px);
+    /* Centres the "TOP PICKS" / LATEST FEATURES panel against the card
      carousel. Every stacked breakpoint below must reset this to stretch —
      centring a column shrink-wraps the carousel and it overflows. */
-  align-items: center;
-}
-.the-edit-left {
-  flex-shrink: 0;
-  width: clamp(160px, 18vw, 240px);
-  /* Width of the vertical "LATEST FEATURES" strip. Set here rather than left to
+    align-items: center;
+  }
+  .the-edit-left {
+    flex-shrink: 0;
+    width: clamp(160px, 18vw, 240px);
+    /* Width of the vertical "LATEST FEATURES" strip. Set here rather than left to
      the text's own width so the grid has a definite first track. */
-  --edit-label-col: 16px;
-  /* Label and heading share the top row; the CTA spans both columns below it.
+    --edit-label-col: 16px;
+    /* Label and heading share the top row; the CTA spans both columns below it.
      The heading track is min-content, which for a title that wraps is the width
      of its longest word — so the track is exactly as wide as "PICKS", and a CTA
      spanning the row ends on that final S. The panel keeps its own width, so
      the few leftover pixels fall to the right of the grid and the carousel does
      not move. Two rows is also what keeps the CTA off the vertical label: it
      cannot ride up into row 1 however short the heading wraps. */
-  display: grid;
-  grid-template-columns: var(--edit-label-col) min-content;
-  column-gap: clamp(12px, 1.5vw, 20px);
-  align-items: start;
-  justify-content: start;
-}
-.the-edit-vertical-label {
-  grid-column: 1;
-  grid-row: 1;
-}
-.the-edit-heading-col {
-  grid-column: 2;
-  grid-row: 1;
-}
-/* The two copies of the CTA — one in this panel, one under the carousel — are
+    display: grid;
+    grid-template-columns: var(--edit-label-col) min-content;
+    column-gap: clamp(12px, 1.5vw, 20px);
+    align-items: start;
+    justify-content: start;
+  }
+  .the-edit-vertical-label {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .the-edit-heading-col {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  /* The two copies of the CTA — one in this panel, one under the carousel — are
    styled next to .tbs-outline-btn at the end of this file, outside @layer base.
    They have to override that class's own `display`, and an unlayered rule beats
    a layered one at any specificity, so from in here they lost and both copies
    rendered at once. */
-.the-edit-grid {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  gap: var(--card-gap);
-  scrollbar-width: none;
-}
-.the-edit-grid::-webkit-scrollbar {
-  display: none;
-}
-/* Single row, 4 cards per viewport on laptop. --gap must match the row's own
-   gap or the 4th card is pushed out and the snap points drift. */
-.the-edit-grid {
-  --card-gap: clamp(14px, 1.5vw, 22px);
-  --cards-per-view: 4;
-}
-.the-edit-grid .the-edit-card {
-  flex: 0 0
-    calc(
-      (100% - (var(--cards-per-view) - 1) * var(--card-gap)) /
-        var(--cards-per-view)
-    );
-  scroll-snap-align: start;
-}
-
-/* ─── BREAKPOINTS ─── */
-
-/* ── Large tablet / small laptop: 1024px ── */
-@media (max-width: 1024px) {
-  .grid-3col  { grid-template-columns: repeat(2, 1fr); }
-  .grid-4col  { grid-template-columns: repeat(2, 1fr); }
-  .grid-2col  { grid-template-columns: 1fr; }
-
-  .nav-links-desktop { display: none !important; }
-
-  .explore-inner {
-    flex-direction: column;
-    justify-content: center;
-    padding: 60px var(--px-page);
-  }
-  .explore-cards {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .explore-rotate-group {
-    flex-direction: row !important;
-    transform: none !important;
-    gap: 24px;
-  }
-  .explore-rotate-group > * {
-    transform: none !important;
-    writing-mode: horizontal-tb !important;
-    font-size: clamp(24px, 4vw, 40px) !important;
-  }
-
-  .whatis-inner {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .whatis-portrait {
-    margin: 0 auto;
-  }
-
-  .nights-inner {
-    justify-content: center !important;
-  }
-  .nights-content {
-    text-align: center !important;
-    max-width: 100% !important;
-    margin-right: 0 !important;
-  }
-  .whatis-body-indent { padding-left: 0 !important; }
-  .whatis-portrait-wrap img {
-    width: min(320px, 82vw) !important;
-    height: min(320px, 82vw) !important;
-  }
-  .nights-content p,
-  .nights-content div[style] {
-    text-align: center !important;
-  }
-
-  /* TBSTalks: 2 cards per viewport once stacked, and only 4 in total — the
-     5th onward would need a third and fourth swipe. */
-  .talks-grid { --cards-per-view: 2; }
-  .talks-grid > *:nth-child(n + 5) { display: none; }
-
-  /* TBSTalks header: logo was overflowing its box and getting cropped; tagline/link sat flush against the screen edge */
-  .talks-logo-wrap {
-    height: auto !important;
-    overflow: hidden !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-  .talks-logo-img {
-    height: auto !important;
-    width: min(480px, 82%) !important;
-    object-fit: contain !important;
-    /* Crops empty space baked into the logo PNG above/below the artwork.
-       Increase these (in px or %) to crop more, decrease to crop less. */
-    margin-top: -90px !important;
-    margin-bottom: -40px !important;
-  }
-  .talks-subtitle {
-    font-size: clamp(15px, 2.4vw, 18px) !important;
-    padding: 0 16px !important;
-  }
-  /* TheEdit: stack left panel above cards */
-  .the-edit-outer { flex-direction: column; align-items: stretch; }
-  /* Back to normal flow: the vertical label is hidden at this width, and the
-     grid would otherwise hold its empty column open beside the heading. */
-  .the-edit-left { width: 100%; display: block; }
-  /* The CTA swap to below the carousel happens with the other CTA rules at the
-     end of this file — see the note above .the-edit-grid. */
-  /* 2 cards per viewport once stacked, and only 4 in total — the 5th onward
-     would need a third and fourth swipe. */
   .the-edit-grid {
-    --cards-per-view: 2;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: var(--card-gap);
+    scrollbar-width: none;
   }
-  .the-edit-grid .the-edit-card:nth-child(n + 5) {
+  .the-edit-grid::-webkit-scrollbar {
     display: none;
   }
-  .the-edit-vertical-label { display: none !important; }
-}
-
-/* ── Tablet: 768px ── */
-@media (max-width: 768px) {
-  .grid-3col  { grid-template-columns: 1fr; }
-  .grid-4col  { grid-template-columns: repeat(2, 1fr); }
-
-  .explore-cards {
-    gap: 16px;
+  /* Single row, 4 cards per viewport on laptop. --gap must match the row's own
+   gap or the 4th card is pushed out and the snap points drift. */
+  .the-edit-grid {
+    --card-gap: clamp(14px, 1.5vw, 22px);
+    --cards-per-view: 4;
+  }
+  .the-edit-grid .the-edit-card {
+    flex: 0 0
+      calc(
+        (100% - (var(--cards-per-view) - 1) * var(--card-gap)) /
+          var(--cards-per-view)
+      );
+    scroll-snap-align: start;
   }
 
-  .about-ghost { display: none; }
-  /* AboutUs arch + content reset */
-  .about-arch-wrap { display: none !important; }
-  .about-content-pad { padding-left: 0 !important; }
-  .about-cards-grid { grid-template-columns: 1fr !important; gap: clamp(32px, 5vw, 48px) !important; }
-  .about-card-stagger { padding-top: 0 !important; }
-  /* Disable fixed bg on mobile — iOS doesn't support background-attachment:fixed */
-  .fixed-bg-section { background-attachment: scroll, scroll !important; }
+  /* ─── BREAKPOINTS ─── */
 
-  /* Lift the wordmark: the 60px of head room the brand block carries reads as
+  /* ── Large tablet / small laptop: 1024px ── */
+  @media (max-width: 1024px) {
+    .grid-3col {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .grid-4col {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .grid-2col {
+      grid-template-columns: 1fr;
+    }
+
+    .nav-links-desktop {
+      display: none !important;
+    }
+
+    .explore-inner {
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px var(--px-page);
+    }
+    .explore-cards {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .explore-rotate-group {
+      flex-direction: row !important;
+      transform: none !important;
+      gap: 24px;
+    }
+    .explore-rotate-group > * {
+      transform: none !important;
+      writing-mode: horizontal-tb !important;
+      font-size: clamp(24px, 4vw, 40px) !important;
+    }
+
+    .whatis-inner {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .whatis-portrait {
+      margin: 0 auto;
+    }
+
+    .nights-inner {
+      justify-content: center !important;
+    }
+    .nights-content {
+      text-align: center !important;
+      max-width: 100% !important;
+      margin-right: 0 !important;
+    }
+    .whatis-body-indent {
+      padding-left: 0 !important;
+    }
+    .whatis-portrait-wrap img {
+      width: min(320px, 82vw) !important;
+      height: min(320px, 82vw) !important;
+    }
+    .nights-content p,
+    .nights-content div[style] {
+      text-align: center !important;
+    }
+
+    /* TBSTalks: 2 cards per viewport once stacked, and only 4 in total — the
+     5th onward would need a third and fourth swipe. */
+    .talks-grid {
+      --cards-per-view: 2;
+    }
+    .talks-grid > *:nth-child(n + 5) {
+      display: none;
+    }
+
+    /* TBSTalks header: logo was overflowing its box and getting cropped; tagline/link sat flush against the screen edge */
+    .talks-logo-wrap {
+      height: auto !important;
+      overflow: hidden !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+    }
+    .talks-logo-img {
+      height: auto !important;
+      width: min(480px, 82%) !important;
+      object-fit: contain !important;
+      /* Crops empty space baked into the logo PNG above/below the artwork.
+       Increase these (in px or %) to crop more, decrease to crop less. */
+      margin-top: -90px !important;
+      margin-bottom: -40px !important;
+    }
+    .talks-subtitle {
+      font-size: clamp(15px, 2.4vw, 18px) !important;
+      padding: 0 16px !important;
+    }
+    /* TheEdit: stack left panel above cards */
+    .the-edit-outer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    /* Back to normal flow: the vertical label is hidden at this width, and the
+     grid would otherwise hold its empty column open beside the heading. */
+    .the-edit-left {
+      width: 100%;
+      display: block;
+    }
+    /* The CTA swap to below the carousel happens with the other CTA rules at the
+     end of this file — see the note above .the-edit-grid. */
+    /* 2 cards per viewport once stacked, and only 4 in total — the 5th onward
+     would need a third and fourth swipe. */
+    .the-edit-grid {
+      --cards-per-view: 2;
+    }
+    .the-edit-grid .the-edit-card:nth-child(n + 5) {
+      display: none;
+    }
+    .the-edit-vertical-label {
+      display: none !important;
+    }
+  }
+
+  /* ── Tablet: 768px ── */
+  @media (max-width: 768px) {
+    .grid-3col {
+      grid-template-columns: 1fr;
+    }
+    .grid-4col {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .explore-cards {
+      gap: 16px;
+    }
+
+    .about-ghost {
+      display: none;
+    }
+    /* AboutUs arch + content reset */
+    .about-arch-wrap {
+      display: none !important;
+    }
+    .about-content-pad {
+      padding-left: 0 !important;
+    }
+    .about-cards-grid {
+      grid-template-columns: 1fr !important;
+      gap: clamp(32px, 5vw, 48px) !important;
+    }
+    .about-card-stagger {
+      padding-top: 0 !important;
+    }
+    /* Disable fixed bg on mobile — iOS doesn't support background-attachment:fixed */
+    .fixed-bg-section {
+      background-attachment: scroll, scroll !important;
+    }
+
+    /* Lift the wordmark: the 60px of head room the brand block carries reads as
      a dead band once the footer is only a phone wide. !important because the
      padding shorthand is inline on the element. */
-  .footer-brand { padding-top: 24px !important; }
+    .footer-brand {
+      padding-top: 24px !important;
+    }
 
-  /* TBSNights on mobile: logo, then video banner, then text */
-  #nights {
-    min-height: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  .nights-logo-mobile {
-    display: block;
-    order: 0;
-    /* Width-driven, sized so the *wordmark* matches the TBS Talks one. The two
+    /* TBSNights on mobile: logo, then video banner, then text */
+    #nights {
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .nights-logo-mobile {
+      display: block;
+      order: 0;
+      /* Width-driven, sized so the *wordmark* matches the TBS Talks one. The two
        PNGs bake in very different amounts of empty space: the artwork fills 95%
        of tbsnights-hero.png but only 65% of tbstalks-logo.png, so giving both
        the same box width (min(480px, 82%)) rendered Nights ~1.8x larger.
        min(330px, 46%) lands the drawn wordmark within a few px of Talks' at
        every phone width. */
-    width: min(330px, 46%);
-    height: auto;
-    object-fit: contain;
-    /* Bottom gap matches .nights-inner's top padding so the video sits with
+      width: min(330px, 46%);
+      height: auto;
+      object-fit: contain;
+      /* Bottom gap matches .nights-inner's top padding so the video sits with
        equal breathing room above and below. */
-    padding: clamp(28px, 6vw, 44px) 0;
-  }
-  .nights-logo-desktop {
-    display: none !important;
-  }
-  .nights-bg-img {
-    position: relative !important;
-    inset: auto !important;
-    order: 1;
-    /* Inset by the same gutter .nights-inner uses below it (2× its
+      padding: clamp(28px, 6vw, 44px) 0;
+    }
+    .nights-logo-desktop {
+      display: none !important;
+    }
+    .nights-bg-img {
+      position: relative !important;
+      inset: auto !important;
+      order: 1;
+      /* Inset by the same gutter .nights-inner uses below it (2× its
        horizontal padding), so the video's edges line up with the text
        rather than bleeding to the screen edge. */
-    width: calc(100% - clamp(40px, 8vw, 120px)) !important;
-    height: clamp(220px, 56vw, 340px) !important;
-    display: block;
-  }
-  .nights-inner {
-    order: 2;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    padding-top: clamp(28px, 6vw, 44px) !important;
-  }
-  .nights-video-spacer {
-    display: none !important;
-  }
+      width: calc(100% - clamp(40px, 8vw, 120px)) !important;
+      height: clamp(220px, 56vw, 340px) !important;
+      display: block;
+    }
+    .nights-inner {
+      order: 2;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      padding-top: clamp(28px, 6vw, 44px) !important;
+    }
+    .nights-video-spacer {
+      display: none !important;
+    }
 
-  /* AboutUs cover bar: stack heading above category grid */
-  .aboutus-cover-bar {
-    flex-direction: column;
-    align-items: center;
-  }
+    /* AboutUs cover bar: stack heading above category grid */
+    .aboutus-cover-bar {
+      flex-direction: column;
+      align-items: center;
+    }
 
-  /* MegaMenu: 3-col grid using the full screen width instead of 7 squeezed columns */
-  .mega-menu-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-    row-gap: clamp(28px, 6vw, 40px) !important;
-    column-gap: clamp(16px, 4vw, 28px) !important;
-  }
+    /* MegaMenu: 3-col grid using the full screen width instead of 7 squeezed columns */
+    .mega-menu-grid {
+      grid-template-columns: repeat(3, 1fr) !important;
+      row-gap: clamp(28px, 6vw, 40px) !important;
+      column-gap: clamp(16px, 4vw, 28px) !important;
+    }
 
-  /* Fix seam between TBSTalks and Footer on mobile.
+    /* Fix seam between TBSTalks and Footer on mobile.
      With scroll attachment, each section renders its own copy of hero-bg.jpg at
      a different offset, causing a visible break. Solution: make TBSTalks fully
      black so the boundary is black→black (invisible), then let the footer reveal
      the image gradually as you scroll into it. */
-  #talks { background: var(--black) !important; }
-  #newsletter {
-    /* Where the drawn TBS wordmark ends, measured from the footer's top edge.
+    #talks {
+      background: var(--black) !important;
+    }
+    #newsletter {
+      /* Where the drawn TBS wordmark ends, measured from the footer's top edge.
        Its box is clamp(260px, 38vw, 480px) tall and starts 10px above the
        footer (60px section padding minus the logo's -70px margin); the artwork
        inside the PNG ends ~64% of the way down that box. */
-    --footer-logo-bottom: calc(0.64 * clamp(260px, 38vw, 480px) - 10px);
-    /* The image is held back only until the wordmark, so it reads as sitting
+      --footer-logo-bottom: calc(0.64 * clamp(260px, 38vw, 480px) - 10px);
+      /* The image is held back only until the wordmark, so it reads as sitting
        directly under the logo rather than starting a screen further down. */
-    background-image:
-      linear-gradient(to bottom,
-        rgba(0,0,0,1)    0px,
-        rgba(0,0,0,1)    calc(var(--footer-logo-bottom) - 48px),
-        rgba(0,0,0,0.5)  var(--footer-logo-bottom),
-        rgba(0,0,0,0.5)  62%,
-        rgba(0,0,0,1)    100%
-      ),
-      url('/hero-bg.jpg') !important;
-    background-size: auto, cover !important;
-    background-position: 0 0, center !important;
+      background-image:
+        linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 1) 0px,
+          rgba(0, 0, 0, 1) calc(var(--footer-logo-bottom) - 48px),
+          rgba(0, 0, 0, 0.5) var(--footer-logo-bottom),
+          rgba(0, 0, 0, 0.5) 62%,
+          rgba(0, 0, 0, 1) 100%
+        ),
+        url('/hero-bg.jpg') !important;
+      background-size: auto, cover !important;
+      background-position:
+        0 0,
+        center !important;
+    }
   }
-}
 
-/* ─── Footer: Follow Us icons ─── */
-/* The glyph is the whole mark — the ringed circle it used to sit in is gone — so
+  /* ─── Footer: Follow Us icons ─── */
+  /* The glyph is the whole mark — the ringed circle it used to sit in is gone — so
    the box exists only to keep a comfortable tap target, and the gap now reads
    glyph to glyph rather than ring to ring. That makes the same numbers look far
    wider apart than they did with the ring drawn, which is why the row is tighter
    than the 14px it carried before, and tighter again on mobile. */
-.footer-social-icons {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  gap: 8px;
-}
+  .footer-social-icons {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 8px;
+  }
 
-.footer-social-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  width: 44px;
-  height: 44px;
-  color: white;
-  transition: transform 0.2s ease;
-}
+  .footer-social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    color: white;
+    transition: transform 0.2s ease;
+  }
 
-/* ── TheEdit / Top Picks carousel — non-desktop ── */
-@media (max-width: 767.98px) {
-  /* The stacked outer must stretch its children so the carousel is bounded to
+  /* ── TheEdit / Top Picks carousel — non-desktop ── */
+  @media (max-width: 767.98px) {
+    /* The stacked outer must stretch its children so the carousel is bounded to
      the viewport; otherwise the flex row sizes to its content and the cards
      overflow far past the screen edge. */
-  .the-edit-outer {
-    align-items: stretch;
-  }
-  .the-edit-grid {
-    width: 100%;
-    max-width: 100%;
-  }
-  .the-edit-grid .the-edit-card {
-    min-width: 0;
-  }
-}
-
-/* ── Mobile: 640px ── */
-@media (max-width: 640px) {
-  .grid-4col  { grid-template-columns: 1fr; }
-
-  .explore-cards {
-    flex-direction: column;
-    align-items: center;
+    .the-edit-outer {
+      align-items: stretch;
+    }
+    .the-edit-grid {
+      width: 100%;
+      max-width: 100%;
+    }
+    .the-edit-grid .the-edit-card {
+      min-width: 0;
+    }
   }
 
-  .footer-grid {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  .footer-grid-spacer {
-    display: none !important;
-  }
+  /* ── Mobile: 640px ── */
+  @media (max-width: 640px) {
+    .grid-4col {
+      grid-template-columns: 1fr;
+    }
 
-  .press-grid { grid-template-columns: 1fr !important; }
+    .explore-cards {
+      flex-direction: column;
+      align-items: center;
+    }
 
-  .footer-bottom-bar {
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-  }
-  /* Follow Us spans both columns so all 4 icons fit in one row */
-  .footer-follow-us { grid-column: span 2; }
-  /* Locations: add right breathing room so text doesn't crowd the phone edge */
-  .footer-locations-col { padding-right: 16px !important; }
-  /* Follow Us: center heading on mobile, and close the icon row up — six marks
+    .footer-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    .footer-grid-spacer {
+      display: none !important;
+    }
+
+    .press-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .footer-bottom-bar {
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+    }
+    /* Follow Us spans both columns so all 4 icons fit in one row */
+    .footer-follow-us {
+      grid-column: span 2;
+    }
+    /* Locations: add right breathing room so text doesn't crowd the phone edge */
+    .footer-locations-col {
+      padding-right: 16px !important;
+    }
+    /* Follow Us: center heading on mobile, and close the icon row up — six marks
      with a phone's worth of width to sit in read as one group, not six. */
-  .footer-follow-us { text-align: center; }
-  .footer-social-icons { gap: 0; }
-  .footer-social-icon { width: 38px; height: 38px; }
-  /* Quick Links / Locations: center heading + link list on mobile */
-  .footer-quicklinks-col,
-  .footer-locations-col {
-    text-align: center;
+    .footer-follow-us {
+      text-align: center;
+    }
+    .footer-social-icons {
+      gap: 0;
+    }
+    .footer-social-icon {
+      width: 38px;
+      height: 38px;
+    }
+    /* Quick Links / Locations: center heading + link list on mobile */
+    .footer-quicklinks-col,
+    .footer-locations-col {
+      text-align: center;
+    }
+    .footer-quicklinks-col nav,
+    .footer-locations-col nav {
+      align-items: center;
+    }
   }
-  .footer-quicklinks-col nav,
-  .footer-locations-col nav {
-    align-items: center;
+
+  /* ── Small mobile: 480px ── */
+  @media (max-width: 480px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
   }
-}
 
-/* ── Small mobile: 480px ── */
-@media (max-width: 480px) {
-  .footer-grid {
-    grid-template-columns: 1fr 1fr !important;
+  /* ─── TBS Nights form — placeholder colour to match select text ─── */
+  .tbs-nights-form input::placeholder,
+  .tbs-nights-form textarea::placeholder {
+    color: rgba(255, 255, 255, 0.38);
+    font-family: 'Poppins', sans-serif;
   }
-}
 
-/* ─── TBS Nights form — placeholder colour to match select text ─── */
-.tbs-nights-form input::placeholder,
-.tbs-nights-form textarea::placeholder {
-  color: rgba(255,255,255,0.38);
-  font-family: 'Poppins', sans-serif;
-}
-
-/* ─── TBS Nights form page — wizard layout ─── */
-.tbs-nights-form {
-  display: grid;
-  grid-template-columns: 420px 1fr;
-  height: 100vh;
-  background: #100f0d;
-  overflow: hidden;
-}
-.tbs-wizard-mobile-progress {
-  display: none;
-}
-.tbs-wizard-mobile-back {
-  display: none;
-}
-.tbs-wizard-progress-track {
-  width: 100%;
-  height: 2px;
-  background: rgba(255,255,255,0.15);
-  margin-bottom: 16px;
-}
-.tbs-wizard-progress-fill {
-  height: 100%;
-  background: white;
-  transition: width 0.3s ease;
-}
-.tbs-wizard-sidebar {
-  position: relative;
-  height: 100%;
-  min-height: 0;
-  overflow-y: auto;
-  scrollbar-width: none;
-  box-sizing: border-box;
-  /* The sidebar draws its label and back link in the top-left corner, which is
-     where the hamburger sits — clear it rather than let the button cover them. */
-  padding: max(clamp(24px, 4.5vh, 48px), var(--nav-slot-reserve))
-           clamp(28px, 3vw, 48px) clamp(24px, 4.5vh, 48px);
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid rgba(255,255,255,0.08);
-}
-.tbs-wizard-sidebar::-webkit-scrollbar { display: none; }
-.tbs-wizard-main {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
-}
-.tbs-wizard-content {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  scrollbar-width: none;
-  box-sizing: border-box;
-  padding: clamp(32px, 5vh, 56px) clamp(32px, 4vw, 64px) 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-.tbs-wizard-content::-webkit-scrollbar { display: none; }
-.tbs-wizard-nav {
-  flex-shrink: 0;
-  background: #100f0d;
-  padding: clamp(12px, 2vh, 20px) clamp(32px, 4vw, 64px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.form-col {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-.form-two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.rating-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.rating-endlabel {
-  font-family: 'Poppins', sans-serif;
-  font-size: 10.5px;
-  letter-spacing: 0.01em;
-  color: rgba(255,255,255,0.4);
-  line-height: 1.3;
-  flex-shrink: 0;
-  width: 64px;
-}
-.rating-endlabel.right {
-  text-align: right;
-}
-.rating-dots {
-  display: flex;
-  flex: 1;
-  justify-content: space-between;
-  gap: 8px;
-}
-.rating-dot {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-family: 'Poppins', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-}
-.rating-dot:hover {
-  border-color: rgba(255,255,255,0.5);
-}
-.tbs-nights-success {
-  display: flex;
-  width: 100%;
-  max-width: 820px;
-  max-height: 90vh;
-  overflow: hidden;
-}
-
-@media (max-width: 768px) {
+  /* ─── TBS Nights form page — wizard layout ─── */
   .tbs-nights-form {
-    grid-template-columns: 1fr;
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
-  }
-  .tbs-wizard-sidebar {
-    height: auto;
-    overflow: visible;
-    padding: max(24px, var(--nav-slot-reserve)) 20px 20px;
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    height: 100vh;
+    background: #100f0d;
+    overflow: hidden;
   }
   .tbs-wizard-mobile-progress {
-    display: block;
+    display: none;
   }
   .tbs-wizard-mobile-back {
-    display: inline-block;
+    display: none;
   }
-  .tbs-wizard-desktop-intro {
+  .tbs-wizard-progress-track {
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.15);
+    margin-bottom: 16px;
+  }
+  .tbs-wizard-progress-fill {
+    height: 100%;
+    background: white;
+    transition: width 0.3s ease;
+  }
+  .tbs-wizard-sidebar {
+    position: relative;
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    box-sizing: border-box;
+    /* The sidebar draws its label and back link in the top-left corner, which is
+     where the hamburger sits — clear it rather than let the button cover them. */
+    padding: max(clamp(24px, 4.5vh, 48px), var(--nav-slot-reserve))
+      clamp(28px, 3vw, 48px) clamp(24px, 4.5vh, 48px);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .tbs-wizard-sidebar::-webkit-scrollbar {
     display: none;
   }
   .tbs-wizard-main {
-    height: auto;
-    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
   }
   .tbs-wizard-content {
-    overflow: visible;
-    padding: 28px 24px 24px;
-  }
-  .tbs-wizard-nav {
-    padding: 16px 24px;
-  }
-  .form-two-col {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .rating-row {
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px 0;
-  }
-  .rating-dots {
-    flex-basis: 100%;
-    order: -1;
-  }
-  .rating-dot {
-    width: 42px;
-    height: 42px;
-    font-size: 13px;
-  }
-  .rating-endlabel {
-    width: auto;
-    flex: none;
-  }
-  .rating-endlabel.right {
-    margin-left: auto;
-  }
-  .tbs-nights-success {
-    flex-direction: column;
-    max-height: 95vh;
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
+    scrollbar-width: none;
+    box-sizing: border-box;
+    padding: clamp(32px, 5vh, 56px) clamp(32px, 4vw, 64px) 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
   }
-  .tbs-nights-success-img {
+  .tbs-wizard-content::-webkit-scrollbar {
     display: none;
   }
-}
+  .tbs-wizard-nav {
+    flex-shrink: 0;
+    background: #100f0d;
+    padding: clamp(12px, 2vh, 20px) clamp(32px, 4vw, 64px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .form-col {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+  .form-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .rating-endlabel {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10.5px;
+    letter-spacing: 0.01em;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.3;
+    flex-shrink: 0;
+    width: 64px;
+  }
+  .rating-endlabel.right {
+    text-align: right;
+  }
+  .rating-dots {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .rating-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease,
+      transform 0.15s ease;
+  }
+  .rating-dot:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  .tbs-nights-success {
+    display: flex;
+    width: 100%;
+    max-width: 820px;
+    max-height: 90vh;
+    overflow: hidden;
+  }
 
-/* ─── Article Body Typography ─── */
-.article-page-container img,
-.article-page-container video {
-  filter: none !important;
-}
+  @media (max-width: 768px) {
+    .tbs-nights-form {
+      grid-template-columns: 1fr;
+      height: auto;
+      min-height: 100vh;
+      overflow: visible;
+    }
+    .tbs-wizard-sidebar {
+      height: auto;
+      overflow: visible;
+      padding: max(24px, var(--nav-slot-reserve)) 20px 20px;
+      border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .tbs-wizard-mobile-progress {
+      display: block;
+    }
+    .tbs-wizard-mobile-back {
+      display: inline-block;
+    }
+    .tbs-wizard-desktop-intro {
+      display: none;
+    }
+    .tbs-wizard-main {
+      height: auto;
+      overflow: visible;
+    }
+    .tbs-wizard-content {
+      overflow: visible;
+      padding: 28px 24px 24px;
+    }
+    .tbs-wizard-nav {
+      padding: 16px 24px;
+    }
+    .form-two-col {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .rating-row {
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 0;
+    }
+    .rating-dots {
+      flex-basis: 100%;
+      order: -1;
+    }
+    .rating-dot {
+      width: 42px;
+      height: 42px;
+      font-size: 13px;
+    }
+    .rating-endlabel {
+      width: auto;
+      flex: none;
+    }
+    .rating-endlabel.right {
+      margin-left: auto;
+    }
+    .tbs-nights-success {
+      flex-direction: column;
+      max-height: 95vh;
+      overflow-y: auto;
+    }
+    .tbs-nights-success-img {
+      display: none;
+    }
+  }
 
-/* One body size for every article, the way a magazine sets its text: 20px on
+  /* ─── Article Body Typography ─── */
+  .article-page-container img,
+  .article-page-container video {
+    filter: none !important;
+  }
+
+  /* One body size for every article, the way a magazine sets its text: 20px on
    desktop, 17px on phones, from the tokens at the top of this file. */
-.article-body-text {
-  width: 100%;
-  max-width: 780px; /* Comfortable reading width */
-  margin: 0 auto;
-  font-family: 'Poppins', sans-serif;
-  font-size: var(--fs-article-body);
-  line-height: var(--lh-article-body);
-  color: #e7e6e1;
-  margin-bottom: 1.5rem;
-}
+  .article-body-text {
+    width: 100%;
+    max-width: 780px; /* Comfortable reading width */
+    margin: 0 auto;
+    font-family: 'Poppins', sans-serif;
+    font-size: var(--fs-article-body);
+    line-height: var(--lh-article-body);
+    color: #e7e6e1;
+    margin-bottom: 1.5rem;
+  }
 
-.article-body-text p,
-.article-body-text > div {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  font-style: normal;
-}
+  .article-body-text p,
+  .article-body-text > div,
+  .article-body-text span,
+  .article-body-text font {
+    font-family: 'Poppins', sans-serif !important;
+    line-height: var(--lh-article-body) !important;
+    letter-spacing: normal !important;
+  }
 
-.article-body-text p:last-child,
-.article-body-text > div:last-child {
-  margin-bottom: 0;
-}
+  .article-body-text span,
+  .article-body-text font {
+    font-size: inherit !important;
+  }
 
-.article-body-text a,
-.article-body-text a:hover,
-.article-body-text a:active,
-.article-body-text a:visited,
-.article-body-text a:focus {
-  color: #FFFFFF;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-  text-decoration-color: #FFFFFF;
-  cursor: pointer;
-}
+  .article-body-text p,
+  .article-body-text > div {
+    /* !important because pasted paragraphs carry their own inline font-size
+     ("font-size: 13px" straight out of Safari), and an inline style beats any
+     ordinary rule no matter how specific. */
+    font-size: var(--fs-article-body) !important;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-style: normal;
+    font-weight: 400;
+  }
 
-.article-body-text h2 {
-  font-family: 'Fraunces', serif;
-  font-size: var(--fs-article-section-head);
-  margin: 2rem 0 1rem 0;
-  color: var(--white);
-  font-weight: 500;
-}
+  .article-body-text p:last-child,
+  .article-body-text > div:last-child {
+    margin-bottom: 0;
+  }
 
-.article-body-text ul {
-  list-style-type: disc;
-  margin: 1.5rem 0 1.5rem 2rem;
-}
+  .article-body-text a,
+  .article-body-text a:hover,
+  .article-body-text a:active,
+  .article-body-text a:visited,
+  .article-body-text a:focus {
+    color: #ffffff;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: #ffffff;
+    cursor: pointer;
+  }
 
-.article-body-text ul li {
-  margin-bottom: 0.75rem;
-  line-height: var(--lh-article-body);
-  font-family: 'Poppins', sans-serif;
-  font-size: var(--fs-article-body);
-  color: #e7e6e1;
-}
+  .article-body-text h2 {
+    font-family: 'Fraunces', serif;
+    font-size: var(--fs-article-section-head);
+    margin: 2rem 0 1rem 0;
+    color: var(--white);
+    font-weight: 500;
+  }
 
-.article-body-text strong, .article-body-text b {
-  color: var(--white);
-  font-weight: 600;
-}
-}
+  .article-body-text ul {
+    list-style-type: disc;
+    margin: 1.5rem 0 1.5rem 2rem;
+  }
 
+  /* Every list item, not just the ones under a <ul> — pasted lists arrive as
+   <ol> too, and Google Docs writes the font onto the <li> itself. The
+   white-space override is for the "white-space: pre" it pastes alongside,
+   which stops the line wrapping and pushes the page sideways on a phone. */
+  .article-body-text li {
+    margin-bottom: 0.75rem;
+    line-height: var(--lh-article-body) !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: var(--fs-article-body) !important;
+    white-space: normal !important;
+    color: #e7e6e1;
+  }
+
+  .article-body-text strong,
+  .article-body-text b {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* Article images, in the three shapes Gallery renders. Sizing lives here rather
+   than inline on the component so the phone caps below can exist at all — a
+   media query cannot reach into a style attribute. */
+  .article-gallery-media {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+
+  .article-gallery-media img {
+    display: block;
+  }
+
+  /* Standalone gallery at the foot of the article: a fixed 3:4 crop, several
+   across on desktop, one per row on a phone. */
+  .article-gallery-media--tile {
+    aspect-ratio: 3 / 4;
+  }
+
+  .article-gallery-media--tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* A lone inline image keeps its own proportions — capped so a tall portrait
+   doesn't swallow the screen — rather than being cropped to someone else's. */
+  .article-gallery-media--single img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: clamp(250px, 50vh, 700px);
+  }
+
+  /* Two or more read as one strip: matched heights, letterboxed not cropped, so
+   a portrait and a landscape can sit side by side without either losing its
+   subject. The faint backing fills whatever the letterboxing leaves. */
+  .article-gallery-media--strip {
+    height: clamp(180px, 30vh, 450px);
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  .article-gallery-media--strip img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Phones get fixed caps instead of the viewport-height clamps above: 50vh is
+   half a screen either way, so a phone turned sideways would otherwise render
+   these at a third the height it does upright. Same breakpoint as the type. */
+  @media (max-width: 767.98px) {
+    .article-gallery-media--tile {
+      aspect-ratio: auto;
+      height: 320px;
+    }
+
+    .article-gallery-media--single img {
+      max-height: 320px;
+    }
+
+    .article-gallery-media--strip {
+      height: 200px;
+    }
+  }
+}
 
 /* Full-screen search dialog. Native <dialog> is display:none while closed, so the
    fade needs allow-discrete plus @starting-style rather than a plain opacity
@@ -1076,8 +1287,10 @@ section.touch-color video:not(.no-grayscale),
   color: white;
   overflow-y: auto;
   opacity: 0;
-  transition: opacity 0.3s ease, overlay 0.3s ease allow-discrete,
-              display 0.3s ease allow-discrete;
+  transition:
+    opacity 0.3s ease,
+    overlay 0.3s ease allow-discrete,
+    display 0.3s ease allow-discrete;
 }
 
 .search-dialog[open] {
@@ -1117,7 +1330,9 @@ section.touch-color video:not(.no-grayscale),
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .tbs-outline-btn:hover {
@@ -1304,17 +1519,25 @@ section.touch-color video:not(.no-grayscale),
    same one sitting behind the article hero image, so the skeleton reads as the
    page arriving rather than as a different screen. */
 @keyframes skeletonShimmer {
-  0%   { opacity: 0.55; }
-  50%  { opacity: 1; }
-  100% { opacity: 0.55; }
+  0% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.55;
+  }
 }
 
 .skeleton-stripe {
   background: #171716;
   background-image: repeating-linear-gradient(
     135deg,
-    #1d1d1b 0px, #1d1d1b 2px,
-    #171716 2px, #171716 5px
+    #1d1d1b 0px,
+    #1d1d1b 2px,
+    #171716 2px,
+    #171716 5px
   );
 }
 

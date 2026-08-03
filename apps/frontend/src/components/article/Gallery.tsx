@@ -20,38 +20,35 @@ export default function Gallery({
 
   const isRow = layout === 'row';
 
+  // A lone inline image is sized from its own proportions; put a second one
+  // beside it and they letterbox to a shared height instead. See the
+  // .article-gallery-media rules in globals.css.
+  let shape: 'tile' | 'single' | 'strip' = 'tile';
+  if (isRow) shape = images.length === 1 ? 'single' : 'strip';
+
   return (
     <div
       className={
         isRow
-          ? 'flex w-full gap-[22px] overflow-x-auto my-[clamp(40px,6vw,64px)]'
-          : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[22px] w-full my-[clamp(40px,6vw,64px)]'
+          ? 'flex w-full gap-[22px] overflow-x-auto my-[clamp(16px,2.5vw,28px)]'
+          : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[22px] w-full my-[clamp(16px,2.5vw,28px)]'
       }
     >
       {images.map((img, idx) => {
         const media = (
           <div
-            className="hover:scale-[1.015] transition-transform duration-300"
-            style={{ aspectRatio: '3/4', overflow: 'hidden' }}
+            className={`article-gallery-media article-gallery-media--${shape} hover:scale-[1.015] transition-transform duration-300`}
           >
-            <img
-              src={img.image}
-              alt={img.caption || ''}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                filter: 'brightness(0.9)',
-                display: 'block',
-              }}
-            />
+            <img src={img.image} alt={img.caption || ''} />
           </div>
         );
 
         return (
           <div
             key={idx}
-            className={isRow ? 'flex-1 min-w-[min(180px,45%)] sm:min-w-0' : undefined}
+            className={
+              isRow ? 'flex-1 min-w-[min(180px,45%)] sm:min-w-0' : undefined
+            }
             style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
             {img.link ? (
