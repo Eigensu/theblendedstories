@@ -1006,10 +1006,26 @@ section.touch-color video:not(.no-grayscale),
 }
 
 .article-body-text p,
+.article-body-text > div,
+.article-body-text span,
+.article-body-text font {
+  font-family: 'Poppins', sans-serif !important;
+  line-height: var(--lh-article-body) !important;
+  letter-spacing: normal !important;
+}
+
+.article-body-text span,
+.article-body-text font {
+  font-size: inherit !important;
+}
+
+.article-body-text p,
 .article-body-text > div {
+  font-size: var(--fs-article-body);
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-style: normal;
+  font-weight: 400;
 }
 
 .article-body-text p:last-child,
