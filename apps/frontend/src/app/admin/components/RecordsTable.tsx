@@ -78,39 +78,13 @@ export default function RecordsTable({
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <h3
-          style={{
-            fontSize: '18px',
-            fontWeight: 600,
-            margin: 0,
-            color: '#222',
-          }}
-        >
-          {title}
-        </h3>
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <h3 className="m-0 text-lg font-semibold text-white">{title}</h3>
         <button
           type="button"
           onClick={handleExportCSV}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '8px 12px',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            background: '#f5f5f5',
-            cursor: 'pointer',
-            fontSize: '12px',
-            fontWeight: 500,
-          }}
+          className="flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:border-zinc-600 hover:text-white"
         >
           <Download size={16} />
           Export CSV
@@ -122,34 +96,15 @@ export default function RecordsTable({
         placeholder="Search records..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        style={{
-          padding: '10px 12px',
-          border: '1px solid #ddd',
-          borderRadius: '4px',
-          fontSize: '14px',
-          width: '100%',
-          boxSizing: 'border-box',
-        }}
+        className="w-full rounded-lg border border-zinc-800 bg-black px-3 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-zinc-500"
       />
 
-      <div
-        style={{
-          overflowX: 'auto',
-          border: '1px solid #ddd',
-          borderRadius: '4px',
-        }}
-      >
-        <table
-          style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            fontSize: '13px',
-          }}
-        >
+      {/* Panel shell matches the section editors: #111111 on the page's black,
+          rounded-2xl, hairline border. */}
+      <div className="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#111111]">
+        <table className="w-full border-collapse text-sm">
           <thead>
-            <tr
-              style={{ background: '#f9f9f9', borderBottom: '1px solid #ddd' }}
-            >
+            <tr className="border-b border-zinc-800 bg-zinc-900/60">
               {columns.map((col) => (
                 <th
                   key={col.key}
@@ -161,24 +116,12 @@ export default function RecordsTable({
                       setSortDesc(false);
                     }
                   }}
-                  style={{
-                    padding: '12px',
-                    textAlign: 'left',
-                    fontWeight: 600,
-                    color: '#555',
-                    cursor: 'pointer',
-                    width: col.width,
-                    userSelect: 'none',
-                    background: sortKey === col.key ? '#f0f0f0' : undefined,
-                  }}
+                  style={{ width: col.width }}
+                  className={`cursor-pointer select-none px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider transition-colors hover:text-white ${
+                    sortKey === col.key ? 'text-white' : 'text-zinc-400'
+                  }`}
                 >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                    }}
-                  >
+                  <div className="flex items-center gap-1.5">
                     {col.label}
                     {sortKey === col.key && (
                       <>
@@ -199,11 +142,7 @@ export default function RecordsTable({
               <tr>
                 <td
                   colSpan={columns.length}
-                  style={{
-                    padding: '20px',
-                    textAlign: 'center',
-                    color: '#999',
-                  }}
+                  className="px-4 py-10 text-center text-zinc-500"
                 >
                   Loading...
                 </td>
@@ -213,11 +152,7 @@ export default function RecordsTable({
               <tr>
                 <td
                   colSpan={columns.length}
-                  style={{
-                    padding: '20px',
-                    textAlign: 'center',
-                    color: '#999',
-                  }}
+                  className="px-4 py-10 text-center text-zinc-500"
                 >
                   {search ? 'No results found' : 'No records yet'}
                 </td>
@@ -228,24 +163,13 @@ export default function RecordsTable({
               filtered.map((record, idx) => (
                 <tr
                   key={record.id || idx}
-                  style={{
-                    borderBottom: '1px solid #eee',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#f9f9f9';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '';
-                  }}
+                  className="border-b border-zinc-800/60 transition-colors last:border-b-0 hover:bg-zinc-900/60"
                 >
                   {columns.map((col) => (
                     <td
                       key={col.key}
-                      style={{
-                        padding: '12px',
-                        color: '#333',
-                        width: col.width,
-                      }}
+                      style={{ width: col.width }}
+                      className="px-4 py-3 text-zinc-300"
                     >
                       {formatCellValue(record[col.key])}
                     </td>
@@ -256,13 +180,7 @@ export default function RecordsTable({
         </table>
       </div>
 
-      <div
-        style={{
-          fontSize: '12px',
-          color: '#666',
-          textAlign: 'right',
-        }}
-      >
+      <div className="text-right text-xs text-zinc-500">
         Showing {filtered.length} of {records.length} records
       </div>
     </div>
