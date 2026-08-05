@@ -35,11 +35,16 @@ export default function Gallery({
       }
     >
       {images.map((img, idx) => {
+        // An uncaptioned image gets no caption line at all. It used to fall back
+        // to "01 — gallery image", which reads as a placeholder someone forgot to
+        // fill in rather than as an editorial choice to leave the image to speak.
+        const caption = img.caption?.trim();
+
         const media = (
           <div
             className={`article-gallery-media article-gallery-media--${shape} hover:scale-[1.015] transition-transform duration-300`}
           >
-            <img src={img.image} alt={img.caption || ''} />
+            <img src={img.image} alt={caption || ''} />
           </div>
         );
 
@@ -63,16 +68,18 @@ export default function Gallery({
             ) : (
               media
             )}
-            <span
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: '11px',
-                letterSpacing: '0.06em',
-                color: '#6b6a65',
-              }}
-            >
-              {img.caption || `0${idx + 1} — gallery image`}
-            </span>
+            {caption && (
+              <span
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                  color: '#6b6a65',
+                }}
+              >
+                {caption}
+              </span>
+            )}
           </div>
         );
       })}
