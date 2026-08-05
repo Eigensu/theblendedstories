@@ -40,3 +40,6 @@ coverage/
 # permission allowlist, not per-machine state.
 .claude/*
 !.claude/settings.json
+
+# Local DB snapshots taken before content migrations — never commit prod data
+backups/

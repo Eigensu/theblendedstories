@@ -100,9 +100,13 @@ function getRecommendedArticles(
  * or an <img> included, stops it matching, so a block carrying content cannot
  * be removed. A paste shape not on the list just goes unstripped until its tag
  * is added, which is the safe direction to fail in.
+ *
+ * Headings count too. An editor who writes their whole story with the Heading 2
+ * button on produces blank <h2><br></h2> spacers, and those cost more than a
+ * blank paragraph because a heading is set at the section-head size.
  */
 const BLANK_BLOCK =
-  /<(p|div)\b[^>]*>(?:\s|&nbsp;|<\/?(?:br|span)\b[^>]*>)*<\/\1>/gi;
+  /<(p|div|h[1-6])\b[^>]*>(?:\s|&nbsp;|<\/?(?:br|span)\b[^>]*>)*<\/\1>/gi;
 
 function stripBlankBlocks(html: string) {
   return html.replace(BLANK_BLOCK, '');
@@ -129,7 +133,9 @@ function renderTextBlock(content: string, isIntro: boolean) {
 function renderBlock(block: ArticleContentBlock, index: number) {
   if (block.type === 'text') {
     return (
-      <div key={block.id}>{renderTextBlock(block.content || '', index === 0)}</div>
+      <div key={block.id}>
+        {renderTextBlock(block.content || '', index === 0)}
+      </div>
     );
   }
 
@@ -208,7 +214,9 @@ export async function generateMetadata({
   return {
     // toSingleLine because the title carries the editor's hand-placed breaks,
     // which belong in the hero, not in a <title> tag.
-    title: article.seo_title || `${toSingleLine(article.title)} | The Blended Stories`,
+    title:
+      article.seo_title ||
+      `${toSingleLine(article.title)} | The Blended Stories`,
     description: article.seo_description || article.subtitle,
   };
 }
@@ -345,7 +353,10 @@ export default async function ArticlePage({
             </div>
           </article>
 
-          <aside className="xl:sticky xl:top-24 article-recommended" style={{ minWidth: 0 }}>
+          <aside
+            className="xl:sticky xl:top-24 article-recommended"
+            style={{ minWidth: 0 }}
+          >
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
             >
@@ -378,8 +389,9 @@ export default async function ArticlePage({
                   gap: '16px',
                 }}
               >
-                {recommendedArticles.slice(0, 4).map(
-                  (recommendedArticle: any, index: number) => (
+                {recommendedArticles
+                  .slice(0, 4)
+                  .map((recommendedArticle: any, index: number) => (
                     <Link
                       key={recommendedArticle.slug}
                       href={`/stories/${recommendedArticle.slug}`}
@@ -466,8 +478,7 @@ export default async function ArticlePage({
                         </span>
                       </div>
                     </Link>
-                  )
-                )}
+                  ))}
               </div>
             </div>
           </aside>
