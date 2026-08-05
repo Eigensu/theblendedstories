@@ -40,7 +40,7 @@
        sub headline     22px  /  17px   hero subtitle (article.subtitle)
        article body     20px  /  17px   .article-body-text and its lists
        quote            32px  /  22px   PullQuote
-       section head     30px  /  24px   <h2> inside the body copy          */
+       section head     30px  /  24px   <h1>-<h6> inside the body copy     */
     --fs-article-headline: 56px;
     --lh-article-headline: 1.12;
     --fs-article-subheadline: 22px;
@@ -1126,10 +1126,15 @@
     margin-bottom: 1.5rem;
   }
 
+  /* Descendant selectors, not child ones: pasted copy arrives wrapped in its
+   own container (Word writes <div class="MsoNormal">, ChatGPT nests a few
+   deep), so the paragraphs that need the size are rarely direct children. */
   .article-body-text p,
-  .article-body-text > div,
+  .article-body-text div,
   .article-body-text span,
-  .article-body-text font {
+  .article-body-text font,
+  .article-body-text td,
+  .article-body-text th {
     font-family: 'Poppins', sans-serif !important;
     line-height: var(--lh-article-body) !important;
     letter-spacing: normal !important;
@@ -1141,15 +1146,21 @@
   }
 
   .article-body-text p,
-  .article-body-text > div {
+  .article-body-text div,
+  .article-body-text td,
+  .article-body-text th {
     /* !important because pasted paragraphs carry their own inline font-size
      ("font-size: 13px" straight out of Safari), and an inline style beats any
      ordinary rule no matter how specific. */
     font-size: var(--fs-article-body) !important;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
     font-style: normal;
     font-weight: 400;
+  }
+
+  .article-body-text p,
+  .article-body-text > div {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
   }
 
   .article-body-text p:last-child,
@@ -1170,12 +1181,36 @@
     cursor: pointer;
   }
 
-  .article-body-text h2 {
-    font-family: 'Fraunces', serif;
-    font-size: var(--fs-article-section-head);
+  /* Every heading level, not just h2. The editor's only heading control writes
+   <h2>, but pasted copy brings whatever level it was written at, and an h3 or
+   h4 with no rule of its own falls back to the browser default — Times, at a
+   size nobody chose. One section-head size for all six keeps a story on the
+   scale no matter which tag the paste happened to use. */
+  .article-body-text h1,
+  .article-body-text h2,
+  .article-body-text h3,
+  .article-body-text h4,
+  .article-body-text h5,
+  .article-body-text h6 {
+    font-family: 'Fraunces', serif !important;
+    font-size: var(--fs-article-section-head) !important;
+    line-height: 1.3 !important;
     margin: 2rem 0 1rem 0;
     color: var(--white);
     font-weight: 500;
+  }
+
+  /* A heading's own inline styles are overridden above, but the spans inside it
+   inherit from the body rules, which would drop them back to body size. */
+  .article-body-text h1 span,
+  .article-body-text h2 span,
+  .article-body-text h3 span,
+  .article-body-text h4 span,
+  .article-body-text h5 span,
+  .article-body-text h6 span {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
   }
 
   .article-body-text ul {
