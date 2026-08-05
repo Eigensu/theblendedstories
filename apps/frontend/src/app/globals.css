@@ -402,6 +402,7 @@
   .talks-archive .img-card:hover img:not(.no-grayscale),
   .article-recommended .img-card:hover img:not(.no-grayscale),
   .more-articles .img-card:hover img:not(.no-grayscale),
+  .stories-archive .img-card:hover img:not(.no-grayscale),
   .topic-grid .img-card:hover img:not(.no-grayscale) {
     filter: var(--img-color) !important;
   }
