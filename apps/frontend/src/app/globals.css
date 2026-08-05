@@ -1205,6 +1205,20 @@
   /* Article images, in the three shapes Gallery renders. Sizing lives here rather
    than inline on the component so the phone caps below can exist at all — a
    media query cannot reach into a style attribute. */
+  /* The inline image strip scrolls sideways on a phone, so it is an overflow
+   container — and the media inside it scales 1.5% on hover, which pushes the
+   transformed box past the container's right edge and pops a scrollbar into the
+   article for as long as the cursor rests there. Nothing is actually scrollable
+   at that width; it is the transform being counted as overflow. Hidden the same
+   way every other sideways scroller on the site hides its bar. */
+  .article-gallery-row {
+    scrollbar-width: none;
+  }
+
+  .article-gallery-row::-webkit-scrollbar {
+    display: none;
+  }
+
   .article-gallery-media {
     width: 100%;
     overflow: hidden;

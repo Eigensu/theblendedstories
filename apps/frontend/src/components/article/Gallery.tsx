@@ -30,7 +30,7 @@ export default function Gallery({
     <div
       className={
         isRow
-          ? 'flex w-full gap-[22px] overflow-x-auto my-[clamp(16px,2.5vw,28px)]'
+          ? 'article-gallery-row flex w-full gap-[22px] overflow-x-auto my-[clamp(16px,2.5vw,28px)]'
           : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[22px] w-full my-[clamp(16px,2.5vw,28px)]'
       }
     >
