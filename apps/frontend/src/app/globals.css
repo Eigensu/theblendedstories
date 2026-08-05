@@ -1445,10 +1445,10 @@
   margin-bottom: clamp(32px, 4vw, 56px);
 }
 
-/* The masthead centred along the top of the /topics and /talks pages, linking
-   home, and repeated in their loading skeleton so it does not shift when the real
-   page arrives. A class rather than inline styles because the pages rendering it
-   are server components and it needs hover and focus states.
+/* The masthead centred along the top of the /stories, /topics and /talks pages,
+   linking home, and repeated in their loading skeletons so it does not shift when
+   the real page arrives. A class rather than inline styles because the pages
+   rendering it are server components and it needs hover and focus states.
 
    The corner buttons are fixed in a 44px box at top: var(--px-page) (see
    nav/navSlots.ts); matching both puts the logo on their exact centre line. The
@@ -1456,7 +1456,7 @@
    ArticleNav does with the same asset — keep the two in step. z-index stays below
    the mega menu panel's 220 so opening the menu covers it, the same way it covers
    the buttons. */
-.topic-home-logo {
+.home-logo-link {
   position: fixed;
   top: var(--px-page);
   left: 50%;
@@ -1469,7 +1469,7 @@
   transition: opacity 0.25s ease;
 }
 
-.topic-home-logo img {
+.home-logo-link img {
   height: clamp(64px, 9vw, 88px);
   width: auto;
   display: block;
@@ -1478,11 +1478,11 @@
   mix-blend-mode: screen;
 }
 
-.topic-home-logo:hover {
+.home-logo-link:hover {
   opacity: 0.72;
 }
 
-.topic-home-logo:focus-visible {
+.home-logo-link:focus-visible {
   outline: 1px solid white;
   outline-offset: 6px;
 }
