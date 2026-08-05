@@ -80,12 +80,16 @@ export default async function StoriesPage() {
           }} />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
+        {/* `.stories-archive` + `.img-card` are what opt these cards into the
+            colour-reveal-on-hover rules in globals.css; without the pair the
+            covers stay grayscale through the hover, as every other card grid on
+            the site does not. */}
+        <div className="stories-archive grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
           {publishedArticles.map((article: any, index: number) => (
             <Link
               href={`/stories/${article.slug}`}
               key={article.slug}
-              className="group block focus:outline-none"
+              className="group img-card block focus:outline-none"
               style={{ textDecoration: 'none' }}
             >
               <div style={{

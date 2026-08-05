@@ -402,6 +402,7 @@
   .talks-archive .img-card:hover img:not(.no-grayscale),
   .article-recommended .img-card:hover img:not(.no-grayscale),
   .more-articles .img-card:hover img:not(.no-grayscale),
+  .stories-archive .img-card:hover img:not(.no-grayscale),
   .topic-grid .img-card:hover img:not(.no-grayscale) {
     filter: var(--img-color) !important;
   }
@@ -1204,6 +1205,20 @@
   /* Article images, in the three shapes Gallery renders. Sizing lives here rather
    than inline on the component so the phone caps below can exist at all — a
    media query cannot reach into a style attribute. */
+  /* The inline image strip scrolls sideways on a phone, so it is an overflow
+   container — and the media inside it scales 1.5% on hover, which pushes the
+   transformed box past the container's right edge and pops a scrollbar into the
+   article for as long as the cursor rests there. Nothing is actually scrollable
+   at that width; it is the transform being counted as overflow. Hidden the same
+   way every other sideways scroller on the site hides its bar. */
+  .article-gallery-row {
+    scrollbar-width: none;
+  }
+
+  .article-gallery-row::-webkit-scrollbar {
+    display: none;
+  }
+
   .article-gallery-media {
     width: 100%;
     overflow: hidden;
@@ -1395,98 +1410,51 @@
   margin-bottom: clamp(32px, 4vw, 56px);
 }
 
-/* The "Home" link in the top-left corner of the /topics and /talks pages, and
-   repeated in their loading skeleton so it does not shift when the real page
-   arrives. A class rather than inline styles because the pages rendering it are
-   server components and it needs hover and focus states.
+/* The masthead centred along the top of the /topics and /talks pages, linking
+   home, and repeated in their loading skeleton so it does not shift when the real
+   page arrives. A class rather than inline styles because the pages rendering it
+   are server components and it needs hover and focus states.
 
    The corner buttons are fixed in a 44px box at top: var(--px-page) (see
-   nav/navSlots.ts), so matching both puts this on their exact centre line, and the
-   44px left offset is slot 1 — immediately right of the hamburger. Keep the two in
-   step. z-index stays below the mega menu panel's 220 so opening the menu covers
-   it, the same way it covers the buttons. */
-.topic-home-link {
+   nav/navSlots.ts); matching both puts the logo on their exact centre line. The
+   mark itself is taller than that box and overhangs it evenly, which is what
+   ArticleNav does with the same asset — keep the two in step. z-index stays below
+   the mega menu panel's 220 so opening the menu covers it, the same way it covers
+   the buttons. */
+.topic-home-logo {
   position: fixed;
   top: var(--px-page);
-  left: calc(var(--px-page) + 44px);
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 210;
   height: 44px;
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  color: rgba(255, 255, 255, 0.62);
-  font-family: 'Poppins', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 0.25s ease;
+  justify-content: center;
+  transition: opacity 0.25s ease;
 }
 
-/* Hairline against the hamburger, so the pair reads as one nav cluster rather
-   than two unrelated controls that happen to sit side by side. */
-.topic-home-link::before {
-  content: '';
-  width: 1px;
-  height: 14px;
-  margin-right: 5px;
-  background: rgba(255, 255, 255, 0.22);
-  transition: background 0.25s ease;
+.topic-home-logo img {
+  height: clamp(64px, 9vw, 88px);
+  width: auto;
+  display: block;
+  /* The asset is white-on-transparent and every page under it is near-black, so
+     screen keeps the mark from carrying a square edge over the page. */
+  mix-blend-mode: screen;
 }
 
-.topic-home-arrow {
-  font-size: 13px;
-  line-height: 1;
-  transition: transform 0.25s ease;
+.topic-home-logo:hover {
+  opacity: 0.72;
 }
 
-/* An underline that grows from the left, rather than the box outline this used to
-   carry: quieter beside the icon row, and it leaves the label on the buttons'
-   centre line instead of padding it off. */
-.topic-home-label {
-  position: relative;
-  padding-bottom: 3px;
-}
-
-.topic-home-label::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
-}
-
-.topic-home-link:hover {
-  color: white;
-}
-
-.topic-home-link:hover::before {
-  background: rgba(255, 255, 255, 0.45);
-}
-
-.topic-home-link:hover .topic-home-arrow {
-  transform: translateX(-3px);
-}
-
-.topic-home-link:hover .topic-home-label::after {
-  transform: scaleX(1);
-}
-
-.topic-home-link:focus-visible {
+.topic-home-logo:focus-visible {
   outline: 1px solid white;
   outline-offset: 6px;
 }
 
 /* The section crumb that the keyword page passes. It stays above the heading, as
-   context for it, now that Home has moved to the corner — the leading rule is the
-   same one drawn under the heading, so the two bracket the title. */
+   context for it, now that the way home is the logo overhead — the leading rule is
+   the same one drawn under the heading, so the two bracket the title. */
 .topic-section-crumb {
   display: flex;
   align-items: center;

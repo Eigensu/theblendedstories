@@ -12,8 +12,8 @@ export default function MobileTouchReveal() {
       document.querySelectorAll('.touch-color').forEach(el => el.classList.remove('touch-color'));
 
       // Card-level reveal for The Edit and TBS Talks (homepage section + /talks
-      // archive) and the /topics grids
-      const card = target.closest('#the-edit .img-card, #talks .img-card, .talks-archive .img-card, .topic-grid .img-card');
+      // archive) and the /topics and /stories grids
+      const card = target.closest('#the-edit .img-card, #talks .img-card, .talks-archive .img-card, .topic-grid .img-card, .stories-archive .img-card');
       if (card) {
         card.classList.add('touch-color');
         return;
