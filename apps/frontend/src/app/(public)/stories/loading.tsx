@@ -1,3 +1,5 @@
+import HomeLogoLink from '@/components/nav/HomeLogoLink';
+
 /**
  * Route-level loading state for the story archive.
  *
@@ -39,8 +41,12 @@ export default function Loading() {
         }}
       >
         {/* The heading is real text — it is known before the data arrives, so
-            showing it avoids a pointless flash of placeholder. */}
+            showing it avoids a pointless flash of placeholder. The way out is
+            real for the same reason: a page still loading is exactly when a
+            reader wants to leave it. */}
         <div style={{ marginBottom: 'clamp(32px, 5vw, 64px)' }}>
+          <HomeLogoLink />
+
           <h1
             style={{
               fontFamily: "'Fraunces', serif",

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import Footer from '@/components/Footer';
+import HomeLogoLink from '@/components/nav/HomeLogoLink';
 import {
   LOCATION_MAIN_COOKIE,
   LOCATION_SUB_COOKIE,
@@ -60,6 +61,8 @@ export default async function StoriesPage() {
 
       <main style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(20px, 4vw, 56px) clamp(56px, 6vw, 96px)' }}>
         <div style={{ marginBottom: 'clamp(32px, 5vw, 64px)' }}>
+          <HomeLogoLink />
+
           <h1 style={{
             fontFamily: "'Fraunces', serif",
             fontSize: 'clamp(36px, 5vw, 64px)',
