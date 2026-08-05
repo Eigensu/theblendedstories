@@ -90,7 +90,7 @@ export default function CrmView({
   }, [view]);
 
   if (!view) {
-    return <div className="p-8 text-center text-gray-500">Unknown section</div>;
+    return <div className="p-8 text-center text-zinc-500">Unknown section</div>;
   }
 
   return (
@@ -98,15 +98,7 @@ export default function CrmView({
       {error && (
         <div
           role="alert"
-          style={{
-            marginBottom: '16px',
-            padding: '12px 14px',
-            border: '1px solid #f3c2c2',
-            background: '#fdf1f1',
-            color: '#a33',
-            borderRadius: '4px',
-            fontSize: '13px',
-          }}
+          className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3.5 py-3 text-sm text-red-400"
         >
           {error}
         </div>
