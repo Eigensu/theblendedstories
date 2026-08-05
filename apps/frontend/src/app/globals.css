@@ -1445,6 +1445,21 @@
   margin-bottom: clamp(32px, 4vw, 56px);
 }
 
+/* On a phone the clamp bottoms out at its 28px minimum, and that plus the ragged
+   bottom edge of the card row — the cards are content-height, so a two-line role
+   leaves the shorter ones ending well above the tallest — read as a hole between
+   the cards and the button. Halved for that width only; the desktop row, where
+   the cards end level and the section is wider, keeps the clamp.
+
+   This override sits out here beside the rule it overrides rather than with the
+   other mobile layout rules, which live inside @layer base: an unlayered rule
+   beats a layered one at any specificity, so from in there it would lose. */
+@media (max-width: 767.98px) {
+  .talks-view-all-row {
+    margin-top: 14px;
+  }
+}
+
 /* The masthead centred along the top of the /stories, /topics and /talks pages,
    linking home, and repeated in their loading skeletons so it does not shift when
    the real page arrives. A class rather than inline styles because the pages
