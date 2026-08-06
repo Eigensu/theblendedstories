@@ -28,7 +28,7 @@ import {
 } from '@/lib/articleBlocks';
 import { useAdmin } from '../contexts/AdminContext';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
-import { Search, Plus, Edit2, Trash2, ArrowLeft, X, GripVertical, Copy, Bold, Italic, Underline, Link2, Heading2, List } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, ArrowLeft, X, GripVertical, Copy, Bold, Italic, Underline, Link2, Heading2, List, Filter } from 'lucide-react';
 import ArticlePreviewModal from '../components/ArticlePreviewModal';
 
 type EmbeddedVideo = {
@@ -611,6 +611,14 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
   const [locationRegions, setLocationRegions] = useState<LocationRegion[]>([]);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
+  // Filter state
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+
+  // Unique categories derived from the full (unfiltered) articles list for the
+  // dropdown. Stored separately so changing a filter doesn't collapse the options.
+  const [allCategories, setAllCategories] = useState<string[]>([]);
+
   const { setHasUnsavedChanges, setIsSaving, registerSaveHandler, registerPreviewHandler, setStatus } = useAdmin();
 
   useEffect(() => {
@@ -620,7 +628,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       setStatus('published');
       registerPreviewHandler(null);
     }
-  }, [mode]);
+  }, [mode, filterCategory, filterStatus]);
 
   useEffect(() => {
     return () => {
@@ -659,8 +667,23 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
   const fetchArticles = async () => {
     setIsLoading(true);
     try {
-      const response = await apiClient.get<Article[]>('/articles/');
-      setArticles(response.map(normalizeArticle));
+      // Build query string from active filters
+      const params = new URLSearchParams();
+      if (filterCategory) params.set('category', filterCategory);
+      if (filterStatus) params.set('status', filterStatus);
+      const qs = params.toString();
+      const response = await apiClient.get<Article[]>(`/articles/${qs ? `?${qs}` : ''}`);
+      const normalized = response.map(normalizeArticle);
+      setArticles(normalized);
+
+      // Refresh the full category list only when no category filter is active
+      // (so the dropdown keeps showing all options even while filtered).
+      if (!filterCategory) {
+        const cats = Array.from(
+          new Set(normalized.map((a) => a.category).filter(Boolean))
+        ).sort();
+        setAllCategories(cats);
+      }
     } catch (err: any) {
       handleApiError('Failed to load articles', err);
     } finally {
@@ -781,12 +804,19 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
   );
 
   if (mode === 'list') {
+    const hasActiveFilter = filterCategory || filterStatus;
+
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-white">Articles</h2>
-            <p className="text-sm text-zinc-400 mt-1">Manage all articles and stories.</p>
+          <div className="flex items-center gap-3">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight text-white">Articles</h2>
+              <p className="text-sm text-zinc-400 mt-1">Manage all articles and stories.</p>
+            </div>
+            <span className="ml-2 inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-zinc-800 text-xs font-semibold text-zinc-300 tabular-nums">
+              {articles.length}
+            </span>
           </div>
           <button
             onClick={handleCreateNew}
@@ -797,6 +827,45 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
           </button>
         </div>
 
+        {/* ── Filter bar ─────────────────────────────────────────────── */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2 text-zinc-500 text-sm">
+            <Filter className="w-4 h-4" />
+            <span>Filters</span>
+          </div>
+
+          <select
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+            className="bg-zinc-900 border border-zinc-800 text-sm text-zinc-300 rounded-lg px-3 py-1.5 outline-none focus:border-zinc-600 transition-colors cursor-pointer"
+          >
+            <option value="">All Categories</option>
+            {allCategories.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="bg-zinc-900 border border-zinc-800 text-sm text-zinc-300 rounded-lg px-3 py-1.5 outline-none focus:border-zinc-600 transition-colors cursor-pointer"
+          >
+            <option value="">All Statuses</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+
+          {hasActiveFilter && (
+            <button
+              onClick={() => { setFilterCategory(''); setFilterStatus(''); }}
+              className="flex items-center gap-1 text-xs text-zinc-500 hover:text-white transition-colors"
+            >
+              <X className="w-3 h-3" />
+              Clear filters
+            </button>
+          )}
+        </div>
+
         {isLoading ? (
           <div className="text-center py-10 text-zinc-500">Loading articles...</div>
         ) : (
@@ -804,6 +873,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-zinc-800 text-xs uppercase tracking-wider text-zinc-500">
+                  <th className="px-4 py-4 font-medium w-12 text-center">#</th>
                   <th className="px-6 py-4 font-medium">Title</th>
                   <th className="px-6 py-4 font-medium">Category</th>
                   <th className="px-6 py-4 font-medium">Status</th>
@@ -811,8 +881,9 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800">
-                {articles.map((article) => (
+                {articles.map((article, index) => (
                   <tr key={article.id || article.slug} className="hover:bg-zinc-900/50 transition-colors">
+                    <td className="px-4 py-4 text-center text-sm tabular-nums text-zinc-500 font-medium">{index + 1}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
                         {article.cover_image && (
