@@ -222,11 +222,11 @@ export default function Footer({ data }: { data?: any }) {
                 Locations
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {footerLocations.filter(loc => !loc.isComingSoon).map(({ label, regionSlug, citySlug, active }) => (
+                {footerLocations.map(({ label, regionSlug, citySlug, active, isComingSoon }) => (
                   <button
                     key={`${regionSlug}-${citySlug}`}
                     type="button"
-                    onClick={() => setLocation(regionSlug, citySlug)}
+                    onClick={() => { if (!isComingSoon) setLocation(regionSlug, citySlug); }}
                     aria-current={active ? 'true' : undefined}
                     style={{
                       fontFamily: "'Montserrat', sans-serif",
@@ -236,50 +236,20 @@ export default function Footer({ data }: { data?: any }) {
                       border: 'none',
                       padding: 0,
                       textAlign: 'left',
-                      cursor: 'pointer',
-                      opacity: active ? 1 : 0.75,
-                      fontWeight: active ? 600 : 400,
+                      cursor: isComingSoon ? 'not-allowed' : 'pointer',
+                      opacity: active ? 1 : (isComingSoon ? 0.6 : 0.75),
+                      fontWeight: 400,
                       transition: 'opacity 0.2s ease',
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
-                    onMouseLeave={(e) => (e.currentTarget.style.opacity = active ? '1' : '0.75')}
+                    onMouseEnter={(e) => (e.currentTarget.style.opacity = isComingSoon ? '0.6' : '0.6')}
+                    onMouseLeave={(e) => (e.currentTarget.style.opacity = active ? '1' : (isComingSoon ? '0.6' : '0.75'))}
                   >
                     {label}
-                  </button>
-                ))}
-
-                {footerLocations.some(loc => loc.isComingSoon) && (
-                  <h5 style={{
-                    fontFamily: "'Fraunces', serif",
-                    fontSize: 'clamp(14px, 1.3vw, 18px)',
-                    fontStyle: 'italic',
-                    fontWeight: 400,
-                    color: 'white',
-                    marginTop: '12px',
-                    marginBottom: '0px',
-                  }}>
-                    Coming Soon
-                  </h5>
-                )}
-
-                {footerLocations.filter(loc => loc.isComingSoon).map(({ label, regionSlug, citySlug }) => (
-                  <button
-                    key={`${regionSlug}-${citySlug}`}
-                    type="button"
-                    style={{
-                      fontFamily: "'Montserrat', sans-serif",
-                      fontSize: 'clamp(13px, 1.1vw, 15px)',
-                      color: 'white',
-                      background: 'none',
-                      border: 'none',
-                      padding: 0,
-                      textAlign: 'left',
-                      cursor: 'not-allowed',
-                      opacity: 1,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {label}
+                    {isComingSoon && (
+                      <span style={{ fontSize: '0.65em', fontStyle: 'italic', opacity: 0.8, marginLeft: '6px' }}>
+                        Coming Soon
+                      </span>
+                    )}
                   </button>
                 ))}
               </nav>
