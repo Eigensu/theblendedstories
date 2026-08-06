@@ -19,13 +19,22 @@ async def list_articles(
     summary: bool = False,
     location_main: Optional[str] = None,
     location_sub: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
 ):
-    """Set summary=true to omit article bodies — listings never render them."""
+    """Set summary=true to omit article bodies — listings never render them.
+
+    Optional filters:
+    - category: exact-match on the article's category field
+    - status: 'draft' or 'published'
+    """
     items = await get_all(
         featured_only=featured,
         summary=summary,
         location_main=location_main,
         location_sub=location_sub,
+        category=category,
+        status=status,
     )
     # Sort by display order (treat 0 as last)
     # Sort by display order, treating 0/missing/null as last. `or` rather than a
