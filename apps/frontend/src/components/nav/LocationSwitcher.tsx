@@ -99,48 +99,92 @@ export default function LocationSwitcher({
               >
                 {region.label}
               </p>
-              {region.cities.map((city) => {
-                const active =
-                  region.slug === locationMain && city.slug === locationSub;
+              {(() => {
+                const activeCities = region.cities.filter(c => !c.isComingSoon);
+                const comingSoonCities = region.cities.filter(c => c.isComingSoon);
+
                 return (
-                  <button
-                    key={city.slug}
-                    type="button"
-                    role="menuitemradio"
-                    aria-checked={active}
-                    onClick={() => {
-                      setLocation(region.slug, city.slug);
-                      setOpen(false);
-                    }}
-                    style={{
-                      display: 'block',
-                      width: '100%',
-                      textAlign: 'left',
-                      background: active
-                        ? 'rgba(255,255,255,0.08)'
-                        : 'transparent',
-                      border: 'none',
-                      color: active ? 'white' : 'rgba(255,255,255,0.65)',
-                      cursor: 'pointer',
-                      fontFamily: "'Poppins', sans-serif",
-                      fontSize: '12.5px',
-                      padding: '8px 10px',
-                      transition: 'background 0.2s ease, color 0.2s ease',
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background =
-                        'rgba(255,255,255,0.08)')
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = active
-                        ? 'rgba(255,255,255,0.08)'
-                        : 'transparent')
-                    }
-                  >
-                    {city.label}
-                  </button>
+                  <>
+                    {activeCities.map((city) => {
+                      const active = region.slug === locationMain && city.slug === locationSub;
+                      return (
+                        <button
+                          key={city.slug}
+                          type="button"
+                          role="menuitemradio"
+                          aria-checked={active}
+                          onClick={() => {
+                            setLocation(region.slug, city.slug);
+                            setOpen(false);
+                          }}
+                          style={{
+                            display: 'block',
+                            width: '100%',
+                            textAlign: 'left',
+                            background: active ? 'rgba(255,255,255,0.08)' : 'transparent',
+                            border: 'none',
+                            color: active ? 'white' : 'rgba(255,255,255,0.65)',
+                            cursor: 'pointer',
+                            fontFamily: "'Poppins', sans-serif",
+                            fontSize: '12.5px',
+                            padding: '8px 10px',
+                            transition: 'background 0.2s ease, color 0.2s ease',
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')
+                          }
+                          onMouseLeave={(e) =>
+                            (e.currentTarget.style.background = active
+                              ? 'rgba(255,255,255,0.08)'
+                              : 'transparent')
+                          }
+                        >
+                          {city.label}
+                        </button>
+                      );
+                    })}
+
+                    {comingSoonCities.length > 0 && (
+                      <p
+                        style={{
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: '9.5px',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'white',
+                          margin: '12px 0 6px 0',
+                          paddingLeft: '10px'
+                        }}
+                      >
+                        Coming Soon
+                      </p>
+                    )}
+
+                    {comingSoonCities.map((city) => (
+                      <button
+                        key={city.slug}
+                        type="button"
+                        role="menuitemradio"
+                        aria-checked={false}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          textAlign: 'left',
+                          background: 'transparent',
+                          border: 'none',
+                          color: 'white',
+                          cursor: 'not-allowed',
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: '12.5px',
+                          padding: '8px 10px',
+                        }}
+                      >
+                        {city.label}
+                      </button>
+                    ))}
+                  </>
                 );
-              })}
+              })()}
             </div>
           ))}
         </div>

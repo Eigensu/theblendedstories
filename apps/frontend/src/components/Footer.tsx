@@ -19,6 +19,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const socialIcons = [
   {
     label: 'Facebook',
+    url: 'https://www.facebook.com/TheBlendedStories.in/',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
         <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
@@ -27,6 +28,7 @@ const socialIcons = [
   },
   {
     label: 'Instagram',
+    url: 'https://www.instagram.com/theblendedstories.in/?hl=en',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -37,32 +39,8 @@ const socialIcons = [
     ),
   },
   {
-    label: 'X / Twitter',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-      </svg>
-    ),
-  },
-  {
-    label: 'YouTube',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-        <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0d0d0d" />
-      </svg>
-    ),
-  },
-  {
-    label: 'Pinterest',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 0a12 12 0 0 0-4.37 23.17c-.09-.85-.17-2.16.04-3.09.19-.84 1.25-5.32 1.25-5.32s-.32-.64-.32-1.59c0-1.49.86-2.6 1.93-2.6.91 0 1.35.69 1.35 1.51 0 .92-.58 2.3-.89 3.58-.25 1.07.54 1.94 1.58 1.94 1.9 0 3.37-2.01 3.37-4.91 0-2.56-1.84-4.36-4.48-4.36-3.06 0-4.85 2.29-4.85 4.65 0 .92.35 1.92.8 2.45.09.11.1.2.07.31-.08.34-.26 1.07-.3 1.22-.05.2-.15.24-.36.15-1.34-.62-2.18-2.57-2.18-4.16 0-3.38 2.46-6.49 7.1-6.49 3.73 0 6.62 2.66 6.62 6.2 0 3.7-2.33 6.68-5.57 6.68-1.09 0-2.11-.56-2.46-1.23l-.67 2.55c-.24.94-.9 2.11-1.34 2.82A12 12 0 1 0 12 0z" />
-      </svg>
-    ),
-  },
-  {
     label: 'LinkedIn',
+    url: 'https://www.linkedin.com/in/the-blended-stories-a579112ba/',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <path d="M6.94 6.5A2.06 2.06 0 1 1 2.82 6.5a2.06 2.06 0 0 1 4.12 0ZM3.1 8.8h3.68V21H3.1V8.8Zm6.02 0h3.53v1.67h.05c.49-.93 1.69-1.91 3.48-1.91 3.72 0 4.4 2.45 4.4 5.64V21h-3.68v-5.31c0-1.27-.03-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.81V21H9.12V8.8Z" />
@@ -129,6 +107,7 @@ export default function Footer({ data }: { data?: any }) {
       label: city.label,
       regionSlug: region.slug,
       citySlug: city.slug,
+      isComingSoon: city.isComingSoon,
       active: region.slug === locationMain && city.slug === locationSub,
     }))
   );
@@ -243,7 +222,7 @@ export default function Footer({ data }: { data?: any }) {
                 Locations
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {footerLocations.map(({ label, regionSlug, citySlug, active }) => (
+                {footerLocations.filter(loc => !loc.isComingSoon).map(({ label, regionSlug, citySlug, active }) => (
                   <button
                     key={`${regionSlug}-${citySlug}`}
                     type="button"
@@ -268,6 +247,41 @@ export default function Footer({ data }: { data?: any }) {
                     {label}
                   </button>
                 ))}
+
+                {footerLocations.some(loc => loc.isComingSoon) && (
+                  <h5 style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontSize: 'clamp(14px, 1.3vw, 18px)',
+                    fontStyle: 'italic',
+                    fontWeight: 400,
+                    color: 'white',
+                    marginTop: '12px',
+                    marginBottom: '0px',
+                  }}>
+                    Coming Soon
+                  </h5>
+                )}
+
+                {footerLocations.filter(loc => loc.isComingSoon).map(({ label, regionSlug, citySlug }) => (
+                  <button
+                    key={`${regionSlug}-${citySlug}`}
+                    type="button"
+                    style={{
+                      fontFamily: "'Montserrat', sans-serif",
+                      fontSize: 'clamp(13px, 1.1vw, 15px)',
+                      color: 'white',
+                      background: 'none',
+                      border: 'none',
+                      padding: 0,
+                      textAlign: 'left',
+                      cursor: 'not-allowed',
+                      opacity: 1,
+                      fontWeight: 400,
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
               </nav>
             </div>
           </ScrollReveal>
@@ -288,10 +302,12 @@ export default function Footer({ data }: { data?: any }) {
               {/* Row and box geometry live in globals.css so the mobile rules can
                   tighten them — inline values would outrank the stylesheet. */}
               <div className="footer-social-icons">
-                {socialIcons.map(({ label, icon }) => (
+                {socialIcons.map(({ label, url, icon }) => (
                   <a
                     key={label}
-                    href="#"
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={label}
                     className="footer-social-icon"
                     onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
