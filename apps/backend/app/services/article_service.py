@@ -183,6 +183,8 @@ async def get_all(
     summary: bool = False,
     location_main: str | None = None,
     location_sub: str | None = None,
+    category: str | None = None,
+    status: str | None = None,
 ):
     items = await repo.get_all()
     if featured_only:
@@ -191,6 +193,10 @@ async def get_all(
         items = [item for item in items if item.get("location_main") == location_main]
     if location_sub:
         items = [item for item in items if item.get("location_sub") == location_sub]
+    if category:
+        items = [item for item in items if item.get("category") == category]
+    if status:
+        items = [item for item in items if item.get("status") == status]
     if summary:
         # Skip block normalization entirely — it is pure waste when the blocks
         # are about to be dropped.
