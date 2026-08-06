@@ -9,7 +9,7 @@ export default function AdminPreviewPage() {
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
-      // Validate origin if necessary, but since it's the same origin, it's fine.
+      if (e.origin !== window.location.origin) return;
       if (e.data?.type === 'UPDATE_PREVIEW' && e.data?.article) {
         setArticle(e.data.article);
       }
@@ -19,7 +19,7 @@ export default function AdminPreviewPage() {
 
     // Let the parent know we're ready to receive data
     if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'PREVIEW_READY' }, '*');
+      window.parent.postMessage({ type: 'PREVIEW_READY' }, window.location.origin);
     }
 
     return () => window.removeEventListener('message', handleMessage);
