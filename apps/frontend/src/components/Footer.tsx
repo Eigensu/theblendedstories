@@ -241,7 +241,7 @@ export default function Footer({ data }: { data?: any }) {
                       fontWeight: 400,
                       transition: 'opacity 0.2s ease',
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.opacity = isComingSoon ? '0.6' : '0.6')}
+                    onMouseEnter={(e) => (e.currentTarget.style.opacity = isComingSoon ? '0.6' : '1')}
                     onMouseLeave={(e) => (e.currentTarget.style.opacity = active ? '1' : (isComingSoon ? '0.6' : '0.75'))}
                   >
                     {label}
