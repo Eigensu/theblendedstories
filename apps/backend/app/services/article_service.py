@@ -196,7 +196,7 @@ async def get_all(
     if category:
         items = [item for item in items if item.get("category") == category]
     if status:
-        items = [item for item in items if item.get("status") == status]
+        items = [item for item in items if (item.get("status") or "published") == status]
     if summary:
         # Skip block normalization entirely — it is pure waste when the blocks
         # are about to be dropped.

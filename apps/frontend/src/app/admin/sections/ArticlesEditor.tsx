@@ -672,16 +672,17 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       if (filterCategory) params.set('category', filterCategory);
       if (filterStatus) params.set('status', filterStatus);
       const qs = params.toString();
-      const response = await apiClient.get<Article[]>(`/articles/${qs ? `?${qs}` : ''}`);
+      const endpoint = qs ? `/articles/?${qs}` : '/articles/';
+      const response = await apiClient.get<Article[]>(endpoint);
       const normalized = response.map(normalizeArticle);
       setArticles(normalized);
 
-      // Refresh the full category list only when no category filter is active
+      // Refresh the full category list only when no filters are active
       // (so the dropdown keeps showing all options even while filtered).
-      if (!filterCategory) {
+      if (!filterCategory && !filterStatus) {
         const cats = Array.from(
           new Set(normalized.map((a) => a.category).filter(Boolean))
-        ).sort();
+        ).sort((a, b) => a.localeCompare(b));
         setAllCategories(cats);
       }
     } catch (err: any) {
@@ -819,6 +820,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
             </span>
           </div>
           <button
+            type="button"
             onClick={handleCreateNew}
             className="flex items-center px-4 py-2 bg-white text-black text-sm font-medium rounded-lg hover:bg-zinc-200 transition-colors"
           >
@@ -857,6 +859,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
 
           {hasActiveFilter && (
             <button
+              type="button"
               onClick={() => { setFilterCategory(''); setFilterStatus(''); }}
               className="flex items-center gap-1 text-xs text-zinc-500 hover:text-white transition-colors"
             >
@@ -909,10 +912,10 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
                       )}
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button onClick={() => handleEdit(article)} className="p-2 text-zinc-400 hover:text-white transition-colors">
+                      <button type="button" onClick={() => handleEdit(article)} className="p-2 text-zinc-400 hover:text-white transition-colors">
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button onClick={() => article.id && handleDelete(article.id)} className="p-2 text-zinc-400 hover:text-red-400 transition-colors">
+                      <button type="button" onClick={() => article.id && handleDelete(article.id)} className="p-2 text-zinc-400 hover:text-red-400 transition-colors">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </td>
@@ -937,7 +940,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       />
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center gap-4">
-        <button onClick={() => setMode('list')} className="p-2 text-zinc-400 hover:text-white bg-zinc-900 rounded-lg transition-colors">
+        <button type="button" onClick={() => setMode('list')} className="p-2 text-zinc-400 hover:text-white bg-zinc-900 rounded-lg transition-colors">
           <ArrowLeft className="w-4 h-4" />
         </button>
         <div>
