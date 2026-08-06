@@ -129,7 +129,7 @@ export default function AboutUs({ data, settings }: { data?: any[], settings?: a
         </p>
 
         {/* Editorial Request CTA */}
-        <ScrollReveal delay={0.25}>
+        <ScrollReveal delay={0.25} style={{ position: 'absolute', bottom: 'clamp(40px, 10vh, 80px)' }}>
           <a
             href="mailto:info@theblendedstories.in"
             style={{
@@ -137,7 +137,6 @@ export default function AboutUs({ data, settings }: { data?: any[], settings?: a
               alignItems: 'center',
               justifyContent: 'center',
               textDecoration: 'none',
-              marginTop: 'clamp(28px, 3.5vw, 40px)',
               fontFamily: "'Poppins', sans-serif",
               fontSize: 'clamp(10px, 1vw, 13px)',
               fontWeight: 600,
