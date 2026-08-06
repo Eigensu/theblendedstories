@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import ReadingProgressBar from './ReadingProgressBar';
 import ArticleNav from './ArticleNav';
@@ -70,8 +69,14 @@ export type ArticleLayoutProps = {
   isPreview?: boolean;
 };
 
-export default function ArticleLayout({ article, recommendedArticles, isPreview = false }: ArticleLayoutProps) {
-  const hasQuoteBlock = article.contentBlocks?.some((block: any) => block.type === 'quote');
+export default function ArticleLayout({
+  article,
+  recommendedArticles,
+  isPreview = false,
+}: ArticleLayoutProps) {
+  const hasQuoteBlock = article.contentBlocks?.some(
+    (block: any) => block.type === 'quote'
+  );
 
   return (
     <div
@@ -102,24 +107,32 @@ export default function ArticleLayout({ article, recommendedArticles, isPreview 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
               {article.contentBlocks && article.contentBlocks.length > 0 && (
                 <>
-                  {article.contentBlocks.map((block: ArticleContentBlock, index: number) =>
-                    renderBlock(block, index)
+                  {article.contentBlocks.map(
+                    (block: ArticleContentBlock, index: number) =>
+                      renderBlock(block, index)
                   )}
                   {!hasQuoteBlock && article.quote && (
                     <PullQuote
                       quote={article.quote}
-                      author={article.quote_author || 'A stylist who asked not to be named'}
+                      author={
+                        article.quote_author ||
+                        'A stylist who asked not to be named'
+                      }
                     />
                   )}
                 </>
               )}
 
-              {(!article.contentBlocks || article.contentBlocks.length === 0) && article.quote && (
-                <PullQuote
-                  quote={article.quote}
-                  author={article.quote_author || 'A stylist who asked not to be named'}
-                />
-              )}
+              {(!article.contentBlocks || article.contentBlocks.length === 0) &&
+                article.quote && (
+                  <PullQuote
+                    quote={article.quote}
+                    author={
+                      article.quote_author ||
+                      'A stylist who asked not to be named'
+                    }
+                  />
+                )}
 
               {article.galleryImages && article.galleryImages.length > 0 && (
                 <Gallery images={article.galleryImages} />
@@ -142,8 +155,13 @@ export default function ArticleLayout({ article, recommendedArticles, isPreview 
             </div>
           </article>
 
-          <aside className="xl:sticky xl:top-24 article-recommended" style={{ minWidth: 0 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <aside
+            className="xl:sticky xl:top-24 article-recommended"
+            style={{ minWidth: 0 }}
+          >
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+            >
               <div
                 style={{
                   display: 'flex',
@@ -166,86 +184,108 @@ export default function ArticleLayout({ article, recommendedArticles, isPreview 
                 </span>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {recommendedArticles.slice(0, 4).map((recommendedArticle: any, index: number) => {
-                  const href = isPreview ? '#' : `/stories/${recommendedArticle.slug}`;
-                  return (
-                    <Link
-                      key={recommendedArticle.slug}
-                      href={href}
-                      className="group img-card"
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: '96px minmax(0,1fr)',
-                        gap: '14px',
-                        textDecoration: 'none',
-                        padding: '14px',
-                        border: '1px solid rgba(245,244,240,0.1)',
-                        background: '#111111',
-                      }}
-                      onClick={(e) => { if (isPreview) e.preventDefault(); }}
-                    >
-                      <div
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px',
+                }}
+              >
+                {recommendedArticles
+                  .slice(0, 4)
+                  .map((recommendedArticle: any, index: number) => {
+                    const href = isPreview
+                      ? '#'
+                      : `/stories/${recommendedArticle.slug}`;
+                    return (
+                      <Link
+                        key={recommendedArticle.slug}
+                        href={href}
+                        className="group img-card"
                         style={{
-                          aspectRatio: '4/5',
-                          overflow: 'hidden',
-                          background: '#1a1a18',
+                          display: 'grid',
+                          gridTemplateColumns: '96px minmax(0,1fr)',
+                          gap: '14px',
+                          textDecoration: 'none',
+                          padding: '14px',
+                          border: '1px solid rgba(245,244,240,0.1)',
+                          background: '#111111',
+                        }}
+                        onClick={(e) => {
+                          if (isPreview) e.preventDefault();
                         }}
                       >
-                        <img
-                          src={recommendedArticle.cover_image || recommendedArticle.hero_image}
-                          alt=""
+                        <div
                           style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
+                            aspectRatio: '4/5',
+                            overflow: 'hidden',
+                            background: '#1a1a18',
                           }}
-                        />
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '100%' }}>
-                        <div>
+                        >
+                          <img
+                            src={
+                              recommendedArticle.cover_image ||
+                              recommendedArticle.hero_image
+                            }
+                            alt=""
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
+                          />
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            minHeight: '100%',
+                          }}
+                        >
+                          <div>
+                            <span
+                              style={{
+                                display: 'block',
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: '11px',
+                                letterSpacing: '0.18em',
+                                textTransform: 'uppercase',
+                                color: '#7a7972',
+                                marginBottom: '10px',
+                              }}
+                            >
+                              0{index + 1}
+                            </span>
+                            <h3
+                              style={{
+                                margin: 0,
+                                fontFamily: "'Fraunces', serif",
+                                fontSize: '18px',
+                                lineHeight: 1.35,
+                                color: '#f5f4f0',
+                              }}
+                            >
+                              {recommendedArticle.title}
+                            </h3>
+                          </div>
                           <span
                             style={{
                               display: 'block',
                               fontFamily: "'Poppins', sans-serif",
                               fontSize: '11px',
-                              letterSpacing: '0.18em',
+                              letterSpacing: '0.08em',
                               textTransform: 'uppercase',
-                              color: '#7a7972',
-                              marginBottom: '10px',
+                              color: '#6b6a65',
+                              marginTop: '12px',
                             }}
                           >
-                            0{index + 1}
+                            {recommendedArticle.publish_date}
                           </span>
-                          <h3
-                            style={{
-                              margin: 0,
-                              fontFamily: "'Fraunces', serif",
-                              fontSize: '18px',
-                              lineHeight: 1.35,
-                              color: '#f5f4f0',
-                            }}
-                          >
-                            {recommendedArticle.title}
-                          </h3>
                         </div>
-                        <span
-                          style={{
-                            display: 'block',
-                            fontFamily: "'Poppins', sans-serif",
-                            fontSize: '11px',
-                            letterSpacing: '0.08em',
-                            textTransform: 'uppercase',
-                            color: '#6b6a65',
-                            marginTop: '12px',
-                          }}
-                        >
-                          {recommendedArticle.publish_date}
-                        </span>
-                      </div>
-                    </Link>
-                  );
-                })}
+                      </Link>
+                    );
+                  })}
               </div>
             </div>
           </aside>
