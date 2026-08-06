@@ -29,6 +29,7 @@ import {
 import { useAdmin } from '../contexts/AdminContext';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Search, Plus, Edit2, Trash2, ArrowLeft, X, GripVertical, Copy, Bold, Italic, Underline, Link2, Heading2, List } from 'lucide-react';
+import ArticlePreviewModal from '../components/ArticlePreviewModal';
 
 type EmbeddedVideo = {
   url: string;
@@ -608,16 +609,24 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
   const [isLoading, setIsLoading] = useState(true);
   const [menuSections, setMenuSections] = useState<MenuSection[]>([]);
   const [locationRegions, setLocationRegions] = useState<LocationRegion[]>([]);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  const { setHasUnsavedChanges, setIsSaving, registerSaveHandler, setStatus } = useAdmin();
+  const { setHasUnsavedChanges, setIsSaving, registerSaveHandler, registerPreviewHandler, setStatus } = useAdmin();
 
   useEffect(() => {
     if (mode === 'list') {
       fetchArticles();
       setHasUnsavedChanges(false);
       setStatus('published');
+      registerPreviewHandler(null);
     }
   }, [mode]);
+
+  useEffect(() => {
+    return () => {
+      registerPreviewHandler(null);
+    };
+  }, [registerPreviewHandler]);
 
   // Fetched once rather than per edit: the keyword dropdowns need it, and a failure
   // here should not block editing an article, so it degrades to empty dropdowns.
@@ -643,6 +652,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       setHasUnsavedChanges(isChanged);
       setStatus(selectedArticle?.status || 'draft');
       registerSaveHandler(handleSave);
+      registerPreviewHandler(() => setIsPreviewOpen(true));
     }
   }, [selectedArticle, originalArticle, mode, setHasUnsavedChanges]);
 
@@ -848,7 +858,13 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
   if (!selectedArticle) return null;
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <>
+      <ArticlePreviewModal
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        article={selectedArticle}
+      />
+      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center gap-4">
         <button onClick={() => setMode('list')} className="p-2 text-zinc-400 hover:text-white bg-zinc-900 rounded-lg transition-colors">
           <ArrowLeft className="w-4 h-4" />
@@ -1215,5 +1231,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
         </div>
       </div>
     </div>
+  );
+    </>
   );
 }
