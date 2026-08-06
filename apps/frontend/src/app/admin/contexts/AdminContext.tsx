@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 
 type AdminContextType = {
   isSaving: boolean;
@@ -11,6 +11,9 @@ type AdminContextType = {
   setStatus: (status: string) => void;
   onSave: (publish: boolean) => Promise<void>;
   registerSaveHandler: (handler: (publish: boolean) => Promise<void>) => void;
+  onPreview: (() => void) | null;
+  registerPreviewHandler: (handler: (() => void) | null) => void;
+  resetAdminContext: () => void;
 };
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -22,10 +25,22 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   
   // We hold a reference to the active editor's save function
   const [saveHandler, setSaveHandler] = useState<{ fn: (publish: boolean) => Promise<void> } | null>(null);
+  const [onPreview, setOnPreview] = useState<(() => void) | null>(null);
 
-  const registerSaveHandler = (handler: (publish: boolean) => Promise<void>) => {
+  const registerSaveHandler = useCallback((handler: (publish: boolean) => Promise<void>) => {
     setSaveHandler({ fn: handler });
-  };
+  }, []);
+
+  const registerPreviewHandler = useCallback((handler: (() => void) | null) => {
+    setOnPreview(() => handler);
+  }, []);
+
+  const resetAdminContext = useCallback(() => {
+    setHasUnsavedChanges(false);
+    setStatus('published');
+    setSaveHandler(null);
+    setOnPreview(null);
+  }, []);
 
   const onSave = async (publish: boolean) => {
     if (saveHandler?.fn) {
@@ -38,7 +53,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       isSaving, setIsSaving,
       hasUnsavedChanges, setHasUnsavedChanges,
       status, setStatus,
-      onSave, registerSaveHandler
+      onSave, registerSaveHandler,
+      onPreview, registerPreviewHandler,
+      resetAdminContext
     }}>
       {children}
     </AdminContext.Provider>

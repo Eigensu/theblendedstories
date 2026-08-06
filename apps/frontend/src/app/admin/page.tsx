@@ -56,7 +56,7 @@ export default function AdminDashboard() {
   const [activeSectionId, setActiveSectionId] = useState<string>('hero');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [homeOpen, setHomeOpen] = useState(true);
-  const { isSaving, hasUnsavedChanges, status, onSave } = useAdmin();
+  const { isSaving, hasUnsavedChanges, status, onSave, onPreview, resetAdminContext } = useAdmin();
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
@@ -98,7 +98,10 @@ export default function AdminDashboard() {
     return (
       <li key={section.id}>
         <button
-          onClick={() => setActiveSectionId(section.id)}
+          onClick={() => {
+            resetAdminContext();
+            setActiveSectionId(section.id);
+          }}
           className={`w-full flex items-center ${indented ? 'pl-10' : 'px-3'} pr-3 py-2 text-sm font-medium rounded-lg transition-colors relative ${
             isActive
               ? 'bg-zinc-900 text-white'
@@ -317,6 +320,17 @@ export default function AdminDashboard() {
                       </motion.span>
                     )}
                   </AnimatePresence>
+                  
+                  {onPreview && (
+                    <button
+                      onClick={onPreview}
+                      disabled={isSaving}
+                      className="relative flex items-center justify-center px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 bg-black border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-900"
+                    >
+                      Preview
+                    </button>
+                  )}
+
                   <button
                     onClick={() => onSave(false)}
                     disabled={isSaving || !hasUnsavedChanges}
