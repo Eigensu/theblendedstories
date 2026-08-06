@@ -13,6 +13,7 @@
 export interface LocationCity {
   slug: string;
   label: string;
+  isComingSoon?: boolean;
 }
 
 export interface LocationRegion {
@@ -21,12 +22,17 @@ export interface LocationRegion {
   cities: LocationCity[];
 }
 
-/** Shipped taxonomy: India/Mumbai only, until the CMS taxonomy grows beyond it. */
 export const DEFAULT_LOCATION_REGIONS: LocationRegion[] = [
   {
     slug: 'india',
     label: 'India',
-    cities: [{ slug: 'mumbai', label: 'Mumbai' }],
+    cities: [
+      { slug: 'mumbai', label: 'Mumbai' },
+      { slug: 'bangalore', label: 'Bangalore', isComingSoon: true },
+      { slug: 'delhi', label: 'Delhi', isComingSoon: true },
+      { slug: 'gujarat', label: 'Gujarat', isComingSoon: true },
+      { slug: 'hyderabad', label: 'Hyderabad', isComingSoon: true },
+    ],
   },
 ];
 
@@ -53,7 +59,10 @@ export function normalizeLocationRegions(raw: unknown): LocationRegion[] {
           >;
           if (typeof citySlug !== 'string' || !citySlug) return [];
           if (typeof cityLabel !== 'string' || !cityLabel) return [];
-          return [{ slug: citySlug, label: cityLabel }];
+          
+          const isComingSoon = citySlug.toLowerCase() !== 'mumbai';
+          
+          return [{ slug: citySlug, label: cityLabel, isComingSoon }];
         })
       : [];
 
