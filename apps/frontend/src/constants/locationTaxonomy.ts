@@ -28,6 +28,7 @@ export const DEFAULT_LOCATION_REGIONS: LocationRegion[] = [
     label: 'India',
     cities: [
       { slug: 'mumbai', label: 'Mumbai' },
+      { slug: 'indore', label: 'Indore' },
       { slug: 'bangalore', label: 'Bangalore', isComingSoon: true },
       { slug: 'delhi', label: 'Delhi', isComingSoon: true },
       { slug: 'gujarat', label: 'Gujarat', isComingSoon: true },
@@ -53,15 +54,18 @@ export function normalizeLocationRegions(raw: unknown): LocationRegion[] {
     const normalizedCities = Array.isArray(cities)
       ? cities.flatMap((city): LocationCity[] => {
           if (!city || typeof city !== 'object') return [];
-          const { slug: citySlug, label: cityLabel } = city as Record<
+          const { slug: citySlug, label: cityLabel, isComingSoon: rawIsComingSoon } = city as Record<
             string,
             unknown
           >;
           if (typeof citySlug !== 'string' || !citySlug) return [];
           if (typeof cityLabel !== 'string' || !cityLabel) return [];
-          
-          const isComingSoon = citySlug.toLowerCase() !== 'mumbai';
-          
+
+          const isComingSoon =
+            typeof rawIsComingSoon === 'boolean'
+              ? rawIsComingSoon
+              : !['mumbai', 'indore'].includes(citySlug.toLowerCase());
+
           return [{ slug: citySlug, label: cityLabel, isComingSoon }];
         })
       : [];

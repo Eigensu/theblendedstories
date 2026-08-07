@@ -13,6 +13,7 @@ class LocationCityModel(BaseModel):
     """
     slug: Optional[str] = None
     label: str
+    is_coming_soon: Optional[bool] = False
 
 
 class LocationRegionModel(BaseModel):
@@ -33,6 +34,7 @@ DEFAULT_LOCATION_REGIONS: List[dict] = [
         "label": "India",
         "cities": [
             {"slug": "mumbai", "label": "Mumbai"},
+            {"slug": "indore", "label": "Indore"},
         ],
     },
 ]
