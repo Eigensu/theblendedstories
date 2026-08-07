@@ -22,7 +22,11 @@ def normalize_regions(regions) -> list:
 
     for region in assign_slugs(regions, "region"):
         cities = [
-            {"slug": city["slug"], "label": city["label"]}
+            {
+                "slug": city["slug"],
+                "label": city["label"],
+                "is_coming_soon": city.get("is_coming_soon", False),
+            }
             for city in assign_slugs(region.get("cities"), "city")
         ]
         normalized.append(

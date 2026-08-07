@@ -13,6 +13,7 @@ class LocationCityModel(BaseModel):
     """
     slug: Optional[str] = None
     label: str
+    is_coming_soon: Optional[bool] = False
 
 
 class LocationRegionModel(BaseModel):
