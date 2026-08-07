@@ -190,9 +190,9 @@ async def get_all(
     if featured_only:
         items = [item for item in items if item.get("featured") is True]
     if location_main:
-        items = [item for item in items if item.get("location_main") == location_main]
+        items = [item for item in items if not item.get("location_main") or item.get("location_main") == location_main]
     if location_sub:
-        items = [item for item in items if item.get("location_sub") == location_sub]
+        items = [item for item in items if not item.get("location_sub") or item.get("location_sub") == location_sub]
     if category:
         items = [item for item in items if item.get("category") == category]
     if status:

@@ -70,12 +70,29 @@ function compareNewestFirst(a: ArticleSummary, b: ArticleSummary): number {
   return (a.display_order || 999999) - (b.display_order || 999999);
 }
 
+import { cookies } from 'next/headers';
+import {
+  LOCATION_MAIN_COOKIE,
+  LOCATION_SUB_COOKIE,
+} from '@/contexts/LocationContext';
+import {
+  DEFAULT_LOCATION_MAIN,
+  DEFAULT_LOCATION_SUB,
+} from '@/constants/locationTaxonomy';
+
 /**
  * Every published article, newest first. Returns [] on a backend outage so the page
  * degrades to its empty state rather than throwing, matching the rest of `(public)`.
  */
 export async function fetchPublishedArticles(): Promise<ArticleSummary[]> {
-  const articles = await fetchCMSData('/articles/?summary=true');
+  const cookieStore = await cookies();
+  const locationMain =
+    cookieStore.get(LOCATION_MAIN_COOKIE)?.value || DEFAULT_LOCATION_MAIN;
+  const locationSub =
+    cookieStore.get(LOCATION_SUB_COOKIE)?.value || DEFAULT_LOCATION_SUB;
+  const locationQuery = `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
+
+  const articles = await fetchCMSData(`/articles/?summary=true&${locationQuery}`);
   if (!Array.isArray(articles)) return [];
 
   return articles
