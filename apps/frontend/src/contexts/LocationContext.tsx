@@ -57,9 +57,9 @@ export function LocationProvider({ children }: { children: ReactNode }) {
     writeCookie(LOCATION_SUB_COOKIE, nextSub);
     setLocationMain(nextMain);
     setLocationSub(nextSub);
-    // The homepage and listing pages filter server-side off the cookie, so the
-    // selection only takes visible effect after a fresh request.
-    window.location.reload();
+    // The selection only takes visible effect after a fresh request, and we
+    // send the reader directly to the stories archive to see the new city's content.
+    window.location.href = '/stories';
   }, []);
 
   const value = useMemo(
