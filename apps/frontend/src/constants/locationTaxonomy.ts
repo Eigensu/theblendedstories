@@ -54,12 +54,17 @@ export function normalizeLocationRegions(raw: unknown): LocationRegion[] {
     const normalizedCities = Array.isArray(cities)
       ? cities.flatMap((city): LocationCity[] => {
           if (!city || typeof city !== 'object') return [];
-          const { slug: citySlug, label: cityLabel, isComingSoon: rawIsComingSoon } = city as Record<
-            string,
-            unknown
-          >;
+          const cityRecord = city as Record<string, unknown>;
+          const { slug: citySlug, label: cityLabel } = cityRecord;
           if (typeof citySlug !== 'string' || !citySlug) return [];
           if (typeof cityLabel !== 'string' || !cityLabel) return [];
+
+          const rawIsComingSoon =
+            typeof cityRecord.isComingSoon === 'boolean'
+              ? cityRecord.isComingSoon
+              : typeof cityRecord.is_coming_soon === 'boolean'
+              ? cityRecord.is_coming_soon
+              : undefined;
 
           const isComingSoon =
             typeof rawIsComingSoon === 'boolean'
