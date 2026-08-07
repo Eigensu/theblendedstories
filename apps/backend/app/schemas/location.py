@@ -33,6 +33,7 @@ DEFAULT_LOCATION_REGIONS: List[dict] = [
         "label": "India",
         "cities": [
             {"slug": "mumbai", "label": "Mumbai"},
+            {"slug": "indore", "label": "Indore"},
         ],
     },
 ]
