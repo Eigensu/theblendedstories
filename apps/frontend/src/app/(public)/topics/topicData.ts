@@ -24,6 +24,8 @@ export interface ArticleSummary {
   publish_date?: string;
   display_order?: number | null;
   status?: string;
+  location_main?: string;
+  location_sub?: string;
 }
 
 export interface KeywordGroup {
