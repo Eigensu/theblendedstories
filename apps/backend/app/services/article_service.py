@@ -189,10 +189,9 @@ async def get_all(
     items = await repo.get_all()
     if featured_only:
         items = [item for item in items if item.get("featured") is True]
-    if location_main:
-        items = [item for item in items if not item.get("location_main") or item.get("location_main") == location_main]
-    if location_sub:
-        items = [item for item in items if not item.get("location_sub") or item.get("location_sub") == location_sub]
+    # location_main / location_sub are no longer used for filtering here —
+    # the router sorts by location relevance instead, so all articles are
+    # returned and the selected city's content simply floats to the top.
     if category:
         items = [item for item in items if item.get("category") == category]
     if status:
