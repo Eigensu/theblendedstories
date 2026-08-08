@@ -58,7 +58,18 @@ async function fetchCMSData(endpoint: string) {
  * breaking the remaining ties. `display_order` is read with `||` rather than a
  * default argument because existing documents store it as an explicit null.
  */
-function compareNewestFirst(a: ArticleSummary, b: ArticleSummary): number {
+function compareNewestFirst(a: ArticleSummary, b: ArticleSummary, locationMain: string, locationSub: string): number {
+  // 1. Exact match for sub location
+  const aSubMatch = a.location_sub === locationSub;
+  const bSubMatch = b.location_sub === locationSub;
+  if (aSubMatch !== bSubMatch) return aSubMatch ? -1 : 1;
+
+  // 2. Exact match for main location
+  const aMainMatch = a.location_main === locationMain;
+  const bMainMatch = b.location_main === locationMain;
+  if (aMainMatch !== bMainMatch) return aMainMatch ? -1 : 1;
+
+  // 3. Newest first
   const dateA = Date.parse(a.publish_date || '');
   const dateB = Date.parse(b.publish_date || '');
   const hasDateA = !Number.isNaN(dateA);
@@ -97,7 +108,7 @@ export async function fetchPublishedArticles(): Promise<ArticleSummary[]> {
 
   return articles
     .filter((article: ArticleSummary) => article.status === 'published')
-    .sort(compareNewestFirst);
+    .sort((a, b) => compareNewestFirst(a, b, locationMain, locationSub));
 }
 
 /** Articles filed under a menu section, whatever their sub keyword. */
