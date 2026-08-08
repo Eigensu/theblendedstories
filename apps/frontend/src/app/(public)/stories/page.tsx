@@ -48,9 +48,7 @@ export default async function StoriesPage() {
   const allArticles = await fetchCMSData(`/articles/?summary=true&${locationQuery}`);
   
   const publishedArticles = allArticles
-    ? allArticles
-        .filter((a: any) => a.status === 'published')
-        .sort((a: any, b: any) => a.display_order - b.display_order)
+    ? allArticles.filter((a: any) => a.status === 'published')
     : [];
 
   return (
