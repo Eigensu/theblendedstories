@@ -28,6 +28,9 @@ async def list_articles(
     - category: exact-match on the article's category field
     - status: 'draft' or 'published'
     """
+    location_main = location_main or None
+    location_sub = location_sub or None
+
     items = await get_all(
         featured_only=featured,
         summary=summary,

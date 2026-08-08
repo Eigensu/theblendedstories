@@ -54,9 +54,11 @@ async function fetchCMSData(endpoint: string) {
 }
 
 /**
- * Newest first, with undated articles sinking below dated ones and `display_order`
- * breaking the remaining ties. `display_order` is read with `||` rather than a
- * default argument because existing documents store it as an explicit null.
+ * Sorting for the /topics pages.
+ * 
+ * 1. Prioritizes exact matches for the requested location (sub then main)
+ * 2. Newest first (by publish_date)
+ * 3. Ties broken by display_order
  */
 function compareNewestFirst(a: ArticleSummary, b: ArticleSummary, locationMain: string, locationSub: string): number {
   // 1. Exact match for sub location
