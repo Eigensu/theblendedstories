@@ -7,11 +7,7 @@ import {
   DEFAULT_LOCATION_SUB,
 } from '@/constants/locationTaxonomy';
 
-export const LOCATION_MAIN_COOKIE = 'tbs_location_main';
-export const LOCATION_SUB_COOKIE = 'tbs_location_sub';
-
-/** A year — long enough that picking a city "sticks" across normal visits. */
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+import { LOCATION_MAIN_COOKIE, LOCATION_SUB_COOKIE, COOKIE_MAX_AGE } from '@/constants/cookies';
 
 type LocationContextValue = {
   locationMain: string;
