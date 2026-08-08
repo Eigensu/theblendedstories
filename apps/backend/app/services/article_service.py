@@ -108,12 +108,14 @@ def _normalize_article_record(item: dict | None) -> dict | None:
     normalized_blocks = []
 
     for block in existing_blocks:
-      normalized_block = _normalize_block(block)
-      if normalized_block:
-          normalized_blocks.append(normalized_block)
+        normalized_block = _normalize_block(block)
+        if normalized_block:
+            normalized_blocks.append(normalized_block)
 
     if not normalized_blocks:
-        normalized_blocks = _legacy_content_to_blocks(normalized_item.get("content") or [])
+        normalized_blocks = _legacy_content_to_blocks(
+            normalized_item.get("content") or []
+        )
 
     normalized_item["contentBlocks"] = normalized_blocks
     normalized_item["content"] = [
@@ -147,6 +149,7 @@ def _prepare_article_payload(payload: ArticleModel) -> dict:
     data["contentBlocks"] = normalized_blocks
     data.pop("content", None)
     return data
+
 
 # Everything a listing needs (cards, prev/next, recommendations) and nothing more.
 # Excludes contentBlocks/content, which dominate the payload and are only ever
@@ -189,22 +192,22 @@ async def get_all(
     items = await repo.get_all()
     if featured_only:
         items = [item for item in items if item.get("featured") is True]
-    if location_main:
-        items = [item for item in items if not item.get("location_main") or item.get("location_main") == location_main]
-    if location_sub:
-        items = [item for item in items if not item.get("location_sub") or item.get("location_sub") == location_sub]
     if category:
         items = [item for item in items if item.get("category") == category]
     if status:
-        items = [item for item in items if (item.get("status") or "published") == status]
+        items = [
+            item for item in items if (item.get("status") or "published") == status
+        ]
     if summary:
         # Skip block normalization entirely — it is pure waste when the blocks
         # are about to be dropped.
         return [_summarize_article_record(item) for item in items]
     return [_normalize_article_record(item) for item in items]
 
+
 async def get_by_id(item_id: str):
     return _normalize_article_record(await repo.get_by_id(item_id))
+
 
 async def get_by_slug(slug: str):
     items = await repo.get_all()
@@ -213,22 +216,31 @@ async def get_by_slug(slug: str):
             return _normalize_article_record(item)
     return None
 
+
 async def search(query: str, limit: int = 20):
     """Keyword search over published articles, ranked by relevance."""
     return await article_search.search(query, get_all, limit=limit)
 
+
 async def create(payload: ArticleModel):
     article_search.invalidate_cache()
-    return _normalize_article_record(await repo.create(_prepare_article_payload(payload)))
+    return _normalize_article_record(
+        await repo.create(_prepare_article_payload(payload))
+    )
+
 
 async def update(item_id: str, payload: ArticleModel):
     article_search.invalidate_cache()
-    return _normalize_article_record(await repo.update(item_id, _prepare_article_payload(payload)))
+    return _normalize_article_record(
+        await repo.update(item_id, _prepare_article_payload(payload))
+    )
+
 
 async def patch_fields(item_id: str, fields: dict):
     """Partial update — only sets the provided fields (e.g. featured, display_order)."""
     article_search.invalidate_cache()
     return _normalize_article_record(await repo.update(item_id, fields))
+
 
 async def delete(item_id: str):
     article_search.invalidate_cache()
