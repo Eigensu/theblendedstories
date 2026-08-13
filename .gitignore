@@ -15,6 +15,10 @@ __pycache__/
 # Node
 node_modules/
 
+# This is a pnpm monorepo — npm/yarn lockfiles must never be committed
+package-lock.json
+yarn.lock
+
 # Environment
 .env
 .env.local
