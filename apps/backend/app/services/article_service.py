@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.repositories.base_repo import BaseRepository
 from uuid import uuid4
 
@@ -5,6 +7,46 @@ from app.schemas.article import ArticleModel
 from app.services import article_search
 
 repo = BaseRepository("articles")
+
+
+def _publication_timestamp(item: dict) -> float | None:
+    publish_date = item.get("publish_date")
+    if isinstance(publish_date, str) and publish_date.strip():
+        try:
+            return datetime.fromisoformat(publish_date.strip()).timestamp()
+        except ValueError:
+            pass
+
+    created_at = item.get("created_at")
+    if isinstance(created_at, datetime):
+        try:
+            return created_at.timestamp()
+        except (OverflowError, OSError, ValueError):
+            return None
+
+    return None
+
+
+def _article_sort_key_latest(item: dict) -> tuple[float, str]:
+    publication_timestamp = _publication_timestamp(item)
+    publication_sort = (
+        float("inf") if publication_timestamp is None else -publication_timestamp
+    )
+    slug = str(item.get("slug") or "")
+    return (publication_sort, slug)
+
+def _article_sort_key_featured(item: dict) -> tuple[int, int, float, str]:
+    display_order = item.get("display_order")
+    latest_sort = _article_sort_key_latest(item)
+    if isinstance(display_order, int) and display_order > 0:
+        return (0, display_order, *latest_sort)
+    return (1, 0, *latest_sort)
+
+async def _fetch_sorted_articles(query: dict | None = None, featured_only: bool = False) -> list[dict]:
+    cursor = repo.collection.find({**(query or {}), "is_active": True})
+    items = await cursor.to_list(length=None)
+    sort_key = _article_sort_key_featured if featured_only else _article_sort_key_latest
+    return sorted(items, key=sort_key)
 
 
 def _new_block_id() -> str:
@@ -184,13 +226,15 @@ async def get_all(
     location_main: str | None = None,
     location_sub: str | None = None,
 ):
-    items = await repo.get_all()
+    query: dict[str, object] = {}
+    if location_main:
+        query["location_main"] = location_main
+    if location_sub:
+        query["location_sub"] = location_sub
+
+    items = await _fetch_sorted_articles(query, featured_only)
     if featured_only:
         items = [item for item in items if item.get("featured") is True]
-    if location_main:
-        items = [item for item in items if item.get("location_main") == location_main]
-    if location_sub:
-        items = [item for item in items if item.get("location_sub") == location_sub]
     if summary:
         # Skip block normalization entirely — it is pure waste when the blocks
         # are about to be dropped.

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { MapPin } from 'lucide-react';
 import NavButton from './NavButton';
 import { navSlotRight } from './navSlots';
 import { useLocation } from '@/contexts/LocationContext';
@@ -54,7 +53,24 @@ export default function LocationSwitcher({
         ariaLabel={`Change city (currently ${currentLabel})`}
         ariaHasPopup="menu"
       >
-        <MapPin size={18} strokeWidth={1.5} />
+        <span
+          style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: '8px',
+            fontWeight: 600,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            lineHeight: 1,
+            maxWidth: '34px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            display: 'block',
+            textAlign: 'center',
+          }}
+        >
+          {currentLabel}
+        </span>
       </NavButton>
 
       {open && (

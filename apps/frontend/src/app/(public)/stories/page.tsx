@@ -10,6 +10,7 @@ import {
 import {
   DEFAULT_LOCATION_MAIN,
   DEFAULT_LOCATION_SUB,
+  DEFAULT_LOCATION_REGIONS,
 } from '@/constants/locationTaxonomy';
 
 export const dynamic = 'force-dynamic';
@@ -34,15 +35,35 @@ async function fetchCMSData(endpoint: string) {
   }
 }
 
-export default async function StoriesPage() {
+export default async function StoriesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const resolvedParams = await searchParams;
+  const urlLocation = typeof resolvedParams?.location === 'string' ? resolvedParams.location.toLowerCase() : null;
   // The visitor's chosen city, set by LocationSwitcher — falls back to the
   // shipped default (India/Mumbai) for a first-time visitor with no cookie yet.
   const cookieStore = await cookies();
+  // Find region for urlLocation if provided
+  let overrideMain = null;
+  if (urlLocation) {
+    for (const region of DEFAULT_LOCATION_REGIONS) {
+      if (region.cities.some((c: any) => c.slug === urlLocation)) {
+        overrideMain = region.slug;
+        break;
+      }
+    }
+  }
+
   const locationMain =
-    cookieStore.get(LOCATION_MAIN_COOKIE)?.value || DEFAULT_LOCATION_MAIN;
+    overrideMain || cookieStore.get(LOCATION_MAIN_COOKIE)?.value || DEFAULT_LOCATION_MAIN;
   const locationSub =
-    cookieStore.get(LOCATION_SUB_COOKIE)?.value || DEFAULT_LOCATION_SUB;
-  const locationQuery = `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
+    urlLocation || cookieStore.get(LOCATION_SUB_COOKIE)?.value || DEFAULT_LOCATION_SUB;
+  
+  const locationQuery = urlLocation 
+    ? `location_sub=${encodeURIComponent(locationSub)}` 
+    : `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
 
   // Cards render title/subtitle/cover only, so the summary projection is enough.
   const allArticles = await fetchCMSData(`/articles/?summary=true&${locationQuery}`);
@@ -50,7 +71,6 @@ export default async function StoriesPage() {
   const publishedArticles = allArticles
     ? allArticles
         .filter((a: any) => a.status === 'published')
-        .sort((a: any, b: any) => a.display_order - b.display_order)
     : [];
 
   return (
@@ -63,18 +83,35 @@ export default async function StoriesPage() {
         <div style={{ marginBottom: 'clamp(32px, 5vw, 64px)' }}>
           <HomeLogoLink />
 
-          <h1 style={{
-            fontFamily: "'Fraunces', serif",
-            fontSize: 'clamp(36px, 5vw, 64px)',
-            fontWeight: 400,
-            color: 'white',
-            margin: '0',
-            lineHeight: '0.9',
-            textTransform: 'uppercase',
-            letterSpacing: '-0.01em',
-          }}>
-            ALL STORIES
-          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+            <h1 style={{
+              fontFamily: "'Fraunces', serif",
+              fontSize: 'clamp(28px, 5vw, 64px)',
+              fontWeight: 400,
+              color: 'white',
+              margin: '0',
+              lineHeight: '0.9',
+              textTransform: 'uppercase',
+              letterSpacing: '-0.01em',
+            }}>
+              {urlLocation ? `${urlLocation} STORIES` : 'ALL STORIES'}
+            </h1>
+            {urlLocation && (
+              <Link href="/stories" style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '14px',
+                color: 'white',
+                border: '1px solid rgba(255,255,255,0.3)',
+                padding: '8px 16px',
+                borderRadius: '20px',
+                textDecoration: 'none',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                View All Stories
+              </Link>
+            )}
+          </div>
           <div style={{
             width: '36px',
             height: '1px',

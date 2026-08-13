@@ -82,6 +82,9 @@ export default function Loading() {
                 background: '#0a0a0a',
                 border: '1px solid rgba(255,255,255,0.06)',
                 overflow: 'hidden',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
               }}
             >
               <div
@@ -89,7 +92,10 @@ export default function Loading() {
                 style={{ width: '100%', height: 'clamp(200px, 22vw, 320px)' }}
               />
 
-              <div style={{ padding: 'clamp(10px, 1.4vw, 18px)' }}>
+              <div
+                className="talks-card-body"
+                style={{ padding: 'clamp(10px, 1.4vw, 18px)' }}
+              >
                 <div
                   className="skeleton-bar"
                   style={{

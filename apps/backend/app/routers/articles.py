@@ -27,11 +27,6 @@ async def list_articles(
         location_main=location_main,
         location_sub=location_sub,
     )
-    # Sort by display order (treat 0 as last)
-    # Sort by display order, treating 0/missing/null as last. `or` rather than a
-    # comparison because .get(key, 0) still yields None when the key exists as null,
-    # which used to raise a TypeError and 500 the whole listing.
-    items = sorted(items, key=lambda x: x.get("display_order") or 999999)
     return success_response(data=items)
 
 # NOTE: must stay above `/{slug}` — FastAPI matches in declaration order and the

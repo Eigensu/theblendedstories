@@ -455,6 +455,7 @@
     display: none;
   }
   .talks-grid > * {
+    display: flex;
     flex: 0 0
       calc(
         (100% - (var(--cards-per-view) - 1) * var(--card-gap)) /
@@ -462,6 +463,20 @@
       );
     min-width: 0;
     scroll-snap-align: start;
+  }
+  .talks-grid > * > .talks-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .talks-card-body {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .talks-card-date {
+    margin-top: auto !important;
   }
 
   /* ─── TheEdit layout ─── */
@@ -1277,13 +1292,17 @@
     object-fit: cover;
   }
 
-  /* A lone inline image keeps its own proportions — capped so a tall portrait
-   doesn't swallow the screen — rather than being cropped to someone else's. */
+  /* A lone inline image keeps its own proportions — capped via React to
+   Instagram aspect ratios (4:5 to 1.91:1) so it fills the screen perfectly. */
+  .article-gallery-media--single {
+    width: 100%;
+  }
+  
   .article-gallery-media--single img {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: clamp(250px, 50vh, 700px);
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   /* Two or more read as one strip: matched heights, letterboxed not cropped, so
@@ -1309,9 +1328,7 @@
       height: 320px;
     }
 
-    .article-gallery-media--single img {
-      max-height: 320px;
-    }
+    /* Single inline images are fully controlled by the React component now */
 
     .article-gallery-media--strip {
       height: 200px;

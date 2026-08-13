@@ -122,12 +122,14 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
 
             return (
             <ScrollReveal key={idx} delay={idx * 0.08}>
-              <CardTag {...(linkProps as any)} className="img-card" style={{
+              <CardTag {...(linkProps as any)} className="img-card talks-card" style={{
                 background: '#0a0a0a',
                 border: '1px solid rgba(255,255,255,0.06)',
                 overflow: 'hidden',
                 cursor: speaker.social_link ? 'pointer' : 'default',
-                display: 'block',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
                 textDecoration: 'none',
               }}>
 
@@ -154,7 +156,7 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
                 </div>
 
                 {/* Info block */}
-                <div style={{ padding: 'clamp(10px, 1.4vw, 18px)' }}>
+                <div className="talks-card-body" style={{ padding: 'clamp(10px, 1.4vw, 18px)' }}>
 
                   {/* Name */}
                   <h3 style={{
@@ -194,7 +196,7 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
                   </p>
 
                   {/* Date */}
-                  <p style={{
+                  <p className="talks-card-date" style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontSize: 'clamp(9px, 0.75vw, 11px)',
                     fontWeight: 400,

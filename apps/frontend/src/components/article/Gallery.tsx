@@ -1,4 +1,66 @@
+'use client';
+
+import { useState } from 'react';
 import { ArticleImageItem } from '@/types/article';
+
+function GalleryMedia({
+  img,
+  caption,
+  shape,
+}: {
+  img: ArticleImageItem;
+  caption: string;
+  shape: 'tile' | 'single' | 'strip';
+}) {
+  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
+
+  const isSingle = shape === 'single';
+  let containerStyle: React.CSSProperties = {};
+  let imgStyle: React.CSSProperties = {};
+
+  if (isSingle) {
+    if (aspectRatio !== null) {
+      let targetRatio = aspectRatio <= 1.0 ? 4 / 5 : 1.91 / 1;
+      
+      const cropFactor = aspectRatio > targetRatio 
+        ? targetRatio / aspectRatio
+        : aspectRatio / targetRatio;
+    
+      const MIN_KEEP = 0.80; // Allow up to 20% crop (allows 1:1 -> 4:5)
+    
+      if (cropFactor < MIN_KEEP) {
+        targetRatio = aspectRatio > targetRatio 
+          ? aspectRatio * MIN_KEEP 
+          : aspectRatio / MIN_KEEP;
+      }
+      
+      containerStyle.aspectRatio = targetRatio;
+      imgStyle = { width: '100%', height: '100%', objectFit: 'cover' };
+    } else {
+      // Before load, let it flow naturally to avoid 0-height collapse
+      imgStyle = { width: '100%', height: 'auto' };
+    }
+  }
+
+  return (
+    <div
+      className={`article-gallery-media article-gallery-media--${shape} hover:scale-[1.015] transition-transform duration-300`}
+      style={containerStyle}
+    >
+      <img
+        src={img.image}
+        alt={caption}
+        style={imgStyle}
+        onLoad={(e) => {
+          const { naturalWidth, naturalHeight } = e.currentTarget;
+          if (naturalHeight > 0) {
+            setAspectRatio(naturalWidth / naturalHeight);
+          }
+        }}
+      />
+    </div>
+  );
+}
 
 /**
  * `grid` wraps onto as many rows as it needs — used by the article's standalone
@@ -30,8 +92,8 @@ export default function Gallery({
     <div
       className={
         isRow
-          ? 'article-gallery-row flex w-full gap-[22px] overflow-x-auto my-[clamp(16px,2.5vw,28px)]'
-          : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-[22px] w-full my-[clamp(16px,2.5vw,28px)]'
+          ? `article-gallery-row grid w-full ${images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-3 my-[clamp(16px,2.5vw,28px)] sm:flex sm:flex-nowrap sm:gap-5.5 sm:overflow-x-auto`
+          : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5.5 w-full my-[clamp(16px,2.5vw,28px)]'
       }
     >
       {images.map((img, idx) => {
@@ -41,20 +103,17 @@ export default function Gallery({
         const caption = img.caption?.trim();
 
         const media = (
-          <div
-            className={`article-gallery-media article-gallery-media--${shape} hover:scale-[1.015] transition-transform duration-300`}
-          >
-            <img src={img.image} alt={caption || ''} />
-          </div>
+          <GalleryMedia img={img} caption={caption || ''} shape={shape} />
         );
 
         return (
           <div
             key={idx}
             className={
-              isRow ? 'flex-1 min-w-[min(180px,45%)] sm:min-w-0' : undefined
+              isRow
+                ? 'flex min-w-0 flex-col gap-2.5 sm:flex-1 sm:min-w-[min(180px,45%)] sm:gap-3.5'
+                : undefined
             }
-            style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
             {img.link ? (
               <a

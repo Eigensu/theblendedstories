@@ -54,23 +54,6 @@ async function fetchCMSData(endpoint: string) {
 }
 
 /**
- * Newest first, with undated articles sinking below dated ones and `display_order`
- * breaking the remaining ties. `display_order` is read with `||` rather than a
- * default argument because existing documents store it as an explicit null.
- */
-function compareNewestFirst(a: ArticleSummary, b: ArticleSummary): number {
-  const dateA = Date.parse(a.publish_date || '');
-  const dateB = Date.parse(b.publish_date || '');
-  const hasDateA = !Number.isNaN(dateA);
-  const hasDateB = !Number.isNaN(dateB);
-
-  if (hasDateA && hasDateB && dateA !== dateB) return dateB - dateA;
-  if (hasDateA !== hasDateB) return hasDateA ? -1 : 1;
-
-  return (a.display_order || 999999) - (b.display_order || 999999);
-}
-
-/**
  * Every published article, newest first. Returns [] on a backend outage so the page
  * degrades to its empty state rather than throwing, matching the rest of `(public)`.
  */
@@ -79,8 +62,7 @@ export async function fetchPublishedArticles(): Promise<ArticleSummary[]> {
   if (!Array.isArray(articles)) return [];
 
   return articles
-    .filter((article: ArticleSummary) => article.status === 'published')
-    .sort(compareNewestFirst);
+    .filter((article: ArticleSummary) => article.status === 'published');
 }
 
 /** Articles filed under a menu section, whatever their sub keyword. */

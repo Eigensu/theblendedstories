@@ -27,18 +27,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   const apiArticles = data && data.length > 0
-    ? data.filter(d => d.status === 'published').sort((a: any, b: any) => {
-        const orderA = a.display_order > 0 ? a.display_order : 999999;
-        const orderB = b.display_order > 0 ? b.display_order : 999999;
-        if (orderA !== orderB) return orderA - orderB;
-        // Most featured articles share display_order 0, so without a tie-break
-        // the section renders in whatever order Mongo happens to return —
-        // newest first, then slug so the result is stable across requests.
-        const dateA = Date.parse(a.created_at ?? '') || 0;
-        const dateB = Date.parse(b.created_at ?? '') || 0;
-        if (dateA !== dateB) return dateB - dateA;
-        return String(a.slug ?? '').localeCompare(String(b.slug ?? ''));
-      }).slice(0, MAX_PICKS).map((d, index) => ({
+    ? data.filter(d => d.status === 'published').slice(0, MAX_PICKS).map((d, index) => ({
         img: d.cover_image || d.hero_image,
         title: d.title,
         desc: d.subtitle,

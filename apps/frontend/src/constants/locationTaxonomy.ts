@@ -22,13 +22,15 @@ export interface LocationRegion {
   cities: LocationCity[];
 }
 
+const COMING_SOON_CITY_SLUGS = new Set(['delhi', 'gujarat', 'hyderabad']);
+
 export const DEFAULT_LOCATION_REGIONS: LocationRegion[] = [
   {
     slug: 'india',
     label: 'India',
     cities: [
       { slug: 'mumbai', label: 'Mumbai' },
-      { slug: 'bangalore', label: 'Bangalore', isComingSoon: true },
+      { slug: 'bangalore', label: 'Bangalore' },
       { slug: 'delhi', label: 'Delhi', isComingSoon: true },
       { slug: 'gujarat', label: 'Gujarat', isComingSoon: true },
       { slug: 'hyderabad', label: 'Hyderabad', isComingSoon: true },
@@ -60,7 +62,10 @@ export function normalizeLocationRegions(raw: unknown): LocationRegion[] {
           if (typeof citySlug !== 'string' || !citySlug) return [];
           if (typeof cityLabel !== 'string' || !cityLabel) return [];
           
-          const isComingSoon = citySlug.toLowerCase() !== 'mumbai';
+          const isComingSoon =
+            typeof (city as Record<string, unknown>).isComingSoon === 'boolean'
+              ? Boolean((city as Record<string, unknown>).isComingSoon)
+              : COMING_SOON_CITY_SLUGS.has(citySlug.toLowerCase());
           
           return [{ slug: citySlug, label: cityLabel, isComingSoon }];
         })

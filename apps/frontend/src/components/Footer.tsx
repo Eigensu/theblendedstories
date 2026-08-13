@@ -226,7 +226,7 @@ export default function Footer({ data }: { data?: any }) {
                   <button
                     key={`${regionSlug}-${citySlug}`}
                     type="button"
-                    onClick={() => { if (!isComingSoon) setLocation(regionSlug, citySlug); }}
+                    onClick={() => { if (!isComingSoon) window.location.href = `/stories?location=${citySlug}`; }}
                     aria-current={active ? 'true' : undefined}
                     style={{
                       fontFamily: "'Montserrat', sans-serif",
