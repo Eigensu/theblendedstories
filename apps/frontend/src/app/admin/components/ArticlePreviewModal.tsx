@@ -51,7 +51,7 @@ export default function ArticlePreviewModal({ isOpen, onClose, article }: Articl
       if (mappedArticle) {
         iframeRef.current.contentWindow.postMessage(
           { type: 'UPDATE_PREVIEW', article: mappedArticle },
-          '*'
+          window.location.origin
         );
       }
     }
@@ -66,6 +66,7 @@ export default function ArticlePreviewModal({ isOpen, onClose, article }: Articl
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
+      if (e.origin !== window.location.origin) return;
       if (e.data?.type === 'PREVIEW_READY') {
         sendArticleToIframe();
       }

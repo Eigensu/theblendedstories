@@ -13,6 +13,7 @@ class LocationCityModel(BaseModel):
     """
     slug: Optional[str] = None
     label: str
+    is_coming_soon: Optional[bool] = False
 
 
 class LocationRegionModel(BaseModel):
@@ -25,17 +26,23 @@ class LocationTaxonomyModel(BaseModelMixin):
     regions: List[LocationRegionModel] = Field(default_factory=list)
 
 
-# Shipped taxonomy, used until an editor saves their own. India/Mumbai ships first
-# since it is the only region with articles filed under it today.
+# Shipped taxonomy, used until an editor saves their own. India/Mumbai and Indore ship first
+# as active cities, with other regions marked coming soon.
 DEFAULT_LOCATION_REGIONS: List[dict] = [
     {
         "slug": "india",
         "label": "India",
         "cities": [
-            {"slug": "mumbai", "label": "Mumbai"},
+            {"slug": "mumbai", "label": "Mumbai", "is_coming_soon": False},
+            {"slug": "indore", "label": "Indore", "is_coming_soon": False},
+            {"slug": "bangalore", "label": "Bangalore", "is_coming_soon": True},
+            {"slug": "delhi", "label": "Delhi", "is_coming_soon": True},
+            {"slug": "gujarat", "label": "Gujarat", "is_coming_soon": True},
+            {"slug": "hyderabad", "label": "Hyderabad", "is_coming_soon": True},
         ],
     },
 ]
 
 DEFAULT_LOCATION_MAIN = "india"
 DEFAULT_LOCATION_SUB = "mumbai"
+

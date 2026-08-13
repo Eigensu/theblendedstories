@@ -127,6 +127,42 @@ export default function AboutUs({ data, settings }: { data?: any[], settings?: a
         >
           {slide.caption}
         </p>
+
+        {/* Editorial Request CTA */}
+        <ScrollReveal delay={0.25} style={{ position: 'absolute', bottom: 'clamp(40px, 10vh, 80px)' }}>
+          <a
+            href="mailto:info@theblendedstories.in"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textDecoration: 'none',
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: 'clamp(10px, 1vw, 13px)',
+              fontWeight: 600,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'white',
+              background: 'transparent',
+              border: '1px solid white',
+              cursor: 'pointer',
+              padding: '0 clamp(24px, 3vw, 36px)',
+              height: '52px',
+              transition: 'background 0.25s ease, color 0.25s ease',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'white';
+              e.currentTarget.style.color = 'black';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = 'white';
+            }}
+          >
+            Editorial Request
+          </a>
+        </ScrollReveal>
       </div>
     </section>
   );

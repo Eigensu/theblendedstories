@@ -19,14 +19,27 @@ async def list_articles(
     summary: bool = False,
     location_main: Optional[str] = None,
     location_sub: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
 ):
-    """Set summary=true to omit article bodies — listings never render them."""
+    """Set summary=true to omit article bodies — listings never render them.
+
+    Optional filters:
+    - category: exact-match on the article's category field
+    - status: 'draft' or 'published'
+    """
+    location_main = location_main or None
+    location_sub = location_sub or None
+
     items = await get_all(
         featured_only=featured,
         summary=summary,
         location_main=location_main,
         location_sub=location_sub,
+        category=category,
+        status=status,
     )
+
     return success_response(data=items)
 
 # NOTE: must stay above `/{slug}` — FastAPI matches in declaration order and the

@@ -6,7 +6,7 @@ import HomeLogoLink from '@/components/nav/HomeLogoLink';
 import {
   LOCATION_MAIN_COOKIE,
   LOCATION_SUB_COOKIE,
-} from '@/contexts/LocationContext';
+} from '@/constants/cookies';
 import {
   DEFAULT_LOCATION_MAIN,
   DEFAULT_LOCATION_SUB,
@@ -69,8 +69,7 @@ export default async function StoriesPage({
   const allArticles = await fetchCMSData(`/articles/?summary=true&${locationQuery}`);
   
   const publishedArticles = allArticles
-    ? allArticles
-        .filter((a: any) => a.status === 'published')
+    ? allArticles.filter((a: any) => a.status === 'published')
     : [];
 
   return (

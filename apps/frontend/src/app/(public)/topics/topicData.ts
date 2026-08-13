@@ -24,6 +24,8 @@ export interface ArticleSummary {
   publish_date?: string;
   display_order?: number | null;
   status?: string;
+  location_main?: string;
+  location_sub?: string;
 }
 
 export interface KeywordGroup {
@@ -54,15 +56,63 @@ async function fetchCMSData(endpoint: string) {
 }
 
 /**
+ * Sorting for the /topics pages.
+ * 
+ * 1. Prioritizes exact matches for the requested location (sub then main)
+ * 2. Newest first (by publish_date)
+ * 3. Ties broken by display_order
+ */
+function compareNewestFirst(a: ArticleSummary, b: ArticleSummary, locationMain: string, locationSub: string): number {
+  // 1. Exact match for sub location
+  const aSubMatch = a.location_sub === locationSub;
+  const bSubMatch = b.location_sub === locationSub;
+  if (aSubMatch !== bSubMatch) return aSubMatch ? -1 : 1;
+
+  // 2. Exact match for main location
+  const aMainMatch = a.location_main === locationMain;
+  const bMainMatch = b.location_main === locationMain;
+  if (aMainMatch !== bMainMatch) return aMainMatch ? -1 : 1;
+
+  // 3. Newest first
+  const dateA = Date.parse(a.publish_date || '');
+  const dateB = Date.parse(b.publish_date || '');
+  const hasDateA = !Number.isNaN(dateA);
+  const hasDateB = !Number.isNaN(dateB);
+
+  if (hasDateA && hasDateB && dateA !== dateB) return dateB - dateA;
+  if (hasDateA !== hasDateB) return hasDateA ? -1 : 1;
+
+  return (a.display_order || 999999) - (b.display_order || 999999);
+}
+
+import { cookies } from 'next/headers';
+import {
+  LOCATION_MAIN_COOKIE,
+  LOCATION_SUB_COOKIE,
+} from '@/constants/cookies';
+import {
+  DEFAULT_LOCATION_MAIN,
+  DEFAULT_LOCATION_SUB,
+} from '@/constants/locationTaxonomy';
+
+/**
  * Every published article, newest first. Returns [] on a backend outage so the page
  * degrades to its empty state rather than throwing, matching the rest of `(public)`.
  */
 export async function fetchPublishedArticles(): Promise<ArticleSummary[]> {
-  const articles = await fetchCMSData('/articles/?summary=true');
+  const cookieStore = await cookies();
+  const locationMain =
+    cookieStore.get(LOCATION_MAIN_COOKIE)?.value || DEFAULT_LOCATION_MAIN;
+  const locationSub =
+    cookieStore.get(LOCATION_SUB_COOKIE)?.value || DEFAULT_LOCATION_SUB;
+  const locationQuery = `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
+
+  const articles = await fetchCMSData(`/articles/?summary=true&${locationQuery}`);
   if (!Array.isArray(articles)) return [];
 
   return articles
-    .filter((article: ArticleSummary) => article.status === 'published');
+    .filter((article: ArticleSummary) => article.status === 'published')
+    .sort((a, b) => compareNewestFirst(a, b, locationMain, locationSub));
 }
 
 /** Articles filed under a menu section, whatever their sub keyword. */

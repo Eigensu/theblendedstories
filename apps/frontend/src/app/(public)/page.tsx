@@ -10,7 +10,7 @@ import Footer from '@/components/Footer';
 import {
   LOCATION_MAIN_COOKIE,
   LOCATION_SUB_COOKIE,
-} from '@/contexts/LocationContext';
+} from '@/constants/cookies';
 import {
   DEFAULT_LOCATION_MAIN,
   DEFAULT_LOCATION_SUB,

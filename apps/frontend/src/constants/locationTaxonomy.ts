@@ -22,7 +22,6 @@ export interface LocationRegion {
   cities: LocationCity[];
 }
 
-const COMING_SOON_CITY_SLUGS = new Set(['delhi', 'gujarat', 'hyderabad']);
 
 export const DEFAULT_LOCATION_REGIONS: LocationRegion[] = [
   {
@@ -30,6 +29,7 @@ export const DEFAULT_LOCATION_REGIONS: LocationRegion[] = [
     label: 'India',
     cities: [
       { slug: 'mumbai', label: 'Mumbai' },
+      { slug: 'indore', label: 'Indore' },
       { slug: 'bangalore', label: 'Bangalore' },
       { slug: 'delhi', label: 'Delhi', isComingSoon: true },
       { slug: 'gujarat', label: 'Gujarat', isComingSoon: true },
@@ -55,18 +55,21 @@ export function normalizeLocationRegions(raw: unknown): LocationRegion[] {
     const normalizedCities = Array.isArray(cities)
       ? cities.flatMap((city): LocationCity[] => {
           if (!city || typeof city !== 'object') return [];
-          const { slug: citySlug, label: cityLabel } = city as Record<
-            string,
-            unknown
-          >;
+          const cityRecord = city as Record<string, unknown>;
+          const { slug: citySlug, label: cityLabel } = cityRecord;
           if (typeof citySlug !== 'string' || !citySlug) return [];
           if (typeof cityLabel !== 'string' || !cityLabel) return [];
-          
+          const rawIsComingSoon =
+            typeof cityRecord.isComingSoon === 'boolean'
+              ? cityRecord.isComingSoon
+              : typeof cityRecord.is_coming_soon === 'boolean'
+              ? cityRecord.is_coming_soon
+              : undefined;
+
           const isComingSoon =
-            typeof (city as Record<string, unknown>).isComingSoon === 'boolean'
-              ? Boolean((city as Record<string, unknown>).isComingSoon)
-              : COMING_SOON_CITY_SLUGS.has(citySlug.toLowerCase());
-          
+            typeof rawIsComingSoon === 'boolean'
+              ? rawIsComingSoon
+              : ['delhi', 'gujarat', 'hyderabad'].includes(citySlug.toLowerCase());
           return [{ slug: citySlug, label: cityLabel, isComingSoon }];
         })
       : [];

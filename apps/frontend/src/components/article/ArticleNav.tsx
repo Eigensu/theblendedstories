@@ -51,7 +51,7 @@ export default function ArticleNav() {
       >
         <div className="w-[88px] flex justify-start">
           <Link
-            href="/#top-picks"
+            href="/stories"
             className="inline-flex items-center gap-3 text-[#f5f4f0] hover:text-white transition-colors"
             style={{
               fontFamily: "'Poppins', sans-serif",
@@ -67,13 +67,15 @@ export default function ArticleNav() {
           </Link>
         </div>
 
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-none">
-          <img
-            src="/TBS LOGO-02 white.png"
-            alt="The Blended Stories"
-            className="no-grayscale"
-            style={{ height: 'clamp(64px, 9vw, 88px)', width: 'auto', mixBlendMode: 'screen', display: 'block' }}
-          />
+        <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+          <Link href="/">
+            <img
+              src="/TBS LOGO-02 white.png"
+              alt="The Blended Stories"
+              className="no-grayscale"
+              style={{ height: 'clamp(64px, 9vw, 88px)', width: 'auto', mixBlendMode: 'screen', display: 'block' }}
+            />
+          </Link>
         </div>
 
         <div
