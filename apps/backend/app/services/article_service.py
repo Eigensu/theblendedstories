@@ -27,22 +27,51 @@ def _publication_timestamp(item: dict) -> float | None:
     return None
 
 
-def _article_sort_key_latest(item: dict) -> tuple[float, str]:
+def _location_rank(
+    item: dict, location_main: str | None, location_sub: str | None
+) -> int:
+    """0 = exact city match, 1 = same region only, 2 = no match / no hint given.
+
+    This only ever reorders — a visitor's default/cookied city must never
+    exclude articles tagged for somewhere else, or a city with nothing tagged
+    for it renders an empty page for no reason.
+    """
+    if location_sub and item.get("location_sub") == location_sub:
+        return 0
+    if location_main and item.get("location_main") == location_main:
+        return 1
+    return 2
+
+
+def _article_sort_key_latest(
+    item: dict, location_main: str | None = None, location_sub: str | None = None
+) -> tuple[int, float, str]:
     publication_timestamp = _publication_timestamp(item)
     publication_sort = (
         float("inf") if publication_timestamp is None else -publication_timestamp
     )
     slug = str(item.get("slug") or "")
-    return (publication_sort, slug)
+    return (_location_rank(item, location_main, location_sub), publication_sort, slug)
 
-def _article_sort_key_featured(item: dict) -> tuple[int, int, float, str]:
+def _article_sort_key_featured(
+    item: dict, location_main: str | None = None, location_sub: str | None = None
+) -> tuple[int, int, int, float, str]:
     display_order = item.get("display_order")
-    latest_sort = _article_sort_key_latest(item)
     if isinstance(display_order, int) and display_order > 0:
-        return (0, display_order, *latest_sort)
-    return (1, 0, *latest_sort)
+        # An editor's explicit Top Picks placement always wins — location never
+        # reshuffles it.
+        return (0, display_order, 0, 0.0, "")
+    location_rank, publication_sort, slug = _article_sort_key_latest(
+        item, location_main, location_sub
+    )
+    return (1, 0, location_rank, publication_sort, slug)
 
-async def _fetch_sorted_articles(query: dict | None = None, featured_only: bool = False) -> list[dict]:
+async def _fetch_sorted_articles(
+    query: dict | None = None,
+    featured_only: bool = False,
+    location_main: str | None = None,
+    location_sub: str | None = None,
+) -> list[dict]:
     cursor = repo.collection.find({**(query or {}), "is_active": True})
     docs = await cursor.to_list(length=None)
     # find() returns raw Mongo docs with an ObjectId `_id` — repo.get_all() normally
@@ -50,8 +79,15 @@ async def _fetch_sorted_articles(query: dict | None = None, featured_only: bool 
     # to sort in Python, so it has to normalize the same way or the raw ObjectId ends
     # up in the response and blows up FastAPI's response serialization.
     items = [repo._format_doc(doc) for doc in docs]
-    sort_key = _article_sort_key_featured if featured_only else _article_sort_key_latest
-    return sorted(items, key=sort_key)
+    if featured_only:
+        return sorted(
+            items,
+            key=lambda item: _article_sort_key_featured(item, location_main, location_sub),
+        )
+    return sorted(
+        items,
+        key=lambda item: _article_sort_key_latest(item, location_main, location_sub),
+    )
 
 
 def _new_block_id() -> str:
@@ -233,16 +269,18 @@ async def get_all(
     summary: bool = False,
     location_main: str | None = None,
     location_sub: str | None = None,
+    city: str | None = None,
     category: str | None = None,
     status: str | None = None,
 ):
+    # `city` is an explicit pick (the footer's location links) and hard-filters.
+    # `location_main`/`location_sub` are the visitor's default/cookied city — a
+    # sort hint only, so they never hide anything. See _location_rank.
     query: dict[str, object] = {}
-    if location_main:
-        query["location_main"] = location_main
-    if location_sub:
-        query["location_sub"] = location_sub
+    if city:
+        query["location_sub"] = city
 
-    items = await _fetch_sorted_articles(query, featured_only)
+    items = await _fetch_sorted_articles(query, featured_only, location_main, location_sub)
     if featured_only:
         items = [item for item in items if item.get("featured") is True]
     if category:

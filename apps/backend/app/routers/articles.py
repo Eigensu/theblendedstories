@@ -19,6 +19,7 @@ async def list_articles(
     summary: bool = False,
     location_main: Optional[str] = None,
     location_sub: Optional[str] = None,
+    city: Optional[str] = None,
     category: Optional[str] = None,
     status: Optional[str] = None,
 ):
@@ -27,15 +28,21 @@ async def list_articles(
     Optional filters:
     - category: exact-match on the article's category field
     - status: 'draft' or 'published'
+    - location_main/location_sub: the visitor's default/cookied city — never
+      excludes anything, just sorts that city's articles to the top
+    - city: an explicit city pick (e.g. the footer's location links) — hard
+      filters to only that city's articles
     """
     location_main = location_main or None
     location_sub = location_sub or None
+    city = city or None
 
     items = await get_all(
         featured_only=featured,
         summary=summary,
         location_main=location_main,
         location_sub=location_sub,
+        city=city,
         category=category,
         status=status,
     )

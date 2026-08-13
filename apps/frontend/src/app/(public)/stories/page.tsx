@@ -1,7 +1,12 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import Footer from '@/components/Footer';
 import HomeLogoLink from '@/components/nav/HomeLogoLink';
+import {
+  LOCATION_MAIN_COOKIE,
+  LOCATION_SUB_COOKIE,
+} from '@/constants/cookies';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,12 +38,21 @@ export default async function StoriesPage({
   const resolvedParams = await searchParams;
   const urlLocation = typeof resolvedParams?.location === 'string' ? resolvedParams.location.toLowerCase() : null;
 
-  // Only an explicit ?location= click (from the footer's city list) narrows the
-  // archive — a visitor's default/cookied city must never hard-filter it, or a
-  // city with nothing tagged for it renders an empty page for no reason.
-  const locationQuery = urlLocation
-    ? `location_sub=${encodeURIComponent(urlLocation)}`
-    : '';
+  // An explicit ?location= click (from the footer's city list) hard-filters to
+  // just that city. Otherwise, the visitor's default/cookied city only sorts
+  // its matches to the top — it never hides an article, or a city with nothing
+  // tagged for it would render an empty page for no reason.
+  let locationQuery = '';
+  if (urlLocation) {
+    locationQuery = `city=${encodeURIComponent(urlLocation)}`;
+  } else {
+    const cookieStore = await cookies();
+    const locationMain = cookieStore.get(LOCATION_MAIN_COOKIE)?.value || '';
+    const locationSub = cookieStore.get(LOCATION_SUB_COOKIE)?.value || '';
+    if (locationMain || locationSub) {
+      locationQuery = `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
+    }
+  }
 
   // Cards render title/subtitle/cover only, so the summary projection is enough.
   const allArticles = await fetchCMSData(
