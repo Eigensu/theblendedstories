@@ -44,7 +44,12 @@ def _article_sort_key_featured(item: dict) -> tuple[int, int, float, str]:
 
 async def _fetch_sorted_articles(query: dict | None = None, featured_only: bool = False) -> list[dict]:
     cursor = repo.collection.find({**(query or {}), "is_active": True})
-    items = await cursor.to_list(length=None)
+    docs = await cursor.to_list(length=None)
+    # find() returns raw Mongo docs with an ObjectId `_id` — repo.get_all() normally
+    # converts that to a string `id` via _format_doc, but this bypasses repo.get_all()
+    # to sort in Python, so it has to normalize the same way or the raw ObjectId ends
+    # up in the response and blows up FastAPI's response serialization.
+    items = [repo._format_doc(doc) for doc in docs]
     sort_key = _article_sort_key_featured if featured_only else _article_sort_key_latest
     return sorted(items, key=sort_key)
 

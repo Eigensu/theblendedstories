@@ -1,17 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import Footer from '@/components/Footer';
 import HomeLogoLink from '@/components/nav/HomeLogoLink';
-import {
-  LOCATION_MAIN_COOKIE,
-  LOCATION_SUB_COOKIE,
-} from '@/constants/cookies';
-import {
-  DEFAULT_LOCATION_MAIN,
-  DEFAULT_LOCATION_SUB,
-  DEFAULT_LOCATION_REGIONS,
-} from '@/constants/locationTaxonomy';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,31 +32,18 @@ export default async function StoriesPage({
 }) {
   const resolvedParams = await searchParams;
   const urlLocation = typeof resolvedParams?.location === 'string' ? resolvedParams.location.toLowerCase() : null;
-  // The visitor's chosen city, set by LocationSwitcher — falls back to the
-  // shipped default (India/Mumbai) for a first-time visitor with no cookie yet.
-  const cookieStore = await cookies();
-  // Find region for urlLocation if provided
-  let overrideMain = null;
-  if (urlLocation) {
-    for (const region of DEFAULT_LOCATION_REGIONS) {
-      if (region.cities.some((c: any) => c.slug === urlLocation)) {
-        overrideMain = region.slug;
-        break;
-      }
-    }
-  }
 
-  const locationMain =
-    overrideMain || cookieStore.get(LOCATION_MAIN_COOKIE)?.value || DEFAULT_LOCATION_MAIN;
-  const locationSub =
-    urlLocation || cookieStore.get(LOCATION_SUB_COOKIE)?.value || DEFAULT_LOCATION_SUB;
-  
-  const locationQuery = urlLocation 
-    ? `location_sub=${encodeURIComponent(locationSub)}` 
-    : `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
+  // Only an explicit ?location= click (from the footer's city list) narrows the
+  // archive — a visitor's default/cookied city must never hard-filter it, or a
+  // city with nothing tagged for it renders an empty page for no reason.
+  const locationQuery = urlLocation
+    ? `location_sub=${encodeURIComponent(urlLocation)}`
+    : '';
 
   // Cards render title/subtitle/cover only, so the summary projection is enough.
-  const allArticles = await fetchCMSData(`/articles/?summary=true&${locationQuery}`);
+  const allArticles = await fetchCMSData(
+    `/articles/?summary=true${locationQuery ? `&${locationQuery}` : ''}`
+  );
   
   const publishedArticles = allArticles
     ? allArticles.filter((a: any) => a.status === 'published')
