@@ -35,7 +35,7 @@ DEFAULT_LOCATION_REGIONS: List[dict] = [
         "cities": [
             {"slug": "mumbai", "label": "Mumbai", "is_coming_soon": False},
             {"slug": "indore", "label": "Indore", "is_coming_soon": False},
-            {"slug": "bangalore", "label": "Bangalore", "is_coming_soon": True},
+            {"slug": "bangalore", "label": "Bangalore", "is_coming_soon": False},
             {"slug": "delhi", "label": "Delhi", "is_coming_soon": True},
             {"slug": "gujarat", "label": "Gujarat", "is_coming_soon": True},
             {"slug": "hyderabad", "label": "Hyderabad", "is_coming_soon": True},

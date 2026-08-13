@@ -1,6 +1,3 @@
-'use client';
-
-import { useState } from 'react';
 import { ArticleImageItem } from '@/types/article';
 
 function GalleryMedia({
@@ -12,52 +9,11 @@ function GalleryMedia({
   caption: string;
   shape: 'tile' | 'single' | 'strip';
 }) {
-  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
-
-  const isSingle = shape === 'single';
-  let containerStyle: React.CSSProperties = {};
-  let imgStyle: React.CSSProperties = {};
-
-  if (isSingle) {
-    if (aspectRatio !== null) {
-      let targetRatio = aspectRatio <= 1.0 ? 4 / 5 : 1.91 / 1;
-      
-      const cropFactor = aspectRatio > targetRatio 
-        ? targetRatio / aspectRatio
-        : aspectRatio / targetRatio;
-    
-      const MIN_KEEP = 0.80; // Allow up to 20% crop (allows 1:1 -> 4:5)
-    
-      if (cropFactor < MIN_KEEP) {
-        targetRatio = aspectRatio > targetRatio 
-          ? aspectRatio * MIN_KEEP 
-          : aspectRatio / MIN_KEEP;
-      }
-      
-      containerStyle.aspectRatio = targetRatio;
-      imgStyle = { width: '100%', height: '100%', objectFit: 'cover' };
-    } else {
-      // Before load, let it flow naturally to avoid 0-height collapse
-      imgStyle = { width: '100%', height: 'auto' };
-    }
-  }
-
   return (
     <div
       className={`article-gallery-media article-gallery-media--${shape} hover:scale-[1.015] transition-transform duration-300`}
-      style={containerStyle}
     >
-      <img
-        src={img.image}
-        alt={caption}
-        style={imgStyle}
-        onLoad={(e) => {
-          const { naturalWidth, naturalHeight } = e.currentTarget;
-          if (naturalHeight > 0) {
-            setAspectRatio(naturalWidth / naturalHeight);
-          }
-        }}
-      />
+      <img src={img.image} alt={caption} />
     </div>
   );
 }
@@ -82,17 +38,22 @@ export default function Gallery({
 
   const isRow = layout === 'row';
 
-  // A lone inline image is sized from its own proportions; put a second one
-  // beside it and they letterbox to a shared height instead. See the
-  // .article-gallery-media rules in globals.css.
+  // Inline images — alone or paired in a row — keep their own proportions,
+  // capped to a max height. See the .article-gallery-media rules in globals.css.
   let shape: 'tile' | 'single' | 'strip' = 'tile';
   if (isRow) shape = images.length === 1 ? 'single' : 'strip';
+
+  // On a phone, 2-3 images pair up two-to-a-row; more than that stacks one per
+  // row rather than packing an uneven leftover tile beside empty space. Tablet
+  // and up switch to the horizontal scrolling strip regardless of count.
+  const mobileCols =
+    images.length === 1 || images.length > 3 ? 'grid-cols-1' : 'grid-cols-2';
 
   return (
     <div
       className={
         isRow
-          ? `article-gallery-row grid w-full ${images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-3 my-[clamp(16px,2.5vw,28px)] sm:flex sm:flex-nowrap sm:gap-5.5 sm:overflow-x-auto`
+          ? `article-gallery-row grid w-full ${mobileCols} gap-3 my-[clamp(16px,2.5vw,28px)] sm:flex sm:flex-nowrap sm:gap-5.5 sm:overflow-x-auto`
           : 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5.5 w-full my-[clamp(16px,2.5vw,28px)]'
       }
     >
