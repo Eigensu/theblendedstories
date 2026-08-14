@@ -146,7 +146,7 @@ function SuccessModal({ onBack }: { onBack: () => void }) {
             <h2
               style={{
                 fontFamily: "'Fraunces', serif",
-                fontSize: 'clamp(28px, 4vw, 44px)',
+                fontSize: 'clamp(20px, 2.8vw, 32px)',
                 fontWeight: 400,
                 color: 'white',
                 textTransform: 'uppercase',

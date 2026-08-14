@@ -129,7 +129,6 @@ export default function TBSTalks({ data, settings }: { data?: any[], settings?: 
                 cursor: speaker.social_link ? 'pointer' : 'default',
                 display: 'flex',
                 flexDirection: 'column',
-                height: '100%',
                 textDecoration: 'none',
               }}>
 
