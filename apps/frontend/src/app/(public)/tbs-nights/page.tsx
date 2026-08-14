@@ -119,32 +119,12 @@ function SuccessModal({ onBack }: { onBack: () => void }) {
               marginBottom: '28px',
             }}
           >
-            <div>
-              <p
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: '10px',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.5)',
-                  margin: 0,
-                }}
-              >
-                TBS
-              </p>
-              <p
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: '10px',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.5)',
-                  margin: 0,
-                }}
-              >
-                NIGHTS
-              </p>
-            </div>
+            <img
+              src="/TBS LOGO-02 white.png"
+              alt="The Blended Stories"
+              className="no-grayscale"
+              style={{ height: '28px', width: 'auto', display: 'block', mixBlendMode: 'screen' }}
+            />
             <div
               style={{
                 border: '1px solid rgba(255,255,255,0.3)',
@@ -166,7 +146,7 @@ function SuccessModal({ onBack }: { onBack: () => void }) {
             <h2
               style={{
                 fontFamily: "'Fraunces', serif",
-                fontSize: 'clamp(28px, 4vw, 44px)',
+                fontSize: 'clamp(20px, 2.8vw, 32px)',
                 fontWeight: 400,
                 color: 'white',
                 textTransform: 'uppercase',
@@ -205,8 +185,6 @@ function SuccessModal({ onBack }: { onBack: () => void }) {
             }}
           >
             THANK YOU FOR APPLYING
-            <br />
-            TO TBS NIGHTS.
           </p>
 
           {/* Body text */}
@@ -220,21 +198,7 @@ function SuccessModal({ onBack }: { onBack: () => void }) {
                 margin: '0 0 14px 0',
               }}
             >
-              We&apos;re currently reviewing applications and carefully curating
-              our next gathering. Every guest is selected with intention to
-              create a table that&apos;s as interesting as the conversations
-              around it.
-            </p>
-            <p
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: '11px',
-                color: 'rgba(255,255,255,0.6)',
-                lineHeight: '1.75',
-                margin: '0 0 14px 0',
-              }}
-            >
-              If selected, you&apos;ll receive an invitation from us soon.
+              We&apos;re currently reviewing applications and carefully curating our next gathering. Every guest is selected with intention to create a table that&apos;s as interesting as the conversations around it. If selected, you&apos;ll receive an invitation from us soon.
             </p>
             <p
               style={{
@@ -288,7 +252,7 @@ function SuccessModal({ onBack }: { onBack: () => void }) {
                 margin: '0 0 20px 0',
               }}
             >
-              we&apos;ll be in touch.
+              We&apos;ll Be In Touch.
             </p>
             <button
               onClick={onBack}

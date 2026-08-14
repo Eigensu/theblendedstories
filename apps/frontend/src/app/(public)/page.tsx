@@ -11,10 +11,6 @@ import {
   LOCATION_MAIN_COOKIE,
   LOCATION_SUB_COOKIE,
 } from '@/constants/cookies';
-import {
-  DEFAULT_LOCATION_MAIN,
-  DEFAULT_LOCATION_SUB,
-} from '@/constants/locationTaxonomy';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,14 +31,16 @@ async function fetchCMSData(endpoint: string) {
 }
 
 export default async function Home() {
-  // The visitor's chosen city, set by LocationSwitcher — falls back to the
-  // shipped default (India/Mumbai) for a first-time visitor with no cookie yet.
+  // The visitor's chosen city, set by LocationSwitcher — only sorts their
+  // Top Picks matches to the top of the automatic (non-manually-ordered) tail;
+  // it never hides an article, and a first-time visitor with no cookie yet
+  // just gets the unranked curated order.
   const cookieStore = await cookies();
-  const locationMain =
-    cookieStore.get(LOCATION_MAIN_COOKIE)?.value || DEFAULT_LOCATION_MAIN;
-  const locationSub =
-    cookieStore.get(LOCATION_SUB_COOKIE)?.value || DEFAULT_LOCATION_SUB;
-  const locationQuery = `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
+  const locationMain = cookieStore.get(LOCATION_MAIN_COOKIE)?.value || '';
+  const locationSub = cookieStore.get(LOCATION_SUB_COOKIE)?.value || '';
+  const locationQuery = locationMain || locationSub
+    ? `&location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`
+    : '';
 
   // Fetch all CMS data in parallel
   const [
@@ -59,7 +57,7 @@ export default async function Home() {
     fetchCMSData('/what-is-tbs/'),
     fetchCMSData('/what-we-cover/'),
     fetchCMSData('/tbs-nights/'),
-    fetchCMSData(`/articles/?featured=true&${locationQuery}`),
+    fetchCMSData(`/articles/?featured=true${locationQuery}`),
     fetchCMSData('/tbs-talks/?featured=true'),
     fetchCMSData('/footer/'),
     fetchCMSData('/settings/')

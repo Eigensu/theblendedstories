@@ -455,6 +455,7 @@
     display: none;
   }
   .talks-grid > * {
+    display: flex;
     flex: 0 0
       calc(
         (100% - (var(--cards-per-view) - 1) * var(--card-gap)) /
@@ -462,6 +463,19 @@
       );
     min-width: 0;
     scroll-snap-align: start;
+  }
+  .talks-grid > * > .talks-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .talks-card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .talks-card-date {
+    margin-top: auto !important;
   }
 
   /* ─── TheEdit layout ─── */
@@ -1277,27 +1291,15 @@
     object-fit: cover;
   }
 
-  /* A lone inline image keeps its own proportions — capped so a tall portrait
-   doesn't swallow the screen — rather than being cropped to someone else's. */
-  .article-gallery-media--single img {
+  /* Inline images — alone or paired in a row — render at their own (uploaded)
+   proportions rather than being cropped or letterboxed to a shared box. Only
+   the height is capped, so a tall portrait doesn't swallow the screen. */
+  .article-gallery-media--single img,
+  .article-gallery-media--strip img {
     width: auto;
     max-width: 100%;
     height: auto;
     max-height: clamp(250px, 50vh, 700px);
-  }
-
-  /* Two or more read as one strip: matched heights, letterboxed not cropped, so
-   a portrait and a landscape can sit side by side without either losing its
-   subject. The faint backing fills whatever the letterboxing leaves. */
-  .article-gallery-media--strip {
-    height: clamp(180px, 30vh, 450px);
-    background-color: rgba(255, 255, 255, 0.03);
-  }
-
-  .article-gallery-media--strip img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
   }
 
   /* Phones get fixed caps instead of the viewport-height clamps above: 50vh is
@@ -1309,12 +1311,9 @@
       height: 320px;
     }
 
-    .article-gallery-media--single img {
+    .article-gallery-media--single img,
+    .article-gallery-media--strip img {
       max-height: 320px;
-    }
-
-    .article-gallery-media--strip {
-      height: 200px;
     }
   }
 }

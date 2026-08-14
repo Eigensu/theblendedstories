@@ -90,4 +90,4 @@ class ArticleModel(BaseModelMixin):
     seo_description: Optional[str] = None
     
     featured: bool = False
-    display_order: int = 0
+    display_order: Optional[int] = None

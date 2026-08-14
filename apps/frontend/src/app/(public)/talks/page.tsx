@@ -131,13 +131,15 @@ export default async function TalksPage() {
               <CardTag
                 key={speaker.id || speaker.name}
                 {...linkProps}
-                className="img-card group"
+                className="img-card talks-card group"
                 style={{
                   background: '#0a0a0a',
                   border: '1px solid rgba(255,255,255,0.06)',
                   overflow: 'hidden',
                   cursor: href ? 'pointer' : 'default',
-                  display: 'block',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
                   textDecoration: 'none',
                 }}
               >
@@ -165,7 +167,7 @@ export default async function TalksPage() {
                 </div>
 
                 {/* Info block */}
-                <div style={{ padding: 'clamp(10px, 1.4vw, 18px)' }}>
+                <div className="talks-card-body" style={{ padding: 'clamp(10px, 1.4vw, 18px)' }}>
                   <h2
                     style={{
                       fontFamily: "'Libre Bodoni', serif",
@@ -207,6 +209,7 @@ export default async function TalksPage() {
                   </p>
 
                   <p
+                    className="talks-card-date"
                     style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontSize: 'clamp(9px, 0.75vw, 11px)',

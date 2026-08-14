@@ -7,10 +7,6 @@ import {
   LOCATION_MAIN_COOKIE,
   LOCATION_SUB_COOKIE,
 } from '@/constants/cookies';
-import {
-  DEFAULT_LOCATION_MAIN,
-  DEFAULT_LOCATION_SUB,
-} from '@/constants/locationTaxonomy';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,18 +30,34 @@ async function fetchCMSData(endpoint: string) {
   }
 }
 
-export default async function StoriesPage() {
-  // The visitor's chosen city, set by LocationSwitcher — falls back to the
-  // shipped default (India/Mumbai) for a first-time visitor with no cookie yet.
-  const cookieStore = await cookies();
-  const locationMain =
-    cookieStore.get(LOCATION_MAIN_COOKIE)?.value || DEFAULT_LOCATION_MAIN;
-  const locationSub =
-    cookieStore.get(LOCATION_SUB_COOKIE)?.value || DEFAULT_LOCATION_SUB;
-  const locationQuery = `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
+export default async function StoriesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const resolvedParams = await searchParams;
+  const urlLocation = typeof resolvedParams?.location === 'string' ? resolvedParams.location.toLowerCase() : null;
+
+  // An explicit ?location= click (from the footer's city list) hard-filters to
+  // just that city. Otherwise, the visitor's default/cookied city only sorts
+  // its matches to the top — it never hides an article, or a city with nothing
+  // tagged for it would render an empty page for no reason.
+  let locationQuery = '';
+  if (urlLocation) {
+    locationQuery = `city=${encodeURIComponent(urlLocation)}`;
+  } else {
+    const cookieStore = await cookies();
+    const locationMain = cookieStore.get(LOCATION_MAIN_COOKIE)?.value || '';
+    const locationSub = cookieStore.get(LOCATION_SUB_COOKIE)?.value || '';
+    if (locationMain || locationSub) {
+      locationQuery = `location_main=${encodeURIComponent(locationMain)}&location_sub=${encodeURIComponent(locationSub)}`;
+    }
+  }
 
   // Cards render title/subtitle/cover only, so the summary projection is enough.
-  const allArticles = await fetchCMSData(`/articles/?summary=true&${locationQuery}`);
+  const allArticles = await fetchCMSData(
+    `/articles/?summary=true${locationQuery ? `&${locationQuery}` : ''}`
+  );
   
   const publishedArticles = allArticles
     ? allArticles.filter((a: any) => a.status === 'published')
@@ -61,18 +73,35 @@ export default async function StoriesPage() {
         <div style={{ marginBottom: 'clamp(32px, 5vw, 64px)' }}>
           <HomeLogoLink />
 
-          <h1 style={{
-            fontFamily: "'Fraunces', serif",
-            fontSize: 'clamp(36px, 5vw, 64px)',
-            fontWeight: 400,
-            color: 'white',
-            margin: '0',
-            lineHeight: '0.9',
-            textTransform: 'uppercase',
-            letterSpacing: '-0.01em',
-          }}>
-            ALL STORIES
-          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+            <h1 style={{
+              fontFamily: "'Fraunces', serif",
+              fontSize: 'clamp(28px, 5vw, 64px)',
+              fontWeight: 400,
+              color: 'white',
+              margin: '0',
+              lineHeight: '0.9',
+              textTransform: 'uppercase',
+              letterSpacing: '-0.01em',
+            }}>
+              {urlLocation ? `${urlLocation} STORIES` : 'ALL STORIES'}
+            </h1>
+            {urlLocation && (
+              <Link href="/stories" style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '14px',
+                color: 'white',
+                border: '1px solid rgba(255,255,255,0.3)',
+                padding: '8px 16px',
+                borderRadius: '20px',
+                textDecoration: 'none',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                View All Stories
+              </Link>
+            )}
+          </div>
           <div style={{
             width: '36px',
             height: '1px',

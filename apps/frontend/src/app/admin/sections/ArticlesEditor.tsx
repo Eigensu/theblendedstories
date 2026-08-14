@@ -89,7 +89,7 @@ export type Article = {
   seo_title?: string;
   seo_description?: string;
   featured: boolean;
-  display_order: number;
+  display_order?: number | null;
   status: string;
 };
 
@@ -618,7 +618,6 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
   // Unique categories derived from the full (unfiltered) articles list for the
   // dropdown. Stored separately so changing a filter doesn't collapse the options.
   const [allCategories, setAllCategories] = useState<string[]>([]);
-
   const { setHasUnsavedChanges, setIsSaving, registerSaveHandler, registerPreviewHandler, setStatus } = useAdmin();
 
   useEffect(() => {
@@ -629,6 +628,12 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       registerPreviewHandler(null);
     }
   }, [mode, filterCategory, filterStatus]);
+
+  useEffect(() => {
+    return () => {
+      registerPreviewHandler(null);
+    };
+  }, [registerPreviewHandler]);
 
   useEffect(() => {
     return () => {
@@ -765,7 +770,7 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
       gallery: [],
       related_articles: [],
       featured: false,
-      display_order: articles.length + 1,
+      display_order: null,
       status: 'draft'
     };
     setSelectedArticle(newArticle);
@@ -1012,6 +1017,28 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
               onChange={(v) => setSelectedArticle({ ...selectedArticle, publish_date: v })}
             />
 
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-white mb-2">
+                Display Order (Homepage)
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={selectedArticle.display_order?.toString() || ''}
+                onChange={(e) =>
+                  setSelectedArticle({
+                    ...selectedArticle,
+                    display_order: e.target.value ? parseInt(e.target.value, 10) : null,
+                  })
+                }
+                placeholder="Leave blank for automatic newest-first ordering"
+                className="w-full px-4 py-2.5 text-sm bg-black text-white border border-zinc-800 rounded-lg shadow-sm placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-white focus:border-white transition-all duration-200 ease-in-out"
+              />
+              <p className="mt-2 text-xs text-zinc-500">
+                Leave empty for automatic newest-first ordering. Enter a number to manually control the position.
+              </p>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <SelectField
                 label="Primary Keyword (menu section)"
@@ -1235,12 +1262,6 @@ export default function ArticlesEditor({ sectionId }: { sectionId: string }) {
               </label>
             </div>
 
-            <TextField 
-              label="Display Order (Homepage)" 
-              value={selectedArticle.display_order.toString()} 
-              onChange={(v) => setSelectedArticle({ ...selectedArticle, display_order: parseInt(v) || 0 })} 
-              type="number"
-            />
           </div>
 
 

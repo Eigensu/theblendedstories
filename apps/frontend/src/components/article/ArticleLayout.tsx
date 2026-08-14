@@ -1,5 +1,5 @@
 'use client';
-
+import React from 'react';
 import Link from 'next/link';
 import ReadingProgressBar from './ReadingProgressBar';
 import ArticleNav from './ArticleNav';

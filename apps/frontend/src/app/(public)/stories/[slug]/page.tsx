@@ -38,12 +38,6 @@ function getArticleBlocks(article: any): ArticleContentBlock[] {
   return legacyContentToBlocks(article.content || []);
 }
 
-function getArticleSortValue(article: any) {
-  const parsedDate = Date.parse(article.publish_date);
-  if (!Number.isNaN(parsedDate)) return parsedDate;
-  return article.display_order || 0;
-}
-
 function getRecommendedArticles(
   allArticles: any[],
   currentSlug: string,
@@ -53,8 +47,7 @@ function getRecommendedArticles(
     .filter(
       (article: any) =>
         article.status === 'published' && article.slug !== currentSlug
-    )
-    .sort((a: any, b: any) => getArticleSortValue(b) - getArticleSortValue(a));
+    );
 
   const sameCategory = publishedArticles.filter(
     (article: any) => article.category === currentCategory
@@ -164,8 +157,7 @@ export default async function ArticlePage({
   if (!allArticles) notFound();
 
   const publishedArticles = allArticles
-    .filter((a: any) => a.status === 'published')
-    .sort((a: any, b: any) => a.display_order - b.display_order);
+    .filter((a: any) => a.status === 'published');
   const articleIndex = publishedArticles.findIndex(
     (a: any) => a.slug === resolvedParams.slug
   );
