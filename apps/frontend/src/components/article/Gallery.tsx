@@ -91,10 +91,12 @@ export default function Gallery({
             {caption && (
               <span
                 style={{
+                  display: 'block',
                   fontFamily: "'Poppins', sans-serif",
                   fontSize: '11px',
                   letterSpacing: '0.06em',
                   color: '#6b6a65',
+                  textAlign: 'center',
                 }}
               >
                 {caption}
