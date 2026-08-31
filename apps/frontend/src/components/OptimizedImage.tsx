@@ -46,7 +46,7 @@ export default function OptimizedImage({
   height = 1500,
   onMouseEnter,
   onMouseLeave,
-}: OptimizedImageProps) {
+}: Readonly<OptimizedImageProps>) {
   // An empty/missing src would make next/image throw during render, where a
   // plain <img> merely showed nothing. CMS fields are optional, so guard.
   if (!src) return null;

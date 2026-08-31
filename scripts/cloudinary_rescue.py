@@ -204,8 +204,22 @@ def cmd_probe():
     print("      c. Last resort: one month of a paid plan, export, cancel.")
 
 
+def assert_fetchable(url):
+    """Reject anything that is not an https Cloudinary delivery URL.
+
+    Every URL here originates in MongoDB, so it is untrusted input. urlopen
+    honours file:// and will happily reach link-local addresses, which would
+    turn a poisoned record into a local file read or an SSRF against internal
+    metadata endpoints. Nothing legitimate falls outside this allowlist.
+    """
+    parsed = urlparse(url)
+    if parsed.scheme != "https" or parsed.hostname != "res.cloudinary.com":
+        raise ValueError(f"refusing non-Cloudinary URL: {url[:80]}")
+    return url
+
+
 def status_of(url):
-    request = urllib.request.Request(url, method="HEAD")
+    request = urllib.request.Request(assert_fetchable(url), method="HEAD")
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
             return response.status
@@ -238,7 +252,7 @@ def cmd_download():
         target.parent.mkdir(parents=True, exist_ok=True)
 
         try:
-            with urllib.request.urlopen(url, timeout=60) as response:
+            with urllib.request.urlopen(assert_fetchable(url), timeout=60) as response:
                 payload = response.read()
             target.write_bytes(payload)
             saved += 1

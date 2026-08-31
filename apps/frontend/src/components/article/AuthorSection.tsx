@@ -1,5 +1,6 @@
-import OptimizedImage from '@/components/OptimizedImage';
 "use client";
+
+import OptimizedImage from '@/components/OptimizedImage';
 
 import { useEffect, useState } from 'react';
 
