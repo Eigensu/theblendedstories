@@ -22,7 +22,13 @@ async def upload_media(file: UploadFile = File(...)):
             resource_type=resource_type,
             folder="theblendedstories"
         )
-        return success_response(data={"url": result.get("secure_url")}, message="Uploaded successfully")
+        # The admin stores this URL verbatim, so it must stay canonical —
+        # transformations are added at delivery time, not baked into the record.
+        return success_response(
+            data={"url": result.get("secure_url")},
+            message="Uploaded successfully",
+            optimize_media=False,
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
