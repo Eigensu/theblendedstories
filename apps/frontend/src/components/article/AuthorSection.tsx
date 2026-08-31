@@ -1,3 +1,4 @@
+import OptimizedImage from '@/components/OptimizedImage';
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -21,7 +22,7 @@ export default function AuthorSection({ author, authorImage, authorRole }: { aut
   return (
     <div style={{ width: '100%', margin: '0 0 clamp(40px, 8vw, 88px)', padding: 0 }}>
       <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-[26px]" style={{ borderTop: '1px solid rgba(245,244,240,0.14)', borderBottom: '1px solid rgba(245,244,240,0.14)', padding: 'clamp(24px, 4vw, 44px) 0' }}>
-        <img src={authorImage} alt="" style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '1px solid rgba(245,244,240,0.16)', filter: 'grayscale(0.3) brightness(0.75)' }} className="mx-auto sm:mx-0" />
+        <OptimizedImage src={authorImage} alt="" sizes="96px" width={96} height={96} style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '1px solid rgba(245,244,240,0.16)', filter: 'grayscale(0.3) brightness(0.75)' }} className="mx-auto sm:mx-0" />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'inherit' }}>
           <span style={{ display: 'block', fontFamily: "'Fraunces', serif", fontSize: '21px', color: '#f5f4f0', marginBottom: '4px' }}>
             {author}

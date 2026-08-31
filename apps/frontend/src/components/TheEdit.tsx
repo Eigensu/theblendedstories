@@ -1,4 +1,5 @@
 'use client';
+import OptimizedImage from '@/components/OptimizedImage';
 import { useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 
@@ -167,7 +168,7 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
                       overflow: 'hidden',
                       marginBottom: 'clamp(14px, 1.6vw, 20px)',
                     }}>
-                      <img
+                      <OptimizedImage
                         src={article.img}
                         alt={article.title}
                         style={{
@@ -180,6 +181,9 @@ export default function TheEdit({ data, settings }: { data?: any[], settings?: a
                         }}
                         onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)')}
                         onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        width={800}
+                        height={1000}
                       />
                     </div>
 

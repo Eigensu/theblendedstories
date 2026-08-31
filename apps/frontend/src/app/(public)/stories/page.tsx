@@ -1,3 +1,4 @@
+import OptimizedImage from '@/components/OptimizedImage';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
@@ -128,7 +129,7 @@ export default async function StoriesPage({
                 overflow: 'hidden',
                 marginBottom: 'clamp(14px, 1.6vw, 20px)',
               }}>
-                <img
+                <OptimizedImage
                   src={article.cover_image || article.hero_image}
                   alt={article.title}
                   style={{
@@ -140,6 +141,9 @@ export default async function StoriesPage({
                     transition: 'transform 0.5s ease, filter 0.65s ease',
                   }}
                   className="group-hover:scale-[1.04]"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  width={800}
+                  height={1000}
                 />
               </div>
 

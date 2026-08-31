@@ -1,3 +1,4 @@
+import OptimizedImage from '@/components/OptimizedImage';
 import { Metadata } from 'next';
 import Footer from '@/components/Footer';
 import TopicBreadcrumb from '@/components/topics/TopicBreadcrumb';
@@ -151,7 +152,7 @@ export default async function TalksPage() {
                     overflow: 'hidden',
                   }}
                 >
-                  <img
+                  <OptimizedImage
                     src={speaker.photo_url}
                     alt={speaker.name}
                     className="group-hover:scale-[1.04]"
@@ -163,6 +164,9 @@ export default async function TalksPage() {
                       display: 'block',
                       transition: 'transform 0.5s ease, filter 0.65s ease',
                     }}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    width={800}
+                    height={1000}
                   />
                 </div>
 

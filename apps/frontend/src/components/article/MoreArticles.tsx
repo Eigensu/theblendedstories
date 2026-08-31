@@ -1,3 +1,4 @@
+import OptimizedImage from '@/components/OptimizedImage';
 import Link from 'next/link';
 import { formatArticleDate } from '@/lib/articleMeta';
 
@@ -60,9 +61,12 @@ export default function MoreArticles({ articles }: { articles: MoreArticle[] }) 
                     marginBottom: 'clamp(14px, 1.6vw, 20px)',
                   }}
                 >
-                  <img
+                  <OptimizedImage
                     src={article.cover_image || article.hero_image}
                     alt=""
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    width={800}
+                    height={1000}
                     className="group-hover:scale-[1.04] transition-transform duration-500"
                     style={{
                       width: '100%',

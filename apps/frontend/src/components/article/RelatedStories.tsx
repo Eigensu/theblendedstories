@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import OptimizedImage from '@/components/OptimizedImage';
 import { Article } from '@/types/article';
 
 export default function RelatedStories({ articles }: { articles: Article[] }) {
@@ -13,7 +14,14 @@ export default function RelatedStories({ articles }: { articles: Article[] }) {
         {articles.map((article, idx) => (
           <Link href={`/stories/${article.slug}`} key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '20px', cursor: 'pointer', textDecoration: 'none' }}>
             <div className="hover:scale-[1.015] transition-transform duration-300" style={{ aspectRatio: '4/5', overflow: 'hidden' }}>
-              <img src={article.heroImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.35) brightness(0.6) contrast(1.08)', display: 'block' }} />
+              <OptimizedImage
+                src={article.heroImage}
+                alt=""
+                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                width={800}
+                height={1000}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.35) brightness(0.6) contrast(1.08)', display: 'block' }}
+              />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: '12px', color: '#7a7972' }}>0{idx + 1}</span>
