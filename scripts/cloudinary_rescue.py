@@ -204,18 +204,39 @@ def cmd_probe():
     print("      c. Last resort: one month of a paid plan, export, cancel.")
 
 
+# Every character a Cloudinary path segment legitimately uses: public_ids are
+# alphanumeric, folders add separators, and a transformation segment joins its
+# pairs with commas. Notably absent are '%', ':' and anything that could smuggle
+# a second host or escape the path.
+_SAFE_SEGMENT = re.compile(r"[A-Za-z0-9_,.-]+")
+
+
 def assert_fetchable(url):
-    """Reject anything that is not an https Cloudinary delivery URL.
+    """Return a URL rebuilt from validated parts, or raise.
 
     Every URL here originates in MongoDB, so it is untrusted input. urlopen
     honours file:// and will happily reach link-local addresses, which would
     turn a poisoned record into a local file read or an SSRF against internal
-    metadata endpoints. Nothing legitimate falls outside this allowlist.
+    metadata endpoints.
+
+    Checking the scheme and host is not enough on its own: the path still
+    carries whatever was stored. So nothing from the input is passed through —
+    the scheme and host are literals, and each path segment has to match the
+    allowlist before it is joined back together.
     """
     parsed = urlparse(url)
     if parsed.scheme != "https" or parsed.hostname != "res.cloudinary.com":
         raise ValueError(f"refusing non-Cloudinary URL: {url[:80]}")
-    return url
+
+    segments = [segment for segment in parsed.path.split("/") if segment]
+    # '.' and '..' match the allowlist since dots are legal inside a public_id,
+    # so exclude them by name rather than by pattern.
+    if not segments or any(s in (".", "..") for s in segments):
+        raise ValueError(f"refusing URL with relative path: {url[:80]}")
+    if not all(_SAFE_SEGMENT.fullmatch(s) for s in segments):
+        raise ValueError(f"refusing URL with unexpected path: {url[:80]}")
+
+    return "https://res.cloudinary.com/" + "/".join(segments)
 
 
 def status_of(url):
