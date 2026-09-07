@@ -11,9 +11,11 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 60 * 24 * 7 # 7 days
     
-    CLOUDINARY_CLOUD_NAME: str = ""
-    CLOUDINARY_API_KEY: str = ""
-    CLOUDINARY_API_SECRET: str = ""
+    R2_ACCOUNT_ID: str = ""
+    R2_ACCESS_KEY_ID: str = ""
+    R2_SECRET_ACCESS_KEY: str = ""
+    R2_BUCKET_NAME: str = "theblendedstories-media"
+    R2_PUBLIC_URL: str = "https://cdn.theblendedstories.in"
 
     # Google sign-in for site members. Empty means the feature is off and
     # POST /auth/google returns 503 rather than failing deep inside the exchange.

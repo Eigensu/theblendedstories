@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'cdn.theblendedstories.in',
+      },
+      {
+        // Existing article records still carry Cloudinary URLs until the
+        // migration script rewrites them; drop this once that's done.
+        protocol: 'https',
         hostname: 'res.cloudinary.com',
       },
     ],
@@ -28,7 +34,7 @@ const nextConfig: NextConfig = {
     formats: ['image/webp'],
 
     // Cache aggressively: a transformation is only billed on a miss, and these
-    // assets are immutable — a new image gets a new Cloudinary public_id.
+    // assets are immutable — a new upload gets a new object key.
     minimumCacheTTL: 60 * 60 * 24 * 31,
   },
 };

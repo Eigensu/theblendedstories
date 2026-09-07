@@ -1,4 +1,5 @@
-"""Recover media off a disabled Cloudinary account before it is deleted.
+"""Recover media off a disabled Cloudinary account before it is deleted,
+then repoint the database at the Cloudflare R2 copies.
 
 Cloudinary permanently deletes a disabled account's assets 30 days after
 disablement, so the order of operations matters:
@@ -9,6 +10,10 @@ disablement, so the order of operations matters:
   2. probe      - check what Cloudinary still lets us do (delivery, Admin API).
                   Tells you whether you can export without reactivating.
   3. download   - pull every inventoried asset to disk.
+  4. migrate    - rewrite every res.cloudinary.com URL found by `inventory`
+                  to its cdn.theblendedstories.in equivalent. Dry-run by
+                  default; pass --apply to actually write. Only run this
+                  after scripts/r2_upload.sh has uploaded every asset.
 
 Usage:
     export MONGODB_URI='...'            # from Railway -> backend -> Variables
@@ -16,6 +21,8 @@ Usage:
     python3 scripts/cloudinary_rescue.py inventory
     python3 scripts/cloudinary_rescue.py probe      # needs CLOUDINARY_* vars
     python3 scripts/cloudinary_rescue.py download
+    python3 scripts/cloudinary_rescue.py migrate            # dry run
+    python3 scripts/cloudinary_rescue.py migrate --apply     # writes + backs up
 """
 
 import json
@@ -26,6 +33,7 @@ import time
 import urllib.error
 import urllib.request
 from base64 import b64encode
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -34,6 +42,9 @@ from pymongo import MongoClient
 OUT_DIR = Path(__file__).resolve().parent.parent / "cloudinary_rescue"
 MANIFEST = OUT_DIR / "manifest.json"
 ASSET_DIR = OUT_DIR / "assets"
+BACKUP_DIR = Path(__file__).resolve().parent.parent / "backups"
+
+R2_PUBLIC_URL = "https://cdn.theblendedstories.in"
 
 CLOUDINARY_URL_RE = re.compile(r"https?://res\.cloudinary\.com/[^\s\"'<>\\)]+")
 
@@ -298,9 +309,94 @@ def cmd_download():
         print(f"{len(failed)} failures -> {OUT_DIR / 'failed.json'}")
 
 
-COMMANDS = {"inventory": cmd_inventory, "probe": cmd_probe, "download": cmd_download}
+def _substitute(node, url_map, misses):
+    """Return a deep copy of `node` with every mapped Cloudinary URL rewritten.
+
+    Uses regex substitution rather than exact-match so a URL embedded inside
+    a longer string (e.g. markdown body text) is still caught, matching how
+    the URLs were originally found by `inventory`.
+    """
+    if isinstance(node, str):
+        def replace(match):
+            old = match.group(0)
+            new = url_map.get(old)
+            if new is None:
+                misses.add(old)
+                return old
+            return new
+
+        return CLOUDINARY_URL_RE.sub(replace, node)
+    if isinstance(node, dict):
+        return {key: _substitute(value, url_map, misses) for key, value in node.items()}
+    if isinstance(node, list):
+        return [_substitute(value, url_map, misses) for value in node]
+    return node
+
+
+def cmd_migrate():
+    if not MANIFEST.exists():
+        sys.exit("error: run `inventory` first.")
+    apply = "--apply" in sys.argv[2:]
+
+    references = json.loads(MANIFEST.read_text())["references"]
+    url_map = {}
+    for ref in references:
+        if ref["public_id"] and ref["ext"]:
+            url_map[ref["url"]] = f"{R2_PUBLIC_URL}/{ref['public_id']}.{ref['ext']}"
+
+    client = connect()
+    db = client[env("MONGO_DB_NAME", "the_blended_stories")]
+
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    backup_dir = BACKUP_DIR / stamp
+    misses = set()
+    docs_changed = 0
+    urls_rewritten = 0
+
+    for name in sorted(db.list_collection_names()):
+        collection_changed = 0
+        backup_lines = []
+        for doc in db[name].find({}):
+            new_doc = _substitute(doc, url_map, misses)
+            if new_doc == doc:
+                continue
+            collection_changed += 1
+            urls_rewritten += sum(
+                1 for _, url in walk(doc) if url in url_map
+            )
+            if apply:
+                backup_lines.append(json.dumps(doc, default=str))
+                db[name].replace_one({"_id": doc["_id"]}, new_doc)
+
+        if collection_changed:
+            docs_changed += collection_changed
+            print(f"{'rewrote' if apply else 'would rewrite'} {collection_changed} doc(s) in {name}")
+            if apply and backup_lines:
+                backup_dir.mkdir(parents=True, exist_ok=True)
+                (backup_dir / f"{name}.jsonl").write_text("\n".join(backup_lines) + "\n")
+
+    print(f"\n{docs_changed} document(s) {'rewritten' if apply else 'would be rewritten'}, "
+          f"{urls_rewritten} URL occurrence(s) {'replaced' if apply else 'would be replaced'}")
+    if misses:
+        print(f"\n{len(misses)} Cloudinary URL(s) found in the DB with no R2 mapping "
+              f"(not in manifest.json, or missing public_id/ext) -- left unchanged:")
+        for url in sorted(misses)[:20]:
+            print(f"  {url}")
+
+    if apply and docs_changed:
+        print(f"\noriginal documents backed up -> {backup_dir}")
+    elif not apply and docs_changed:
+        print("\ndry run only -- pass --apply to write these changes")
+
+
+COMMANDS = {
+    "inventory": cmd_inventory,
+    "probe": cmd_probe,
+    "download": cmd_download,
+    "migrate": cmd_migrate,
+}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:
-        sys.exit(f"usage: {sys.argv[0]} {{{'|'.join(COMMANDS)}}}")
+        sys.exit(f"usage: {sys.argv[0]} {{{'|'.join(COMMANDS)}}} [--apply]")
     COMMANDS[sys.argv[1]]()
