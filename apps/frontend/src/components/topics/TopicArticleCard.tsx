@@ -1,3 +1,4 @@
+import OptimizedImage from '@/components/OptimizedImage';
 import Link from 'next/link';
 import { keywordLabel, type MenuSection } from '@/constants/menuTaxonomy';
 import type { ArticleSummary } from '@/app/(public)/topics/topicData';
@@ -43,9 +44,12 @@ export default function TopicArticleCard({
           background: '#1a1a18',
         }}
       >
-        <img
+        <OptimizedImage
           src={article.cover_image || article.hero_image}
           alt={article.title}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          width={800}
+          height={1000}
           style={{
             width: '100%',
             height: '100%',

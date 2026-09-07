@@ -1,3 +1,4 @@
+import OptimizedImage from '@/components/OptimizedImage';
 import { ArticleImageItem } from '@/types/article';
 
 function GalleryMedia({
@@ -13,7 +14,13 @@ function GalleryMedia({
     <div
       className={`article-gallery-media article-gallery-media--${shape} hover:scale-[1.015] transition-transform duration-300`}
     >
-      <img src={img.image} alt={caption} />
+      <OptimizedImage
+        src={img.image}
+        alt={caption}
+        sizes="(max-width: 640px) 100vw, 50vw"
+        width={1000}
+        height={750}
+      />
     </div>
   );
 }

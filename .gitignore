@@ -47,3 +47,6 @@ coverage/
 
 # Local DB snapshots taken before content migrations — never commit prod data
 backups/
+
+# Cloudinary export — 1.18GB of recovered media, kept local only
+cloudinary_rescue/

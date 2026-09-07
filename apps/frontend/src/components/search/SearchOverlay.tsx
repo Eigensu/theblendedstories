@@ -1,5 +1,6 @@
 'use client';
 
+import OptimizedImage from '@/components/OptimizedImage';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, X } from 'lucide-react';
@@ -390,7 +391,7 @@ export default function SearchOverlay({
                         }}
                       >
                         {(result.cover_image || result.hero_image) && (
-                          <img
+                          <OptimizedImage
                             src={result.cover_image || result.hero_image || ''}
                             alt=""
                             style={{
@@ -399,6 +400,9 @@ export default function SearchOverlay({
                               objectFit: 'cover',
                               display: 'block',
                             }}
+                            sizes="96px"
+                            width={96}
+                            height={128}
                           />
                         )}
                       </div>

@@ -1,3 +1,4 @@
+import OptimizedImage from '@/components/OptimizedImage';
 import { Article } from '@/types/article';
 import { formatArticleDate, formatReadingTime } from '@/lib/articleMeta';
 
@@ -14,7 +15,16 @@ export default function ArticleHero({ article }: { article: Article }) {
       {finalUrl && (
         <a href={finalUrl} target="_blank" rel="noopener noreferrer" style={{ position: 'absolute', inset: 0, zIndex: 10, cursor: 'pointer', display: 'block' }} aria-label="View on Instagram" />
       )}
-      <img className="no-grayscale" src={article.heroImage} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.6) contrast(1.1)', pointerEvents: 'none' }} />
+      <OptimizedImage
+        className="no-grayscale"
+        src={article.heroImage}
+        alt=""
+        sizes="100vw"
+        priority
+        width={1920}
+        height={1080}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.6) contrast(1.1)', pointerEvents: 'none' }}
+      />
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.05) 0%, rgba(10,10,10,0.35) 55%, rgba(10,10,10,0.92) 88%, #0a0a0a 100%)', pointerEvents: 'none' }}></div>
       <div className="w-full absolute left-0 right-0 flex flex-col items-center text-center" style={{ bottom: 'clamp(32px, 8vh, 76px)', padding: '0 clamp(20px, 4vw, 120px)', pointerEvents: 'none', zIndex: 5 }}>
         <div className="flex flex-wrap justify-center items-center gap-x-[14px] gap-y-[6px]" style={{ marginBottom: 'clamp(12px, 2vh, 22px)', fontFamily: "'Poppins', sans-serif", fontSize: '12px', letterSpacing: '0.22em', textTransform: 'uppercase' }}>

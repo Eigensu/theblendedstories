@@ -1,5 +1,6 @@
 'use client';
 
+import OptimizedImage from '@/components/OptimizedImage';
 import { useEffect, useState } from 'react';
 import ScrollReveal from './ScrollReveal';
 
@@ -57,7 +58,7 @@ export default function AboutUs({ data, settings }: { data?: any[], settings?: a
       {/* Background Media */}
       <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
         {apiSlides.map((s, i) => (
-          <img
+          <OptimizedImage
             key={s.img + i}
             src={s.img}
             alt="What we cover"
@@ -72,6 +73,9 @@ export default function AboutUs({ data, settings }: { data?: any[], settings?: a
               opacity: i === index ? 1 : 0,
               transition: 'opacity 1s ease',
             }}
+            sizes="100vw"
+            width={1600}
+            height={900}
           />
         ))}
         {/* Dark overlay for readability */}

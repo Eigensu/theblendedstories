@@ -1,5 +1,6 @@
 'use client';
 
+import OptimizedImage from '@/components/OptimizedImage';
 import { useState } from 'react';
 import ScrollReveal from './ScrollReveal';
 import RegisterModal from './auth/RegisterModal';
@@ -40,7 +41,7 @@ export default function WhatIsTBS({ data }: { data?: any }) {
         {/* ── Left: Square image ── */}
         <ScrollReveal delay={0.05}>
           <div className="whatis-portrait-wrap img-card" style={{ flexShrink: 0 }}>
-            <img
+            <OptimizedImage
               src={imageUrl}
               alt="The Blended Stories"
               style={{
@@ -51,6 +52,9 @@ export default function WhatIsTBS({ data }: { data?: any }) {
                 borderRadius: '0',
                 display: 'block',
               }}
+              sizes="(max-width: 640px) 280px, 520px"
+              width={520}
+              height={520}
             />
           </div>
         </ScrollReveal>
