@@ -302,6 +302,15 @@ function sanitizePastedHtml(html: string) {
   return doc.body.innerHTML;
 }
 
+/* document.execCommand is deprecated with no standards-track replacement for
+   contentEditable rich-text mutations (formatBlock, insertHTML, createLink,
+   unlink, defaultParagraphSeparator...). Every editing command in this file
+   funnels through here so the deprecation is acknowledged once, not per call. */
+function runEditCommand(command: string, value?: string) {
+  // NOSONAR: no replacement API exists for contentEditable formatting commands.
+  return document.execCommand(command, false, value);
+}
+
 function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (updates: Partial<TextBlock>) => void }) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [showLinkPrompt, setShowLinkPrompt] = useState(false);
@@ -324,7 +333,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
   // Chrome's default block is <div>. <p> is what the story page styles as body
   // copy, so ask for that instead.
   useEffect(() => {
-    document.execCommand('defaultParagraphSeparator', false, 'p');
+    runEditCommand('defaultParagraphSeparator', 'p');
   }, []);
 
   useEffect(() => {
@@ -361,7 +370,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
   const applyFormat = (command: string, value?: string) => {
     if (!editorRef.current) return;
     editorRef.current.focus();
-    document.execCommand(command, false, value);
+    runEditCommand(command, value);
     onChange({ content: editorRef.current.innerHTML || '' });
   };
 
@@ -394,7 +403,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
 
     window.setTimeout(() => {
       if (!editorRef.current) return;
-      document.execCommand('formatBlock', false, 'P');
+      runEditCommand('formatBlock', 'P');
       onChange({ content: editorRef.current.innerHTML || '' });
     }, 0);
   };
@@ -407,9 +416,9 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
     const text = event.clipboardData.getData('text/plain');
 
     if (html) {
-      document.execCommand('insertHTML', false, sanitizePastedHtml(html));
+      runEditCommand('insertHTML', sanitizePastedHtml(html));
     } else if (text) {
-      document.execCommand('insertText', false, text);
+      runEditCommand('insertText', text);
     }
 
     onChange({ content: editorRef.current.innerHTML || '' });
@@ -446,7 +455,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
       selection.removeAllRanges();
       selection.addRange(savedRange);
     }
-    document.execCommand('createLink', false, linkUrl);
+    runEditCommand('createLink', linkUrl);
     onChange({ content: editorRef.current.innerHTML || '' });
     setShowLinkPrompt(false);
     setSavedRange(null);
@@ -479,7 +488,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
         selection.addRange(range);
       }
       
-      document.execCommand('unlink', false);
+      runEditCommand('unlink');
     }
     
     onChange({ content: editorRef.current.innerHTML || '' });
@@ -547,6 +556,10 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
+        role="textbox"
+        aria-multiline="true"
+        aria-label="Article body text"
+        tabIndex={0}
         onInput={() => onChange({ content: editorRef.current?.innerHTML || '' })}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
