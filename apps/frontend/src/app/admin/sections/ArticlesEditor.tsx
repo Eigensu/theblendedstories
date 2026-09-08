@@ -224,7 +224,7 @@ const PASTE_ALLOWED_TAGS = new Set([
   'UL', 'OL', 'LI', 'STRONG', 'B', 'EM', 'I', 'U', 'A', 'BLOCKQUOTE',
 ]);
 
-const SAFE_HREF = /^(https?:|mailto:|tel:|#|\/)/i;
+const SAFE_HREF = /^(https?:|mailto:|tel:|#|\/(?!\/))/i;
 
 const unwrap = (el: Element) => el.replaceWith(...Array.from(el.childNodes));
 
