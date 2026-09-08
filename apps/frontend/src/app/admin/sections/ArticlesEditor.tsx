@@ -28,7 +28,7 @@ import {
 } from '@/lib/articleBlocks';
 import { useAdmin } from '../contexts/AdminContext';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
-import { Search, Plus, Edit2, Trash2, ArrowLeft, X, GripVertical, Copy, Bold, Italic, Underline, Link2, Heading2, List, Filter } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, ArrowLeft, X, GripVertical, Copy, Bold, Italic, Underline, Link2, Heading2, List, Filter, Pilcrow } from 'lucide-react';
 import ArticlePreviewModal from '../components/ArticlePreviewModal';
 
 type EmbeddedVideo = {
@@ -200,20 +200,141 @@ const normalizeArticle = (article: Article): Article => {
   };
 };
 
+const HEADING_TAGS = new Set(['H1', 'H2', 'H3', 'H4', 'H5', 'H6']);
+
+/* Nearest ancestor of `node` that satisfies `match`, stopping at `root`. */
+function closestWithin(node: Node | null, root: Node | null, match: (el: HTMLElement) => boolean) {
+  let current: Node | null = node;
+  while (current && current !== root) {
+    if (current.nodeType === Node.ELEMENT_NODE && match(current as HTMLElement)) {
+      return current as HTMLElement;
+    }
+    current = current.parentNode;
+  }
+  return null;
+}
+
+const isHeading = (el: HTMLElement) => HEADING_TAGS.has(el.tagName);
+
+/* The tags the story page has a style for. Everything else a paste brings is
+   unwrapped to its text rather than dropped, so the words survive and only the
+   markup goes. */
+const PASTE_ALLOWED_TAGS = new Set([
+  'P', 'BR', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6',
+  'UL', 'OL', 'LI', 'STRONG', 'B', 'EM', 'I', 'U', 'A', 'BLOCKQUOTE',
+]);
+
+const SAFE_HREF = /^(https?:|mailto:|tel:|#|\/(?!\/))/i;
+
+const unwrap = (el: Element) => el.replaceWith(...Array.from(el.childNodes));
+
+const DECLARES_BOLD = /font-weight\s*:\s*(bold(er)?|[6-9]00)\b/i;
+const DECLARES_NOT_BOLD = /font-weight\s*:\s*(normal|lighter|[1-5]00)\b/i;
+const DECLARES_ITALIC = /font-style\s*:\s*italic\b/i;
+const DECLARES_UNDERLINE = /text-decoration[a-z-]*\s*:[^;]*underline/i;
+
+/* Google Docs and Word write character formatting as inline style on a <span>,
+   not as <strong>/<em>/<u> — so dropping the style attribute would throw away
+   the emphasis an editor actually meant along with the type scale nobody asked
+   for. Put the meaning back as a tag on the way past. */
+function unwrapKeepingEmphasis(el: Element, inlineStyle: string) {
+  let inner = Array.from(el.childNodes);
+
+  if (el.textContent && el.textContent.trim() !== '') {
+    const wrapIn = (tag: string) => {
+      const wrapper = el.ownerDocument.createElement(tag);
+      inner.forEach((node) => wrapper.appendChild(node));
+      inner = [wrapper];
+    };
+
+    if (DECLARES_UNDERLINE.test(inlineStyle)) wrapIn('u');
+    if (DECLARES_ITALIC.test(inlineStyle)) wrapIn('em');
+    if (DECLARES_BOLD.test(inlineStyle)) wrapIn('strong');
+  }
+
+  el.replaceWith(...inner);
+}
+
+/* What lands in the editor is what gets stored and replayed on the story page,
+   so a paste is cleaned on the way in rather than fought with !important on the
+   way out. Word, Google Docs and ChatGPT all paste their own type scale as
+   inline styles — "font-family: Times New Roman", "font-size: 9pt",
+   "font-weight: 700" — and those beat any ordinary rule the article page has.
+   Strip every attribute except a link's href and the paste inherits the site's
+   typography instead of bringing its own. */
+function sanitizePastedHtml(html: string) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  doc.body.querySelectorAll('style, script, meta, link, title').forEach((el) => el.remove());
+
+  const clean = (el: Element) => {
+    // Depth first: unwrapping a parent moves its children up, so they have to
+    // be dealt with before the parent goes.
+    Array.from(el.children).forEach(clean);
+
+    const inlineStyle = el.getAttribute('style') || '';
+
+    if (!PASTE_ALLOWED_TAGS.has(el.tagName)) {
+      unwrapKeepingEmphasis(el, inlineStyle);
+      return;
+    }
+
+    const href = el.tagName === 'A' ? (el.getAttribute('href') || '').trim() : '';
+    Array.from(el.attributes).forEach((attr) => el.removeAttribute(attr.name));
+
+    // Google Docs wraps an entire copy in <b style="font-weight:normal">. Drop
+    // the style, keep the tag, and the whole story turns bold — so the weight
+    // the element actually asked for decides whether the <b> survives at all.
+    if ((el.tagName === 'B' || el.tagName === 'STRONG') && DECLARES_NOT_BOLD.test(inlineStyle)) {
+      unwrap(el);
+      return;
+    }
+
+    if (el.tagName === 'A') {
+      if (SAFE_HREF.test(href)) {
+        el.setAttribute('href', href);
+      } else {
+        unwrap(el);
+      }
+    }
+  };
+
+  Array.from(doc.body.children).forEach(clean);
+  return doc.body.innerHTML;
+}
+
+/* document.execCommand is deprecated with no standards-track replacement for
+   contentEditable rich-text mutations (formatBlock, insertHTML, createLink,
+   unlink, defaultParagraphSeparator...). Every editing command in this file
+   funnels through here so the deprecation is acknowledged once, not per call. */
+function runEditCommand(command: string, value?: string) {
+  // NOSONAR: no replacement API exists for contentEditable formatting commands.
+  return document.execCommand(command, false, value);
+}
+
 function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (updates: Partial<TextBlock>) => void }) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [showLinkPrompt, setShowLinkPrompt] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [savedRange, setSavedRange] = useState<Range | null>(null);
   const [isLinkActive, setIsLinkActive] = useState(false);
+  const [isHeadingActive, setIsHeadingActive] = useState(false);
 
   useEffect(() => {
     if (!editorRef.current) return;
-    const nextHtml = block.content || '<p><br /></p>';
+    // <br>, not <br />: innerHTML reads back normalised, and a value that
+    // never matches makes the effect rewrite the node — and drop the caret —
+    // on every pass.
+    const nextHtml = block.content || '<p><br></p>';
     if (editorRef.current.innerHTML !== nextHtml) {
       editorRef.current.innerHTML = nextHtml;
     }
   }, [block.content]);
+
+  // Chrome's default block is <div>. <p> is what the story page styles as body
+  // copy, so ask for that instead.
+  useEffect(() => {
+    runEditCommand('defaultParagraphSeparator', 'p');
+  }, []);
 
   useEffect(() => {
     const handleSelectionChange = () => {
@@ -223,6 +344,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
       
       if (!editorRef.current.contains(selection.anchorNode)) {
         setIsLinkActive(false);
+        setIsHeadingActive(false);
         return;
       }
 
@@ -236,6 +358,9 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
         node = node.parentNode;
       }
       setIsLinkActive(active);
+      setIsHeadingActive(
+        Boolean(closestWithin(selection.anchorNode, editorRef.current, isHeading))
+      );
     };
 
     document.addEventListener('selectionchange', handleSelectionChange);
@@ -245,7 +370,57 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
   const applyFormat = (command: string, value?: string) => {
     if (!editorRef.current) return;
     editorRef.current.focus();
-    document.execCommand(command, false, value);
+    runEditCommand(command, value);
+    onChange({ content: editorRef.current.innerHTML || '' });
+  };
+
+  /* The Heading 2 button had no way back: execCommand('formatBlock') is not a
+     toggle, so once a block was an <h2> the only undo was Ctrl+Z. Pressing it
+     on a heading now returns the block to body copy. */
+  const toggleHeading = () => {
+    applyFormat('formatBlock', isHeadingActive ? 'P' : 'H2');
+  };
+
+  /* A section head's formatting used to run on into the paragraph typed after
+     it, which is how whole drafts ended up stored as <h2>. Let the browser
+     split the block, then put the new one back to body copy. */
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Enter' || event.shiftKey || !isHeadingActive) return;
+
+    const selection = window.getSelection();
+    if (!selection || !selection.isCollapsed || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    const heading = closestWithin(range.endContainer, editorRef.current, isHeading);
+    if (!heading) return;
+
+    // Only when the caret is at the end of the heading — pressing Enter part
+    // way through one is a deliberate split, and both halves stay heads.
+    const rest = range.cloneRange();
+    rest.selectNodeContents(heading);
+    rest.setStart(range.endContainer, range.endOffset);
+    if (rest.toString().trim() !== '') return;
+
+    window.setTimeout(() => {
+      if (!editorRef.current) return;
+      runEditCommand('formatBlock', 'P');
+      onChange({ content: editorRef.current.innerHTML || '' });
+    }, 0);
+  };
+
+  const handlePaste = (event: React.ClipboardEvent<HTMLDivElement>) => {
+    if (!editorRef.current) return;
+    event.preventDefault();
+
+    const html = event.clipboardData.getData('text/html');
+    const text = event.clipboardData.getData('text/plain');
+
+    if (html) {
+      runEditCommand('insertHTML', sanitizePastedHtml(html));
+    } else if (text) {
+      runEditCommand('insertText', text);
+    }
+
     onChange({ content: editorRef.current.innerHTML || '' });
   };
 
@@ -280,7 +455,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
       selection.removeAllRanges();
       selection.addRange(savedRange);
     }
-    document.execCommand('createLink', false, linkUrl);
+    runEditCommand('createLink', linkUrl);
     onChange({ content: editorRef.current.innerHTML || '' });
     setShowLinkPrompt(false);
     setSavedRange(null);
@@ -313,7 +488,7 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
         selection.addRange(range);
       }
       
-      document.execCommand('unlink', false);
+      runEditCommand('unlink');
     }
     
     onChange({ content: editorRef.current.innerHTML || '' });
@@ -338,8 +513,11 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
           <Link2 className="w-4 h-4" />
         </button>
         <div className="w-px h-6 bg-zinc-800 mx-1"></div>
-        <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat('formatBlock', 'H2')} className="p-2 rounded-md border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900 transition-colors" title="Heading 2">
+        <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={toggleHeading} className={`p-2 rounded-md border transition-colors ${isHeadingActive ? 'border-zinc-400 bg-zinc-800 text-white' : 'border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900'}`} title={isHeadingActive ? 'Heading 2 (click to return to body text)' : 'Heading 2'}>
           <Heading2 className="w-4 h-4" />
+        </button>
+        <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat('formatBlock', 'P')} className="p-2 rounded-md border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900 transition-colors" title="Body text — clears heading formatting from the selection">
+          <Pilcrow className="w-4 h-4" />
         </button>
         <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => applyFormat('insertUnorderedList')} className="p-2 rounded-md border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-600 hover:bg-zinc-900 transition-colors" title="Bullet List">
           <List className="w-4 h-4" />
@@ -378,8 +556,14 @@ function TextBlockEditor({ block, onChange }: { block: TextBlock; onChange: (upd
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
+        role="textbox"
+        aria-multiline="true"
+        aria-label="Article body text"
+        tabIndex={0}
         onInput={() => onChange({ content: editorRef.current?.innerHTML || '' })}
-        className="min-h-55 rounded-xl border border-zinc-800 bg-black px-4 py-3 text-sm text-white outline-none focus:border-zinc-500 [&_a]:text-[#AB853C] [&_a]:underline"
+        onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
+        className="admin-rich-text min-h-55 rounded-xl border border-zinc-800 bg-black px-4 py-3 text-sm text-white outline-none focus:border-zinc-500 [&_a]:text-[#AB853C] [&_a]:underline"
         style={{ lineHeight: 1.85, fontFamily: "'Poppins', sans-serif" }}
       />
     </div>

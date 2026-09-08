@@ -1168,7 +1168,10 @@
      ordinary rule no matter how specific. */
     font-size: var(--fs-article-body) !important;
     font-style: normal;
-    font-weight: 400;
+    /* !important for the same reason as the size above: a paste carries its own
+     inline font-weight ("font-weight: 700" out of Google Docs), and intentional
+     emphasis comes through <strong>/<b>, which keep their own rule below. */
+    font-weight: 400 !important;
   }
 
   .article-body-text p,
@@ -1211,7 +1214,7 @@
     line-height: 1.3 !important;
     margin: 2rem 0 1rem 0;
     color: var(--white);
-    font-weight: 500;
+    font-weight: 500 !important;
   }
 
   /* A heading's own inline styles are overridden above, but the spans inside it
@@ -1575,4 +1578,75 @@
   .skeleton-bar-soft {
     animation: none;
   }
+}
+
+/* ─── Admin rich-text editor (Articles) ───
+   The editor is a contentEditable div whose innerHTML is stored verbatim and
+   replayed on the story page, so the markup being written has to be visible
+   while it is written. It wasn't: Tailwind's preflight flattens h1-h6 to
+   `font-size: inherit; font-weight: inherit` and the reset at the top of this
+   file zeroes their margins, which left a heading pixel-identical to a
+   paragraph in the admin. An editor could press Heading 2 over a whole draft,
+   see nothing change, and ship prose that renders as Fraunces serif at
+   section-head size on the public page (`.article-body-text h1-h6` above).
+
+   These rules mirror the article body's shape at editor scale — serif and
+   larger for a heading, sans and smaller for copy — so the two match.
+
+   Unlayered on purpose: preflight and the reset both sit in @layer base, and
+   an unlayered rule beats a layered one whatever the specificity, so none of
+   this needs !important to land. */
+.admin-rich-text h1,
+.admin-rich-text h2,
+.admin-rich-text h3,
+.admin-rich-text h4,
+.admin-rich-text h5,
+.admin-rich-text h6 {
+  font-family: 'Fraunces', serif;
+  font-size: 19px;
+  line-height: 1.3;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 1.1em 0 0.5em;
+}
+
+.admin-rich-text p,
+.admin-rich-text div {
+  margin: 0 0 0.85em;
+}
+
+.admin-rich-text > *:first-child {
+  margin-top: 0;
+}
+
+.admin-rich-text > *:last-child {
+  margin-bottom: 0;
+}
+
+.admin-rich-text ul {
+  list-style: disc;
+  margin: 0 0 0.85em 1.5em;
+}
+
+.admin-rich-text ol {
+  list-style: decimal;
+  margin: 0 0 0.85em 1.5em;
+}
+
+.admin-rich-text li {
+  margin-bottom: 0.3em;
+}
+
+.admin-rich-text strong,
+.admin-rich-text b {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.admin-rich-text blockquote {
+  margin: 0 0 0.85em;
+  padding-left: 12px;
+  border-left: 2px solid #3f3f46;
+  color: #d4d4d8;
+  font-style: italic;
 }
