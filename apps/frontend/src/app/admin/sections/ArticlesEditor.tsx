@@ -29,6 +29,7 @@ import {
 import { useAdmin } from '../contexts/AdminContext';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Search, Plus, Edit2, Trash2, ArrowLeft, X, GripVertical, Copy, Bold, Italic, Underline, Link2, Heading2, List, Filter, Pilcrow } from 'lucide-react';
+import { demoteProseHeadings } from '@/lib/articleHtml';
 import ArticlePreviewModal from '../components/ArticlePreviewModal';
 
 type EmbeddedVideo = {
@@ -299,7 +300,15 @@ function sanitizePastedHtml(html: string) {
   };
 
   Array.from(doc.body.children).forEach(clean);
-  return doc.body.innerHTML;
+
+  /* Heading tags survive the pass above, which is right for a real section head
+     and wrong for the copy that is the reason this keeps coming back: prose
+     already sitting in an <h2>. It arrives that way whenever the source is a
+     story page that was itself saved broken — copying a published article to
+     start the next one carries its markup across, and a brand-new article is
+     bold before a word is typed. The story page applies the same rule on the
+     way out, so this is only about what gets stored. */
+  return demoteProseHeadings(doc.body.innerHTML);
 }
 
 /* document.execCommand is deprecated with no standards-track replacement for
