@@ -13,6 +13,7 @@ import ArticleNewsletter from './ArticleNewsletter';
 import MoreArticles from './MoreArticles';
 import Footer from '../Footer';
 import { ArticleContentBlock } from '@/types/article';
+import { demoteProseHeadings } from '@/lib/articleHtml';
 
 const BLANK_BLOCK =
   /<(p|div|h[1-6])\b[^>]*>(?:\s|&nbsp;|<\/?(?:br|span)\b[^>]*>)*<\/\1>/gi;
@@ -23,7 +24,10 @@ function stripBlankBlocks(html: string) {
 
 function renderTextBlock(content: string, isIntro: boolean) {
   const htmlPattern = /<[^>]+>/;
-  const processedContent = stripBlankBlocks(content).replace(
+  /* Headings holding prose become paragraphs first: a story saved before the
+   editor stopped writing them is otherwise set in section-head serif, which is
+   the "why is my article bold" report. */
+  const processedContent = demoteProseHeadings(stripBlankBlocks(content)).replace(
     /<a /gi,
     '<a target="_blank" rel="noopener noreferrer" class="article-link" '
   );
